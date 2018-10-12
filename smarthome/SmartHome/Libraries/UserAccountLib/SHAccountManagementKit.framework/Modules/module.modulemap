@@ -1,0 +1,6 @@
+framework module SHAccountManagementKit {
+  umbrella header "SHAccountManagementKit.h"
+
+  export *
+  module * { export * }
+}

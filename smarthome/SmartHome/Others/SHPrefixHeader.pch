@@ -1,0 +1,38 @@
+//
+//  SHPrefixHeader.pch
+//  SmartHome
+//
+//  Created by ZJ on 2017/4/14.
+//  Copyright © 2017年 ZJ. All rights reserved.
+//
+
+#ifndef SHPrefixHeader_pch
+#define SHPrefixHeader_pch
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import "SHUtilsMacro.h"
+#import <CoreData/CoreData.h>
+//#import "MBProgressHUD+SH.h"
+#import "SHSDK.h"
+#import "SHSettingCommon.h"
+#import "SHCameraManager.h"
+#import <AVFoundation/AVFoundation.h>
+#import "SHTool.h"
+#import "SHCamera.h"
+#import "SHCamStaticData.h"
+#import "Additions.h"
+#import "SHTutkHttp.h"
+#import "SHQRManager.h"
+#import "CoreDataHandlerHeader.h"
+#import "ZJSlidingDrawerViewController.h"
+
+// 代码混淆生成的头文件（方法名->随机字符串）
+//#import "codeObfuscation.h"
+
+#endif
+
+#endif /* SHPrefixHeader_pch */

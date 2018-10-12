@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="v72-dO-hzJ" customClass="SHAccountInfoHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="223" height="171"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="大西瓜" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ibi-QV-3bQ">
+                    <rect key="frame" x="20" y="130" width="183" height="29"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hv6-Q1-Ovc">
+                    <rect key="frame" x="20" y="33" width="85" height="85"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="85" id="T5Q-ba-gdA"/>
+                        <constraint firstAttribute="width" secondItem="Hv6-Q1-Ovc" secondAttribute="height" multiplier="1:1" id="T8c-SQ-Q2Y"/>
+                    </constraints>
+                    <state key="normal" image="portrait"/>
+                    <state key="highlighted" image="portrait"/>
+                    <connections>
+                        <action selector="enterAccountAction:" destination="v72-dO-hzJ" eventType="touchUpInside" id="yyz-it-qb7"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Ibi-QV-3bQ" firstAttribute="top" secondItem="Hv6-Q1-Ovc" secondAttribute="bottom" constant="12" id="2kD-Rd-9Bl"/>
+                <constraint firstItem="Ibi-QV-3bQ" firstAttribute="centerX" secondItem="v72-dO-hzJ" secondAttribute="centerX" id="9m5-vz-xBq"/>
+                <constraint firstItem="Hv6-Q1-Ovc" firstAttribute="centerY" secondItem="v72-dO-hzJ" secondAttribute="centerY" constant="-10" id="Knl-E1-dt5"/>
+                <constraint firstItem="Ibi-QV-3bQ" firstAttribute="leading" secondItem="Qfl-4k-WPq" secondAttribute="leading" constant="20" id="OEU-TX-Vxr"/>
+                <constraint firstItem="Qfl-4k-WPq" firstAttribute="trailing" secondItem="Ibi-QV-3bQ" secondAttribute="trailing" constant="20" id="cc5-g3-Exf"/>
+                <constraint firstItem="Hv6-Q1-Ovc" firstAttribute="leading" secondItem="Qfl-4k-WPq" secondAttribute="leading" constant="20" id="gEs-2p-fJb"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="Qfl-4k-WPq"/>
+            <connections>
+                <outlet property="avatorButton" destination="Hv6-Q1-Ovc" id="isM-lc-sOi"/>
+                <outlet property="nickNameLabel" destination="Ibi-QV-3bQ" id="VbA-oX-bQB"/>
+            </connections>
+            <point key="canvasLocation" x="206.5" y="-459.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="portrait" width="70" height="70"/>
+    </resources>
+</document>

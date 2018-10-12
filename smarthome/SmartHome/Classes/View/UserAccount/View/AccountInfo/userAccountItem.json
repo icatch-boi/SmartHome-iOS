@@ -1,0 +1,22 @@
+[
+ {
+    "title" : "My doorbell",
+    "iconName" : "leftbar-btn-mydoorbell",
+     "methodName" : "enterMyCameras"
+ },
+ {
+    "title" : "Feedback",
+    "iconName" : "leftbar-btn-eedback",
+     "methodName" : "enterSuggestion:"
+ },
+ {
+     "title" : "Account",
+     "iconName" : "leftbar-btn-account",
+     "methodName" : "enterAccount:"
+ },
+ {
+    "title" : "About",
+    "iconName" : "leftbar-btn-about",
+     "methodName" : "enterAbout:"
+ },
+]

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="q2E-cM-bJH" customClass="SHLoginFirstView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="default-logo" translatesAutoresizingMaskIntoConstraints="NO" id="Hto-eL-iUV">
+                    <rect key="frame" x="109.5" y="100" width="101" height="100"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTz-Tc-FW7">
+                    <rect key="frame" x="24" y="365" width="272" height="55"/>
+                    <state key="normal" title="Sign In" backgroundImage="default-btn"/>
+                    <state key="highlighted" backgroundImage="default-btn-pre"/>
+                    <connections>
+                        <action selector="signinAction" destination="q2E-cM-bJH" eventType="touchUpInside" id="1eT-3N-Aky"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DTJ-Nt-Z97">
+                    <rect key="frame" x="24" y="290" width="272" height="55"/>
+                    <state key="normal" title="New user" backgroundImage="default-btn"/>
+                    <state key="highlighted" backgroundImage="default-btn-pre"/>
+                    <connections>
+                        <action selector="signupAction" destination="q2E-cM-bJH" eventType="touchUpInside" id="zMf-GK-NUx"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="yTz-Tc-FW7" firstAttribute="top" secondItem="DTJ-Nt-Z97" secondAttribute="bottom" constant="20" id="AXR-jX-Gvs"/>
+                <constraint firstItem="qvJ-r6-iiE" firstAttribute="bottom" secondItem="yTz-Tc-FW7" secondAttribute="bottom" constant="60" id="N79-BR-W0i"/>
+                <constraint firstItem="DTJ-Nt-Z97" firstAttribute="centerX" secondItem="q2E-cM-bJH" secondAttribute="centerX" id="SCk-dH-tFq"/>
+                <constraint firstItem="Hto-eL-iUV" firstAttribute="top" secondItem="qvJ-r6-iiE" secondAttribute="top" constant="80" id="YSo-bI-AqQ"/>
+                <constraint firstItem="yTz-Tc-FW7" firstAttribute="centerX" secondItem="q2E-cM-bJH" secondAttribute="centerX" id="ePS-Hb-r9C"/>
+                <constraint firstItem="Hto-eL-iUV" firstAttribute="centerX" secondItem="q2E-cM-bJH" secondAttribute="centerX" id="fee-oo-uNr"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="qvJ-r6-iiE"/>
+            <connections>
+                <outlet property="bottomCons" destination="N79-BR-W0i" id="Db2-rD-bT1"/>
+                <outlet property="signinButton" destination="yTz-Tc-FW7" id="Q4U-VF-5Yj"/>
+                <outlet property="signupButton" destination="DTJ-Nt-Z97" id="kwk-DU-aNk"/>
+            </connections>
+            <point key="canvasLocation" x="4" y="1"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="default-btn" width="272" height="55"/>
+        <image name="default-btn-pre" width="272" height="55"/>
+        <image name="default-logo" width="101" height="100"/>
+    </resources>
+</document>

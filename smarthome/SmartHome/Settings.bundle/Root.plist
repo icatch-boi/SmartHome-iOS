@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Title</key>
+			<string>Version</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>0.0.6</string>
+			<key>Key</key>
+			<string>PreferenceSpecifiers:1</string>
+			<key>Title</key>
+			<string>App Version</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>12872</string>
+			<key>Key</key>
+			<string>PreferenceSpecifiers:2</string>
+			<key>Title</key>
+			<string>Build</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>Title</key>
+			<string></string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>PreferenceSpecifier:SHAppLog</string>
+			<key>Title</key>
+			<string>Logging</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<integer>16000</integer>
+			<key>Key</key>
+			<string>PreferenceSpecifier:audioRate</string>
+			<key>Title</key>
+			<string>Audio sample rate</string>
+			<key>Titles</key>
+			<array>
+				<string>8000</string>
+				<string>16000</string>
+			</array>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Values</key>
+			<array>
+				<integer>8000</integer>
+				<integer>16000</integer>
+			</array>
+		</dict>
+	</array>
+	<key>StringsTable</key>
+	<string>Root</string>
+</dict>
+</plist>

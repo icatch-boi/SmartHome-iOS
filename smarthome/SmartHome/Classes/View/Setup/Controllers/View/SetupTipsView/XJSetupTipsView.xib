@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="zNq-fl-pUe" customClass="XJSetupTipsView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qh6-6R-mwy">
+                    <rect key="frame" x="20" y="424" width="280" height="44"/>
+                    <color key="backgroundColor" red="0.027450980390000001" green="0.43137254899999999" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="cGL-kA-vPE"/>
+                    </constraints>
+                    <state key="normal" title="Next"/>
+                    <connections>
+                        <action selector="nextClick:" destination="zNq-fl-pUe" eventType="touchUpInside" id="57b-rM-Dkn"/>
+                    </connections>
+                </button>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-tips" translatesAutoresizingMaskIntoConstraints="NO" id="bDn-x3-Mrv">
+                    <rect key="frame" x="0.0" y="20" width="50" height="50"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tips" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A12-XW-q5H">
+                    <rect key="frame" x="42" y="31.5" width="41" height="27"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Before setup device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D6H-Ml-6MB">
+                    <rect key="frame" x="83.5" y="78.5" width="153" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.Check device is power on" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTh-hR-VXU">
+                    <rect key="frame" x="12" y="107.5" width="296" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.Maybe should charge battery first" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z7B-hc-Iux">
+                    <rect key="frame" x="12" y="126.5" width="296" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3.Press reset  button 3s,door bell will show red light" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZUh-7q-9JI">
+                    <rect key="frame" x="12" y="145.5" width="296" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" insetsLayoutMarginsFromSafeArea="NO" image="屏幕快照 2018-05-15 下午3.49.26" translatesAutoresizingMaskIntoConstraints="NO" id="lg9-ZJ-BZX">
+                    <rect key="frame" x="70" y="181.5" width="180" height="180"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="180" id="HMn-Qq-M8Y"/>
+                        <constraint firstAttribute="height" constant="180" id="MhG-8s-BBt"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="z7B-hc-Iux" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="0lY-om-cIB"/>
+                <constraint firstItem="A12-XW-q5H" firstAttribute="centerY" secondItem="bDn-x3-Mrv" secondAttribute="centerY" id="0zw-dW-HK4"/>
+                <constraint firstItem="ZUh-7q-9JI" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="5aC-Ln-OX8"/>
+                <constraint firstAttribute="trailing" secondItem="ZUh-7q-9JI" secondAttribute="trailing" constant="12" id="8Dv-cP-CLq"/>
+                <constraint firstItem="Qh6-6R-mwy" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="9Jm-tH-ITj"/>
+                <constraint firstItem="bDn-x3-Mrv" firstAttribute="top" secondItem="9JA-e9-zI0" secondAttribute="top" id="Esc-Fa-gwr"/>
+                <constraint firstItem="bDn-x3-Mrv" firstAttribute="leading" secondItem="9JA-e9-zI0" secondAttribute="leading" id="K2M-Ra-Y0w"/>
+                <constraint firstItem="z7B-hc-Iux" firstAttribute="top" secondItem="GTh-hR-VXU" secondAttribute="bottom" constant="1" id="Kwv-Nz-8O6"/>
+                <constraint firstItem="ZUh-7q-9JI" firstAttribute="top" secondItem="z7B-hc-Iux" secondAttribute="bottom" constant="1" id="LHF-sl-9Nz"/>
+                <constraint firstItem="ZUh-7q-9JI" firstAttribute="leading" secondItem="zNq-fl-pUe" secondAttribute="leading" constant="12" id="RKC-4I-ttj"/>
+                <constraint firstItem="GTh-hR-VXU" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="SG7-Cw-qyi"/>
+                <constraint firstItem="D6H-Ml-6MB" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="Syp-Qb-Jg1"/>
+                <constraint firstItem="9JA-e9-zI0" firstAttribute="trailing" secondItem="GTh-hR-VXU" secondAttribute="trailing" constant="12" id="TYA-JO-CeY"/>
+                <constraint firstItem="GTh-hR-VXU" firstAttribute="leading" secondItem="9JA-e9-zI0" secondAttribute="leading" constant="12" id="XB9-V8-8Cq"/>
+                <constraint firstItem="z7B-hc-Iux" firstAttribute="leading" secondItem="9JA-e9-zI0" secondAttribute="leading" constant="12" id="Xy7-8a-vfj"/>
+                <constraint firstItem="D6H-Ml-6MB" firstAttribute="top" secondItem="A12-XW-q5H" secondAttribute="bottom" constant="20" id="cAp-d2-MeK"/>
+                <constraint firstItem="9JA-e9-zI0" firstAttribute="trailing" secondItem="Qh6-6R-mwy" secondAttribute="trailing" constant="20" id="cuX-Oh-ncw"/>
+                <constraint firstItem="Qh6-6R-mwy" firstAttribute="leading" secondItem="9JA-e9-zI0" secondAttribute="leading" constant="20" id="k0S-r2-bPY"/>
+                <constraint firstItem="lg9-ZJ-BZX" firstAttribute="centerX" secondItem="zNq-fl-pUe" secondAttribute="centerX" id="ljF-g1-62N"/>
+                <constraint firstItem="9JA-e9-zI0" firstAttribute="trailing" secondItem="z7B-hc-Iux" secondAttribute="trailing" constant="12" id="pyR-Lg-VZD"/>
+                <constraint firstItem="A12-XW-q5H" firstAttribute="leading" secondItem="bDn-x3-Mrv" secondAttribute="trailing" constant="-8" id="s0H-xS-izs"/>
+                <constraint firstItem="GTh-hR-VXU" firstAttribute="top" secondItem="D6H-Ml-6MB" secondAttribute="bottom" constant="8" id="vnO-nz-xnw"/>
+                <constraint firstItem="9JA-e9-zI0" firstAttribute="bottom" secondItem="Qh6-6R-mwy" secondAttribute="bottom" constant="12" id="wl0-RD-N5l"/>
+                <constraint firstItem="lg9-ZJ-BZX" firstAttribute="top" secondItem="ZUh-7q-9JI" secondAttribute="bottom" id="yV2-c2-fF6"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="9JA-e9-zI0"/>
+            <connections>
+                <outlet property="gifImageView" destination="lg9-ZJ-BZX" id="EhT-tY-yg8"/>
+                <outlet property="nextButton" destination="Qh6-6R-mwy" id="O0V-oG-nUm"/>
+                <outlet property="tipsViewHeightCons" destination="MhG-8s-BBt" id="63v-2v-tXj"/>
+                <outlet property="tipsViewWidthCons" destination="HMn-Qq-M8Y" id="CPr-RW-XS4"/>
+            </connections>
+            <point key="canvasLocation" x="98" y="97"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="add-tips" width="50" height="50"/>
+        <image name="屏幕快照 2018-05-15 下午3.49.26" width="285" height="249"/>
+    </resources>
+</document>

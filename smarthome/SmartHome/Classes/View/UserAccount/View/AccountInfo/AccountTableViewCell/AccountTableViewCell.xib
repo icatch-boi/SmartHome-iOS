@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="nfL-KW-9Xj" customClass="SHAccountTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nfL-KW-9Xj" id="79x-qb-OqT">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vP8-SH-KG0">
+                        <rect key="frame" x="0.0" y="0.0" width="43.5" height="43.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="vP8-SH-KG0" secondAttribute="height" multiplier="1:1" id="zF9-R3-8HL"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZh-hy-Owz">
+                        <rect key="frame" x="43.5" y="12" width="42" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="fZh-hy-Owz" firstAttribute="leading" secondItem="vP8-SH-KG0" secondAttribute="trailing" id="K5N-VX-YeD"/>
+                    <constraint firstItem="vP8-SH-KG0" firstAttribute="leading" secondItem="79x-qb-OqT" secondAttribute="leading" id="bME-W8-WSW"/>
+                    <constraint firstItem="fZh-hy-Owz" firstAttribute="centerY" secondItem="vP8-SH-KG0" secondAttribute="centerY" id="fmg-qz-6cN"/>
+                    <constraint firstItem="vP8-SH-KG0" firstAttribute="top" secondItem="79x-qb-OqT" secondAttribute="top" id="qFS-qw-gqm"/>
+                    <constraint firstItem="vP8-SH-KG0" firstAttribute="centerY" secondItem="79x-qb-OqT" secondAttribute="centerY" id="suV-Bv-BYj"/>
+                    <constraint firstAttribute="bottom" secondItem="vP8-SH-KG0" secondAttribute="bottom" id="ys5-cZ-WVW"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="iconView" destination="vP8-SH-KG0" id="TaM-Xj-swY"/>
+                <outlet property="titleLabel" destination="fZh-hy-Owz" id="Ww5-xt-rPK"/>
+            </connections>
+            <point key="canvasLocation" x="88.5" y="53"/>
+        </tableViewCell>
+    </objects>
+</document>

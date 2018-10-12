@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>SHFileFilterMonitorType</key>
+		<array>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterMonitorType:Audio</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterMonitorType:Manual</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterMonitorType:Montion</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterMonitorType:Ring</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>SHFileFilterFileType</key>
+		<array>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterFileType:Video</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterFileType:Audio</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterFileType:Image</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>SHFileFilterFavoriteType</key>
+		<array>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterFavoriteType:Unfavorite</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Identifier</key>
+				<string>SHFileFilterFavoriteType:Favorite</string>
+				<key>Default Value</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>
