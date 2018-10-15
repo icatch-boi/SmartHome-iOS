@@ -36,6 +36,7 @@
 @property(nonatomic) FILE *appLogFile;
 @property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) BOOL loaded;
+@property (nonatomic, strong) NSMutableArray *messages;
 
 @end
 
@@ -786,7 +787,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	UNNotificationSound *sound = content.sound;  // 推送消息的声音
 	NSString *subtitle = content.subtitle;  // 推送消息的副标题
 	NSString *title = content.title;  // 推送消息的标题
-	
+#if 0
 	if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
 		//        NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
 		NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
@@ -799,6 +800,40 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	}
 	
 	completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+#else
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults boolForKey:@"kPushTest"]) {
+        if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+            //        NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
+            NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+            //        NSLog(@"收到的 alert: %@", [self parseNotification:userInfo]);
+            
+            [self postNotification:userInfo];
+        } else {
+            // 判断为本地通知
+            NSLog(@"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
+        }
+        
+        completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+    } else {
+        [self notificationHandler:notification withCompletionHandler:completionHandler];
+    }
+#endif
+}
+
+- (void)notificationHandler:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+    if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        NSDictionary * userInfo = notification.request.content.userInfo;
+
+        [self addReceiveMessage:userInfo];
+    } else {
+        // 判断为本地通知
+        NSLog(@"iOS10 前台收到本地通知");
+    }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kQuiesce"]) {
+        completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+    }
 }
 
 // 通知的点击事件
@@ -842,7 +877,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	NSDictionary *aps = userInfo[@"aps"];
 	NSString *alert = aps[@"alert"];
 	NSDictionary *alertDict = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
-	NSLog(@"receive dict: %@", alertDict);
+//    NSLog(@"receive dict: %@", alertDict);
 	
 	return alertDict;
 }
@@ -1054,6 +1089,41 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 		if(permissionStatus == AVAudioSessionRecordPermissionUndetermined)
 			return;
 	}
+}
+
+#pragma mark - ICatch Push Test
+- (void)addReceiveMessage:(NSDictionary *)userInfo {
+    NSDictionary *notification = [self parseNotification:userInfo];
+    
+    NSDate *date = [NSDate date];
+    NSTimeInterval client = date.timeIntervalSince1970;
+    
+    NSString *msgID = notification[@"msgID"];
+    NSString *tmdbg = notification[@"tmdbg"];
+    if (msgID == nil || tmdbg == nil) {
+        NSLog(@"msgID or tmdbg is nil, msgID: %@, tmdbg: %@", msgID, tmdbg);
+        return;
+    }
+    
+    NSDictionary *dict = @{
+                           @"msgID": msgID,
+                           @"device": tmdbg,
+                           @"client": @(client).stringValue,
+                           };
+    
+    dict ? [self.messages addObject:dict] : void();
+}
+
+- (NSMutableArray *)messages {
+    if (_messages == nil) {
+        _messages = [NSMutableArray array];
+    }
+    
+    return _messages;
+}
+
+- (void)cleanMessageCache {
+    [self.messages removeAllObjects];
 }
 
 @end

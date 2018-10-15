@@ -145,12 +145,12 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
         CFDictionarySetValue(dict, kCMSampleAttachmentKey_DisplayImmediately, kCFBooleanTrue);
         if (status == kCMBlockBufferNoErr) {
             if (avslayer != nil && [avslayer isReadyForMoreMediaData]) {
-                //flush avslayer when active from background
-                if (avslayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
-                    [avslayer flush];
-                }
-                
                 dispatch_sync(dispatch_get_main_queue(),^{
+                    //flush avslayer when active from background
+                    if (avslayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
+                        [avslayer flush];
+                    }
+                    
                     [avslayer enqueueSampleBuffer:sampleBuffer];
                 });
             }

@@ -16,7 +16,7 @@ static NSString * const pushServer = @"http://push.iotcplatform.com/tpns?"; //@"
 static NSString * const registerUrl = [pushServer stringByAppendingString:@"cmd=client"];
 static NSString * const mapUrl = [pushServer stringByAppendingString:@"cmd=mapping"];
 static NSString * const unmapUrl = [pushServer stringByAppendingString:@"cmd=rm_mapping"];
-static NSString * const applicationId = @"com.xj.app.doorbell"; //@"com.icatchtek.smarthome";
+static NSString * const applicationId = @"com.icatchtek.smarthome"; //@"com.xj.app.doorbell";
 static NSString * const keychain_key = @"push.udid";
 
 @implementation SHTutkHttp

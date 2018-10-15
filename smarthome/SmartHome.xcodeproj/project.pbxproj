@@ -29,6 +29,23 @@
 		3818D65C217040D100AF846C /* .cp in Resources */ = {isa = PBXBuildFile; fileRef = 3818D650217040D100AF846C /* .cp */; };
 		3818D65D217040D100AF846C /* libicatch_iot_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3818D651217040D100AF846C /* libicatch_iot_sdk.a */; };
 		3818D65E217040D100AF846C /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3818D652217040D100AF846C /* libswscale.a */; };
+		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
+		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
+		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
+		3818D68921709BA100AF846C /* XYChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66A21709BA100AF846C /* XYChart.m */; };
+		3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66C21709BA100AF846C /* NSArray+XYChart.m */; };
+		3818D68B21709BA100AF846C /* UIColor+XYChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66F21709BA100AF846C /* UIColor+XYChart.m */; };
+		3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D67521709BA100AF846C /* XYLineItemView.m */; };
+		3818D68D21709BA100AF846C /* XYLinesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D67621709BA100AF846C /* XYLinesView.m */; };
+		3818D68E21709BA100AF846C /* XYLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D67721709BA100AF846C /* XYLineChart.m */; };
+		3818D68F21709BA100AF846C /* XYLineGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D67C21709BA100AF846C /* XYLineGradientLayer.m */; };
+		3818D69021709BA100AF846C /* XYChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68021709BA100AF846C /* XYChartItem.m */; };
+		3818D69121709BA100AF846C /* XYChartDataSourceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68121709BA100AF846C /* XYChartDataSourceItem.m */; };
+		3818D69221709BA100AF846C /* XYBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68621709BA100AF846C /* XYBarView.m */; };
+		3818D69321709BA100AF846C /* XYBarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68721709BA100AF846C /* XYBarCell.m */; };
+		3818D69421709BA100AF846C /* XYBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68821709BA100AF846C /* XYBarChart.m */; };
+		3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69921709C6C00AF846C /* SHPushTestViewController.m */; };
+		3818D69D21709CAA00AF846C /* ICPCChartGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69C21709CAA00AF846C /* ICPCChartGroup.m */; };
 		381DB6F81ED6E1410054D817 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */; };
 		38223C5320BD260B0057DC14 /* MessageDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38223C5120BD260A0057DC14 /* MessageDetailInfo.m */; };
 		382CA9BD1EE69BEF0042442C /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BC1EE69BEF0042442C /* libresolv.tbd */; };
@@ -483,6 +500,41 @@
 		3818D650217040D100AF846C /* .cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .cp; sourceTree = "<group>"; };
 		3818D651217040D100AF846C /* libicatch_iot_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libicatch_iot_sdk.a; sourceTree = "<group>"; };
 		3818D652217040D100AF846C /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
+		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
+		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
+		3818D66421709AB200AF846C /* PushTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PushTest.storyboard; sourceTree = "<group>"; };
+		3818D66621709AF100AF846C /* SHPushTestNavController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHPushTestNavController.h; sourceTree = "<group>"; };
+		3818D66721709AF100AF846C /* SHPushTestNavController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHPushTestNavController.m; sourceTree = "<group>"; };
+		3818D66A21709BA100AF846C /* XYChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYChart.m; sourceTree = "<group>"; };
+		3818D66C21709BA100AF846C /* NSArray+XYChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+XYChart.m"; sourceTree = "<group>"; };
+		3818D66D21709BA100AF846C /* UIColor+XYChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+XYChart.h"; sourceTree = "<group>"; };
+		3818D66E21709BA100AF846C /* NSArray+XYChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+XYChart.h"; sourceTree = "<group>"; };
+		3818D66F21709BA100AF846C /* UIColor+XYChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+XYChart.m"; sourceTree = "<group>"; };
+		3818D67021709BA100AF846C /* XYChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYChart.h; sourceTree = "<group>"; };
+		3818D67221709BA100AF846C /* XYChartProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYChartProtocol.h; sourceTree = "<group>"; };
+		3818D67321709BA100AF846C /* XYChartConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYChartConst.h; sourceTree = "<group>"; };
+		3818D67521709BA100AF846C /* XYLineItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYLineItemView.m; sourceTree = "<group>"; };
+		3818D67621709BA100AF846C /* XYLinesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYLinesView.m; sourceTree = "<group>"; };
+		3818D67721709BA100AF846C /* XYLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYLineChart.m; sourceTree = "<group>"; };
+		3818D67821709BA100AF846C /* XYLineGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYLineGradientLayer.h; sourceTree = "<group>"; };
+		3818D67921709BA100AF846C /* XYLineItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYLineItemView.h; sourceTree = "<group>"; };
+		3818D67A21709BA100AF846C /* XYLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYLineChart.h; sourceTree = "<group>"; };
+		3818D67B21709BA100AF846C /* XYLinesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYLinesView.h; sourceTree = "<group>"; };
+		3818D67C21709BA100AF846C /* XYLineGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYLineGradientLayer.m; sourceTree = "<group>"; };
+		3818D67E21709BA100AF846C /* XYChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYChartItem.h; sourceTree = "<group>"; };
+		3818D67F21709BA100AF846C /* XYChartDataSourceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYChartDataSourceItem.h; sourceTree = "<group>"; };
+		3818D68021709BA100AF846C /* XYChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYChartItem.m; sourceTree = "<group>"; };
+		3818D68121709BA100AF846C /* XYChartDataSourceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYChartDataSourceItem.m; sourceTree = "<group>"; };
+		3818D68321709BA100AF846C /* XYBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYBarView.h; sourceTree = "<group>"; };
+		3818D68421709BA100AF846C /* XYBarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYBarCell.h; sourceTree = "<group>"; };
+		3818D68521709BA100AF846C /* XYBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYBarChart.h; sourceTree = "<group>"; };
+		3818D68621709BA100AF846C /* XYBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYBarView.m; sourceTree = "<group>"; };
+		3818D68721709BA100AF846C /* XYBarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYBarCell.m; sourceTree = "<group>"; };
+		3818D68821709BA100AF846C /* XYBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYBarChart.m; sourceTree = "<group>"; };
+		3818D69821709C6C00AF846C /* SHPushTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPushTestViewController.h; sourceTree = "<group>"; };
+		3818D69921709C6C00AF846C /* SHPushTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHPushTestViewController.m; sourceTree = "<group>"; };
+		3818D69B21709CAA00AF846C /* ICPCChartGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICPCChartGroup.h; sourceTree = "<group>"; };
+		3818D69C21709CAA00AF846C /* ICPCChartGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICPCChartGroup.m; sourceTree = "<group>"; };
 		381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		3820466E1FC7EF06005EA723 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		38223C5120BD260A0057DC14 /* MessageDetailInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailInfo.m; sourceTree = "<group>"; };
@@ -1233,6 +1285,94 @@
 				3818D643217040D000AF846C /* ICatchMJPGStreamParam.h */,
 			);
 			path = type;
+			sourceTree = "<group>";
+		};
+		3818D66321709A8C00AF846C /* PushTest */ = {
+			isa = PBXGroup;
+			children = (
+				3818D66921709BA100AF846C /* XYChart */,
+				3818D66421709AB200AF846C /* PushTest.storyboard */,
+				3818D66621709AF100AF846C /* SHPushTestNavController.h */,
+				3818D66721709AF100AF846C /* SHPushTestNavController.m */,
+				3818D69821709C6C00AF846C /* SHPushTestViewController.h */,
+				3818D69921709C6C00AF846C /* SHPushTestViewController.m */,
+				3818D69B21709CAA00AF846C /* ICPCChartGroup.h */,
+				3818D69C21709CAA00AF846C /* ICPCChartGroup.m */,
+			);
+			path = PushTest;
+			sourceTree = "<group>";
+		};
+		3818D66921709BA100AF846C /* XYChart */ = {
+			isa = PBXGroup;
+			children = (
+				3818D66A21709BA100AF846C /* XYChart.m */,
+				3818D66B21709BA100AF846C /* Extension */,
+				3818D67021709BA100AF846C /* XYChart.h */,
+				3818D67121709BA100AF846C /* Const */,
+				3818D67421709BA100AF846C /* Line */,
+				3818D67D21709BA100AF846C /* model */,
+				3818D68221709BA100AF846C /* Bar */,
+			);
+			path = XYChart;
+			sourceTree = "<group>";
+		};
+		3818D66B21709BA100AF846C /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				3818D66C21709BA100AF846C /* NSArray+XYChart.m */,
+				3818D66D21709BA100AF846C /* UIColor+XYChart.h */,
+				3818D66E21709BA100AF846C /* NSArray+XYChart.h */,
+				3818D66F21709BA100AF846C /* UIColor+XYChart.m */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		3818D67121709BA100AF846C /* Const */ = {
+			isa = PBXGroup;
+			children = (
+				3818D67221709BA100AF846C /* XYChartProtocol.h */,
+				3818D67321709BA100AF846C /* XYChartConst.h */,
+			);
+			path = Const;
+			sourceTree = "<group>";
+		};
+		3818D67421709BA100AF846C /* Line */ = {
+			isa = PBXGroup;
+			children = (
+				3818D67521709BA100AF846C /* XYLineItemView.m */,
+				3818D67621709BA100AF846C /* XYLinesView.m */,
+				3818D67721709BA100AF846C /* XYLineChart.m */,
+				3818D67821709BA100AF846C /* XYLineGradientLayer.h */,
+				3818D67921709BA100AF846C /* XYLineItemView.h */,
+				3818D67A21709BA100AF846C /* XYLineChart.h */,
+				3818D67B21709BA100AF846C /* XYLinesView.h */,
+				3818D67C21709BA100AF846C /* XYLineGradientLayer.m */,
+			);
+			path = Line;
+			sourceTree = "<group>";
+		};
+		3818D67D21709BA100AF846C /* model */ = {
+			isa = PBXGroup;
+			children = (
+				3818D67E21709BA100AF846C /* XYChartItem.h */,
+				3818D67F21709BA100AF846C /* XYChartDataSourceItem.h */,
+				3818D68021709BA100AF846C /* XYChartItem.m */,
+				3818D68121709BA100AF846C /* XYChartDataSourceItem.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		3818D68221709BA100AF846C /* Bar */ = {
+			isa = PBXGroup;
+			children = (
+				3818D68321709BA100AF846C /* XYBarView.h */,
+				3818D68421709BA100AF846C /* XYBarCell.h */,
+				3818D68521709BA100AF846C /* XYBarChart.h */,
+				3818D68621709BA100AF846C /* XYBarView.m */,
+				3818D68721709BA100AF846C /* XYBarCell.m */,
+				3818D68821709BA100AF846C /* XYBarChart.m */,
+			);
+			path = Bar;
 			sourceTree = "<group>";
 		};
 		384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */ = {
@@ -1998,6 +2138,8 @@
 				38E5C07F20A3F5AE003004E0 /* SHNetworkManager.m */,
 				38E5C08320A3F5AE003004E0 /* SHNetworkManager+SHCamera.h */,
 				38E5C07E20A3F5AE003004E0 /* SHNetworkManager+SHCamera.m */,
+				3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */,
+				3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */,
 				38E5C08020A3F5AE003004E0 /* Model */,
 			);
 			path = Network;
@@ -2139,6 +2281,7 @@
 		38E5C0D120A3F5AE003004E0 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				3818D66321709A8C00AF846C /* PushTest */,
 				38E5C0D820A3F5AE003004E0 /* SH_XJ_SettingTVC.h */,
 				38E5C0FA20A3F5AE003004E0 /* SH_XJ_SettingTVC.m */,
 				38E5C0FB20A3F5AE003004E0 /* DeleteCameraCell */,
@@ -2726,7 +2869,7 @@
 		38A837CB1E9CB4D200553985 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = XJ;
+				CLASSPREFIX = SH;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "iCatch Technology Inc";
 				TargetAttributes = {
@@ -2851,6 +2994,7 @@
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				38E5C38B20A4192E003004E0 /* emailCell.xib in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
+				3818D66521709AB200AF846C /* PushTest.storyboard in Resources */,
 				38E5C2E720A3F7FA003004E0 /* SHFileFilter.plist in Resources */,
 				384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */,
 				1234BC7A20B90EB5003CD9AB /* XJMessageTitleTableViewCell.xib in Resources */,
@@ -2985,17 +3129,21 @@
 				38E5C22C20A3F62F003004E0 /* SHVideoFormatTransformer.m in Sources */,
 				38E5C36E20A40FFC003004E0 /* UIView+Layout.m in Sources */,
 				384BBE4120C13A900047E152 /* SVRadialGradientLayer.m in Sources */,
+				3818D68B21709BA100AF846C /* UIColor+XYChart.m in Sources */,
 				38E5C15420A3F5AF003004E0 /* SHAppInfoVC.m in Sources */,
 				38E5C16720A3F5AF003004E0 /* JJCPayCodeTextFieldCell.m in Sources */,
 				386FAFD220AFB701007655CF /* SHLoginFirstView.m in Sources */,
 				38E5C21020A3F610003004E0 /* DiskSpaceTool.m in Sources */,
+				3818D68921709BA100AF846C /* XYChart.m in Sources */,
 				38802ECA20B27401006274AE /* XJSetupTipsView.m in Sources */,
 				38E5C3DB20A419E0003004E0 /* SHAccountInfoHeaderView.m in Sources */,
+				3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */,
 				384BBE4620C13A900047E152 /* ZJGridViewController.m in Sources */,
 				38E5C3E820A41A0B003004E0 /* UIViewController+CWLateralSlide.m in Sources */,
 				38A0C56920EDF12F00AE7B7F /* UIImageView+ZJAddition.m in Sources */,
 				384BBE4320C13A900047E152 /* SVProgressHUD.m in Sources */,
 				38E5C3F120A594AA003004E0 /* SHSubscribeInfoConvert.m in Sources */,
+				3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */,
 				384BBE4920C13A900047E152 /* ZJPhotoBrowserController.m in Sources */,
 				38E5C28020A3F685003004E0 /* MessageManager.m in Sources */,
 				38E5C2EB20A3F7FA003004E0 /* SHGUIHandleTool.m in Sources */,
@@ -3032,6 +3180,7 @@
 				38E5C30E20A3F81F003004E0 /* SHFilterTableViewCell.m in Sources */,
 				38E5C34D20A40F8A003004E0 /* SHActionControl.m in Sources */,
 				38F525B41F2F020400F5A5A2 /* SGWebView.m in Sources */,
+				3818D69421709BA100AF846C /* XYBarChart.m in Sources */,
 				38E5C3D520A419E0003004E0 /* SHAccountTableViewCell.m in Sources */,
 				38E5C3B420A4199F003004E0 /* SHShareHomeCell.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
@@ -3080,6 +3229,7 @@
 				38E5C1A520A3F5AF003004E0 /* SHUserAccountInfoTVC.m in Sources */,
 				38E5C33520A40F49003004E0 /* SHSleepTime.m in Sources */,
 				38E5C16220A3F5AF003004E0 /* RTCButton.m in Sources */,
+				3818D69121709BA100AF846C /* XYChartDataSourceItem.m in Sources */,
 				38E5C37120A40FFC003004E0 /* UIView+Addition.m in Sources */,
 				38E5C22220A3F610003004E0 /* SHFindIndicator.m in Sources */,
 				38E5C36A20A40FFC003004E0 /* GCDiscreetNotificationView+Addition.m in Sources */,
@@ -3088,6 +3238,7 @@
 				38E5C16320A3F5AF003004E0 /* QBTools.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
+				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38E5C3E720A41A0B003004E0 /* CWLateralSlideConfiguration.m in Sources */,
 				38E5C32E20A40F49003004E0 /* SHAbout.m in Sources */,
 				38E5C3D220A419E0003004E0 /* SHUserAccountInfoVC.m in Sources */,
@@ -3103,7 +3254,9 @@
 				38E5C26520A3F66D003004E0 /* SHFileThumbnail.m in Sources */,
 				38802ED520B2CAF7006274AE /* XJSetupDeviceInfoVC.m in Sources */,
 				38802EC620B272BF006274AE /* XJSetupHomeVC.m in Sources */,
+				3818D69D21709CAA00AF846C /* ICPCChartGroup.m in Sources */,
 				38E5C33220A40F49003004E0 /* SHVidRecDuration.m in Sources */,
+				3818D68F21709BA100AF846C /* XYLineGradientLayer.m in Sources */,
 				384BBE4020C13A900047E152 /* ZJPhotoViewerController.m in Sources */,
 				38E5C33420A40F49003004E0 /* SHRangeItemData.m in Sources */,
 				38E5C15A20A3F5AF003004E0 /* SHCameraViewCell.m in Sources */,
@@ -3116,6 +3269,7 @@
 				38E5C2E620A3F7FA003004E0 /* MpbSDKEventListener.cpp in Sources */,
 				38E5C2D120A3F7DF003004E0 /* SHMsgFileViewController.m in Sources */,
 				38E5C23C20A3F650003004E0 /* SHGettingSupportedProperty.m in Sources */,
+				3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */,
 				38E5C36C20A40FFC003004E0 /* NSDate+Convert.m in Sources */,
 				38E5C2BC20A3F7CA003004E0 /* SHSetupWiFiViewController.m in Sources */,
 				38E5C36D20A40FFC003004E0 /* UIScreen+Addition.m in Sources */,
@@ -3148,9 +3302,11 @@
 				389C29F01F2EEA5D004C4806 /* AppDelegate.m in Sources */,
 				38E5C2D020A3F7DF003004E0 /* SHFileInfoTableViewCell.m in Sources */,
 				38E5C37420A40FFC003004E0 /* UIImage+Mask.m in Sources */,
+				3818D69221709BA100AF846C /* XYBarView.m in Sources */,
 				38E5C37020A40FFC003004E0 /* UIColor+Addition.m in Sources */,
 				38E5C3E920A41A0B003004E0 /* CWDrawerTransition.m in Sources */,
 				38E5C16120A3F5AF003004E0 /* ICVoiceHud.m in Sources */,
+				3818D68D21709BA100AF846C /* XYLinesView.m in Sources */,
 				38470A2120CA779A00C8DEC7 /* XJLocalAssetHelper.m in Sources */,
 				38E5C28620A3F685003004E0 /* MessageInfo.m in Sources */,
 				38E5C16020A3F5AF003004E0 /* SHWaterView.m in Sources */,
@@ -3160,12 +3316,15 @@
 				38802ED220B2C019006274AE /* XJSetupDeviceSSIDVC.m in Sources */,
 				38E5C32F20A40F49003004E0 /* SHVideoSize.m in Sources */,
 				38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */,
+				3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */,
 				38E5C37E20A41027003004E0 /* SHCameraHelper.m in Sources */,
 				386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */,
 				38E5C33020A40F49003004E0 /* SHSettingData.m in Sources */,
 				38E5C28D20A3F698003004E0 /* SHLocalWithRemoteHelper.m in Sources */,
 				38E5C28220A3F685003004E0 /* DBWrapper.m in Sources */,
 				38E5C26620A3F66D003004E0 /* SHDatabase.m in Sources */,
+				3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */,
+				3818D69021709BA100AF846C /* XYChartItem.m in Sources */,
 				38E5C20C20A3F610003004E0 /* SHAudioUnitRecord.m in Sources */,
 				38E5C33820A40F49003004E0 /* SHPir.m in Sources */,
 				38E5C2FA20A3F80B003004E0 /* VideoPlaybackSlideController.m in Sources */,
@@ -3186,6 +3345,7 @@
 				38E5C19520A3F5AF003004E0 /* SHMessagesListTVC.m in Sources */,
 				38E5C37C20A41027003004E0 /* CoreDataHandler+SHCamera.m in Sources */,
 				38802ECF20B29D14006274AE /* XJSetupWiFiVC.m in Sources */,
+				3818D69321709BA100AF846C /* XYBarCell.m in Sources */,
 				38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */,
 				1234BC7920B90EB5003CD9AB /* XJMessageTitleTableViewCell.m in Sources */,
 				38E5C2BB20A3F7CA003004E0 /* SHSetupWiFiCell.m in Sources */,

@@ -9,6 +9,7 @@
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
 //#import <SHAccountManagementKit/TokenOperate.h>
+#import "SHNetworkManager+SHPush.h"
 
 @interface SHNetworkManager ()
 
@@ -138,6 +139,10 @@
                 completion(NO, error);
             }
         }];
+        
+        [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
+            NSLog(@"register client success: %d", isSuccess);
+        }];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
@@ -231,6 +236,12 @@
             NSLog(@"userAccount: %@", self.userAccount);
         } failure:^(Error * _Nonnull error) {
             NSLog(@"acquireAccountInfoWithToken failed, error: %@", error.error_description);
+        }];
+        
+        NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
+        NSLog(@"This is device Token: %@", deviceToken);
+        [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
+            NSLog(@"register client success: %d", isSuccess);
         }];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"refreshToken failed, error: %@", error.error_description);

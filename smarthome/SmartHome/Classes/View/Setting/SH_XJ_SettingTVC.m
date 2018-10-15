@@ -32,6 +32,7 @@
 #import "SHMpbTVC.h"
 #import "SHWiFiSettingVC.h"
 #import "SHNetworkManagerHeader.h"
+#import "SHPushTestNavController.h"
 
 typedef NS_OPTIONS(NSUInteger, SHSettingSectionType) {
     SHSettingSectionTypeBasic,
@@ -241,10 +242,15 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_Detail forIndexPath:indexPath];
             }
         } else if (indexPath.section == SHSettingSectionTypeDeleteCamera) {
-            cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
-            
-            if ([self validityCheckOfIndexPath:indexPath]) {
-                ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+            if (indexPath.row == 0) {
+                cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_Detail forIndexPath:indexPath];
+                cell.textLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+            } else {
+                cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
+                
+                if ([self validityCheckOfIndexPath:indexPath]) {
+                    ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+                }
             }
         }
         
@@ -255,10 +261,15 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             cell.detailTextLabel.text = data.detailTextLabel;
         }
     } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
-        
-        if ([self validityCheckOfIndexPath:indexPath]) {
-            ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+        if (indexPath.row == 0) {
+            cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_Detail forIndexPath:indexPath];
+            cell.textLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+        } else {
+            cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
+            
+            if ([self validityCheckOfIndexPath:indexPath]) {
+                ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+            }
         }
     }
     
@@ -398,7 +409,11 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (!_shCamObj.isConnect) {
-        [self showDeleteCameraAlertWithIndexPath:indexPath];
+        if (indexPath.row == 0) {
+            [self enterPustTestView];
+        } else {
+            [self showDeleteCameraAlertWithIndexPath:indexPath];
+        }
         return;
     }
     
@@ -420,7 +435,11 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             break;
             
         case SHSettingSectionTypeDeleteCamera:
-            [self showDeleteCameraAlertWithIndexPath:indexPath];
+            if (indexPath.row == 0) {
+                [self enterPustTestView];
+            } else {
+                [self showDeleteCameraAlertWithIndexPath:indexPath];
+            }
             break;
             
         default:
@@ -454,6 +473,15 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     vc.title = title;
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)enterPustTestView {
+    SHPushTestNavController *nav = [SHPushTestNavController pushTestNavController];
+    nav.title = _shCamObj.camera.cameraUid;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:nav animated:YES completion:nil];
+    });
 }
 
 #pragma mark - DeleteCamera
@@ -703,6 +731,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)fillDeleteCameraTable {
     [self.mainMenuDeleteCameraTable removeAllObjects];
     
+    [self.mainMenuDeleteCameraTable addObject:@"Push Test"];
     [self.mainMenuDeleteCameraTable addObject:@"Delete"];
 }
 

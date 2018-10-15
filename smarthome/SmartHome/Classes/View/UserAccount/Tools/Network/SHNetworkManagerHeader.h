@@ -12,5 +12,6 @@
 #import "SHNetworkManager.h"
 #import "SHNetworkManager+SHCamera.h"
 #import "SHUserAccount.h"
+#import "SHNetworkManager+SHPush.h"
 
 #endif /* SHNetworkManagerHeader_h */

@@ -300,6 +300,7 @@ static void AudioPlayerAQInputCallback(void* inUserData, AudioQueueRef outQ, Aud
                 break;
             } else {
                 [NSThread sleepForTimeInterval:0.002];
+                AudioQueueStart(audioQueue, NULL);
             }
         }
     }

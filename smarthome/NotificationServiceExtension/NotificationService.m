@@ -125,7 +125,7 @@
     } else if ([msgType isEqualToString:@"203"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kNotDetectSome", nil)];
     } else if ([msgType isEqualToString:@"204"]) {
-        str = @"Push message test.";
+        str = [NSString stringWithFormat:@"Push message test, msgID: %@", aps[@"msgID"]];
     } else if ([msgType isEqualToString:@"104"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kSDCardErrorTipsInfo", nil), devID, time];
     } else if ([msgType isEqualToString:@"105"]) {

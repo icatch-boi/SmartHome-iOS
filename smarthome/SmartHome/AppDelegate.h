@@ -25,5 +25,9 @@
 @property (nonatomic, weak) id <AppDelegateDelegate> delegate;
 //@property (nonatomic, copy) NSString *deviceToken;
 
+@property (nonatomic, strong, readonly) NSMutableArray *messages;
+
+- (void)cleanMessageCache;
+
 @end
 
