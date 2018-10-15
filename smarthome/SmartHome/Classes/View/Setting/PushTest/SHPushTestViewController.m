@@ -9,7 +9,7 @@
 #import "SHPushTestViewController.h"
 #import "XYChart.h"
 #import "XYChartItem.h"
-#import "ICPCChartGroup.h"
+#import "SHChartGroup.h"
 #import "SHNetworkManager+SHPush.h"
 #import "AppDelegate.h"
 
@@ -21,7 +21,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
 @interface SHPushTestViewController () <XYChartDelegate, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDataSource>
 
 @property (nonatomic, strong) XYChart *chartView;
-@property (nonatomic, strong) ICPCChartGroup *dataSource;
+@property (nonatomic, strong) SHChartGroup *dataSource;
 @property (nonatomic, assign) NSInteger pushCount;
 @property (nonatomic, strong) NSTimer *pushTimer;
 
@@ -130,7 +130,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.chartView removeFromSuperview];
 
-        self.dataSource = [[ICPCChartGroup alloc] initWithStyle:XYChartTypeLine section:1 row:kPushNum dataList:dataList];
+        self.dataSource = [[SHChartGroup alloc] initWithStyle:XYChartTypeLine section:1 row:kPushNum dataList:dataList];
         self.dataSource.range = XYRangeMake(0, 3000);
         
         CGFloat width = self.view.frame.size.width - 20;

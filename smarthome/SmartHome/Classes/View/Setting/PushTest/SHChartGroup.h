@@ -1,5 +1,5 @@
 //
-//  ICPCChartGroup.h
+//  SHChartGroup.h
 //  ICatchPushChart
 //
 //  Created by ZJ on 2018/10/8.
@@ -8,7 +8,7 @@
 
 #import "XYChartDataSourceItem.h"
 
-@interface ICPCChartGroup : XYChartDataSourceItem
+@interface SHChartGroup : XYChartDataSourceItem
 
 @property (nonatomic, readonly) XYChartType type;
 

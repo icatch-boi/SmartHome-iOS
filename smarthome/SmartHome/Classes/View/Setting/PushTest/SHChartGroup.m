@@ -1,18 +1,18 @@
 //
-//  ICPCChartGroup.m
+//  SHChartGroup.m
 //  ICatchPushChart
 //
 //  Created by ZJ on 2018/10/8.
 //  Copyright © 2018年 iCatch Technology Inc. All rights reserved.
 //
 
-#import "ICPCChartGroup.h"
+#import "SHChartGroup.h"
 #import "XYChartItem.h"
 
-@implementation ICPCChartGroup
+@implementation SHChartGroup
 
 - (instancetype)initWithStyle:(XYChartType)type section:(NSUInteger)section row:(NSUInteger)row dataList:(NSArray <NSArray<NSString *>*> *)dataList {
-    self = [self initWithDataList:[ICPCChartGroup getDataListWithSection:section row:row dataList:dataList]];
+    self = [self initWithDataList:[SHChartGroup getDataListWithSection:section row:row dataList:dataList]];
     if (self) {
         _type = type;
         self.autoSizingRowWidth = YES;
@@ -22,7 +22,7 @@
 }
 
 - (instancetype)initWithStyle:(XYChartType)type section:(NSUInteger)section row:(NSUInteger)row width:(CGFloat)width dataList:(NSArray <NSArray<NSString *>*> *)dataList {
-    self = [self initWithDataList:[ICPCChartGroup getDataListWithSection:section row:row dataList:dataList]];
+    self = [self initWithDataList:[SHChartGroup getDataListWithSection:section row:row dataList:dataList]];
     if (self) {
         _type = type;
         self.widthOfRow = width;

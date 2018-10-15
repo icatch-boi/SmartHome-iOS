@@ -249,7 +249,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
                 
                 if ([self validityCheckOfIndexPath:indexPath]) {
-                    ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+                    NSString *deleteCellTitle = self.mainMenuTable[indexPath.section][indexPath.row];
+                    ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : @"Delete";
                 }
             }
         }
@@ -268,7 +269,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             cell = [tableView dequeueReusableCellWithIdentifier:kDeleteCameraCellID forIndexPath:indexPath];
             
             if ([self validityCheckOfIndexPath:indexPath]) {
-                ((SHDeleteCameraCell *)cell).titleLabel.text = self.mainMenuTable[indexPath.section][indexPath.row];
+                NSString *deleteCellTitle = self.mainMenuTable[indexPath.section][indexPath.row];
+                ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : @"Delete";
             }
         }
     }
@@ -895,13 +897,13 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     return _curResult;
 }
 
-- (SHPropertyQueryResult *)supResult {
-    if (!_supResult) {
-        _supResult = [_ctrl.propCtrl retrieveSettingSupPropertyWithCamera:_shCamObj];
-    }
-    
-    return _supResult;
-}
+//- (SHPropertyQueryResult *)supResult {
+//    if (!_supResult) {
+//        _supResult = nil; //[_ctrl.propCtrl retrieveSettingSupPropertyWithCamera:_shCamObj];
+//    }
+//
+//    return _supResult;
+//}
 
 - (NSMutableArray *)mainMenuTable {
     if (!_mainMenuTable) {

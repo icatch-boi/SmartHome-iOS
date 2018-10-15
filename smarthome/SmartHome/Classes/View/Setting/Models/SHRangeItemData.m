@@ -28,13 +28,13 @@
     int proId = propertyID ? propertyID : _propertyID;
     
     int curRangeItemValue = [self retrieveRangeItemCurrentValueWithPropertyID:proId];
-    SHRangeItem *item = [self retrieveRangeItemSupportedValueWithPropertyID:proId];
+//    SHRangeItem *item = [self retrieveRangeItemSupportedValueWithPropertyID:proId];
     
     SHSettingData *riData = [[SHSettingData alloc] init];
     riData.textLabel = title;
     riData.detailTextLabel = [NSString stringWithFormat:@"%d%@", curRangeItemValue, unit];
     riData.detailType = type;
-    riData.detailData = @[item];
+//    riData.detailData = @[item];
     riData.unit = unit;
     riData.propertyID = proId;
     

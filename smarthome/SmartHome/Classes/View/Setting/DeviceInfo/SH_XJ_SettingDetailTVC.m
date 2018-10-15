@@ -201,6 +201,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"detailSettingCellID" forIndexPath:indexPath];
+    cell.textLabel.textColor = [UIColor blackColor];
     
     if (indexPath.section == SHDetailSettingSectionTypeBasic) {
         if (indexPath.row) {
@@ -907,13 +908,13 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     return _curResult;
 }
 
-- (SHPropertyQueryResult *)supResult {
-    if (!_supResult) {
-        _supResult = [_ctrl.propCtrl retrieveSettingSupPropertyWithCamera:_shCamObj];
-    }
-    
-    return _supResult;
-}
+//- (SHPropertyQueryResult *)supResult {
+//    if (!_supResult) {
+//        _supResult = [_ctrl.propCtrl retrieveSettingSupPropertyWithCamera:_shCamObj];
+//    }
+//    
+//    return _supResult;
+//}
 
 #pragma mark - Action Progress
 - (MBProgressHUD *)progressHUD {

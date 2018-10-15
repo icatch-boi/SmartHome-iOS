@@ -45,7 +45,7 @@
 		3818D69321709BA100AF846C /* XYBarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68721709BA100AF846C /* XYBarCell.m */; };
 		3818D69421709BA100AF846C /* XYBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D68821709BA100AF846C /* XYBarChart.m */; };
 		3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69921709C6C00AF846C /* SHPushTestViewController.m */; };
-		3818D69D21709CAA00AF846C /* ICPCChartGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69C21709CAA00AF846C /* ICPCChartGroup.m */; };
+		3818D69D21709CAA00AF846C /* SHChartGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69C21709CAA00AF846C /* SHChartGroup.m */; };
 		381DB6F81ED6E1410054D817 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */; };
 		38223C5320BD260B0057DC14 /* MessageDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38223C5120BD260A0057DC14 /* MessageDetailInfo.m */; };
 		382CA9BD1EE69BEF0042442C /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BC1EE69BEF0042442C /* libresolv.tbd */; };
@@ -533,8 +533,8 @@
 		3818D68821709BA100AF846C /* XYBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYBarChart.m; sourceTree = "<group>"; };
 		3818D69821709C6C00AF846C /* SHPushTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPushTestViewController.h; sourceTree = "<group>"; };
 		3818D69921709C6C00AF846C /* SHPushTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHPushTestViewController.m; sourceTree = "<group>"; };
-		3818D69B21709CAA00AF846C /* ICPCChartGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICPCChartGroup.h; sourceTree = "<group>"; };
-		3818D69C21709CAA00AF846C /* ICPCChartGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICPCChartGroup.m; sourceTree = "<group>"; };
+		3818D69B21709CAA00AF846C /* SHChartGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHChartGroup.h; sourceTree = "<group>"; };
+		3818D69C21709CAA00AF846C /* SHChartGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHChartGroup.m; sourceTree = "<group>"; };
 		381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		3820466E1FC7EF06005EA723 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		38223C5120BD260A0057DC14 /* MessageDetailInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailInfo.m; sourceTree = "<group>"; };
@@ -1296,8 +1296,8 @@
 				3818D66721709AF100AF846C /* SHPushTestNavController.m */,
 				3818D69821709C6C00AF846C /* SHPushTestViewController.h */,
 				3818D69921709C6C00AF846C /* SHPushTestViewController.m */,
-				3818D69B21709CAA00AF846C /* ICPCChartGroup.h */,
-				3818D69C21709CAA00AF846C /* ICPCChartGroup.m */,
+				3818D69B21709CAA00AF846C /* SHChartGroup.h */,
+				3818D69C21709CAA00AF846C /* SHChartGroup.m */,
 			);
 			path = PushTest;
 			sourceTree = "<group>";
@@ -3254,7 +3254,7 @@
 				38E5C26520A3F66D003004E0 /* SHFileThumbnail.m in Sources */,
 				38802ED520B2CAF7006274AE /* XJSetupDeviceInfoVC.m in Sources */,
 				38802EC620B272BF006274AE /* XJSetupHomeVC.m in Sources */,
-				3818D69D21709CAA00AF846C /* ICPCChartGroup.m in Sources */,
+				3818D69D21709CAA00AF846C /* SHChartGroup.m in Sources */,
 				38E5C33220A40F49003004E0 /* SHVidRecDuration.m in Sources */,
 				3818D68F21709BA100AF846C /* XYLineGradientLayer.m in Sources */,
 				384BBE4020C13A900047E152 /* ZJPhotoViewerController.m in Sources */,
