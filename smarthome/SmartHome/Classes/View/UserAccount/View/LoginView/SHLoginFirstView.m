@@ -28,12 +28,14 @@
 #import "SHLoginFirstView.h"
 
 static const CGFloat kBottomConsDefaultValue = 60;
+static const CGFloat kLogoTopConsDefaultVaule = 80;
 
 @interface SHLoginFirstView ()
 
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
 @property (weak, nonatomic) IBOutlet UIButton *signinButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCons;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoTopCons;
 
 @end
 
@@ -46,6 +48,7 @@ static const CGFloat kBottomConsDefaultValue = 60;
     view.frame = [[UIScreen mainScreen] bounds];
 
     view.bottomCons.constant = kBottomConsDefaultValue * kScreenHeightScale;
+    view.logoTopCons.constant = kLogoTopConsDefaultVaule * kScreenWidthScale;
     
     return view;
 }

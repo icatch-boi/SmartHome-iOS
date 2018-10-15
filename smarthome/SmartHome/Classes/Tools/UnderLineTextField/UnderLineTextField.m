@@ -43,7 +43,16 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    if (CGRectGetWidth(self.frame) != CGRectGetWidth(self.lineView.frame)) {
+        [self setupGUI];
+    }
+}
+
 - (void)setupGUI {
+    [self.lineView removeFromSuperview];
     self.borderStyle = UITextBorderStyleNone;
     self.font = [UIFont systemFontOfSize:16.0];
 //    self.placeholder = @"placeholder";

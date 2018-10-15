@@ -43,6 +43,7 @@
 #import "XJMessageCenterViewController.h"
 #import "MessageCenter.h"
 #import "SHQRCodeScanningVC.h"
+#import "SHPushTestNavController.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -409,12 +410,22 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
+    // when (if = 0) for faster enter push test.
+#if 1
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
     tvc.title = @"Camera Roll";
     
     [self.navigationController pushViewController:tvc animated:YES];
+#else
+    SHPushTestNavController *nav = [SHPushTestNavController pushTestNavController];
+    nav.title = cell.viewModel.cameraObj.camera.cameraUid;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:nav animated:YES completion:nil];
+    });
+#endif
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {

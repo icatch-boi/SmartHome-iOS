@@ -204,11 +204,11 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 }
 
 - (IBAction)changeButtonBackgroundColor:(UIButton *)sender {
-    sender.backgroundColor = kButtonSelectedBackgroundColor;
+//    sender.backgroundColor = kButtonSelectedBackgroundColor;
 }
 
 - (IBAction)resetButtonBackgroundColor:(UIButton *)sender {
-    sender.backgroundColor = kButtonDefaultBackgroundColor;
+//    sender.backgroundColor = kButtonDefaultBackgroundColor;
 }
 
 #pragma mark - TouchesEvent

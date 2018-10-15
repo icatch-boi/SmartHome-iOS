@@ -146,7 +146,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
         CGFloat navBarHeight = CGRectGetHeight(self.navigationController.navigationBar.frame);
         CGFloat scale = CGRectGetHeight(self.view.frame) / 320.0;
         CGFloat height = (205 - navBarHeight) * scale;
-        self.chartView = [[XYChart alloc] initWithFrame:CGRectMake(0, navBarHeight + 5, width, height)
+        self.chartView = [[XYChart alloc] initWithFrame:CGRectMake(6, navBarHeight + 5, width, height)
                                           chartType:XYChartTypeBar];
         self.chartView.dataSource = self.dataSource;
         self.chartView.delegate = self;
