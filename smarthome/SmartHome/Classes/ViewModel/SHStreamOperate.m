@@ -193,7 +193,9 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             */
             [self play];
             if (_shCamObj.cameraProperty.serverOpened == NO) {
-                [_shCamObj openAudioServer];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [_shCamObj openAudioServer];
+                });
             }
 
             if (successBlock) {

@@ -62,4 +62,10 @@
     _talk = NO;
 }
 
+- (void)setServerOpened:(BOOL)serverOpened {
+    @synchronized (self) {
+        _serverOpened = serverOpened;
+    }
+}
+
 @end

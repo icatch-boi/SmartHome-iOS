@@ -1057,8 +1057,8 @@
 		38E5C3EE20A594AA003004E0 /* SHSubscribeInfoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHSubscribeInfoConvert.m; sourceTree = "<group>"; };
 		38E5C3EF20A594AA003004E0 /* SubscribeStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeStatus.h; sourceTree = "<group>"; };
 		38E5C3F020A594AA003004E0 /* SHSubscribeInfoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSubscribeInfoConvert.h; sourceTree = "<group>"; };
-		38EB72DF20DA5BA3003E84B6 /* confuse.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = confuse.sh; sourceTree = SOURCE_ROOT; };
-		38EB72E020DA5BA4003E84B6 /* func.list */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = func.list; sourceTree = SOURCE_ROOT; };
+		38EB72DF20DA5BA3003E84B6 /* confuse.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = confuse.sh; path = SmartHome/Others/confuse.sh; sourceTree = SOURCE_ROOT; };
+		38EB72E020DA5BA4003E84B6 /* func.list */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = func.list; path = SmartHome/Others/func.list; sourceTree = SOURCE_ROOT; };
 		38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F4424B1FAC079A00BDA6DF /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		38F4424C1FAC079A00BDA6DF /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
@@ -1543,6 +1543,9 @@
 				389C29E41F2EEA0D004C4806 /* SHPrefixHeader.pch */,
 				389C29E51F2EEA0D004C4806 /* SHUtilsMacro.h */,
 				389C29E61F2EEA0D004C4806 /* TimeZone.json */,
+				38EB72DF20DA5BA3003E84B6 /* confuse.sh */,
+				38EB72E020DA5BA4003E84B6 /* func.list */,
+				1209ABB320D0F3880014F684 /* icatchtek.cer */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -1611,9 +1614,6 @@
 		38A837D51E9CB4D200553985 /* SmartHome */ = {
 			isa = PBXGroup;
 			children = (
-				38EB72DF20DA5BA3003E84B6 /* confuse.sh */,
-				38EB72E020DA5BA4003E84B6 /* func.list */,
-				1209ABB320D0F3880014F684 /* icatchtek.cer */,
 				382CA9C61EE69C790042442C /* SmartHome.entitlements */,
 				38E5BF3120A3F5AE003004E0 /* Classes */,
 				389C29DD1F2EEA0D004C4806 /* Others */,

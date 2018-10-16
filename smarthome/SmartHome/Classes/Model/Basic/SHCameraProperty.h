@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 @class SHFileTable;
+@class SHICatchEvent;
 
 //typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 //    SHPreviewModeCameraOff = 1<<0,
@@ -70,6 +71,8 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 
 @property (nonatomic) ICatchVideoFormat *videoFormat;
 @property (nonatomic) ICatchAudioFormat *audioFormat;
+
+@property (nonatomic) SHICatchEvent *curBatteryLevel;
 
 - (void)cleanCurrentCameraAllProperty;
 - (BOOL)checkSupportPropertyExist;

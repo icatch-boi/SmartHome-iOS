@@ -274,6 +274,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
         [self startMediaStream];
     } else {
         [self addVideoBitRateObserver];
+        [self prepareCameraPropertyData];
     }
 }
 
@@ -502,6 +503,8 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 - (void)initCameraPropertyGUI {
     [self initBatteryLevelIcon];
     
+    SHICatchEvent *evt = _shCameraObj.cameraProperty.curBatteryLevel;
+    evt ? [self updateBatteryLevelIcon:evt] : void();
     [self updateCameraPropertyGUI];
 }
 
@@ -511,6 +514,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     [_shCameraObj setCameraPropertyValueChangeBlock:^ (SHICatchEvent *evt){
         switch (evt.eventID) {
             case ICATCH_EVENT_BATTERY_LEVEL_CHANGED:
+                weakSelf.shCameraObj.cameraProperty.curBatteryLevel = evt;
                 [weakSelf updateBatteryLevelIcon:evt];
                 break;
 
