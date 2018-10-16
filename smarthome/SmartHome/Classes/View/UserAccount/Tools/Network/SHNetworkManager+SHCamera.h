@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //获取相机及一些操作
 - (void)getCameraByCameraID:(NSString *)cameraId completion:(RequestCompletionBlock)completion;
+- (void)getCameraByCameraUID:(NSString *)cameraUid completion:(RequestCompletionBlock)completion;
 - (void)getCameraList:(RequestCompletionBlock)completion;
 - (void)renameCameraByCameraID:(NSString *)cameraId andNewName:(NSString * _Nonnull)name completion:(RequestCompletionBlock)completion;
 - (void)fixedAliasByCameraID:(NSString * _Nonnull)cameraId andAlias:(NSString * _Nonnull)alias completion:(RequestCompletionBlock)completion;
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateCameraCoverByCameraID:(NSString *)cameraId andCoverData:(NSData *)data completion:(RequestCompletionBlock)completion;
 
+- (void)checkDeviceHasExistsWithUID:(NSString *)uid completion:(RequestCompletionBlock)completion;
 
 //分享相机
 - (void)shareCameraWithCameraID:(NSString *)cameraId viaCode:(NSString * _Nonnull)viaCode duration:(long)duration userLimits:(char)user_limits completion:(RequestCompletionBlock)completion;

@@ -126,6 +126,64 @@
     }
 }
 
+- (void)getCameraByCameraUID:(NSString *)cameraUid completion:(RequestCompletionBlock)completion {
+    if (self.userAccount.access_tokenHasEffective) {
+        [self.cameraOperate getCameraByCameraUID:cameraUid WithToken:[self createToken] success:^(Camera * _Nullable camera) {
+            if (completion) {
+                completion(YES, camera);
+            }
+        } failure:^(Error * _Nonnull error) {
+            SHLogError(SHLogTagSDK, @"getCameraByCameraUID failed, error: %@", error.error_description);
+            
+            if (completion) {
+                completion(NO, error);
+            }
+        }];
+    } else {
+        [self refreshToken:^(BOOL isSuccess, id  _Nonnull result) {
+            if (isSuccess) {
+                [self.cameraOperate getCameraByCameraUID:cameraUid WithToken:[self createToken] success:^(Camera * _Nullable camera) {
+                    if (completion) {
+                        completion(YES, camera);
+                    }
+                } failure:^(Error * _Nonnull error) {
+                    SHLogError(SHLogTagSDK, @"getCameraByCameraUID failed, error: %@", error.error_description);
+                    
+                    if (completion) {
+                        completion(NO, error);
+                    }
+                }];
+            } else {
+                if (completion) {
+                    completion(NO, result);
+                }
+            }
+        }];
+    }
+}
+
+- (void)checkDeviceHasExistsWithUID:(NSString *)uid completion:(RequestCompletionBlock)completion {
+    if (uid == nil || uid.length <= 0) {
+        completion(NO, @"uid is nil.");
+        return;
+    }
+    
+    [self getCameraByCameraUID:uid completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            completion(isSuccess, @1);
+        } else {
+            NSNumber *value = @0;
+            
+            Error *err = result;
+            if (err.error_code == 50001) {
+                value = @1;
+            }
+            
+            completion(YES, value);
+        }
+    }];
+}
+
 - (void)getCameraList:(RequestCompletionBlock)completion {
     if (self.userAccount.access_tokenHasEffective) {
         [self.cameraOperate getCamerasWithToken:[self createToken] success:^(NSArray * _Nullable cameras) {

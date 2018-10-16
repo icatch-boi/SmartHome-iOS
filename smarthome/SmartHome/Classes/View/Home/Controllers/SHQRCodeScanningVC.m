@@ -13,12 +13,15 @@
 #import "XJSetupDeviceInfoVC.h"
 #import "XJSetupTipsView.h"
 #import "XJSetupScanTipsView.h"
+#import "SHNetworkManagerHeader.h"
 
 @interface SHQRCodeScanningVC () <XJXJSetupTipsViewDelegate, XJSetupScanTipsViewDelegate>
 
 @property (nonatomic, weak) UIView *coverView;
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, strong) XJSetupScanTipsView *scanTipsView;
+
+@property (nonatomic) MBProgressHUD *progressHUD;
 
 @end
 
@@ -236,7 +239,7 @@
     [super viewWillAppear:animated];
 }
 
-- (void)getCameraUIDWithCiphertext:(NSString *)ciphertext {
+- (NSString *)getCameraUIDWithCiphertext:(NSString *)ciphertext {
     int parseResult = 0;
     NSString *token = [[SHQRManager sharedQRManager] getTokenFromQRString:ciphertext parseResult:&parseResult];
     NSString *uid = [[SHQRManager sharedQRManager] getUID:token];
@@ -250,7 +253,7 @@
         }]];
         [self presentViewController:alertVC animated:YES completion:nil];
         
-        return;
+        return nil;
     } else {
         if ([uid containsString:@" "]) {
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"The uid contains Spaces, please check." preferredStyle:UIAlertControllerStyleAlert];
@@ -263,12 +266,14 @@
             
             [self presentViewController:alertVC animated:YES completion:nil];
             
-            return;
+            return nil;
         } else {
 //            [[NSUserDefaults standardUserDefaults] setObject:uid forKey:kCurrentAddCameraUID];
             if (![self checkDeviceExistsByUID:uid]) {
                 [[NSUserDefaults standardUserDefaults] setObject:uid forKey:kCurrentAddCameraUID];
             }
+            
+            return uid;
         }
     }
 }
@@ -308,10 +313,37 @@
 }
 
 - (void)standardModeAddCamera:(NSString *)str {
+#if 0
     [self getCameraUIDWithCiphertext:str];
     
     XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
     [self.navigationController pushViewController:vc animated:YES];
+#else
+    NSString *uid = [self getCameraUIDWithCiphertext:str];
+    if (uid == nil || [self checkDeviceExistsByUID:uid]) {
+        return;
+    }
+    
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    WEAK_SELF(self);
+    [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
+        NSLog(@"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
+        
+        [weakself.progressHUD hideProgressHUD:YES];
+        
+        if (isSuccess) {
+            NSNumber *exist = result;
+            if (exist.integerValue == 1) {
+                [weakself showDeviceExistAlertWithMessage:@"Device have been bind by other accounts."];
+            } else {
+                XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
+                [weakself.navigationController pushViewController:vc animated:YES];
+            }
+        } else {
+            [weakself showDeviceExistAlertWithMessage:@"Check the device has exists operation failed, please try again."];
+        }
+    }];
+#endif
 }
 
 - (void)shareQRCodeAddCamera:(NSString *)str {
@@ -332,7 +364,7 @@
     
     if (camObj) {
         hasExist = YES;
-        [self showDeviceExistAlert];
+        [self showDeviceExistAlertWithMessage:@"Device Already Exist."];
     }
     
     return hasExist;
@@ -344,7 +376,7 @@
     for (SHCameraObject *obj in [SHCameraManager sharedCameraManger].smarthomeCams) {
         if ([obj.camera.id isEqualToString:cameraID]) {
             hasExist = YES;
-            [self showDeviceExistAlert];
+            [self showDeviceExistAlertWithMessage:@"Device Already Exist."];
 
             break;
         }
@@ -353,8 +385,8 @@
     return hasExist;
 }
 
-- (void)showDeviceExistAlert {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Device Already Exist" preferredStyle:UIAlertControllerStyleAlert];
+- (void)showDeviceExistAlertWithMessage:(NSString *)message {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -363,6 +395,15 @@
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+#pragma mark - Action Progress
+- (MBProgressHUD *)progressHUD {
+    if (!_progressHUD) {
+        _progressHUD = [MBProgressHUD progressHUDWithView:self.navigationController.view];
+    }
+    
+    return _progressHUD;
 }
 
 @end
