@@ -48,6 +48,7 @@
 		3818D69D21709CAA00AF846C /* SHChartGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69C21709CAA00AF846C /* SHChartGroup.m */; };
 		381DB6F81ED6E1410054D817 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */; };
 		38223C5320BD260B0057DC14 /* MessageDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38223C5120BD260A0057DC14 /* MessageDetailInfo.m */; };
+		382B99922175950400318BB8 /* test1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 382B9991217594D200318BB8 /* test1.caf */; };
 		382CA9BD1EE69BEF0042442C /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BC1EE69BEF0042442C /* libresolv.tbd */; };
 		382CA9BF1EE69BFF0042442C /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BE1EE69BFF0042442C /* libxml2.tbd */; };
 		382CA9C11EE69C090042442C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9C01EE69C090042442C /* SystemConfiguration.framework */; };
@@ -539,6 +540,7 @@
 		3820466E1FC7EF06005EA723 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		38223C5120BD260A0057DC14 /* MessageDetailInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailInfo.m; sourceTree = "<group>"; };
 		38223C5220BD260A0057DC14 /* MessageDetailInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDetailInfo.h; sourceTree = "<group>"; };
+		382B9991217594D200318BB8 /* test1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = test1.caf; sourceTree = "<group>"; };
 		382CA9BC1EE69BEF0042442C /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		382CA9BE1EE69BFF0042442C /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		382CA9C01EE69C090042442C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1553,6 +1555,7 @@
 		389C29DE1F2EEA0D004C4806 /* Res_Audio */ = {
 			isa = PBXGroup;
 			children = (
+				382B9991217594D200318BB8 /* test1.caf */,
 				380770381FD66C3B006E7B92 /* test.caf */,
 				389C29DF1F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV */,
 				389C29E01F2EEA0D004C4806 /* Capture_Shutter.WAV */,
@@ -2967,6 +2970,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				382B99922175950400318BB8 /* test1.caf in Resources */,
 				38EB72E120DA5BA4003E84B6 /* confuse.sh in Resources */,
 				380770391FD66C3C006E7B92 /* test.caf in Resources */,
 				38E5C3B220A4199F003004E0 /* SHShareHomeHeaderView.xib in Resources */,

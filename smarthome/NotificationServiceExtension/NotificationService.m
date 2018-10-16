@@ -113,7 +113,7 @@
     } else if ([msgType isEqualToString:@"103"]) {
         str = NSLocalizedString(@"CARD_FULL", nil);
     } else if ([msgType isEqualToString:@"201"]) {
-        self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test.caf"];
+        self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
         
         if ([self checkNotificationWhetherOverdue:aps]) {
             self.bestAttemptContent.body = NSLocalizedString(@"kDoorbellOverdueTips", nil);
