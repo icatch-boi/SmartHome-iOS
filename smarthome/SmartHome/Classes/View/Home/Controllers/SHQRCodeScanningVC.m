@@ -15,7 +15,7 @@
 #import "XJSetupScanTipsView.h"
 #import "SHNetworkManagerHeader.h"
 
-@interface SHQRCodeScanningVC () <XJXJSetupTipsViewDelegate, XJSetupScanTipsViewDelegate>
+@interface SHQRCodeScanningVC () <XJSetupTipsViewDelegate, XJSetupScanTipsViewDelegate>
 
 @property (nonatomic, weak) UIView *coverView;
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
@@ -89,12 +89,22 @@
     _coverView = nil;
 }
 
-#pragma mark - XJXJSetupTipsViewDelegate
+#pragma mark - XJSetupTipsViewDelegate
 - (void)closeTipsView:(XJSetupTipsView *)view {
+    [UIView animateWithDuration:0.25 animations:^{
+        _coverView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self closeTipsView];
+        [self closeCoverView];
+    }];
+}
+
+- (void)setupTipsViewNextClick:(XJSetupWiFiVC *)view {
     [self addScanTipsViewToCoverView];
     [self closeTipsView];
 }
 
+#pragma mark - XJSetupScanTipsViewDelegate
 - (void)closeScanTipsView:(XJSetupScanTipsView *)view {
     [UIView animateWithDuration:0.25 animations:^{
         _coverView.alpha = 0;

@@ -26,6 +26,7 @@
     
 static const CGFloat kWidthDefaultValue = 180;
 static const CGFloat kHeightDefaultValue = 180;
+static const CGFloat kNextBtnBottomDefaultValue = 12;
 
 #import "XJSetupTipsView.h"
 
@@ -36,6 +37,7 @@ static const CGFloat kHeightDefaultValue = 180;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipsViewWidthCons;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipsViewHeightCons;
 @property (weak, nonatomic) IBOutlet UIImageView *gifImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *nextButtonBottomCons;
 
 @end
 
@@ -48,6 +50,12 @@ static const CGFloat kHeightDefaultValue = 180;
 
 - (IBAction)nextClick:(id)sender {
     SHLogTRACE();
+    if ([self.delegate respondsToSelector:@selector(setupTipsViewNextClick:)]) {
+        [self.delegate setupTipsViewNextClick:self];
+    }
+}
+
+- (IBAction)closeClick:(id)sender {
     if ([self.delegate respondsToSelector:@selector(closeTipsView:)]) {
         [self.delegate closeTipsView:self];
     }
@@ -64,6 +72,7 @@ static const CGFloat kHeightDefaultValue = 180;
     
     _tipsViewWidthCons.constant = kWidthDefaultValue * kScreenHeightScale;
     _tipsViewHeightCons.constant = kHeightDefaultValue * kScreenHeightScale;
+    _nextButtonBottomCons.constant = kNextBtnBottomDefaultValue * kScreenHeightScale;
     
     _gifImageView.image = [UIImage animatedImageNamed:@"gif_" duration:0.65];
 }

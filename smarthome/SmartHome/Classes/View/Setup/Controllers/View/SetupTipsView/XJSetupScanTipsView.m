@@ -39,7 +39,7 @@ static const CGFloat kQRBottomDefaultValue = 12;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipsViewBottomMarginCons;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *qrViewTopCons;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *qrViewHeightCons;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *qrViewBottomCons;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *nextButtonBottomCons;
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
@@ -62,7 +62,7 @@ static const CGFloat kQRBottomDefaultValue = 12;
     _tipsViewTopMarginCons.constant = _tipsViewBottomMarginCons.constant = _qrViewTopCons.constant = kMarginDefaultValue * kScreenHeightScale;
     _tipsViewHeightCons.constant = kTipsViewDefaultHeight * kScreenHeightScale;
     _qrViewHeightCons.constant = kQRViewDefaultHeight * kScreenHeightScale;
-    _qrViewBottomCons.constant = kQRBottomDefaultValue * kScreenHeightScale;
+    _nextButtonBottomCons.constant = kQRBottomDefaultValue * kScreenHeightScale;
     
     [_nextButton setCornerWithRadius:_nextButton.bounds.size.height * 0.25 masksToBounds:NO];
 }
@@ -71,6 +71,10 @@ static const CGFloat kQRBottomDefaultValue = 12;
     if ([self.delegate respondsToSelector:@selector(closeScanTipsView:)]) {
         [self.delegate closeScanTipsView:self];
     }
+}
+
+- (IBAction)closeClick:(id)sender {
+    [self nextClick:nil];
 }
 
 /*

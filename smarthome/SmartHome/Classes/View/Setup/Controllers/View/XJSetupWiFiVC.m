@@ -32,7 +32,7 @@
 #import "XJSetupDeviceSSIDVC.h"
 #import "UnderLineTextField.h"
 
-@interface XJSetupWiFiVC () <XJXJSetupTipsViewDelegate, UITextFieldDelegate>
+@interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UnderLineTextField *ssidTextField;
 @property (weak, nonatomic) IBOutlet UnderLineTextField *pwdTextField;

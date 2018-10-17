@@ -28,15 +28,17 @@
 #import <UIKit/UIKit.h>
 
 @class XJSetupTipsView;
-@protocol XJXJSetupTipsViewDelegate <NSObject>
+@protocol XJSetupTipsViewDelegate <NSObject>
 
 - (void)closeTipsView:(XJSetupTipsView *)view;
+@optional
+- (void)setupTipsViewNextClick:(XJSetupTipsView *)view;
 
 @end
 
 @interface XJSetupTipsView : UIView
 
-@property (nonatomic, weak) id <XJXJSetupTipsViewDelegate> delegate;
+@property (nonatomic, weak) id <XJSetupTipsViewDelegate> delegate;
 
 + (instancetype)setupTipsView;
 
