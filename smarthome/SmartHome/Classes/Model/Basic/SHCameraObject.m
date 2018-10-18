@@ -208,6 +208,11 @@
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
 		NSLog(@" to connect camera,camera name is : %@",self.camera.cameraName);
+    if (self.camera == nil || self.camera.cameraUid == nil) {
+        SHLogError(SHLogTagAPP, @"camera or camera uid is nil.");
+
+        return ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER;
+    }
         if ((retValue = [sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword]) == ICH_SUCCEED) {
             
             self.streamOper = [[SHStreamOperate alloc] initWithCameraObject:self];
@@ -250,6 +255,14 @@
 }
 
 - (void)cleanCamera {
+    self.isConnect = NO;
+    self.startPV = NO;
+    self.cameraProperty.serverOpened = NO;
+    
+    [self.cameraProperty cleanCacheFormat];
+    [self.cameraProperty cleanCacheData];
+    [self.cameraProperty cleanCurrentCameraAllProperty];
+    
     _curResult = nil;
     _sdk = nil;
     _streamOper = nil;
@@ -286,35 +299,18 @@
 				failedBlock();
 			}
 		} else {
-//            dispatch_async([self.sdk sdkQueue], ^{
-                self.isConnect = NO;
-            self.startPV = NO;
-				dispatch_semaphore_signal(self.semaphore);
-			
-//                [self.sdk closeAudioServer];
-            [self.cameraProperty cleanCacheFormat];
-            [self.cameraProperty cleanCacheData];
-				[self removeCameraPropertyObserver];
-				//delete download list before disconnect
-				[[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
-				[self.sdk destroySHSDK];
-                [self.streamOper uploadPreviewThumbnailToServer];
-                [self cleanCamera];
-//				NSMutableArray *downloadList = [SHDownloadManager shareDownloadManger].downloadArray;
-//				if(downloadList != nil && downloadList.count > 0){
-//					for(int ii = 0; ii < downloadList.count;){
-//						SHFile *file = [downloadList objectAtIndex:ii];
-//						if([file.uid isEqualToString:self.camera.cameraUid]){
-//							[downloadList removeObjectAtIndex:ii];
-//						}else{
-//							ii++;
-//						}
-//					}
-//				}
-				if (successBlock) {
-					successBlock();
-				}
-//            });
+            dispatch_semaphore_signal(self.semaphore);
+        
+            [self removeCameraPropertyObserver];
+            //delete download list before disconnect
+            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
+            [self.sdk destroySHSDK];
+            [self.streamOper uploadPreviewThumbnailToServer];
+            [self cleanCamera];
+
+            if (successBlock) {
+                successBlock();
+            }
 		}
 	});
 }

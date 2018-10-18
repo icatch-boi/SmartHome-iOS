@@ -123,6 +123,10 @@
     }];
     
     if (!exist) {
+        if (cacheCamera.startPV) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+            return;
+        }
         [[SHCameraManager sharedCameraManger] removeSHCameraObject:cacheCamera];
     }
 }

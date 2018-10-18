@@ -236,7 +236,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self isRing] ? void() : [self.progressHUD hideProgressHUD:YES];
+            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : [self.progressHUD hideProgressHUD:YES];
             //            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self enableUserInteraction:YES];
             [self prepareCameraPropertyData];

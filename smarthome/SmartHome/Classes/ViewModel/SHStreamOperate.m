@@ -177,6 +177,15 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             return;
         }
         
+        if (_shCamObj.camera == nil || _shCamObj.camera.cameraUid == nil) {
+            SHLogError(SHLogTagAPP, @"camera or camera uid is nil.");
+            dispatch_semaphore_signal(_shCamObj.semaphore);
+            if (failedBlock) {
+                failedBlock(-1);
+            }
+            return;
+        }
+        
         int ret = [_shCamObj.sdk startMediaStreamWithEnableAudio:enableAudio camera:_shCamObj];
         
         if (ret != ICH_SUCCEED) {
