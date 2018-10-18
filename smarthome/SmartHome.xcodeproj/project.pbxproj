@@ -19,6 +19,7 @@
 		380770B71FDA2CFB006E7B92 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 38A59B0B1EA6178E0071C8CB /* libc++.tbd */; };
 		380770B91FDA2DED006E7B92 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 380770B81FDA2DEC006E7B92 /* Bugly.framework */; };
 		3810273B20622E4200B0B806 /* XJMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3810273A20622E4200B0B806 /* XJMain.storyboard */; };
+		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
 		3818D653217040D100AF846C /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3818D60E217040D000AF846C /* libturbojpeg.a */; };
 		3818D654217040D100AF846C /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3818D60F217040D000AF846C /* libavutil.a */; };
 		3818D655217040D100AF846C /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3818D610217040D000AF846C /* libavfilter.a */; };
@@ -436,6 +437,7 @@
 		380B4EE01FEB9118004209F5 /* SimpleLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLink.h; sourceTree = "<group>"; };
 		380B4EE11FEB9118004209F5 /* SimpleLinkErrorID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLinkErrorID.h; sourceTree = "<group>"; };
 		3810273A20622E4200B0B806 /* XJMain.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = XJMain.storyboard; sourceTree = "<group>"; };
+		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
 		3818D60E217040D000AF846C /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libturbojpeg.a; sourceTree = "<group>"; };
 		3818D60F217040D000AF846C /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
 		3818D610217040D000AF846C /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
@@ -1569,6 +1571,7 @@
 		389C29ED1F2EEA35004C4806 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3814BEC92178276700A13148 /* Resource.bundle */,
 				38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */,
 				389C2A031F2EF533004C4806 /* LaunchScreen.storyboard */,
 				389C2A011F2EF522004C4806 /* Info.plist */,
@@ -2989,6 +2992,7 @@
 				389C29E81F2EEA0D004C4806 /* Capture_Shutter.WAV in Resources */,
 				38F525B01F2F020400F5A5A2 /* SGQRCode.bundle in Resources */,
 				38E5C30C20A3F81F003004E0 /* MpbPopover.xib in Resources */,
+				3814BECA2178276700A13148 /* Resource.bundle in Resources */,
 				38E5C15720A3F5AF003004E0 /* CameraViewCellConnect.xib in Resources */,
 				1234BC7F20B92DD2003CD9AB /* XJMessageDetailTableViewCell.xib in Resources */,
 				389C29EC1F2EEA0D004C4806 /* TimeZone.json in Resources */,

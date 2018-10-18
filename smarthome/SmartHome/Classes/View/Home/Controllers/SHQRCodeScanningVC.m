@@ -15,13 +15,17 @@
 #import "XJSetupScanTipsView.h"
 #import "SHNetworkManagerHeader.h"
 
-@interface SHQRCodeScanningVC () <XJSetupTipsViewDelegate, XJSetupScanTipsViewDelegate>
+static const CGFloat kTipsViewWidth = UIScreen.screenWidth * 0.85;
+static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
+
+@interface SHQRCodeScanningVC () <XJSetupTipsViewDelegate, XJSetupScanTipsViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, weak) UIView *coverView;
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, strong) XJSetupScanTipsView *scanTipsView;
 
 @property (nonatomic) MBProgressHUD *progressHUD;
+@property (nonatomic, weak) UIPageControl *pageControl;
 
 @end
 
@@ -74,19 +78,84 @@
 }
 
 - (UIView *)coverView {
+    if (_coverView) {
+        return _coverView;
+    }
+    
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.screenWidth, UIScreen.screenHeight)];
     v.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.75];
     
     _coverView = v;
 
+#if 0
     [self addTipsViewToCoverView];
+#else
+    [self setupScrollView];
+    [self setupPageControl];
+#endif
     
     return v;
 }
 
 - (void)closeCoverView {
+    [self closeTipsView];
+    [self closeScanTipsView];
+    
+    for (UIView *v in _coverView.subviews) {
+        [v removeFromSuperview];
+    }
+    
     [_coverView removeFromSuperview];
     _coverView = nil;
+}
+
+#pragma mark - UIScrollView
+- (void)setupScrollView {
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kTipsViewWidth, kTipsViewHeight)];
+    scrollView.center = _coverView.center;
+    scrollView.contentSize = CGSizeMake(kTipsViewWidth * 2, 0);
+    scrollView.pagingEnabled = YES;
+    scrollView.backgroundColor = [UIColor redColor];
+    scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.scrollEnabled = YES;
+    scrollView.bounces = NO;
+    
+    [scrollView addSubview:self.tipsView];
+    self.scanTipsView.frame = CGRectOffset(self.scanTipsView.frame, kTipsViewWidth, 0);
+    [scrollView addSubview:self.scanTipsView];
+    
+    scrollView.delegate = self;
+    
+    [_coverView addSubview:scrollView];
+}
+
+- (void)setupPageControl {
+    UIPageControl *pageControl = [[UIPageControl alloc] init];
+    CGFloat width = 50;
+    CGFloat height = 15;
+    CGFloat x = (UIScreen.screenWidth - width) * 0.5;
+    CGFloat y = UIScreen.screenHeight * 0.9 - height;
+    pageControl.frame = CGRectMake(x, y, 50, 20);
+    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    pageControl.currentPageIndicatorTintColor = [ UIColor redColor];
+    pageControl.numberOfPages = 2;
+    pageControl.currentPage = 0;
+    
+    self.pageControl = pageControl;
+    
+    [_coverView addSubview:pageControl];
+    [_coverView bringSubviewToFront:pageControl];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat offsetX = scrollView.contentOffset.x;
+    offsetX += CGRectGetWidth(scrollView.frame) * 0.5;
+    
+    NSInteger page = offsetX / CGRectGetWidth(scrollView.frame);
+    
+    self.pageControl.currentPage = page;
 }
 
 #pragma mark - XJSetupTipsViewDelegate
@@ -118,7 +187,7 @@
 - (XJSetupTipsView *)tipsView {
     if (_tipsView == nil) {
         _tipsView = [XJSetupTipsView setupTipsView];
-        _tipsView.frame = CGRectMake(0, 0, UIScreen.screenWidth * 0.85, UIScreen.screenHeight * 0.8);
+        _tipsView.frame = CGRectMake(0, 0, kTipsViewWidth, kTipsViewHeight);
         
         _tipsView.delegate = self;
     }
@@ -142,7 +211,7 @@
 - (XJSetupScanTipsView *)scanTipsView {
     if (_scanTipsView == nil) {
         _scanTipsView = [XJSetupScanTipsView setupScanTipsView];
-        _scanTipsView.frame = CGRectMake(0, 0, UIScreen.screenWidth * 0.85, UIScreen.screenHeight * 0.8);
+        _scanTipsView.frame = CGRectMake(0, 0, kTipsViewWidth, kTipsViewHeight);
         
         _scanTipsView.delegate = self;
     }

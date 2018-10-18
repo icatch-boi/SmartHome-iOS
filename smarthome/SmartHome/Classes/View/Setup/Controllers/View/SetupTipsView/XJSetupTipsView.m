@@ -24,8 +24,8 @@
  
  // Created by zj on 2018/5/21 上午11:26.
     
-static const CGFloat kWidthDefaultValue = 180;
-static const CGFloat kHeightDefaultValue = 180;
+static const CGFloat kWidthDefaultValue = 200;
+static const CGFloat kHeightDefaultValue = 200;
 static const CGFloat kNextBtnBottomDefaultValue = 12;
 
 #import "XJSetupTipsView.h"
@@ -74,7 +74,31 @@ static const CGFloat kNextBtnBottomDefaultValue = 12;
     _tipsViewHeightCons.constant = kHeightDefaultValue * kScreenHeightScale;
     _nextButtonBottomCons.constant = kNextBtnBottomDefaultValue * kScreenHeightScale;
     
+#if 0
     _gifImageView.image = [UIImage animatedImageNamed:@"gif_" duration:0.65];
+#else
+    _gifImageView.image = [UIImage animatedImageWithImages:[self loadAnimatedImage] duration:0.65];
+#endif
+    
+    _nextButton.hidden = YES;
+}
+
+- (NSArray<UIImage *> *)loadAnimatedImage {
+    NSInteger count = 8;
+    NSMutableArray *imagesMArr = [NSMutableArray arrayWithCapacity:count];
+    
+    for (int i = 1; i <= count; i++) {
+        @autoreleasepool {
+            NSString *imgName = [NSString stringWithFormat:@"Resource.bundle/Images/Setup/gif_%d.jpg", i];
+            NSString *path = [[NSBundle mainBundle] pathForResource:imgName ofType:nil];
+            
+            UIImage *image = [UIImage imageWithContentsOfFile:path];
+            
+            [imagesMArr addObject:image];
+        }
+    }
+    
+    return imagesMArr.copy;
 }
 
 /*
