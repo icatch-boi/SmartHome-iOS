@@ -254,13 +254,13 @@
     }
     
     if (self.session) {
-        SHLogInfo(SHLogTagAPP, @"start destory session.");
+        SHLogInfo(SHLogTagAPP, @"start destroy session.");
         self.session->destroySession();
         self.session->disableTutk();
 //        self.session->unloadTutkLibrary();
         delete self.session;
         self.session = NULL;
-        SHLogInfo(SHLogTagAPP, @"destory session done.");
+        SHLogInfo(SHLogTagAPP, @"destroy session done.");
     }
     
     if (self.videoFrameBuffer) {

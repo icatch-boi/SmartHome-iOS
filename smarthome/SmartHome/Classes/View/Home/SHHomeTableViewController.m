@@ -143,7 +143,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
     WEAK_SELF(self);
 //    [self.progressHUD showProgressHUDWithMessage:@"updating ..."/*NSLocalizedString(@"kLoading", nil)*/];
-    [self.view addSubview:self.coverView];
+//    [self.view addSubview:self.coverView];
     [SHLocalWithRemoteHelper syncCameraList:^(BOOL isSuccess) {
         SHLogTRACE();
 
@@ -153,11 +153,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [weakself.progressHUD hideProgressHUD:YES];
-            [weakself.coverView removeFromSuperview];
+//            [weakself.coverView removeFromSuperview];
             weakself.hasLoad = NO;
             
             if (!isSuccess) {
-                [weakself showLoadCameraListFailedTips];
+//                [weakself showLoadCameraListFailedTips];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
             }
         });
     }];

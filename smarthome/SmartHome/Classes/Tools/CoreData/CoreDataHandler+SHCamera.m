@@ -397,8 +397,37 @@
             SHLogError(SHLogTagAPP, @"unregisterDevice failed.");
         }
         
+#if 0
         [self cleanMemoryCacheWithUid:localCamera.cameraUid];
         [self deleteCamera:localCamera];
+#else
+        if ([self rightAwayUpdateLocalCamera]) {
+            [self cleanMemoryCacheWithUid:localCamera.cameraUid];
+            [self deleteCamera:localCamera];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
+        }
+#endif
+    }
+}
+
+- (BOOL)rightAwayUpdateLocalCamera {
+    ZJSlidingDrawerViewController *slidingVC = (ZJSlidingDrawerViewController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+    UINavigationController *mainVC = (UINavigationController *)slidingVC.mainVC;
+    UIViewController *visibleVC = mainVC.visibleViewController;
+    
+    NSLog(@"current visibleViewController: %@", visibleVC);
+    if ([NSStringFromClass([visibleVC class]) isEqualToString:@"UIAlertController"]) {
+        UIAlertController *vc = (UIAlertController *)visibleVC;
+        if ([vc.message isEqualToString:NSLocalizedString(@"Are you sure you want to remove this record", nil)]) {
+            return YES;
+        }
+    }
+    
+    if ([NSStringFromClass([visibleVC class]) isEqualToString:@"SHHomeTableViewController"]) {
+        return YES;
+    } else {
+        return NO;
     }
 }
 
