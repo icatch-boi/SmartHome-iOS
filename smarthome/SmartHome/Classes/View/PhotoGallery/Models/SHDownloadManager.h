@@ -20,19 +20,19 @@
 
 @interface SHDownloadManager : NSObject
 
-@property (atomic, readonly) int downloadSuccessedNum;
-@property (atomic, readonly) int downloadFailedNum;
-@property (atomic, readonly) int cancelDownloadNum;
+@property (nonatomic, readonly) int downloadSuccessedNum;
+@property (nonatomic, readonly) int downloadFailedNum;
+@property (nonatomic, readonly) int cancelDownloadNum;
 
 @property (nonatomic,weak) id<SHDownloadAboutInfoDelegate> downloadInfoDelegate;
 @property (nonatomic,weak) id<AllDownloadCompleteDelegate> allDownloadCompletedelegate;
-@property (atomic, readonly) NSMutableArray *downloadArray;
+@property (nonatomic, readonly) NSMutableArray *downloadArray;
 + (instancetype)shareDownloadManger;
 - (instancetype)init __attribute__((unavailable("Disabled. Please use the shareDownloadManger methods instead.")));
 
 //- (void)downloadWithCameraObject:(SHCameraObject *)camObj file:(SHFile *)file downloadInfoBlock:(void (^)(int downloadInfo))downloadInfoBlock progressBlock:(void (^)(NSInteger progress))progressBlock;
-- (void)downloadWithFile:(SHFile *)file;
-- (void)cancelDownloadFile:(SHFile *)file;
+- (void)downloadWithfile:(SHFile *)file;
+- (Boolean)cancelDownloadFile:(SHFile *)file;
 - (void)clearDownloadingByUid:(NSString*) uid;
 - (void)addDownloadFile:(SHFile *)file;
 - (void)startDownloadFile;

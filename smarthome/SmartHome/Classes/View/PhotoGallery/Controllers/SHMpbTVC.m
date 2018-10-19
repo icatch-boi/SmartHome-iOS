@@ -957,6 +957,7 @@ static int const kNewFileIconTag = 888;
 		[_popController dismissPopoverAnimated:YES];
 	}
 
+#if 0
     for (NSIndexPath *ip in _selCellsTable.selectedCells) {
         ICatchFile f = _curFileTable.fileList.at(ip.row);
 		NSString *uid = _shCamObj.camera.cameraUid;
@@ -975,7 +976,26 @@ static int const kNewFileIconTag = 888;
 //        self.readyGoToFileDownloadVC = YES;
         [self performSegueWithIdentifier:@"go2FileDownloadSegue" sender:nil];
     });
-
+#else
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSIndexPath *ip in _selCellsTable.selectedCells) {
+            ICatchFile f = _curFileTable.fileList.at(ip.row);
+            NSString *uid = _shCamObj.camera.cameraUid;
+            SHFile *file = [SHFile fileWithUid:uid file:f];
+            [[SHDownloadManager shareDownloadManger] addDownloadFile:file];
+        }
+        
+        [[SHDownloadManager shareDownloadManger] startDownloadFile];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+            [self performSegueWithIdentifier:@"go2FileDownloadSegue" sender:nil];
+            [self clearSelectedCellTable];
+            [self editAction:nil];
+        });
+    });
+#endif
 }
 
 - (NSArray *)downloadSelectedFiles

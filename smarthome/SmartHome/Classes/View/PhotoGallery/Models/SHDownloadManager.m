@@ -10,11 +10,11 @@
 #import "SHDownloader.h"
 
 @interface SHDownloadManager () <SHDownloadInfoDelegate>
-@property (atomic, readwrite) NSMutableArray *downloadArray;
-@property (atomic, strong) NSMutableDictionary *downLoaderCache;
-@property (atomic, readwrite) int downloadSuccessedNum;
-@property (atomic, readwrite) int downloadFailedNum;
-@property (atomic, readwrite) int cancelDownloadNum;
+@property (nonatomic, readwrite) NSMutableArray *downloadArray;
+@property (nonatomic, strong) NSMutableDictionary *downLoaderCache;
+@property (nonatomic, readwrite) int downloadSuccessedNum;
+@property (nonatomic, readwrite) int downloadFailedNum;
+@property (nonatomic, readwrite) int cancelDownloadNum;
 
 @end
 
@@ -61,7 +61,7 @@
 
 
 - (Boolean)cancelDownloadFile:(SHFile *)file {
-	SHLogInfo(SHLogTagAPP, @"cancelDownloadFile filename is %@",[NSString stringWithCString:file.f.getFileName().c_str()]);
+	SHLogInfo(SHLogTagAPP, @"cancelDownloadFile filename is %s", file.f.getFileName().c_str());
 	id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
 	SHDownloader *downloader = [self.downLoaderCache objectForKey:key];
 	if(downloader == nil){//current file is not downloading
@@ -103,7 +103,9 @@
 			SHFile *file = [downloadList objectAtIndex:ii];
 			if([file.uid isEqualToString:uid]){
 				[self cancelDownloadFile:file];
-				[downloadList removeObjectAtIndex:ii];
+                if (ii < downloadList.count) {
+                    [downloadList removeObjectAtIndex:ii];
+                }
 			}else{
 				ii++;
 			}
@@ -122,7 +124,7 @@
 		self.cancelDownloadNum = 0;
 	}
 	[self.downloadArray insertObject:file atIndex:(self.downloadArray.count)];
-	SHLogInfo(SHLogTagAPP, "addDownloadFile cout is : %d",self.downloadArray.count);
+    SHLogInfo(SHLogTagAPP, "addDownloadFile cout is : %lu", (unsigned long)self.downloadArray.count);
 }
 
 - (void)startDownloadFile{
@@ -133,7 +135,7 @@
 }
 
 - (void)onDownloadComplete:(SHFile*)file retvalue:(Boolean)ret{
-	SHLogInfo(SHLogTagAPP, @"onDownloadComplete filename is %@",[NSString stringWithCString:file.f.getFileName().c_str()]);
+	SHLogInfo(SHLogTagAPP, @"onDownloadComplete filename is %s", file.f.getFileName().c_str());
 	if(ret == YES){
 		self.downloadSuccessedNum++;
 	}else{
@@ -153,7 +155,7 @@
 }
 
 - (void)onCancelDownloadComplete:(SHFile*)file retvalue:(Boolean)ret{
-	SHLogInfo(SHLogTagAPP, @"onCancelDownloadComplete filename is %@",[NSString stringWithCString:file.f.getFileName().c_str()]);
+	SHLogInfo(SHLogTagAPP, @"onCancelDownloadComplete filename is %s", file.f.getFileName().c_str());
 	if(ret == YES){
 		self.cancelDownloadNum++;
 		int position = [self findPositionByFile:file];

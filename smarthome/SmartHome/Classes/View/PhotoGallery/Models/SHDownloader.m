@@ -112,7 +112,15 @@
 //			}
 //			
 			dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
 				[self removeObserver:self forKeyPath:@"downloadedPercent"];
+#else
+                @try {
+                    [self removeObserver:self forKeyPath:@"downloadedPercent"];
+                } @catch(NSException *exception) {
+                    SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+                }
+#endif
 			});
 		}else{
 			//[self.delegate onCancelDownloadComplete:self.file retvalue:NO];
@@ -155,11 +163,15 @@
     
     UIApplication  *app = [UIApplication sharedApplication];
     __block  UIBackgroundTaskIdentifier downloadTask;
-    
+    __block UIApplicationState currentState;
+
     dispatch_async(self.downloadPercentQueue, ^{
         do {
             @autoreleasepool {
-                if (app.applicationState == UIApplicationStateBackground) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    currentState = app.applicationState;
+                });
+                if (currentState == UIApplicationStateBackground) {
                     downloadTask = [app beginBackgroundTaskWithExpirationHandler: ^{
                         float progress = [self.shCamObj.sdk getDownloadedFileSize:locatePath] * 1.0 / fileSize;
 						if(progress == -1){//meet error ,so close this thread!
@@ -240,11 +252,13 @@
     switch (value) {
         case 0:
             SHLogInfo(SHLogTagAPP, @"下载成功");
-			if([self.delegate respondsToSelector:@selector(onDownloadComplete:)]){
+			if ([self.delegate respondsToSelector:@selector(onDownloadComplete:retvalue:)]){
 				SHLogInfo(SHLogTagAPP, @"notify onDownloadComplete!");
+                [self.delegate onDownloadComplete:self.file retvalue:YES];
 			}
-			[self.delegate onProgressUpdate:self.file progress:100];
-			[self.delegate onDownloadComplete:self.file retvalue:YES];
+            if ([self.delegate respondsToSelector:@selector(onProgressUpdate:progress:)]) {
+                [self.delegate onProgressUpdate:self.file progress:100];
+            }
 //            downloadInfo = @"下载成功";
 //            if (self.progressBlock) {
 //                self.progressBlock(100);
@@ -258,14 +272,19 @@
         case -1:
             SHLogError(SHLogTagAPP, @"下载失败 - fw出错");
 //            downloadInfo = @"下载失败 - fw出错";
-			[self.delegate onDownloadComplete:self.file retvalue:NO];
+            if ([self.delegate respondsToSelector:@selector(onDownloadComplete:retvalue:)]) {
+                SHLogInfo(SHLogTagAPP, @"notify onDownloadComplete, fw happen error.");
+                [self.delegate onDownloadComplete:self.file retvalue:NO];
+            }
             break;
             
         case -2:
             SHLogWarn(SHLogTagAPP, @"下载失败 - 用户cancel");
 //            downloadInfo = @"下载失败 - 用户cancel";
 //            self.shCamObj.cameraProperty.cancelDownloadNum ++;
-			[self.delegate onCancelDownloadComplete:self.file retvalue:YES];
+            if ([self.delegate respondsToSelector:@selector(onCancelDownloadComplete:retvalue:)]) {
+                [self.delegate onCancelDownloadComplete:self.file retvalue:YES];
+            }
             break;
             
         default:
@@ -292,7 +311,15 @@
 //    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
         [self removeObserver:self forKeyPath:@"downloadedPercent"];
+#else
+        @try {
+            [self removeObserver:self forKeyPath:@"downloadedPercent"];
+        } @catch (NSException *exception) {
+            SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+        }
+#endif
     });
 }
 
@@ -304,8 +331,10 @@
 {
     //SHLogTRACE();
     if ([keyPath isEqualToString:@"downloadedPercent"]) {
-		SHLogInfo(SHLogTagAPP, "download progress is %d",self.downloadedPercent);
-		[self.delegate onProgressUpdate:self.file progress:self.downloadedPercent];
+        SHLogInfo(SHLogTagAPP, "download progress is %lu",(unsigned long)self.downloadedPercent);
+        if ([self.delegate respondsToSelector:@selector(onProgressUpdate:progress:)]) {
+            [self.delegate onProgressUpdate:self.file progress:(int)self.downloadedPercent];
+        }
 
 //        if (self.progressBlock && !_shCamObj.isEnterBackground) {
 //            self.progressBlock(self.downloadedPercent);
