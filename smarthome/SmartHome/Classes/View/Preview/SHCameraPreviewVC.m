@@ -1440,6 +1440,16 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 #endif
                     [self startPreview];
                 });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressHUD hideProgressHUD:YES];
+                    
+                    if (_shCameraObj == nil ||
+                        _shCameraObj.camera == nil ||
+                        _shCameraObj.camera.cameraUid == nil) {
+                        [self showConnectFailedAlertView];
+                    }
+                });
             }
         });
     } else {
@@ -1457,6 +1467,23 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 #endif
         [self startPreview];
     }
+}
+
+- (void)showConnectFailedAlertView {
+    NSString *name = _shCameraObj.camera.cameraName;
+    NSString *errorMessage = NSLocalizedString(@"kConnectionUnknownError", nil);
+    NSString *errorInfo = [NSString stringWithFormat:@"[%@] %@", name ? name : @"", errorMessage];
+    
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself goHome];
+        });
+    }]];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 /*

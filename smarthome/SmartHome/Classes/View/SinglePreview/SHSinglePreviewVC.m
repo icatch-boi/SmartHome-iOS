@@ -206,6 +206,16 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
                     [self initPlayer];
                 });
                 [self startPreview];
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressHUD hideProgressHUD:YES];
+                    
+                    if (_shCameraObj == nil ||
+                        _shCameraObj.camera == nil ||
+                        _shCameraObj.camera.cameraUid == nil) {
+                        [self showConnectFailedAlertView];
+                    }
+                });
             }
         });
     } else {
@@ -228,6 +238,23 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     self.talkbackButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)showConnectFailedAlertView {
+    NSString *name = _shCameraObj.camera.cameraName;
+    NSString *errorMessage = NSLocalizedString(@"kConnectionUnknownError", nil);
+    NSString *errorInfo = [NSString stringWithFormat:@"[%@] %@", name ? name : @"", errorMessage];
+    
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself goHome:nil];
+        });
+    }]];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 - (void)singleDownloadCompleteHandle:(NSNotification *)nc {

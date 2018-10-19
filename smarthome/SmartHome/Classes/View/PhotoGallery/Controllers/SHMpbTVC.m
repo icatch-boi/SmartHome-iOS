@@ -275,6 +275,7 @@ static int const kNewFileIconTag = 888;
     
     [_selCellsTable.selectedCells removeAllObjects];
     self.selCellsTable.count = 0;
+    self.totalDownloadSize = 0;
 }
 
 #pragma mark - initGUI & Data
@@ -737,6 +738,7 @@ static int const kNewFileIconTag = 888;
                 
                 [_selCellsTable.selectedCells removeAllObjects];
                 _selCellsTable.count = 0;
+                _totalDownloadSize = 0;
                 self.run = YES;
                 [self initMpbGUI];
                 [self updateMpbGUI];
@@ -1220,6 +1222,8 @@ static int const kNewFileIconTag = 888;
 }
 
 - (IBAction)changeDateAction:(UIButton *)sender {
+    // clear
+    [self clearSelectedCellTable];
     NSString *curDay = sender.currentTitle;
     
     if ([curDay isEqualToString:[_latestFileDate substringFromIndex:8]]) {
@@ -1244,6 +1248,7 @@ static int const kNewFileIconTag = 888;
             
             [self updateButtonBackgroundColor:table.fileCreateDate];
             [self.tableView reloadData];
+            [self updateSelectStatus];
         }
     }];
 }
