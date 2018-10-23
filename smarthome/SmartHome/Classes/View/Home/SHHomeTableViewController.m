@@ -44,6 +44,7 @@
 #import "MessageCenter.h"
 #import "SHQRCodeScanningVC.h"
 #import "SHPushTestNavController.h"
+#import "XJLocalAssetHelper.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -786,6 +787,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 - (void)deleteCameraDetailWithCamObj:(SHCameraObject *)shCamObj completion:(void (^)())completion {
     NSString *message = NSLocalizedString(@"Deleted", nil);
     
+    NSString *cameraUid = shCamObj.camera.cameraUid;
     if ([[CoreDataHandler sharedCoreDataHander] deleteCamera:shCamObj.camera]) {
         shCamObj.cameraProperty.fwUpdate = NO;
         if (shCamObj.isConnect) {
@@ -795,6 +797,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         //清除相机的push msg信息及缓存的视频缩略图
         MessageCenter *msgCenter = [MessageCenter MessageCenterWithName:shCamObj.camera.cameraUid andMsgDelegate:nil];
         [msgCenter clearAllMessage];
+        
+        [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
+            SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
+        }];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (completion) {

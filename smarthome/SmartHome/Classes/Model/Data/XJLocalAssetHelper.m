@@ -263,6 +263,89 @@ static XJLocalAssetHelper *instance = nil;
     }];
 }
 
+- (void)deleteLocalAllAssetsWithKey:(NSString *)key completionHandler:(nullable LocalAssetCompletionCallback)completionHandler {
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[self readFromPlist]];
+    NSDictionary *desDict = nil;
+    
+    for (NSDictionary *dict in array) {
+        if ([dict.allKeys.firstObject isEqualToString:key]) {
+            desDict = dict;
+            break;
+        }
+    }
+    
+    NSArray *desArray = [desDict objectForKey:key];
+    if (desDict == nil || desArray == nil) {
+        NSLog(@"No have local asset, key: %@", key);
+        
+        if (completionHandler) {
+            completionHandler(YES);
+        }
+        return;
+    }
+    
+    NSArray *deleteAssets = [self retrieveAssetsWithLocalIdentifier:desArray];
+    
+    if (deleteAssets.count <= 0) {
+        NSLog(@"System album no have asset, key: %@", key);
+        
+        [array removeObject:desDict];
+        [self writeDataToPlist:array];
+        
+        if (completionHandler) {
+            completionHandler(YES);
+        }
+        return;
+    }
+    
+    [self deleteAssets:deleteAssets completionHandler:^(BOOL success) {
+        if (success) {
+            [array removeObject:desDict];
+            [self writeDataToPlist:array];
+        }
+        
+        if (completionHandler) {
+            completionHandler(success);
+        }
+    }];
+}
+
+- (void)deleteAssets:(id<NSFastEnumeration>)deleteAssets completionHandler:(nullable LocalAssetCompletionCallback)completionHandler {
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        [PHAssetChangeRequest deleteAssets:deleteAssets];
+    } completionHandler:^(BOOL success, NSError *error) {
+        if (success) {
+            NSLog(@"删除成功!");
+        } else {
+            NSLog(@"删除失败:%@", error);
+        }
+        
+        if (completionHandler) {
+            completionHandler(success);
+        }
+    }];
+}
+
+- (NSArray *)retrieveAssetsWithLocalIdentifier:(NSArray *)desArray {
+    NSMutableArray *deleteAssets = [NSMutableArray array];
+    
+    PHFetchResult *collectonResuts = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+    [collectonResuts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        PHAssetCollection *assetCollection = obj;
+        if ([assetCollection.localizedTitle isEqualToString:kLocalAlbumName])  {
+            PHFetchResult *assetResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+            [assetResult enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                PHAsset *asset = obj;
+                if ([desArray containsObject:asset.localIdentifier]) {
+                    [deleteAssets addObject:asset];
+                }
+            }];
+        }
+    }];
+    
+    return deleteAssets.copy;
+}
+
 #pragma mark - setter
 - (void)setPlistName:(NSString *)plistName {
     if (!_plistName) {

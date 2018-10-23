@@ -28,6 +28,7 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void(^LocalAssetCompletionCallback)(BOOL success);
 @interface XJLocalAssetHelper : NSObject
 
 + (instancetype)sharedLocalAssetHelper;
@@ -36,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)addNewAssetToLocalAlbum:(ICatchFile)file forKey:(NSString *)key;
 - (BOOL)addNewAssetWithURL:(NSURL *)fileURL toAlbum:(NSString *)albumName andFileType:(ICatchFileType)fileType forKey:(NSString *)key;
 - (void)deleteLocalAsset:(NSString *)localIdentifier forKey:(NSString *)key completionHandler:(nullable void(^)(BOOL success))completionHandler;
+- (void)deleteLocalAllAssetsWithKey:(NSString *)key completionHandler:(nullable LocalAssetCompletionCallback)completionHandler;
 
 - (NSArray *)readFromPlist;
 

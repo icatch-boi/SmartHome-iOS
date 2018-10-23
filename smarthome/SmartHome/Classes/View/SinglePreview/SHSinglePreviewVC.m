@@ -548,6 +548,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     [self removePreviewCacheObserver];
     [self releaseCurrentDateTimer];
     [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    [self removeVideoBitRateObserver];
 }
 
 - (void)didReceiveMemoryWarning {
