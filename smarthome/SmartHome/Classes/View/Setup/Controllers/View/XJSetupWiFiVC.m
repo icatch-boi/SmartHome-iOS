@@ -27,7 +27,6 @@
 
 #import "XJSetupWiFiVC.h"
 #import "XJSetupTipsView.h"
-#import "SHSetupWiFiCell.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import "XJSetupDeviceSSIDVC.h"
 #import "UnderLineTextField.h"

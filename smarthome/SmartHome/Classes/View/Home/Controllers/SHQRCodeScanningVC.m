@@ -7,8 +7,6 @@
 //
 
 #import "SHQRCodeScanningVC.h"
-#import "SHCameraInfoViewController.h"
-#import "SHSetupWiFiViewController.h"
 #import "XJSetupWiFiVC.h"
 #import "XJSetupDeviceInfoVC.h"
 #import "XJSetupTipsView.h"

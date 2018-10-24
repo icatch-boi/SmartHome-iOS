@@ -31,7 +31,6 @@
 #import "SHSetupNavVC.h"
 #import "SHCameraPreviewVC.h"
 #import "SHShareCameraViewController.h"
-#import "SHSetupHomeVC.h"
 #import "SHMsgCenterViewController.h"
 #import "SHLocalAlbumTVC.h"
 #import "SHUserAccountHeader.h"
