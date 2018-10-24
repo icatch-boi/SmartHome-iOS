@@ -1942,7 +1942,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         self.batteryImgView.image = batteryStatusImage;
         _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
 
-        if ([imageName isEqualToString:@"ic_battery_alert_24dp"] && !_batteryLowAlertShowed) {
+        if ([imageName isEqualToString:@"vedieo-buttery"] && !_batteryLowAlertShowed) {
             self.batteryLowAlertShowed = YES;
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"ALERT_LOW_BATTERY", nil) showTime:2.0];
             

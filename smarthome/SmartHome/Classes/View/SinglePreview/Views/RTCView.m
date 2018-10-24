@@ -962,6 +962,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
             _hangupBtn = [[RTCButton alloc] initWithTitle:nil noHandleImageName:@"icon_call_reject_normal"];
         }
         
+        [_hangupBtn setImage:[UIImage imageNamed:@"icon_call_reject_press"] forState:UIControlStateHighlighted];
 //        [_hangupBtn addTarget:self action:@selector(hangupClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _hangupBtn;
@@ -1009,6 +1010,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 {
     if (!_answerBtn) {
         _answerBtn = [[RTCButton alloc] initWithTitle:@"Accept" /*@"接听"*/ noHandleImageName:@"icon_audio_receive_normal"];
+        [_answerBtn setImage:[UIImage imageNamed:@"icon_audio_receive_press"] forState:UIControlStateHighlighted];
 //        [_answerBtn addTarget:self action:@selector(answerClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _answerBtn;
