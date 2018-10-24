@@ -14,6 +14,7 @@
 #import "XJSetupTipsView.h"
 #import "XJSetupScanTipsView.h"
 #import "SHNetworkManagerHeader.h"
+#import "Reachability.h"
 
 static const CGFloat kTipsViewWidth = UIScreen.screenWidth * 0.85;
 static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
@@ -403,25 +404,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
         return;
     }
     
-    [self.progressHUD showProgressHUDWithMessage:nil];
-    WEAK_SELF(self);
-    [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
-        NSLog(@"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
-        
-        [weakself.progressHUD hideProgressHUD:YES];
-        
-        if (isSuccess) {
-            NSNumber *exist = result;
-            if (exist.integerValue == 1) {
-                [weakself showDeviceExistAlertWithMessage:@"Device have been bind by other accounts."];
-            } else {
-                XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
-                [weakself.navigationController pushViewController:vc animated:YES];
-            }
-        } else {
-            [weakself showDeviceExistAlertWithMessage:@"Check the device has exists operation failed, please try again."];
-        }
-    }];
+    [self checkNetworkStatus];
 #endif
 }
 
@@ -483,6 +466,70 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     }
     
     return _progressHUD;
+}
+
+#pragma mark - Check Network Reachable
+- (void)checkNetworkStatus {
+    NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
+    
+    if (netStatus == NotReachable) {
+        [self showNetworkNotReachableAlertView];
+    } else {
+        [self checkDeviceHasExistsHandler];
+    }
+}
+
+- (void)checkDeviceHasExistsHandler {
+    [self.progressHUD showProgressHUDWithMessage:@"Checking..."];
+    WEAK_SELF(self);
+    [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
+        NSLog(@"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
+        
+        [weakself.progressHUD hideProgressHUD:YES];
+        
+        if (isSuccess) {
+            NSNumber *exist = result;
+            if (exist.integerValue == 1) {
+                [weakself showDeviceExistAlertWithMessage:@"Device have been bind by other accounts."];
+            } else {
+                XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
+                [weakself.navigationController pushViewController:vc animated:YES];
+            }
+        } else {
+            [weakself showDeviceExistAlertWithMessage:@"Check the device has exists operation failed, please try again."];
+        }
+    }];
+}
+
+- (void)showNetworkNotReachableAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"⚠️ 当前网络不可用, 请检查手机网络设置。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self viewWillAppear:YES];
+        });
+    }]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setupDeviceWiFi];
+            [self viewWillAppear:YES];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)setupDeviceWiFi {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
+    
+    NSString *urlString = @"App-Prefs:root=WIFI";
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlString]]) {
+        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        }
+    }
 }
 
 @end

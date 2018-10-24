@@ -31,6 +31,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import "XJSetupDeviceSSIDVC.h"
 #import "UnderLineTextField.h"
+#import "Reachability.h"
 
 @interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
 
@@ -159,7 +160,11 @@
             [self presentViewController:alertC animated:YES completion:nil];
         });
     } else {
+#if 0
         [self performSegueWithIdentifier:@"go2SetupDeviceSSIDVCSegue" sender:nil];
+#else
+        [self showSurePasswordAlertView];
+#endif
     }
 }
 
@@ -255,6 +260,43 @@
     [textField resignFirstResponder];
     
     return YES;
+}
+
+#pragma mark - Check Network Reachable
+- (void)showSurePasswordAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"请确保输入Wi-Fi密码的正确性。" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self checkNetworkStatus];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)checkNetworkStatus {
+    NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
+    
+    if (netStatus == NotReachable) {
+        [self showNetworkNotReachableAlertView:@"⚠️ 当前网络不可用, 请检查手机网络设置。"];
+    } else if (netStatus == ReachableViaWWAN) {
+        [self showNetworkNotReachableAlertView:@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"];
+    } else {
+        [self performSegueWithIdentifier:@"go2SetupDeviceSSIDVCSegue" sender:nil];
+    }
+}
+
+- (void)showNetworkNotReachableAlertView:(NSString *)message {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setupDeviceWiFi];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 /*
