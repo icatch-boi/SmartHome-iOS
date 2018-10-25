@@ -159,7 +159,6 @@
                           failure:(nullable void (^)(Error* _Nonnull error))failure;
 
 
--(void)getImgDataWithUrl:(NSString *)url success:(nullable void (^)(NSURL* _Nonnull path))success
-                 failure:(nullable void (^)(Error* _Nonnull error))failure;
+
 
 @end

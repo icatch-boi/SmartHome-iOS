@@ -143,8 +143,10 @@
         NSDate *end = [NSDate date];
         SHLogInfo(SHLogTagAPP, @"download thumbnail interval: %f", [end timeIntervalSinceDate:start]);
     }
+#else
+    [self getThumbnailWithName:name permission:permission camera:camera_server];
 #endif
-    
+#if 0
     [[SHNetworkManager sharedNetworkManager] getImgCoverWithFullURL:camera_server.cover completion:^(BOOL isSuccess, id  _Nullable result) {
         if(isSuccess) {
             //NSString *urlStr = [NSString stringWithFormat:@"%@", err];
@@ -164,11 +166,49 @@
         }
 
     }];
+#endif
     SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
     
+}
+
+// async get camera thumbnail
++ (void)getThumbnailWithName:(NSString *)name permission:(int)permission camera:(Camera *)camera_server {
+    NSString *urlString = camera_server.cover;
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0];
+    
+    if (urlString != nil && url != nil && request != nil) {
+        NSDate *start = [NSDate date];
+        
+        [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            NSDate *end = [NSDate date];
+            SHLogInfo(SHLogTagAPP, @"Get thumbnail interval: %f.", [end timeIntervalSinceDate:start]);
+            
+            if (error == nil) {
+                if (data != nil && data.length > 0) {
+                    UIImage *thumbnail = [[UIImage alloc] initWithData:data];
+                    
+                    if (thumbnail != nil) {
+                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %lu.", data.length);
+                        
+                        SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
+                        [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
+                    } else {
+                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                    }
+                } else {
+                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                }
+            } else {
+                SHLogError(SHLogTagAPP, @"Request failed, error: %@", error);
+            }
+        }] resume];
+    } else {
+        SHLogError(SHLogTagAPP, @"Get thumbnail failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+    }
 }
 
 @end

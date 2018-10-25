@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getCameraSubscribersWithCameraID:(NSString *)cameraId status:(int)status completion:(RequestCompletionBlock)completion;
 - (void)removeCameraSubscriberWithCameraID:(NSString *)cameraId userID:(NSString *_Nonnull)userId completion:(RequestCompletionBlock)completion;
 
-- (void)getImgCoverWithFullURL:(NSString *)url completion:(RequestCompletionBlock)completion;
+//- (void)getImgCoverWithFullURL:(NSString *)url completion:(RequestCompletionBlock)completion;
 
 @end
 
