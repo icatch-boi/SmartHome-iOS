@@ -29,6 +29,7 @@
 //#import "LogSet.h"
 #import "type/ICatchLogLevel.h"
 #import "XJLocalAssetHelper.h"
+#import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate, NSFetchedResultsControllerDelegate>
 
@@ -93,6 +94,8 @@
     [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSLog(@"###### Run Date: %@", [dateformatter stringFromDate:date]);
     NSLog(@"===============================================================");
+    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
 }
 
 - (UIViewController *)getAppRootVCWithOptions:(NSDictionary *)launchOptions {
@@ -221,6 +224,10 @@
         
             [mainVC pushViewController:vc animated:YES];
         }
+        
+        [self cleanBadgeNumber];
+    } else {
+        [self showBadgeNumber];
     }
 }
 
@@ -412,7 +419,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	SHLogTRACE();
-	[application setApplicationIconBadgeNumber:0];
+//    [application setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 	
 	if ([self.delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
@@ -819,6 +826,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [self notificationHandler:notification withCompletionHandler:completionHandler];
     }
 #endif
+    
+    [self showBadgeNumber];
 }
 
 - (void)notificationHandler:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
@@ -867,6 +876,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     } else {
         _loaded = NO;
     }
+    
+    [self cleanBadgeNumber];
 }
 
 - (NSDictionary *)parseNotification:(NSDictionary *)userInfo {
@@ -1124,6 +1135,19 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)cleanMessageCache {
     [self.messages removeAllObjects];
+}
+
+#pragma mark - RecvNotificationBadge
+- (void)showBadgeNumber {
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSNumber *count  = [userDefault objectForKey:kRecvNotificationCount];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = count.integerValue;
+}
+
+- (void)cleanBadgeNumber {
+    [[[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName] setObject:nil forKey:kRecvNotificationCount];
+    
+    [self showBadgeNumber];
 }
 
 @end

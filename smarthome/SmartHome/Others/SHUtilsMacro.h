@@ -128,6 +128,7 @@ static NSString * const kMessageCenterStoryboardName = @"MessageCenter";
 static NSString * const kLocalAlbumName = @"SmartHome"; //@"XJ doorbell";
 static NSTimeInterval const kDataBaseFileStorageTime = 7 * 24 * 3600;
 static NSString * const kUserAccounts = @"kUserAccounts";
+static NSString * const kRecvNotificationCount = @"kRecvNotificationCount";
 
 #define USE_ENCRYP 0
 

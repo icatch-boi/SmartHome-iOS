@@ -39,6 +39,7 @@
     // fix SH-912
     self.contentHandler(self.bestAttemptContent);
 #endif
+    [self updateBadgeNumber];
 }
 
 - (void)serviceExtensionTimeWillExpire {
@@ -185,6 +186,16 @@
     
     NSLog(@"cameraName: %@", cameraName);
     return cameraName;
+}
+
+- (void)updateBadgeNumber {
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSNumber *count = [defaults objectForKey:kRecvNotificationCount];
+    NSInteger currentCount = 1;
+    
+    currentCount += count.integerValue;
+    
+    [defaults setObject:@(currentCount) forKey:kRecvNotificationCount];
 }
 
 @end
