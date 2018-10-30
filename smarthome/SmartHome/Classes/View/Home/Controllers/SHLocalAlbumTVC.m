@@ -337,6 +337,7 @@
         return;
     }
     
+#if 0
     [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAsset:asset.localIdentifier forKey:self.cameraUid completionHandler:^(BOOL success) {
         if (success) {
             if (tag == 0) {
@@ -358,6 +359,26 @@
             completionHandler(success);
         }
     }];
+#else
+    SHLogInfo(SHLogTagAPP, @"current index: %lu, assets count: %lu", (unsigned long)index, (unsigned long)assetsArray.count);
+    WEAK_SELF(self);
+    [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAsset:asset.localIdentifier forKey:self.cameraUid completionHandler:^(BOOL success) {
+        // when assetsArray.count == 1, will call performLoadLocalAssets
+        if (success && assetsArray.count > 1) {
+            [assetsArray removeObjectAtIndex:index];
+            
+            NSIndexPath *curIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakself.tableView reloadRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            });
+        }
+        
+        if (completionHandler) {
+            completionHandler(success);
+        }
+    }];
+#endif
 }
 
 @end

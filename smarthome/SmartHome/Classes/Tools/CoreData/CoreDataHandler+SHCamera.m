@@ -167,7 +167,7 @@
     
     // clean cache device before remove local db.
     [self cleanMemoryCacheWithUid:camera.cameraUid];
-    NSString *path = camera.cameraUid.md5;
+//    NSString *path = camera.cameraUid.md5;
     [self.managedObjectContext deleteObject:camera];
     
     NSError *error = nil;
@@ -201,6 +201,12 @@
 }
 
 - (BOOL)addCameraDetailHandle:(SHCameraHelper *)cameraInfo {
+    // when uid is nil, don't add camera.
+    if (cameraInfo.cameraUid == nil) {
+        SHLogError(SHLogTagAPP, @"camera uid is nil.");
+        return NO;
+    }
+    
     BOOL isSuccess = YES;
 
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
