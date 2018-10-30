@@ -591,7 +591,11 @@
 
 - (MBProgressHUD *)progressHUD {
     if (!_progressHUD) {
-        _progressHUD = [MBProgressHUD progressHUDWithView:self.superview];
+        UIView *v = self.superview.window;
+        if (v == nil) {
+            v = self.superview;
+        }
+        _progressHUD = [MBProgressHUD progressHUDWithView:v];
     }
     
     return _progressHUD;

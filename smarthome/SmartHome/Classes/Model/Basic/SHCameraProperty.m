@@ -24,6 +24,7 @@
     self.recStatusData = nil;
     self.pushMsgStatusData = nil;
     self.fasterConnectionData = nil;
+    self.serverOpened = NO;
 }
 
 //- (NSMutableArray *)downloadArray {

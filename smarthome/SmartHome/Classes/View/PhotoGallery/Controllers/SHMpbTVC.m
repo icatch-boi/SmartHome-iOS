@@ -96,6 +96,14 @@ static int const kNewFileIconTag = 888;
     return _downloadPercentQueue;
 }
 
+- (dispatch_queue_t)getThumbnailQueue {
+    if (_getThumbnailQueue == nil) {
+        _getThumbnailQueue = dispatch_queue_create("SmartHome.GCD.Queue.Playback.GetThumbnail", 0);
+    }
+    
+    return _getThumbnailQueue;
+}
+
 //全部过滤条件
 - (NSArray *)filterArray {
     if (!_filterArray) {
@@ -283,6 +291,11 @@ static int const kNewFileIconTag = 888;
     self.title = NSLocalizedString(@"Albums", @"");
     self.editButton.title = NSLocalizedString(@"Edit", @"");
     self.footerView.alpha = 0;
+    
+    // remove Filter & Favorite function
+    self.navigationItem.rightBarButtonItems = @[self.showDownloadButton];
+    [self.favoriteView removeFromSuperview];
+    [self.unfavoriteView removeFromSuperview];
 }
 
 
@@ -1348,7 +1361,8 @@ static int const kNewFileIconTag = 888;
         // Configure the cell...
         cell.file = &file;
         cell.cameraNameLabel.text = _shCamObj.camera.cameraName;
-        
+        [cell.fileThumbs layoutIfNeeded];
+#if 0
         UIImage *image = [self getFileThumbnail:file];
         [cell.fileThumbs layoutIfNeeded];
         if (image) {
@@ -1396,7 +1410,9 @@ static int const kNewFileIconTag = 888;
                 dispatch_semaphore_signal(self.mpbSemaphore);
             });
         }
-        
+#else
+        [self setupThumbnailWithCell:cell cellForRowAtIndexPath:indexPath];
+#endif
         //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else {
@@ -1409,6 +1425,70 @@ static int const kNewFileIconTag = 888;
         
         return cell;
     }
+}
+
+- (void)setupThumbnailWithCell:(SHMpbTableViewCell *)cell cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ICatchFile file = _curFileTable.fileList.at(indexPath.row);
+    
+    WEAK_SELF(self);
+    dispatch_async(self.getThumbnailQueue, ^{
+        UIImage *image = [weakself getFileThumbnail:file];
+        
+        if (image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.fileThumbs.image = [image ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.fileThumbs.image = [[UIImage imageNamed:@"empty_photo"] ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];
+            });
+            
+            [weakself requestThumbnailHandlerWithCell:cell cellForRowAtIndexPath:indexPath];
+        }
+    });
+}
+
+- (void)requestThumbnailHandlerWithCell:(SHMpbTableViewCell *)cell cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    ICatchFile file = _curFileTable.fileList.at(indexPath.row);
+    double delayInSeconds = 0.05;
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    
+    dispatch_after(delayTime, self.thumbnailQueue, ^{
+        if (!_run) {
+            SHLogInfo(SHLogTagAPP, @"bypass...");
+            return;
+        }
+        
+        dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5ull * NSEC_PER_SEC);
+        dispatch_semaphore_wait(self.mpbSemaphore, time);
+        // Just in case, make sure the cell for this indexPath is still On-Screen.
+        __block UITableViewCell *tempCell = nil;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            tempCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        });
+        
+        if (tempCell) {
+            NSData *imageData = [_ctrl.propCtrl requestThumbnail:(ICatchFile *)&file andPropertyID:TRANS_PROP_GET_FILE_THUMBNAIL andCamera:_shCamObj];
+            UIImage *image = [[UIImage alloc] initWithData:imageData];
+            
+            if (image) {
+                SHFileThumbnail *thumbFile = [SHFileThumbnail fileThumbnailWithFile:(ICatchFile *)&file andThumbnailData:imageData];
+                
+                [self.db insertToDataBaseWithFileThumbnail:thumbFile];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    SHMpbTableViewCell *c = (SHMpbTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+                    if (c) {
+                        c.fileThumbs.image = [image ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];//image;
+                    }
+                });
+            } else {
+                SHLogError(SHLogTagAPP, @"request thumbnail failed");
+            }
+        }
+        
+        dispatch_semaphore_signal(self.mpbSemaphore);
+    });
 }
 
 - (UIImage *)getFileThumbnail:(ICatchFile)file {

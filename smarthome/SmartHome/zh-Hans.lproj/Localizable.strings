@@ -415,7 +415,7 @@
 "kMonitoringType" = "监测类型";
 "kFileType" = "文件类型";
 "kCollection" = "收藏";
-"kFilterSelectedFailed" = "某一项不能全不不选 !";
+"kFilterSelectedFailed" = "某一项不能全部不选 !";
 "kSetFilterFailed" = "设置过滤失败。";
 "kMonitorTypeManually" = "手动";
 "kMonitorTypePir" = "运动侦测";

@@ -52,6 +52,9 @@ enum SHMpbState{
 @property (weak, nonatomic) IBOutlet UIButton *selectedButton;
 @property (weak, nonatomic) IBOutlet UIButton *selectedNumber;
 
+@property (weak, nonatomic) IBOutlet UIView *favoriteView;
+@property (weak, nonatomic) IBOutlet UIView *unfavoriteView;
+
 @property (nonatomic) SHCameraObject *shCamObj;
 @property (nonatomic) SHControlCenter *ctrl;
 
@@ -94,5 +97,7 @@ enum SHMpbState{
 //@property (nonatomic) BOOL isDownloading;
 //@property (nonatomic) BOOL readyGoToFileDownloadVC;
 @property (nonatomic, strong) NSMutableArray *curSelectedCells;
+
+@property (nonatomic, strong) dispatch_queue_t getThumbnailQueue;
 
 @end

@@ -56,7 +56,17 @@ sqlite3* database;
     // 数据库路径
     NSString *path = [SHDatabase pathWithDatabaseName:_databaseName];
     // 是否打开成功
+#if 0
     int retVal = sqlite3_open([path UTF8String], &database);
+#else
+    // fixes: sqlite3.dylib: illegal multi-threaded access to database connection
+    sqlite3_shutdown();
+    sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+    sqlite3_initialize();
+    
+    NSLog(@"isThreadSafe %d", sqlite3_threadsafe());
+    int retVal = sqlite3_open_v2(path.UTF8String, &database, SQLITE_OPEN_READWRITE|SQLITE_OPEN_FULLMUTEX, NULL);
+#endif
     if (retVal == SQLITE_OK)
     {
         NSLog(@"Opening Database");
