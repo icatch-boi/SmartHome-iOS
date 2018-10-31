@@ -338,6 +338,9 @@
     //    WifiCamSDKEventListener *listener = new WifiCamSDKEventListener(self, @selector(streamCloseCallback));
     //    self.streamObserver = [[WifiCamObserver alloc] initWithListener:listener eventType:ICATCH_EVENT_MEDIA_STREAM_CLOSED isCustomized:NO isGlobal:NO];
     //    [[SDK instance] addObserver:_streamObserver];
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isVideoPB = YES;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -399,6 +402,9 @@
     //    delete _streamObserver.listener;
     //    _streamObserver.listener = NULL;
     //    self.streamObserver = nil;
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isVideoPB = NO;
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
 }
 
 - (void)didReceiveMemoryWarning

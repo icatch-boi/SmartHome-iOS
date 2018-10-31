@@ -575,8 +575,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         }
         
         //清除相机的push msg信息及缓存的视频缩略图
-        MessageCenter *msgCenter = [MessageCenter MessageCenterWithName:_shCamObj.camera.cameraUid andMsgDelegate:nil];
-        [msgCenter clearAllMessage];
+//        MessageCenter *msgCenter = [MessageCenter MessageCenterWithName:_shCamObj.camera.cameraUid andMsgDelegate:nil];
+//        [msgCenter clearAllMessage];
         
         [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
             SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);

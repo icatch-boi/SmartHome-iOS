@@ -26,6 +26,8 @@
 //@property (nonatomic, copy) NSString *deviceToken;
 
 @property (nonatomic, strong, readonly) NSMutableArray *messages;
+@property (nonatomic, assign) BOOL isVideoPB;
+@property (nonatomic, assign) BOOL isFullScreenPV;
 
 - (void)cleanMessageCache;
 

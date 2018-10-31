@@ -34,6 +34,7 @@ static NSString * const kZJPhotoLoadingDidEndNotification = @"ZJPhotoLoadingDidE
 @required
 @property (nonatomic, strong) UIImage *underlyingImage;
 - (void)loadUnderlyingImageAndNotify;
+- (void)unloadUnderlyingImage;
 
 @optional
 @property (nonatomic, assign) BOOL isVideo;

@@ -17,6 +17,7 @@
 #import "RTCButton.h"
 #import "SHWaterView.h"
 #import "CustomIOS7AlertView.h"
+#import "AppDelegate.h"
 
 typedef enum : NSUInteger {
     CacheTypeVideo,
@@ -57,9 +58,9 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     self.ctrl = _shCameraObj.controler;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-}
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+//    return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+//}
 
 #pragma mark - Lifecycle
 - (void)viewDidLoad {
@@ -585,7 +586,9 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 //    }];
 
 //	[_shCameraObj.streamOper closeAudioServer];
-
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isFullScreenPV = NO;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_presentView) {
             [_presentView removeFromSuperview];

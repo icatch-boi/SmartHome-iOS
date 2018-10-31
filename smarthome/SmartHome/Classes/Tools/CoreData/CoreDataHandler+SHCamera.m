@@ -167,6 +167,7 @@
     
     // clean cache device before remove local db.
     [self cleanMemoryCacheWithUid:camera.cameraUid];
+    [self removeCacheThumbnailWithUid:camera.cameraUid];
 //    NSString *path = camera.cameraUid.md5;
     [self.managedObjectContext deleteObject:camera];
     
@@ -187,6 +188,13 @@
 #endif
     
     return isSuccess;
+}
+
+- (void)removeCacheThumbnailWithUid:(NSString *)cameraUid {
+    NSString *databaseName = [cameraUid.md5 stringByAppendingString:@".db"];
+    NSString *databasePath = [SHTool databasePathWithName:databaseName];
+    
+    [SHTool removeFileWithPath:databasePath];
 }
 
 - (BOOL)addCamera:(SHCameraHelper *)cameraInfo {

@@ -1150,4 +1150,15 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [self showBadgeNumber];
 }
 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if (self.isVideoPB) {
+        return UIInterfaceOrientationMaskAll;
+    } else if (self.isFullScreenPV) {
+        return UIInterfaceOrientationMaskLandscape;
+    }
+    
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 @end

@@ -302,11 +302,32 @@
         if ([photo underlyingImage]) {
             // Successful load
             [self displayImage];
+            [self loadAdjacentPhotosIfNecessary];
         } else {
             // Failed to load
             //            [self showImageFailure];
         }
         //        [self hideLoadingIndicator];
+    }
+}
+
+- (void)loadAdjacentPhotosIfNecessary {
+    if (_photoIndex > 0) {
+        // Preload index - 1
+        id <ZJPhotoProtocol> photo = [_photoBrowser photoAtIndex:_photoIndex - 1];
+        if (![photo underlyingImage]) {
+            [photo loadUnderlyingImageAndNotify];
+            NSLog(@"Pre-loading image at index %lu", (unsigned long)_photoIndex - 1);
+        }
+    }
+    
+    if (_photoIndex < [_photoBrowser numberOfPhotos] - 1) {
+        // Preload index + 1
+        id <ZJPhotoProtocol> photo = [_photoBrowser photoAtIndex:_photoIndex + 1];
+        if (![photo underlyingImage]) {
+            [photo loadUnderlyingImageAndNotify];
+            NSLog(@"Pre-loading image at index %lu", (unsigned long)_photoIndex + 1);
+        }
     }
 }
 

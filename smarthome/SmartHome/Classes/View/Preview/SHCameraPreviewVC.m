@@ -38,6 +38,7 @@
 #import "SHLocalCamerasHelper.h"
 #import "SHSDKEventListener.hpp"
 #import <unistd.h>
+#import "AppDelegate.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -423,7 +424,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 //    self.videoSizeButton.backgroundColor = [UIColor lightGrayColor];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBack)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-setting"] style:UIBarButtonItemStyleDone target:self action:@selector(enterSettingAction)];
+    self.navigationItem.rightBarButtonItem = _notification ? nil : [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-setting"] style:UIBarButtonItemStyleDone target:self action:@selector(enterSettingAction)];
     
     _speakerTopCons.constant = (kScreenHeightScale == 1.0) ? kSpeakerTopConsDefaultValue_Special : kSpeakerTopConsDefaultValue * kScreenHeightScale;
     _speakerLeftCons.constant = kSpeakerLeftConsDefaultValue * kScreenWidthScale;
@@ -962,6 +963,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
         vc.delegate = self;
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            app.isFullScreenPV = YES;
+            
             [self presentViewController:vc animated:YES completion:nil];
         });
     });

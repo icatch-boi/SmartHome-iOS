@@ -329,9 +329,9 @@
     options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
     options.synchronous = false;
     options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
-        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSNumber numberWithDouble: progress], @"progress",
-                              self, @"photo", nil];
+//        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+//                              [NSNumber numberWithDouble: progress], @"progress",
+//                              self, @"photo", nil];
 //        [[NSNotificationCenter defaultCenter] postNotificationName:MWPHOTO_PROGRESS_NOTIFICATION object:dict];
     };
     
@@ -366,6 +366,12 @@
     CGImageRelease(image);
     
     return thumb;
+}
+
+// Release if we can get it again from path or url
+- (void)unloadUnderlyingImage {
+    _loadingInProgress = NO;
+    self.underlyingImage = nil;
 }
 
 - (void)imageLoadingComplete {

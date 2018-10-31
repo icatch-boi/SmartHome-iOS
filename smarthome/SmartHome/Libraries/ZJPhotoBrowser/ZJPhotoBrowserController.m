@@ -30,6 +30,7 @@
 #import "ZJPhotoViewerController.h"
 #import "SVProgressHUD.h"
 #import "UIBarButtonItem+Extensions.h"
+#import "SDImageCache.h"
 
 @interface ZJPhotoBrowserController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIGestureRecognizerDelegate>
 
@@ -102,7 +103,29 @@
 }
 
 - (void)dealloc {
-    
+    [self releaseAllUnderlyingPhotos:NO];
+    [[SDImageCache sharedImageCache] clearMemory]; // clear memory
+}
+
+- (void)releaseAllUnderlyingPhotos:(BOOL)preserveCurrent {
+    // Create a copy in case this array is modified while we are looping through
+    // Release photos
+    NSArray *copy = [_photos copy];
+    for (id p in copy) {
+        if (p != [NSNull null]) {
+            if (preserveCurrent && p == [self photoAtIndex:self.currentPageIndex]) {
+                continue; // skip current
+            }
+            [p unloadUnderlyingImage];
+        }
+    }
+    // Release thumbs
+    copy = [_thumbPhotos copy];
+    for (id p in copy) {
+        if (p != [NSNull null]) {
+            [p unloadUnderlyingImage];
+        }
+    }
 }
 
 - (void)viewDidLoad {

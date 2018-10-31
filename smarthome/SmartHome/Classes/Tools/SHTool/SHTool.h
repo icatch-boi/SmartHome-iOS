@@ -25,4 +25,7 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (void)setLocalFilesFilter:(ICatchFileFilter *)filter;
 + (unsigned long long)calcFileSize:(vector<ICatchFile>)fileList;
 
++ (void)removeFileWithPath:(NSString *)path;
++ (NSString *)databasePathWithName:(NSString *)databaseName;
+
 @end

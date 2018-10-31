@@ -65,7 +65,7 @@ sqlite3* database;
     sqlite3_initialize();
     
     NSLog(@"isThreadSafe %d", sqlite3_threadsafe());
-    int retVal = sqlite3_open_v2(path.UTF8String, &database, SQLITE_OPEN_READWRITE|SQLITE_OPEN_FULLMUTEX, NULL);
+    int retVal = sqlite3_open_v2(path.UTF8String, &database, SQLITE_OPEN_CREATE|SQLITE_OPEN_READWRITE|SQLITE_OPEN_FULLMUTEX, NULL);
 #endif
     if (retVal == SQLITE_OK)
     {
@@ -74,7 +74,11 @@ sqlite3* database;
     else
     {
         // 打开数据库失败
+#if 0
         sqlite3_close(database);
+#else
+        sqlite3_close_v2(database);
+#endif
 #if DEBUG
         NSAssert1(0, @"Failed to open database: '%s'.", sqlite3_errmsg(database));
 #else
@@ -87,6 +91,7 @@ sqlite3* database;
 
 - (void)closeDatabase
 {
+#if 0
     if (sqlite3_close(database) != SQLITE_OK) {
 #if DEBUG
         NSAssert1(0, @"Failed to close database: '%s'.", sqlite3_errmsg(database));
@@ -94,6 +99,17 @@ sqlite3* database;
         NSLog(@"Failed to open database: '%s'.", sqlite3_errmsg(database));
 #endif
     }
+    
+#else
+    
+    if (sqlite3_close_v2(database) != SQLITE_OK) {
+#if DEBUG
+        NSAssert1(0, @"Failed to close database: '%s'.", sqlite3_errmsg(database));
+#else
+        NSLog(@"Failed to open database: '%s'.", sqlite3_errmsg(database));
+#endif
+    }
+#endif
 }
 
 - (instancetype)initWithDatabaseName:(NSString *)databaseName {

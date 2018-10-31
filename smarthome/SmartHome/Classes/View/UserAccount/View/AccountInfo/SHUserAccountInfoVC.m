@@ -91,7 +91,7 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 
 #pragma mark - init

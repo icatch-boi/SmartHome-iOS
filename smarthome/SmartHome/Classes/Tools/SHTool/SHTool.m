@@ -318,4 +318,24 @@
     return fileSize;
 }
 
++ (void)removeFileWithPath:(NSString *)path {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if ([fileManager fileExistsAtPath:path]) {
+        BOOL success =  [fileManager removeItemAtPath:path error:nil];
+        SHLogInfo(SHLogTagAPP, @"remove file is success: %d, path: %@", success, path);
+    } else {
+        SHLogWarn(SHLogTagAPP, @"remove file but file no exist, path: %@", path);
+    }
+}
+
++ (NSString *)databasePathWithName:(NSString *)databaseName
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask,
+                                                         YES);
+    NSString *documentDirectory = [paths lastObject];
+    return [documentDirectory stringByAppendingPathComponent:databaseName];
+}
+
 @end

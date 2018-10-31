@@ -26,7 +26,7 @@
 @implementation ZJSlidingDrawerViewController
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAll;
 }
 
 + (instancetype)sharedSlidingDrawerVC {
