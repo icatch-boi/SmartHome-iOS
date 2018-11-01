@@ -118,6 +118,10 @@
             }
         }
     }
+    
+    // clean local thumbnail cache.
+    NSString *databaseName = [path stringByAppendingString:@".db"];
+    [self removeFileWithPath:[self databasePathWithName:databaseName]];
 }
 
 + (void)enableLogSdkAtDiretctory:(NSString *)directoryName enable:(BOOL)enable {

@@ -857,6 +857,10 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     
     numberOfBytes += [DiskSpaceTool num_folderSizeAtPath:NSTemporaryDirectory()];
     
+    // calc local thumbnail cache size.
+    NSString *databaseName = [_shCamObj.camera.cameraUid.md5 stringByAppendingString:@".db"];
+    numberOfBytes += [DiskSpaceTool fileSizeAtPath:[SHTool databasePathWithName:databaseName]];
+    
     return [DiskSpaceTool humanReadableStringFromBytes:numberOfBytes];
 }
 
