@@ -38,6 +38,7 @@
 @property(nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic) BOOL loaded;
 @property (nonatomic, strong) NSMutableArray *messages;
+@property (nonatomic, weak) MBProgressHUD *progressHUD;
 
 @end
 
@@ -46,7 +47,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
-    [self showAppVersionInfoAndRunDate];
     BuglyConfig *config = [[BuglyConfig alloc] init];
     config.debugMode = YES;
     [Bugly startWithAppId:nil config:config];
@@ -197,6 +197,8 @@
 #endif
 #endif
 	}
+    
+    [self showAppVersionInfoAndRunDate];
 }
 
 - (void)jumpToCameraPreviewVCWithOptions:(NSDictionary *)launchOptions {
@@ -372,6 +374,7 @@
 //    } else {
 //        [self.window.rootViewController dismissViewControllerAnimated:YES completion: nil];
 //    }
+    [self removeGlobalObserver];
 }
 
 
@@ -427,6 +430,7 @@
 	}
 	
 	//    [self addNotificationWithTimeIntervalTrigger];
+    [self addGlobalObserver];
 }
 
 - (void)addNotificationWithTimeIntervalTrigger
@@ -1150,6 +1154,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [self showBadgeNumber];
 }
 
+#pragma mark - Configure Application SupportedInterfaceOrientations
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
     if (self.isVideoPB) {
@@ -1159,6 +1164,37 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
     
     return UIInterfaceOrientationMaskPortrait;
+}
+
+#pragma mark - DownloadCompleteHandle
+- (void)addGlobalObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(singleDownloadCompleteHandle:) name:kSingleDownloadCompleteNotification object:nil];
+}
+
+- (void)removeGlobalObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)singleDownloadCompleteHandle:(NSNotification *)nc {
+    NSDictionary *tempDict = nc.userInfo;
+    
+    NSString *msg = [SHTool createDownloadComplete:tempDict];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"Tips", nil) showTime:kShowDownloadCompleteNoteTime * 0.6];
+        _progressHUD.detailsLabelText = msg;
+    });
+}
+
+#pragma mark - Action Progress
+- (MBProgressHUD *)progressHUD {
+    if (_progressHUD != nil) {
+        _progressHUD = nil;
+    }
+    
+    _progressHUD = [MBProgressHUD progressHUDWithView:self.window];
+    
+    return _progressHUD;
 }
 
 @end

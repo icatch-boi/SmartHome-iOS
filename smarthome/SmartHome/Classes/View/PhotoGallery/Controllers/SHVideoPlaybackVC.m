@@ -355,6 +355,9 @@
 }
 
 - (IBAction)returnBack:(id)sender {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isVideoPB = NO;
+    
     self.PlaybackRun = NO;
     [self showProgressHUDWithMessage:nil detailsMessage:nil
                                 mode:MBProgressHUDModeIndeterminate];

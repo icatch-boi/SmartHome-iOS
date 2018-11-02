@@ -248,7 +248,8 @@
     
     int value = sender.intValue1;
 //    NSString *downloadInfo = nil;
-    
+    NSString *description = @"下载成功";
+
     switch (value) {
         case 0:
             SHLogInfo(SHLogTagAPP, @"下载成功");
@@ -267,6 +268,7 @@
             
 //            [self.shCamObj.sdk addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
             [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
+            description = @"下载成功";
             break;
          
         case -1:
@@ -276,6 +278,7 @@
                 SHLogInfo(SHLogTagAPP, @"notify onDownloadComplete, fw happen error.");
                 [self.delegate onDownloadComplete:self.file retvalue:NO];
             }
+            description = @"下载失败";
             break;
             
         case -2:
@@ -285,6 +288,7 @@
             if ([self.delegate respondsToSelector:@selector(onCancelDownloadComplete:retvalue:)]) {
                 [self.delegate onCancelDownloadComplete:self.file retvalue:YES];
             }
+            description = @"取消下载";
             break;
             
         default:
@@ -292,7 +296,7 @@
     }
     
     if (!_shCamObj.isEnterBackground) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSingleDownloadCompleteNotification object:nil userInfo:@{@"cameraName": _shCamObj.camera.cameraName,@"file": _file}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSingleDownloadCompleteNotification object:nil userInfo:@{@"cameraName": _shCamObj.camera.cameraName,@"file": _file, @"Description": description}];
     }
 
     self.downloadFileProcessing = NO;

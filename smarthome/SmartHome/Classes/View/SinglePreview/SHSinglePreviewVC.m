@@ -225,7 +225,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         if (!_shCameraObj.streamOper.PVRun) {
             [self startPreview];
         } else {
-            [self addVideoBitRateObserver];
+//            [self addVideoBitRateObserver];
             [self initCameraPropertyGUI];
         }
     }
@@ -261,8 +261,12 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 - (void)singleDownloadCompleteHandle:(NSNotification *)nc {
     NSDictionary *tempDict = nc.userInfo;
     
+#if 0
     SHFile *file = tempDict[@"file"];
     NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"kFileDownloadCompleteTipsInfo", nil), tempDict[@"cameraName"], file.f.getFileName().c_str()];
+#else
+    NSString *msg = [SHTool createDownloadComplete:tempDict];
+#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.notificationView showGCDNoteWithMessage:msg andTime:kShowDownloadCompleteNoteTime withAcvity:NO];
@@ -496,7 +500,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         }
 #endif
         [_shCameraObj initCamera];
-        [self addVideoBitRateObserver];
+//        [self addVideoBitRateObserver];
     } failedBlock:^(NSInteger errorCode) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
@@ -549,7 +553,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     [self removePreviewCacheObserver];
     [self releaseCurrentDateTimer];
     [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
-    [self removeVideoBitRateObserver];
+//    [self removeVideoBitRateObserver];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1921,6 +1925,11 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             case ICATCH_EVENT_WIFI_SIGNAL_LEVEL_CHANGED:
                 [weakSelf updateWifiStatusIcon:evt];
                 break;
+                
+            case ICATCH_EVENT_VIDEO_BITRATE:
+                [weakSelf updateBitRateLabel:evt.doubleValue1 + evt.doubleValue2];
+                break;
+                
             default:
                 break;
         }

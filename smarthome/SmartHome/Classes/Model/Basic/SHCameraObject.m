@@ -26,6 +26,7 @@
 @property (nonatomic) SHObserver *pvThumbnailChangedObserver;
 @property (nonatomic) SHObserver *disconnectObserver;
 @property (nonatomic) SHObserver *powerOffObserver;
+@property (nonatomic, strong) SHObserver *bitRateObserver;
 
 @end
 
@@ -349,6 +350,8 @@
     SHSDKEventListener *powerOffListener = new SHSDKEventListener(self, @selector(notifyCameraPowerOffEvent:));
     self.powerOffObserver = [SHObserver cameraObserverWithListener:powerOffListener eventType:ICATCH_EVENT_CAMERA_POWER_OFF isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.powerOffObserver];
+    
+    [self addVideoBitRateObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -461,6 +464,28 @@
         }
         
         self.powerOffObserver = nil;
+    }
+    
+    [self removeVideoBitRateObserver];
+    self.cameraPropertyValueChangeBlock = nil;
+}
+
+- (void)addVideoBitRateObserver {
+    SHSDKEventListener *bitRateListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.bitRateObserver = [SHObserver cameraObserverWithListener:bitRateListener eventType:ICATCH_EVENT_VIDEO_BITRATE isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.bitRateObserver];
+}
+
+- (void)removeVideoBitRateObserver {
+    if (self.bitRateObserver) {
+        [self.sdk removeObserver:self.bitRateObserver];
+        
+        if (self.bitRateObserver.listener) {
+            delete self.bitRateObserver.listener;
+            self.bitRateObserver.listener = nullptr;
+        }
+        
+        self.bitRateObserver = nil;
     }
 }
 

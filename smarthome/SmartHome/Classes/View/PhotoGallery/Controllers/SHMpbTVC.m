@@ -179,8 +179,12 @@ static int const kNewFileIconTag = 888;
 - (void)singleDownloadCompleteHandle:(NSNotification *)nc {
     NSDictionary *tempDict = nc.userInfo;
     
+#if 0
     SHFile *file = tempDict[@"file"];
     NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"kFileDownloadCompleteTipsInfo", nil), tempDict[@"cameraName"], file.f.getFileName().c_str()];
+#else
+    NSString *msg = [SHTool createDownloadComplete:tempDict];
+#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.notificationView showGCDNoteWithMessage:msg andTime:kShowDownloadCompleteNoteTime withAcvity:NO];

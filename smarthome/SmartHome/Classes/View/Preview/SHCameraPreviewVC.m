@@ -166,7 +166,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self removeVideoBitRateObserver];
+//    [self removeVideoBitRateObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self releaseCurrentDateTimer];
     [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
@@ -253,7 +253,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 //        [_shCameraObj initCamera];
         
         [_shCameraObj initCamera];
-        [self addVideoBitRateObserver];
+//        [self addVideoBitRateObserver];
     } failedBlock:^(NSInteger errorCode) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
@@ -274,7 +274,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     if (!_shCameraObj.streamOper.PVRun) {
         [self startMediaStream];
     } else {
-        [self addVideoBitRateObserver];
+//        [self addVideoBitRateObserver];
         [self prepareCameraPropertyData];
     }
 }
@@ -524,6 +524,11 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
                 //do get thumbnail
 //                [weakSelf updatePvThumbnail:evt];
                 break;
+                
+            case ICATCH_EVENT_VIDEO_BITRATE:
+                [weakSelf updateBitRateLabel:evt.doubleValue1 + evt.doubleValue2];
+                break;
+                
             default:
                 break;
         }
@@ -1384,12 +1389,15 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     [self stopPlayRing];
     
     [self closeCallView];
-    
+#if 0
     if (_shCameraObj.isConnect) {
         [self startPreview];
     } else {
         [self connectAndPreview];
     }
+#else
+    [self connectAndPreview];
+#endif
     
     [self checkLoginStatus];
 }

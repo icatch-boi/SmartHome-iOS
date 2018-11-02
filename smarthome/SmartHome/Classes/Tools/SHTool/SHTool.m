@@ -342,4 +342,31 @@
     return [documentDirectory stringByAppendingPathComponent:databaseName];
 }
 
++ (NSString *)createDownloadComplete:(NSDictionary *)tempDict {
+    const char *fileName = "file";
+    if ([tempDict.allKeys containsObject:@"file"]) {
+        SHFile *file = tempDict[@"file"];
+        
+        if ([file isKindOfClass:[SHFile class]]) {
+            fileName = file.f.getFileName().c_str();
+        }
+    }
+    
+    NSString *cameraName = @"One camera";
+    if ([tempDict.allKeys containsObject:@"cameraName"]) {
+        cameraName = tempDict[@"cameraName"];
+    }
+    
+    NSString *description = @"下载完成";
+    if ([tempDict.allKeys containsObject:@"Description"]) {
+        description = tempDict[@"Description"];
+    }
+    
+    NSString *msg = [NSString stringWithFormat:@"%@ 中的文件 %s %@。", cameraName, fileName, description];
+    
+    SHLogInfo(SHLogTagAPP, @"Download complete message: %@", msg);
+    
+    return msg;
+}
+
 @end
