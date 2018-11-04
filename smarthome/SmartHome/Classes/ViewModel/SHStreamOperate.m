@@ -18,7 +18,7 @@
 #import "XJLocalAssetHelper.h"
 #import "SHNetworkManager+SHCamera.h"
 
-static const NSTimeInterval kBufferingMinTime = 1.0;
+static const NSTimeInterval kBufferingMinTime = 5.0;
 static const NSTimeInterval kBufferingMaxTime = 10.0;
 
 @interface SHStreamOperate ()

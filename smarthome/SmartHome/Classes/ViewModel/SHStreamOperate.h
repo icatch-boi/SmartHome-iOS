@@ -34,4 +34,6 @@
 - (void)uploadPreviewThumbnailToServer;
 - (void)stopPreview;
 
+- (UIImage *)getLastFrameImage;
+
 @end

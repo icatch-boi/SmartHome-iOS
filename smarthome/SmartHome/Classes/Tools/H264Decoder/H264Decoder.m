@@ -211,6 +211,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
 //    NSLog(@"last image: %@", image);
     return [self reDrawOrangeImage:image];
 #else
+#if 0
     CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
     
     CIContext *temporaryContext = [CIContext contextWithOptions:nil];
@@ -224,6 +225,19 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     CGImageRelease(videoImage);
     
     return uiImage;
+#else
+    
+    CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    
+    CGImageRef imageRef = [context createCGImage:ciImage fromRect:CGRectMake(0, 0, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer))];
+    
+    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
+    
+    return image;
+#endif
 #endif
 }
 

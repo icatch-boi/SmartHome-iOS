@@ -701,9 +701,13 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     _talkbackBtnWidthCons.constant = kTalkbackBtnDefaultWidth * kScreenWidthScale;
     _captureBtnWidthCons.constant = kMuteBtnDefaultWidth * kScreenWidthScale;
     
+#if 0
     UIImage *img = _shCameraObj.camera.thumbnail;
-//    img = img ? img : [UIImage imageNamed:@"default_thumb"];
+    //    img = img ? img : [UIImage imageNamed:@"default_thumb"];
     _preview.image = [img ic_imageWithSize:_preview.bounds.size backColor:self.view.backgroundColor];
+#else
+    _preview.image = [_shCameraObj.streamOper getLastFrameImage];
+#endif
     _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
 }
 

@@ -435,7 +435,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     
     UIImage *img = _shCameraObj.camera.thumbnail;
 //    img = img ? img : [UIImage imageNamed:@"default_thumb"];
-    _previewImageView.image = [img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
+    _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
 }
 

@@ -59,6 +59,10 @@
     
     [self displayImage];
     [self setVideoIndicatorState];
+    
+    if (self.currentAVPlayerViewController.isBeingDismissed) {
+        self.currentAVPlayerViewController.player = nil;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -183,6 +187,17 @@
     
     [self presentViewController:_currentAVPlayerViewController animated:YES completion:^{
         [_currentAVPlayerViewController.player play];
+    }];
+    
+    _currentAVPlayerViewController.allowsPictureInPicturePlayback = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVideoCompleted:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.currentAVPlayerViewController.player.currentItem];
+    self.photoBrowser.currentViewer = nil;
+}
+
+- (void)onVideoCompleted:(NSNotification *)nc {
+    self.currentAVPlayerViewController.player = nil;
+    [self.currentAVPlayerViewController dismissViewControllerAnimated:YES completion:^{
+        _currentAVPlayerViewController = nil;
     }];
 }
 
