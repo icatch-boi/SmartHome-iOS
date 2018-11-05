@@ -374,17 +374,17 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         } else {
             [self releaseNetStatusTimer];
             
-            [self tryConnectDevice];
+            [self tryConnectDevice:-1];
         }
     });
 }
 
-- (void)tryConnectDevice {
+- (void)tryConnectDevice:(NSInteger)tryTimes {
     if (_trying) {
         return;
     }
     
-    self.tryConnectTimes = 40;
+    self.tryConnectTimes = (tryTimes <= 0) ? 40 : tryTimes;
 //    NSUInteger tryTimes = 40;//5;
     NSTimeInterval sleepTime = 5.0;
     _trying = YES;
@@ -509,7 +509,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         
         [weakself.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"action_waiting", nil)];
         dispatch_async(dispatch_get_global_queue(DISPATCH_TARGET_QUEUE_DEFAULT, 0), ^{
-            [weakself tryConnectDevice];
+            [weakself tryConnectDevice:1];
         });
     }]];
     

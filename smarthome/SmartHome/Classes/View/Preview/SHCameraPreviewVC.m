@@ -39,6 +39,7 @@
 #import "SHSDKEventListener.hpp"
 #import <unistd.h>
 #import "AppDelegate.h"
+#import "SDAutoLayout.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -90,6 +91,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     [self constructPreviewData];
 //    [self prepareVideoSizeData];
 //    [self prepareCameraPropertyData];
+    [self addTapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -139,6 +141,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
     [self updateTalkState];
+    [self.previewImageView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -170,6 +173,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self releaseCurrentDateTimer];
     [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -437,6 +441,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 //    img = img ? img : [UIImage imageNamed:@"default_thumb"];
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    
+    [self setupTopToolView];
+    [self setupBottomToolView];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -542,6 +549,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     self.batteryImageView.image = batteryStatusImage;
     self.batteryLowAlertShowed = NO;
     _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
+    
+    self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
+    self.batteryInfoImgView.image = batteryStatusImage;
 }
 
 - (void)updateBatteryLevelIcon:(SHICatchEvent *)evt {
@@ -553,6 +563,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
         self.batteryImageView.image = batteryStatusImage;
         _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
 
+        self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
+        self.batteryInfoImgView.image = batteryStatusImage;
+        
         if ([imageName isEqualToString:@"vedieo-buttery"] && !_batteryLowAlertShowed) {
             self.batteryLowAlertShowed = YES;
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"ALERT_LOW_BATTERY", nil) showTime:2.0];
@@ -644,7 +657,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             _TalkBackRun = NO;
             
             [self stopTalkBack];
-//            _noHidden = NO;
+            _noHidden = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
 //                self.speakerButton.backgroundColor = [UIColor lightGrayColor];
@@ -697,7 +710,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             }
             
             _shCameraObj.cameraProperty.talk = YES;
-//            _noHidden = YES;
+            _noHidden = YES;
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -728,7 +741,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             [self.progressHUD hideProgressHUD:YES];
             
             _speakerButton.enabled = YES;
-//            _noHidden = NO;
+            _noHidden = NO;
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -961,6 +974,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 }
 
 - (IBAction)enterFullScreenAction:(id)sender {
+#if 0
     dispatch_async(self.previewQueue, ^{
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"XJMain" bundle:nil];
         SHSinglePreviewVC *vc = [sb instantiateViewControllerWithIdentifier:@"SinglePreviewID"];
@@ -974,6 +988,25 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             [self presentViewController:vc animated:YES completion:nil];
         });
     });
+#else
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        [self fullScreenHandler];
+    } else {
+        dispatch_async(self.previewQueue, ^{
+            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"XJMain" bundle:nil];
+            SHSinglePreviewVC *vc = [sb instantiateViewControllerWithIdentifier:@"SinglePreviewID"];
+            vc.cameraUid = _shCameraObj.camera.cameraUid;
+            vc.delegate = self;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                app.isFullScreenPV = YES;
+                
+                [self presentViewController:vc animated:YES completion:nil];
+            });
+        });
+    }
+#endif
 }
 
 #pragma mark - UITableViewDataSource
@@ -1230,7 +1263,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     
     [UIView animateWithDuration:2 animations:^{
         
-        waterView.transform = CGAffineTransformScale(waterView.transform, 2, 2);
+        waterView.transform = CGAffineTransformScale(waterView.transform, 1.618, 1.618);
         
         waterView.alpha = 0;
         
@@ -1542,6 +1575,8 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
         _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
+        
+        self.bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
     });
 }
 
@@ -1555,11 +1590,323 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             BOOL isRing = _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
             isRing ? [self talkBackAction:_speakerButton] : void();
 //        }
+    } else if ([keyPath isEqualToString:@"bounds"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+            
+            self.avslayer.bounds = _previewImageView.bounds;
+            self.avslayer.position = CGPointMake(CGRectGetMidX(_previewImageView.bounds), CGRectGetMidY(_previewImageView.bounds));
+            
+            [CATransaction commit];
+        });
     }
 }
 
 - (BOOL)isRing {
     return _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
+}
+
+#pragma mark - Interface Rotate Handle
+- (void)shrinkScreenClick:(id)sender {
+    [self shrinkScreenHandler];
+}
+
+- (void)fullScreenHandler {
+    [self setupFullScreen:YES];
+    
+    [self updateSubviewFrameForFullScreen];
+    
+    [self interfaceOrientation:[self getRotateOrientation]];
+}
+
+- (void)shrinkScreenHandler {
+    [self setupFullScreen:NO];
+    
+    [self updateSubviewFrameForShrinkScreen];
+    
+    [self interfaceOrientation:UIInterfaceOrientationPortrait];
+}
+
+- (UIInterfaceOrientation)getRotateOrientation {
+#if 1
+    UIDeviceOrientation duration = [[UIDevice currentDevice] orientation];
+    
+    if (duration == UIDeviceOrientationLandscapeLeft) {
+        return UIInterfaceOrientationLandscapeRight;
+    } else if (duration == UIDeviceOrientationLandscapeRight) {
+        return UIInterfaceOrientationLandscapeLeft;
+    }
+    
+    return UIInterfaceOrientationLandscapeLeft;
+    
+#else
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+        return orientation;
+    }
+    
+    return UIInterfaceOrientationLandscapeLeft;
+#endif
+}
+
+- (void)setupFullScreen:(BOOL)fullScreen {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isFullScreenPV = fullScreen;
+}
+
+- (void)interfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    //强制转换
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        //        [CATransaction setAnimationDuration:0.168];
+        
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        NSInvocation * invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = orientation;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+        
+        [CATransaction commit];
+    }
+}
+
+- (void)updateSubviewFrameForFullScreen {
+    self.previewImageView.sd_layout.leftSpaceToView(self.view, 0)
+    .topSpaceToView(self.view, 0)
+    .rightSpaceToView(self.view, 0)
+    .bottomSpaceToView(self.view, 0);
+    
+    self.pvFailedLabel.sd_layout.centerXEqualToView(self.previewImageView)
+    .centerYEqualToView(self.previewImageView);
+    
+    self.captureButton.sd_resetNewLayout.leftSpaceToView(self.speakerButton, 30)
+    .rightSpaceToView(self.view, 24)
+    .bottomSpaceToView(self.view, 22)
+    .widthIs(60)
+    .heightEqualToWidth();
+    
+    self.speakerButton.sd_resetNewLayout.leftSpaceToView(self.audioButton, 30)
+    .rightSpaceToView(self.captureButton, 30)
+    .centerYEqualToView(self.captureButton)
+    .widthIs(80)
+    .heightEqualToWidth();
+    
+    self.audioButton.sd_resetNewLayout.rightSpaceToView(self.speakerButton, 30)
+    .centerYEqualToView(self.speakerButton)
+    .widthRatioToView(self.captureButton, 1.0)
+    .heightEqualToWidth();
+    
+    self.headerView.hidden = YES;
+    self.footerView.hidden = YES;
+    self.navigationController.navigationBar.hidden = YES;
+    self.topToolView.hidden = NO;
+    self.bottomToolView.hidden = NO;
+}
+
+- (void)updateSubviewFrameForShrinkScreen {
+    self.previewImageView.sd_layout.topSpaceToView(self.headerView, 0)
+    .bottomSpaceToView(self.footerView, 0);
+    
+    self.speakerButton.sd_resetNewLayout.topSpaceToView(self.footerView, 44)
+    .leftSpaceToView(self.audioButton, 40)
+    .rightSpaceToView(self.captureButton, 40)
+    .centerXEqualToView(self.view)
+    .widthIs(80)
+    .heightEqualToWidth();
+    
+    self.captureButton.sd_resetNewLayout.centerYEqualToView(self.speakerButton)
+    .leftSpaceToView(self.speakerButton, 40);
+    
+    self.audioButton.sd_resetNewLayout.centerYEqualToView(self.speakerButton)
+    .rightSpaceToView(self.speakerButton, 40);
+    
+    self.headerView.hidden = NO;
+    self.footerView.hidden = NO;
+    self.navigationController.navigationBar.hidden = NO;
+    self.topToolView.hidden = YES;
+    self.bottomToolView.hidden = YES;
+}
+
+#pragma mark - Setup Top Tool View
+- (void)setupTopToolView {
+    UIView *topToolView = [[UIView alloc] init];
+    
+    topToolView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"full scree-top"]];
+    topToolView.hidden = YES;
+    
+    [self.view addSubview:topToolView];
+    
+    topToolView.sd_layout.leftSpaceToView(self.view, 0)
+    .topSpaceToView(self.view, 0)
+    .rightSpaceToView(self.view, 0)
+    .heightIs(44);
+    
+    self.topToolView = topToolView;
+    
+    [self setupCloseButton];
+    [self setupTitleLabel];
+    [self setupBatteryInfoImageView];
+    [self setupBatteryInfoLabel];
+}
+
+- (void)setupCloseButton {
+    UIButton *closeBtn = [[UIButton alloc] init];
+    
+    closeBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [closeBtn setImage:[UIImage imageNamed:@"nav-btn-back"] forState:UIControlStateNormal];
+    [closeBtn setImage:[UIImage imageNamed:@"nav-btn-back"] forState:UIControlStateHighlighted];
+    [closeBtn addTarget:self action:@selector(shrinkScreenClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.topToolView addSubview:closeBtn];
+    
+    closeBtn.sd_layout.leftSpaceToView(self.topToolView, 12)
+    .topSpaceToView(self.topToolView, 0)
+    .bottomSpaceToView(self.topToolView, 0)
+    .widthEqualToHeight();
+    
+    self.topCloseBtn = closeBtn;
+}
+
+- (void)setupTitleLabel {
+    UILabel *titleLable = [[UILabel alloc] init];
+    
+    titleLable.text = @"Camera Name";
+    titleLable.textColor = [UIColor whiteColor];
+    titleLable.font = [UIFont systemFontOfSize:18.0];
+    
+    [self.topToolView addSubview:titleLable];
+    
+    titleLable.sd_layout.topSpaceToView(self.topToolView, 0)
+    .bottomSpaceToView(self.topToolView, 0)
+    .centerXEqualToView(self.topToolView)
+    .centerYEqualToView(self.topToolView);
+    
+    [titleLable setSingleLineAutoResizeWithMaxWidth:MAXFLOAT];
+    
+    self.topTitleLabel = titleLable;
+}
+
+- (void)setupBatteryInfoImageView {
+    UIImageView *batteryInfoImgView = [[UIImageView alloc] init];
+    
+    batteryInfoImgView.image = [UIImage imageNamed:@"vedieo-buttery_2"];
+    
+    [self.topToolView addSubview:batteryInfoImgView];
+    
+    batteryInfoImgView.sd_layout.topSpaceToView(self.topToolView, 0)
+    .rightSpaceToView(self.topToolView, 20)
+    .bottomSpaceToView(self.topToolView, 0)
+    .leftSpaceToView(self.batteryInfoLabel, -12)
+    .widthEqualToHeight()
+    .centerYEqualToView(self.topToolView);
+    
+    self.batteryInfoImgView = batteryInfoImgView;
+}
+
+- (void)setupBatteryInfoLabel {
+    UILabel *batteryInfoLabel = [[UILabel alloc] init];
+    
+    batteryInfoLabel.font = [UIFont systemFontOfSize:17.0];
+    CGFloat colorValue = 242 / 255.0;
+    batteryInfoLabel.textColor = [UIColor colorWithRed:colorValue green:colorValue  blue:colorValue alpha:1.0];
+    batteryInfoLabel.text = @"70%";
+    
+    [self.topToolView addSubview:batteryInfoLabel];
+    
+    batteryInfoLabel.sd_layout.topSpaceToView(self.topToolView, 0)
+    .bottomSpaceToView(self.topToolView, 0)
+    .centerYEqualToView(self.batteryInfoImgView)
+    .rightSpaceToView(self.batteryInfoImgView, -12)
+    .autoWidthRatio(1.0);
+    
+    self.batteryInfoLabel = batteryInfoLabel;
+}
+
+#pragma mark - Setup Top Tool View
+- (void)setupBottomToolView {
+    UIView *bottomToolView = [[UIView alloc] init];
+    
+    bottomToolView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"full scree-top"]];
+    bottomToolView.hidden = YES;
+    
+    [self.view addSubview:bottomToolView];
+    
+    bottomToolView.sd_layout.leftSpaceToView(self.view, 16)
+    .bottomSpaceToView(self.view, 12)
+    .heightIs(24)
+    .widthIs(80);
+    
+    bottomToolView.sd_cornerRadius = @(5);
+    
+    self.bottomToolView = bottomToolView;
+    
+    [self setupBitRateInfoLable];
+}
+
+- (void)setupBitRateInfoLable {
+    UILabel *bitRateInfoLabel = [[UILabel alloc] init];
+    
+    bitRateInfoLabel.font = [UIFont systemFontOfSize:17.0];
+    CGFloat colorValue = 242 / 255.0;
+    bitRateInfoLabel.textColor = [UIColor colorWithRed:colorValue green:colorValue  blue:colorValue alpha:1.0];
+    bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    bitRateInfoLabel.textAlignment = NSTextAlignmentCenter;
+    
+    [self.bottomToolView addSubview:bitRateInfoLabel];
+    
+    bitRateInfoLabel.sd_layout.leftSpaceToView(self.bottomToolView, 4)
+    .rightSpaceToView(self.bottomToolView, 4)
+    .topSpaceToView(self.bottomToolView, 0)
+    .bottomSpaceToView(self.bottomToolView, 0);
+    
+    self.bitRateInfoLabel = bitRateInfoLabel;
+}
+
+#pragma mark - Update Subviews
+- (void)setTitle:(NSString *)title {
+    [super setTitle:title];
+    self.topTitleLabel.text = title;
+}
+
+- (void)addTapGesture {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(controlManagement)];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)controlManagement {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if (app.isFullScreenPV == NO) {
+        return;
+    }
+    
+    if (_noHidden) {
+        self.topToolView.hidden = NO;
+        self.speakerButton.hidden = NO;
+        self.captureButton.hidden = NO;
+        self.audioButton.hidden = NO;
+        self.bottomToolView.hidden = NO;
+    } else {
+        if (self.topToolView.isHidden) {
+            self.topToolView.hidden = NO;
+            self.speakerButton.hidden = NO;
+            self.captureButton.hidden = NO;
+            self.audioButton.hidden = NO;
+            self.bottomToolView.hidden = NO;
+        } else {
+            self.topToolView.hidden = YES;
+            self.speakerButton.hidden = YES;
+            self.captureButton.hidden = YES;
+            self.audioButton.hidden = YES;
+            self.bottomToolView.hidden = YES;
+        }
+    }
 }
 
 @end

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xbz-ga-7y5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xbz-ga-7y5">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -209,7 +208,9 @@
                         <outlet property="bitRateLabel" destination="VXz-F7-Lag" id="3Jp-dc-QGW"/>
                         <outlet property="captureBtnWidthCons" destination="w55-2e-qgQ" id="Jbg-eU-PA9"/>
                         <outlet property="captureButton" destination="yJ1-hB-ftW" id="W2i-iL-7Db"/>
+                        <outlet property="footerView" destination="TXA-de-l86" id="KK2-X7-ywd"/>
                         <outlet property="funScreenButton" destination="I5e-Z7-j2P" id="6EN-dP-bWZ"/>
+                        <outlet property="headerView" destination="OAB-41-i5J" id="z8e-cP-odh"/>
                         <outlet property="previewImageView" destination="ecE-gD-tQd" id="3Wx-2O-iPY"/>
                         <outlet property="pvFailedLabel" destination="yC0-lo-qNY" id="riL-39-gLE"/>
                         <outlet property="speakerBtnWidthCons" destination="FK6-AM-Hg4" id="bMB-9I-6zP"/>
@@ -520,7 +521,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="StartPVFailed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Xa-AG-HJj">
-                                <rect key="frame" x="105" y="80" width="110" height="21"/>
+                                <rect key="frame" x="105" y="79.5" width="110" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -591,7 +592,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8xL-58-3es">
-                                <rect key="frame" x="236" y="398.5" width="60" height="60"/>
+                                <rect key="frame" x="236" y="398" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="8xL-58-3es" secondAttribute="height" multiplier="1:1" id="7oo-HI-FhK"/>
                                     <constraint firstAttribute="width" constant="60" id="tBi-Ay-tPn"/>
@@ -664,7 +665,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TE5-1Z-jz7">
-                                <rect key="frame" x="56" y="398.5" width="60" height="60"/>
+                                <rect key="frame" x="56" y="398" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="mxD-nx-6D8"/>
                                     <constraint firstAttribute="width" secondItem="TE5-1Z-jz7" secondAttribute="height" multiplier="1:1" id="vGw-ZH-qWV"/>
@@ -679,7 +680,7 @@
                                 <rect key="frame" x="16" y="444" width="61.5" height="24"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50kb/s" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ywD-n1-hBH">
-                                        <rect key="frame" x="4" y="2" width="53.5" height="21"/>
+                                        <rect key="frame" x="4" y="1.5" width="53.5" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -926,13 +927,13 @@ NSg6KEgoTChTKFgoZShoKHUoeiiCKIUoiiiSKJUopyiqKK8AAAAAAAACAQAAAAAAAABZAAAAAAAAAAAA
 AAAAAAAosQ
 </mutableData>
         </image>
-        <image name="default_thumb" width="1024" height="764"/>
-        <image name="full screen video-btn-mute-pre_1" width="51" height="51"/>
+        <image name="default_thumb" width="245.75999450683594" height="183.36000061035156"/>
+        <image name="full screen video-btn-mute-pre_1" width="51" height="51.5"/>
         <image name="full screen video-btn-mute_1" width="51" height="51"/>
         <image name="full screen-video-btn-screenshot" width="51" height="51"/>
         <image name="full screen-video-btn-screenshot-pre" width="51" height="51"/>
-        <image name="full screen-video-btn-speak" width="66" height="66"/>
-        <image name="full screen-video-btn-speak-pre" width="66" height="66"/>
+        <image name="full screen-video-btn-speak" width="66.5" height="66"/>
+        <image name="full screen-video-btn-speak-pre" width="66.5" height="66"/>
         <image name="ic_battery_full_green_24dp" width="24" height="24"/>
         <image name="ic_fullscreen_white_24dp" width="48" height="48"/>
         <image name="ic_mic_white_48dp" width="48" height="48"/>
@@ -947,9 +948,9 @@ AAAAAAAosQ
         <image name="video-btn-full screen" width="50" height="50"/>
         <image name="video-btn-mute-pre_1" width="75" height="75"/>
         <image name="video-btn-mute_1" width="75" height="75"/>
-        <image name="video-btn-screenshot" width="74" height="75"/>
-        <image name="video-btn-screenshot-pre" width="75" height="74"/>
-        <image name="video-btn-speak" width="96" height="96"/>
-        <image name="video-btn-speak-pre" width="97" height="96"/>
+        <image name="video-btn-screenshot" width="74.5" height="75"/>
+        <image name="video-btn-screenshot-pre" width="75" height="74.5"/>
+        <image name="video-btn-speak" width="96.5" height="96.5"/>
+        <image name="video-btn-speak-pre" width="97" height="96.5"/>
     </resources>
 </document>

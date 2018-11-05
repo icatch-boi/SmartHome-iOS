@@ -49,6 +49,18 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *speakerBtnWidthCons;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *captureBtnWidthCons;
 
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *footerView;
+
+@property (nonatomic, weak) UIView *topToolView;
+@property (nonatomic, weak) UIButton *topCloseBtn;
+@property (nonatomic, weak) UILabel *topTitleLabel;
+@property (nonatomic, weak) UILabel *batteryInfoLabel;
+@property (nonatomic, weak) UIImageView *batteryInfoImgView;
+@property (nonatomic, weak) UIView *bottomToolView;
+@property (nonatomic, weak) UILabel *bitRateInfoLabel;
+@property (nonatomic, assign) BOOL noHidden;
+
 @property (nonatomic, strong) AVSampleBufferDisplayLayer *avslayer;
 @property (nonatomic, strong) MBProgressHUD *progressHUD;
 @property (nonatomic, retain) GCDiscreetNotificationView *notificationView;
