@@ -227,9 +227,9 @@
             [mainVC pushViewController:vc animated:YES];
         }
         
-        [self cleanBadgeNumber];
+//        [self cleanBadgeNumber];
     } else {
-        [self showBadgeNumber];
+//        [self showBadgeNumber];
     }
 }
 
@@ -422,7 +422,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	SHLogTRACE();
-//    [application setApplicationIconBadgeNumber:0];
+    [application setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 	
 	if ([self.delegate respondsToSelector:@selector(applicationDidBecomeActive:)]) {
@@ -831,7 +831,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
 #endif
     
-    [self showBadgeNumber];
+//    [self showBadgeNumber];
 }
 
 - (void)notificationHandler:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
@@ -881,7 +881,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         _loaded = NO;
     }
     
-    [self cleanBadgeNumber];
+//    [self cleanBadgeNumber];
 }
 
 - (NSDictionary *)parseNotification:(NSDictionary *)userInfo {

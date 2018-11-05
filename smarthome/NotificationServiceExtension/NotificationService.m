@@ -39,7 +39,7 @@
     // fix SH-912
     self.contentHandler(self.bestAttemptContent);
 #endif
-    [self updateBadgeNumber];
+//    [self updateBadgeNumber];
 }
 
 - (void)serviceExtensionTimeWillExpire {
