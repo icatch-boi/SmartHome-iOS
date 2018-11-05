@@ -130,6 +130,7 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 //    }
     
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
+    _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
 }
 
 - (UIImage *)createHighlightedImageWithImage:(UIImage *)image {

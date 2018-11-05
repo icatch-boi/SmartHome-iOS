@@ -349,6 +349,8 @@
         
         if ([file isKindOfClass:[SHFile class]]) {
             fileName = file.f.getFileName().c_str();
+        } else if ([file isKindOfClass:[NSString class]]) {
+            fileName = ((NSString *)file).UTF8String;
         }
     }
     

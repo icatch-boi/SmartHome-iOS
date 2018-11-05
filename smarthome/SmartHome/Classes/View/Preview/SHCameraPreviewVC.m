@@ -40,6 +40,7 @@
 #import <unistd.h>
 #import "AppDelegate.h"
 #import "SDAutoLayout.h"
+#import "SHDownloadManager.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -908,7 +909,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     UINavigationController *nav = self.navigationController;
     NSLog(@"==> nav : %@", nav);
     BOOL doNotDisconnect = _managedObjectContext && ![NSStringFromClass(nav.class) isEqualToString:@"SHMainViewController"];
-    
+#if 0
     NSString *message = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDisconnect", @"")];
     if (doNotDisconnect) {
         message = nil;
@@ -957,6 +958,89 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
                 [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kDisconnectTimeout", @"") showTime:2.0];
                 
 //                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    });
+#else
+    if (doNotDisconnect == NO && [self isDownloading]) {
+        [self showDownloadingAlertView:doNotDisconnect];
+    } else {
+        [self returnBackHandle:doNotDisconnect];
+    }
+#endif
+}
+
+- (void)showDownloadingAlertView:(BOOL)doNotDisconnect {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Some files are being downloaded, exiting preview will cancel the download, are you sure you want to quit ?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancle" style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [weakself returnBackHandle:doNotDisconnect];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (BOOL)isDownloading {
+    NSMutableArray *downloadList = [SHDownloadManager shareDownloadManger].downloadArray;
+    if (downloadList != nil && downloadList.count > 0) {
+        SHLogInfo(SHLogTagAPP, @"current download file num: %lu", (unsigned long)downloadList.count);
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)returnBackHandle:(BOOL)doNotDisconnect {
+    NSString *message = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDisconnect", @"")];
+    if (doNotDisconnect) {
+        message = nil;
+    }
+    [self.progressHUD showProgressHUDWithMessage:message];
+    dispatch_async(self.previewQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //            [self.navigationController popViewControllerAnimated:YES];
+            [self goHome];
+        });
+        
+        [self stopCurrentTalkBack];
+        /*
+         if (_shCameraObj.controler.actCtrl.isRecord) {
+         [_shCameraObj.controler.actCtrl stopVideoRecWithSuccessBlock:nil failedBlock:nil];
+         }*/
+        
+        if (doNotDisconnect) {
+            if (_shCameraObj.streamOper.PVRun) {
+                [_shCameraObj.streamOper stopMediaStreamWithComplete:^{
+                    SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
+                }];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+                _progressHUD = nil;
+                
+                //                [self.navigationController popViewControllerAnimated:YES];
+            });
+            return;
+        }
+        
+        [_shCameraObj.streamOper stopPreview];
+        //        sleep(2);
+        [_shCameraObj.sdk disableTutk];
+        [_shCameraObj disConnectWithSuccessBlock:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+                _progressHUD = nil;
+                
+                //                [self.navigationController popViewControllerAnimated:YES];
+            });
+        } failedBlock:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kDisconnectTimeout", @"") showTime:2.0];
+                
+                //                [self.navigationController popViewControllerAnimated:YES];
             });
         }];
     });

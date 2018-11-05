@@ -295,8 +295,14 @@
             break;
     }
     
+    NSString *fileName = [NSString stringWithFormat:@"%s", self.file.f.getFileName().c_str()];
+    if (fileName == nil) {
+        fileName = @"file";
+    }
+    SHLogInfo(SHLogTagAPP, @"current file is: %@", fileName);
+    
     if (!_shCamObj.isEnterBackground) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSingleDownloadCompleteNotification object:nil userInfo:@{@"cameraName": _shCamObj.camera.cameraName,@"file": _file, @"Description": description}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSingleDownloadCompleteNotification object:nil userInfo:@{@"cameraName": _shCamObj.camera.cameraName,@"file": /*_file*/fileName, @"Description": description}];
     }
 
     self.downloadFileProcessing = NO;
