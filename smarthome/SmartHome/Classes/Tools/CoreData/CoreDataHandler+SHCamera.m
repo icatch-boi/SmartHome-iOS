@@ -28,6 +28,7 @@
 #import "CoreDataHandler+SHCamera.h"
 #import "SHCameraHelper.h"
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
+#import "XJLocalAssetHelper.h"
 
 @implementation CoreDataHandler (SHCamera)
 
@@ -165,9 +166,13 @@
         return NO;
     }
     
+#if 0
     // clean cache device before remove local db.
     [self cleanMemoryCacheWithUid:camera.cameraUid];
     [self removeCacheThumbnailWithUid:camera.cameraUid];
+#else
+    NSString *cameraUid = camera.cameraUid;
+#endif
 //    NSString *path = camera.cameraUid.md5;
     [self.managedObjectContext deleteObject:camera];
     
@@ -184,10 +189,22 @@
         // FIXME: - modify
 //        [SHTool removeMediaDirectoryWithPath:path];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+        
+        [self cleanDeviceDataWithUid:cameraUid];
     }
 #endif
     
     return isSuccess;
+}
+
+- (void)cleanDeviceDataWithUid:(NSString *)cameraUid {
+    // clean cache device before remove local db.
+    [self cleanMemoryCacheWithUid:cameraUid];
+    [self removeCacheThumbnailWithUid:cameraUid];
+    
+    [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
+        SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
+    }];
 }
 
 - (void)removeCacheThumbnailWithUid:(NSString *)cameraUid {

@@ -33,7 +33,7 @@
 #import "SHWiFiSettingVC.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHPushTestNavController.h"
-#import "XJLocalAssetHelper.h"
+//#import "XJLocalAssetHelper.h"
 
 typedef NS_OPTIONS(NSUInteger, SHSettingSectionType) {
     SHSettingSectionTypeBasic,
@@ -571,7 +571,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)deleteCameraDetailWithCompletion:(void (^)())completion {
     NSString *message = NSLocalizedString(@"Deleted", nil);
     
-    NSString *cameraUid = _shCamObj.camera.cameraUid;
+//    NSString *cameraUid = _shCamObj.camera.cameraUid;
     if ([[CoreDataHandler sharedCoreDataHander] deleteCamera:_shCamObj.camera]) {
         _shCamObj.cameraProperty.fwUpdate = NO;
         if (_shCamObj.isConnect) {
@@ -582,9 +582,9 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 //        MessageCenter *msgCenter = [MessageCenter MessageCenterWithName:_shCamObj.camera.cameraUid andMsgDelegate:nil];
 //        [msgCenter clearAllMessage];
         
-        [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
-            SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
-        }];
+//        [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
+//            SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
+//        }];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (completion) {

@@ -124,6 +124,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 - (void)setupGUI {
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

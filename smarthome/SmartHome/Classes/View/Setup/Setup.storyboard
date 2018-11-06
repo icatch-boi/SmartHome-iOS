@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0Kc-80-Zvp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0Kc-80-Zvp">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -131,16 +130,16 @@
                                 </connections>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-wifi logo" translatesAutoresizingMaskIntoConstraints="NO" id="vuC-Pp-WfJ">
-                                <rect key="frame" x="129.5" y="57.5" width="61" height="61"/>
+                                <rect key="frame" x="129.5" y="57" width="61" height="61"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a wifi want to connect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79N-4m-bXt">
-                                <rect key="frame" x="50" y="126.5" width="220" height="21"/>
+                                <rect key="frame" x="50" y="126" width="220" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TSC-Qk-LIP">
-                                <rect key="frame" x="72" y="279.5" width="177" height="30"/>
+                                <rect key="frame" x="71.5" y="279.5" width="177" height="30"/>
                                 <state key="normal" title="Go to change another wifi"/>
                                 <connections>
                                     <action selector="changeWiFiClick:" destination="CcK-TQ-3Lt" eventType="touchUpInside" id="jUp-LQ-Cx9"/>
@@ -153,7 +152,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-password" translatesAutoresizingMaskIntoConstraints="NO" id="5It-NQ-7d2">
-                                <rect key="frame" x="30" y="238.5" width="24" height="24"/>
+                                <rect key="frame" x="30" y="238" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="UlM-GB-l3t"/>
                                     <constraint firstAttribute="width" constant="24" id="bH9-fs-5m5"/>
@@ -166,7 +165,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-wifi" translatesAutoresizingMaskIntoConstraints="NO" id="dK1-m5-iJq">
-                                <rect key="frame" x="30" y="179.5" width="24" height="24"/>
+                                <rect key="frame" x="30" y="179" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="5cU-kc-pO7"/>
                                     <constraint firstAttribute="width" constant="24" id="WH5-90-9bx"/>
@@ -331,7 +330,7 @@
                                 <rect key="frame" x="40" y="70" width="240" height="240"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RvS-u5-ta3">
-                                        <rect key="frame" x="81" y="119.5" width="79.5" height="21"/>
+                                        <rect key="frame" x="80.5" y="119.5" width="79.5" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -352,7 +351,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QDv-gO-jwE" userLabel="Separator">
-                                <rect key="frame" x="16" y="328.5" width="288" height="1"/>
+                                <rect key="frame" x="16" y="329" width="288" height="1"/>
                                 <color key="backgroundColor" red="0.89411764709999997" green="0.8980392157" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="iuL-vy-JaS"/>
@@ -379,13 +378,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xDV-pl-Ghv"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="GBx-S1-4sE">
-                        <barButtonItem key="rightBarButtonItem" title="Exit" id="5DG-2m-G8h">
-                            <connections>
-                                <action selector="exitAddClick:" destination="L7n-eu-pcC" id="Xn8-5r-Bcl"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="X-Sense" id="GBx-S1-4sE"/>
                     <connections>
                         <outlet property="findView" destination="U4r-i1-TUc" id="ldl-dJ-8SD"/>
                         <outlet property="loadScaleLabel" destination="Az5-BW-vrI" id="kaz-Jw-E9k"/>
@@ -442,7 +435,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Verify code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="5ZY-mj-I2Z" customClass="UnderLineTextField">
-                                <rect key="frame" x="60" y="157.5" width="138" height="19"/>
+                                <rect key="frame" x="60" y="158" width="138" height="19"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -461,14 +454,14 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="sign up -enter password again" translatesAutoresizingMaskIntoConstraints="NO" id="ckI-xa-qeO">
-                                <rect key="frame" x="30" y="260.5" width="24" height="24"/>
+                                <rect key="frame" x="30" y="260" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="6MX-53-c1Q"/>
                                     <constraint firstAttribute="height" constant="24" id="hSw-ed-Xro"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wPH-7a-U8h">
-                                <rect key="frame" x="266" y="259.5" width="24" height="24"/>
+                                <rect key="frame" x="266" y="260" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="Awv-wc-7iC"/>
                                     <constraint firstAttribute="width" constant="24" id="GV1-GQ-bT5"/>
@@ -485,14 +478,14 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="sign up-password" translatesAutoresizingMaskIntoConstraints="NO" id="GRW-7k-HtT">
-                                <rect key="frame" x="30" y="209.5" width="24" height="24"/>
+                                <rect key="frame" x="30" y="209" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="AJw-hH-VhX"/>
                                     <constraint firstAttribute="width" constant="24" id="kUe-pj-q8U"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1rC-rr-bSm">
-                                <rect key="frame" x="266" y="208.5" width="24" height="24"/>
+                                <rect key="frame" x="266" y="209" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="luf-Ko-8qZ"/>
                                     <constraint firstAttribute="width" constant="24" id="q8T-jP-mvL"/>
@@ -503,7 +496,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cR0-S7-pXq">
-                                <rect key="frame" x="200" y="153.5" width="90" height="27"/>
+                                <rect key="frame" x="200" y="154" width="90" height="27"/>
                                 <color key="backgroundColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="90" id="TZa-Ec-bSv"/>
@@ -515,7 +508,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Dkr-NH-K5W" customClass="UnderLineTextField">
-                                <rect key="frame" x="60" y="102.5" width="230" height="19"/>
+                                <rect key="frame" x="60" y="103" width="230" height="19"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -590,7 +583,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add-app logo" width="40" height="40"/>
+        <image name="add-app logo" width="40.5" height="40.5"/>
         <image name="add-password" width="75" height="75"/>
         <image name="add-setting" width="75" height="75"/>
         <image name="add-tips" width="50" height="50"/>

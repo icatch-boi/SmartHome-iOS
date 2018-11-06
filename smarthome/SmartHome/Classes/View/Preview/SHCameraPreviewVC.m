@@ -1887,7 +1887,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     batteryInfoImgView.sd_layout.topSpaceToView(self.topToolView, 0)
     .rightSpaceToView(self.topToolView, 20)
     .bottomSpaceToView(self.topToolView, 0)
-    .leftSpaceToView(self.batteryInfoLabel, -12)
+    .leftSpaceToView(self.batteryInfoLabel, -8)
     .widthEqualToHeight()
     .centerYEqualToView(self.topToolView);
     
@@ -1907,8 +1907,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     batteryInfoLabel.sd_layout.topSpaceToView(self.topToolView, 0)
     .bottomSpaceToView(self.topToolView, 0)
     .centerYEqualToView(self.batteryInfoImgView)
-    .rightSpaceToView(self.batteryInfoImgView, -12)
-    .autoWidthRatio(1.0);
+    .rightSpaceToView(self.batteryInfoImgView, -8);
+//    .autoWidthRatio(1.0);
+    [batteryInfoLabel setSingleLineAutoResizeWithMaxWidth:MAXFLOAT];
     
     self.batteryInfoLabel = batteryInfoLabel;
 }

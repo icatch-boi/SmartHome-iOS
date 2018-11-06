@@ -51,9 +51,9 @@ static NSString * const kSHUserAccount = @"kSHUserAccount";
         id value = [self valueForKey:property];
         if (value) {
             [tempMDict setObject:value forKey:property];
-        } else {
+        } /*else {
             [tempMDict setObject:[NSNull null] forKey:property];
-        }
+        }*/
     }
     
     [tempMDict removeObjectForKey:@"expires_in"];
