@@ -160,8 +160,11 @@
             [_photo getVideoURL:^(NSURL *url) {
                 if (url) {
                     dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
                         [self _playVideo:url];
-//                        [self playVideoHandler:url];
+#else
+                        [self playVideoHandler:url];
+#endif
                     });
                 } else {
                     [self setVideoLoadingIndicatorVisible:NO atPageIndex:0];

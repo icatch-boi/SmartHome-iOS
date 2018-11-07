@@ -43,7 +43,7 @@ static const CGFloat kSpace = 10;
     self = [super init];
     if (self) {
         self.cameraObj = cameraObj;
-        [self calaRowHeight];
+//        [self calaRowHeight];
     }
     return self;
 }
@@ -52,6 +52,15 @@ static const CGFloat kSpace = 10;
     CGFloat imageViewHeight = (UIScreen.screenWidth /*- 2 * kSpace*/) * 9 / 16;
     CGFloat footbarHeight = UIScreen.screenWidth * 27 / 160;
     _rowHeight = kCameraTitleHeight + imageViewHeight + footbarHeight + kSpace + 1;
+}
+
++ (CGFloat)rowHeight {
+    CGFloat imageViewHeight = (UIScreen.screenWidth /*- 2 * kSpace*/) * 9 / 16;
+    CGFloat footbarHeight = UIScreen.screenWidth * 27 / 160;
+    CGFloat height = kCameraTitleHeight + imageViewHeight + footbarHeight + kSpace + 1;
+    
+    SHLogInfo(SHLogTagAPP, @"current row height: %f", height);
+    return height;
 }
 
 @end

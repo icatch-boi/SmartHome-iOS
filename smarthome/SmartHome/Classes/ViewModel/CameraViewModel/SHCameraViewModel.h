@@ -33,5 +33,6 @@
 @property (nonatomic, assign, readonly) CGFloat rowHeight;
 
 - (instancetype)initWithCameraObject:(SHCameraObject *)cameraObj;
++ (CGFloat)rowHeight;
 
 @end

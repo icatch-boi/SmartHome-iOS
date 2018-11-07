@@ -114,6 +114,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     [self.tableView registerNib:[UINib nibWithNibName:@"SHCameraViewCell" bundle:nil] forCellReuseIdentifier:kCameraViewCellID];
 //    self.title = @"X-Sense";
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav-logo"]];
+    
+    self.tableView.rowHeight = [SHCameraViewModel rowHeight];
 }
 
 - (UIView *)coverView {
@@ -331,6 +333,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     return cell;
 }
 
+#if 0
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    CGFloat space = 12;
 //    CGFloat imageViewHeight = (UIScreen.screenWidth - 2 * space) * 9 / 16;
@@ -340,6 +343,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     SHCameraViewModel *viewModel = self.listViewModel.cameraList[indexPath.row];
     return viewModel.rowHeight;
 }
+#endif
 
 - (void)connectCameraWithCameraObj:(SHCameraObject *)camObj {
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];
@@ -852,7 +856,11 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 - (void)showFailedTipsWithInfo:(NSString *)info {
     UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:info/*NSLocalizedString(@"kUnregisterDeviceFailed", nil)*/ preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [alertC dismissViewControllerAnimated:YES completion:nil];
+        });
+    }]];
     
     [self presentViewController:alertC animated:YES completion:nil];
 }

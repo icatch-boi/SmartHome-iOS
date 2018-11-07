@@ -59,7 +59,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 @property (nonatomic, getter = isBatteryLowAlertShowed) BOOL batteryLowAlertShowed;
 @property (nonatomic, strong) NSTimer *currentDateTimer;
 
-@property (nonatomic, strong) RTCView *presentView;
+@property (nonatomic, weak) RTCView *presentView;
 @property (nonatomic, strong) AVAudioPlayer *player;
 
 @property (nonatomic) SHObserver *bitRateObserver;
@@ -441,7 +441,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     UIImage *img = _shCameraObj.camera.thumbnail;
 //    img = img ? img : [UIImage imageNamed:@"default_thumb"];
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
-    _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
     
     [self setupTopToolView];
     [self setupBottomToolView];
@@ -1437,8 +1437,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 - (void)setupCallView {
     NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
     if (_managedObjectContext && [msgType isEqualToString:@"201"] && _presentView == nil) {
-        _presentView = [[RTCView alloc] initWithIsVideo:NO isCallee:YES inView:self.navigationController.view];
-
+        RTCView *presentView = [[RTCView alloc] initWithIsVideo:NO isCallee:YES inView:self.navigationController.view];
+        self.presentView = presentView;
+        
         [self.presentView.hangupBtn addTarget:self action:@selector(hangupClick) forControlEvents:UIControlEventTouchUpInside];
         [self.presentView.answerBtn addTarget:self action:@selector(answerClick) forControlEvents:UIControlEventTouchUpInside];
         
@@ -1941,7 +1942,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     bitRateInfoLabel.font = [UIFont systemFontOfSize:17.0];
     CGFloat colorValue = 242 / 255.0;
     bitRateInfoLabel.textColor = [UIColor colorWithRed:colorValue green:colorValue  blue:colorValue alpha:1.0];
-    bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    bitRateInfoLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
     bitRateInfoLabel.textAlignment = NSTextAlignmentCenter;
     
     [self.bottomToolView addSubview:bitRateInfoLabel];
