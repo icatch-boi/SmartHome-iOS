@@ -488,6 +488,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             if (self.bufferingBlock) {
                 self.bufferingBlock(_isBuffering, NO);
             }
+            SHLogWarn(SHLogTagAPP, @"No data received for %0.fs consecutively.", kBufferingMinTime);
         }
     }
 }

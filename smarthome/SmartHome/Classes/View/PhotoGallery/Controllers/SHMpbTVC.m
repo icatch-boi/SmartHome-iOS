@@ -1224,9 +1224,11 @@ static int const kNewFileIconTag = 888;
 }
 
 - (IBAction)showDownloadAction:(id)sender {
+    [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
 //        self.readyGoToFileDownloadVC = YES;
         [self performSegueWithIdentifier:@"go2FileDownloadSegue" sender:nil];
+        [self.progressHUD hideProgressHUD:YES];
     });
 }
 

@@ -1001,7 +1001,13 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     dispatch_async(self.previewQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             //            [self.navigationController popViewControllerAnimated:YES];
+#if 0
             [self goHome];
+#else
+            if (doNotDisconnect == NO) {
+                [self goHome];
+            }
+#endif
         });
         
         [self stopCurrentTalkBack];
@@ -1022,6 +1028,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
                 _progressHUD = nil;
                 
                 //                [self.navigationController popViewControllerAnimated:YES];
+                [self goHome];
             });
             return;
         }
@@ -1659,10 +1666,32 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
         _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
         
         self.bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
+#else
+        NSString *bitRate = [self humanReadableStringFromBit:value];
+        
+        self.bitRateLabel.text = bitRate;
+        self.bitRateInfoLabel.text = bitRate;
+#endif
     });
+}
+
+- (NSString *)humanReadableStringFromBit:(CGFloat)bitCount
+{
+    CGFloat numberOfBit = bitCount;
+    int multiplyFactor = 0;
+    
+    NSArray *tokens = [NSArray arrayWithObjects:@"kb", @"Mb", @"Gb", @"Tb", @"Pb", @"Eb", @"Zb", @"Yb", nil];
+    
+    while (numberOfBit > 1024) {
+        numberOfBit /= 1024;
+        multiplyFactor++;
+    }
+    
+    return [NSString stringWithFormat:@"%.1f%@/s", numberOfBit, [tokens objectAtIndex:multiplyFactor]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -1698,19 +1727,53 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 }
 
 - (void)fullScreenHandler {
+#if 0
     [self setupFullScreen:YES];
     
     [self updateSubviewFrameForFullScreen];
     
     [self interfaceOrientation:[self getRotateOrientation]];
+#else
+    SHLogTRACE();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (app.isFullScreenPV) {
+            SHLogWarn(SHLogTagAPP, @"Current already is full screen pv.");
+            return;
+        }
+        
+        [self setupFullScreen:YES];
+        
+        [self updateSubviewFrameForFullScreen];
+        
+        [self interfaceOrientation:[self getRotateOrientation]];
+    });
+#endif
 }
 
 - (void)shrinkScreenHandler {
+#if 0
     [self setupFullScreen:NO];
     
     [self updateSubviewFrameForShrinkScreen];
     
     [self interfaceOrientation:UIInterfaceOrientationPortrait];
+#else
+    SHLogTRACE();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        if (app.isFullScreenPV == NO) {
+            SHLogWarn(SHLogTagAPP, @"Current already is shrink screen pv.");
+            return;
+        }
+        
+        [self setupFullScreen:NO];
+        
+        [self updateSubviewFrameForShrinkScreen];
+        
+        [self interfaceOrientation:UIInterfaceOrientationPortrait];
+    });
+#endif
 }
 
 - (UIInterfaceOrientation)getRotateOrientation {
@@ -1927,7 +1990,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     bottomToolView.sd_layout.leftSpaceToView(self.view, 16)
     .bottomSpaceToView(self.view, 12)
     .heightIs(24)
-    .widthIs(80);
+    .widthIs(100);
     
     bottomToolView.sd_cornerRadius = @(5);
     

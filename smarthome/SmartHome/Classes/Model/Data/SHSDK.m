@@ -629,7 +629,7 @@
 //        fwrite(self.videoFrameBuffer->getBuffer(), sizeof(char), self.videoFrameBuffer->getFrameSize(), _file);
         
     } else {
-        SHLogError(SHLogTagSDK, @"getVideoFrameData failed : %d", retVal);
+//        SHLogError(SHLogTagSDK, @"getVideoFrameData failed : %d", retVal);
     }
     
     return videoFrameData;
@@ -653,7 +653,7 @@
         [self.audioData setLength:self.audioFrameBuffer->getFrameSize()];
         audioTrackData = [SHAVData cameraAVDataWithData:self.audioData andTime:self.audioFrameBuffer->getPresentationTime()];
     } else {
-        SHLogError(SHLogTagSDK, @"getAudioFrameData failed : %d", retVal);
+//        SHLogError(SHLogTagSDK, @"getAudioFrameData failed : %d", retVal);
     }
     
     return audioTrackData;

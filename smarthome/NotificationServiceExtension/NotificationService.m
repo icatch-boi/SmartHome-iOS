@@ -117,9 +117,9 @@
         self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
         
         if ([self checkNotificationWhetherOverdue:aps]) {
-            self.bestAttemptContent.body = NSLocalizedString(@"kDoorbellOverdueTips", nil);
+            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellOverdueTips", nil)]; //NSLocalizedString(@"kDoorbellOverdueTips", nil);
         } else {
-            self.bestAttemptContent.body = NSLocalizedString(@"kDoorbellTips", nil);
+            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellTips", nil)]; //NSLocalizedString(@"kDoorbellTips", nil);
         }
     } else if ([msgType isEqualToString:@"202"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDetectSome", nil)];

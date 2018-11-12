@@ -662,9 +662,11 @@
 	
 	SHMessage *message = [SHMessage messageWithDict:json];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kPushMessageNotification object:message];
+#if 0
     MessageCenter* msgCenter = [[MessageCenter alloc] initWithName:message.devID andMSGDelegate:nil];
     MessageInfo* info = [[MessageInfo alloc] initWithMsgID:message.msgID andDevID:message.devID andDatetime:message.time andMsgType:message.msgType];
     [msgCenter addMessageWithMessageInfo:info];
+#endif
 }
 
 - (void)onAllDownloadComplete{
