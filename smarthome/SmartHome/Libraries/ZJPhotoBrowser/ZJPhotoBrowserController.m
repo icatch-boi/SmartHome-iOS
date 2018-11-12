@@ -166,7 +166,7 @@
 
 - (void)performLayout {
     [self updateNavigation];
-    ZJPhotoViewerController *viewer = [self createViewer];
+    ZJPhotoViewerController *viewer = [self createViewerWithIndex:_currentPageIndex];
     [_pageController setViewControllers:@[viewer]
                               direction:UIPageViewControllerNavigationDirectionForward
                                animated:NO
@@ -468,8 +468,8 @@
         return nil;
     }
     
-    _currentPageIndex = index;
-    return [self createViewer];
+//    _currentPageIndex = index;
+    return [self createViewerWithIndex:index];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(ZJPhotoViewerController *)viewController {
@@ -480,12 +480,12 @@
         return nil;
     }
     
-    _currentPageIndex = index;
-    return [self createViewer];
+//    _currentPageIndex = index;
+    return [self createViewerWithIndex:index];
 }
 
-- (ZJPhotoViewerController *)createViewer {
-    ZJPhotoViewerController *viewer = [[ZJPhotoViewerController alloc] initWithPhotoBrowser:self photo:[self photoAtIndex:_currentPageIndex] index:_currentPageIndex];
+- (ZJPhotoViewerController *)createViewerWithIndex:(NSInteger)currentPageIndex {
+    ZJPhotoViewerController *viewer = [[ZJPhotoViewerController alloc] initWithPhotoBrowser:self photo:[self photoAtIndex:currentPageIndex] index:currentPageIndex];
 //    [self configureViewer:viewer forIndex:_currentPageIndex];
     
     return viewer;
@@ -543,7 +543,7 @@
         [_currentViewer.view removeFromSuperview];
         [_currentViewer removeFromParentViewController];
         
-        ZJPhotoViewerController *viewer = [self createViewer];
+        ZJPhotoViewerController *viewer = [self createViewerWithIndex:_currentPageIndex];
         [_pageController setViewControllers:@[viewer]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:animated
@@ -750,7 +750,7 @@
     pageController.dataSource = self;
     pageController.delegate = self;
     
-    ZJPhotoViewerController *viewer = [self createViewer];
+    ZJPhotoViewerController *viewer = [self createViewerWithIndex:_currentPageIndex];
     [pageController setViewControllers:@[viewer]
                              direction:UIPageViewControllerNavigationDirectionForward
                               animated:YES
