@@ -34,6 +34,7 @@
 #import "SHNetworkManagerHeader.h"
 #import "SHPushTestNavController.h"
 //#import "XJLocalAssetHelper.h"
+#import "AppDelegate.h"
 
 typedef NS_OPTIONS(NSUInteger, SHSettingSectionType) {
     SHSettingSectionTypeBasic,
@@ -487,6 +488,9 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     nav.title = _shCamObj.camera.cameraUid;
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        app.isFullScreenPV = YES;
+        
         [self presentViewController:nav animated:YES completion:nil];
     });
 }

@@ -44,9 +44,9 @@ static const NSInteger kChartBarWidthOfRow = 20;
 
 @implementation SHPushTestViewController
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-}
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+//    return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,6 +81,9 @@ static const NSInteger kChartBarWidthOfRow = 20;
 }
 
 - (void)close {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isFullScreenPV = NO;
+    
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 

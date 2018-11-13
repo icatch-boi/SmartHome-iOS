@@ -341,7 +341,7 @@
 {
     //SHLogTRACE();
     if ([keyPath isEqualToString:@"downloadedPercent"]) {
-        SHLogInfo(SHLogTagAPP, "download progress is %lu",(unsigned long)self.downloadedPercent);
+//        SHLogInfo(SHLogTagAPP, "download progress is %lu",(unsigned long)self.downloadedPercent);
         if ([self.delegate respondsToSelector:@selector(onProgressUpdate:progress:)]) {
             [self.delegate onProgressUpdate:self.file progress:(int)self.downloadedPercent];
         }
