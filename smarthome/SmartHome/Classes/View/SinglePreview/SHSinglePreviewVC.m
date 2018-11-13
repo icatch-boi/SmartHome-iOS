@@ -708,7 +708,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 #else
     _preview.image = [_shCameraObj.streamOper getLastFrameImage];
 #endif
-    _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
 }
 
 - (void)setButtonRadius:(UIButton *)button withRadius:(CGFloat)radius {
@@ -2047,7 +2047,11 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
         _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
+#else
+        _bitRateLabel.text = [SHTool bitRateStringFromBits:value];
+#endif
     });
 }
 

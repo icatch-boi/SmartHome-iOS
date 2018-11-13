@@ -442,9 +442,10 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 //    img = img ? img : [UIImage imageNamed:@"default_thumb"];
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
-    
+#if 0
     [self setupTopToolView];
     [self setupBottomToolView];
+#endif
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -1065,7 +1066,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 }
 
 - (IBAction)enterFullScreenAction:(id)sender {
-#if 0
+#if 1
     dispatch_async(self.previewQueue, ^{
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"XJMain" bundle:nil];
         SHSinglePreviewVC *vc = [sb instantiateViewControllerWithIdentifier:@"SinglePreviewID"];
@@ -1671,7 +1672,7 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
         
         self.bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
 #else
-        NSString *bitRate = [self humanReadableStringFromBit:value];
+        NSString *bitRate = [SHTool bitRateStringFromBits:value]; //[self humanReadableStringFromBit:value];
         
         self.bitRateLabel.text = bitRate;
         self.bitRateInfoLabel.text = bitRate;
@@ -1781,9 +1782,9 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     UIDeviceOrientation duration = [[UIDevice currentDevice] orientation];
     
     if (duration == UIDeviceOrientationLandscapeLeft) {
-        return UIInterfaceOrientationLandscapeRight;
-    } else if (duration == UIDeviceOrientationLandscapeRight) {
         return UIInterfaceOrientationLandscapeLeft;
+    } else if (duration == UIDeviceOrientationLandscapeRight) {
+        return UIInterfaceOrientationLandscapeRight;
     }
     
     return UIInterfaceOrientationLandscapeLeft;
@@ -1862,7 +1863,8 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     self.previewImageView.sd_layout.topSpaceToView(self.headerView, 0)
     .bottomSpaceToView(self.footerView, 0);
     
-    self.speakerButton.sd_resetNewLayout.topSpaceToView(self.footerView, 44)
+    CGFloat topMargin = (UIScreen.screenWidth == 480) ? kSpeakerTopConsDefaultValue_Special : kSpeakerTopConsDefaultValue * 568 / 480.0;
+    self.speakerButton.sd_resetNewLayout.topSpaceToView(self.footerView, topMargin/*44*/)
     .leftSpaceToView(self.audioButton, 40)
     .rightSpaceToView(self.captureButton, 40)
     .centerXEqualToView(self.view)

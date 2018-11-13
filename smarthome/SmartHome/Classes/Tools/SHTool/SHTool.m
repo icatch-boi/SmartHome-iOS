@@ -371,4 +371,19 @@
     return msg;
 }
 
++ (NSString *)bitRateStringFromBits:(CGFloat)bitCount
+{
+    CGFloat numberOfBit = bitCount;
+    int multiplyFactor = 0;
+    
+    NSArray *tokens = [NSArray arrayWithObjects:@"kb", @"Mb", @"Gb", @"Tb", @"Pb", @"Eb", @"Zb", @"Yb", nil];
+    
+    while (numberOfBit > 1024) {
+        numberOfBit /= 1024;
+        multiplyFactor++;
+    }
+    
+    return [NSString stringWithFormat:@"%.1f%@/s", numberOfBit, [tokens objectAtIndex:multiplyFactor]];
+}
+
 @end

@@ -28,5 +28,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (void)removeFileWithPath:(NSString *)path;
 + (NSString *)databasePathWithName:(NSString *)databaseName;
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict;
++ (NSString *)bitRateStringFromBits:(CGFloat)bitCount;
 
 @end

@@ -408,6 +408,7 @@
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     app.isVideoPB = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    [self stopVideoPb];
 }
 
 - (void)didReceiveMemoryWarning

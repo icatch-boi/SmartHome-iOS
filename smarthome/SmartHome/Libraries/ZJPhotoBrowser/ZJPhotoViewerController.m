@@ -160,7 +160,7 @@
             [_photo getVideoURL:^(NSURL *url) {
                 if (url) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
+#if 1
                         [self _playVideo:url];
 #else
                         [self playVideoHandler:url];
