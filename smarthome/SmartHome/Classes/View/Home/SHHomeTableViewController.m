@@ -830,7 +830,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
                 
-                [weakself showFailedTipsWithInfo:@"解除账户相机绑定失败."];
+                Error *error = result;
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:@"解除账户相机绑定失败. \n%@", error.error_description]];
             });
         }
     }];
@@ -847,7 +848,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
                 
-                [weakself showFailedTipsWithInfo:@"取消订阅失败."];
+                Error *error = result;
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:@"取消订阅失败. \n%@", error.error_description]];
             });
         }
     }];

@@ -267,6 +267,9 @@
     _curResult = nil;
     _sdk = nil;
     _streamOper = nil;
+    
+    [self.gallery cleanDateInfo];
+    [self.cameraProperty updateSDCardInfo:self];
 }
 
 - (void)openAudioServer {
@@ -358,6 +361,17 @@
 	if (self.cameraPropertyValueChangeBlock) {
 		self.cameraPropertyValueChangeBlock(evt);
 	}
+    
+    switch (evt.eventID) {
+        case ICATCH_EVENT_FILE_ADDED:
+            SHLogInfo(SHLogTagAPP, @"receive ICATCH_EVENT_FILE_ADDED");
+            [self.gallery cleanDateInfo];
+            [self.cameraProperty updateSDCardInfo:self];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)notifyDisconnectionEvent {

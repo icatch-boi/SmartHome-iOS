@@ -113,7 +113,7 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (void)setupHeaderView {
-    SHAccountInfoHeaderView *view = [SHAccountInfoHeaderView accountInfoHeaderViewWithFrame:CGRectMake(0, 0, kCWSCREENWIDTH * 0.75, kHeaderViewHeight)];
+    SHAccountInfoHeaderView *view = [SHAccountInfoHeaderView accountInfoHeaderViewWithFrame:CGRectMake(0, 0, MIN(UIScreen.screenWidth, UIScreen.screenHeight)/*kCWSCREENWIDTH*/ * 0.75, kHeaderViewHeight)];
     
     view.nickName = SHNetworkManager.sharedNetworkManager.userAccount.screen_name; //@"大🍉";
 //    view.avatorImage = [UIImage imageNamed:@"portrait-1"];
@@ -128,7 +128,7 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (void)setupTableView {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight, kCWSCREENWIDTH * 0.75, CGRectGetHeight(self.view.bounds) - kHeaderViewHeight) style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight, MIN(UIScreen.screenWidth, UIScreen.screenHeight)/*kCWSCREENWIDTH*/ * 0.75, MAX(UIScreen.screenWidth, UIScreen.screenHeight)/*CGRectGetHeight(self.view.bounds)*/ - kHeaderViewHeight) style:UITableViewStyleGrouped];
     tableView.delegate = self;
     tableView.dataSource = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

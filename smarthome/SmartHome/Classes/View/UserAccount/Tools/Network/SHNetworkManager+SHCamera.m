@@ -63,6 +63,15 @@
         } failure:^(Error * _Nonnull error) {
             SHLogError(SHLogTagSDK, @"unbindCameraWithCameraID failed, error: %@", error.error_description);
             
+            // When device not exist, unbind operation invalid.
+            if (error.error_code == 50002) {
+                if (completion) {
+                    completion(YES, error);
+                }
+                
+                return;
+            }
+            
             if (completion) {
                 completion(NO, error);
             }
@@ -77,6 +86,15 @@
                 } failure:^(Error * _Nonnull error) {
                     SHLogError(SHLogTagSDK, @"unbindCameraWithCameraID failed, error: %@", error.error_description);
 
+                    // When device not exist, unbind operation invalid.
+                    if (error.error_code == 50002) {
+                        if (completion) {
+                            completion(YES, error);
+                        }
+                        
+                        return;
+                    }
+                    
                     if (completion) {
                         completion(NO, error);
                     }
@@ -545,6 +563,15 @@
         } failure:^(Error * _Nonnull error) {
             SHLogError(SHLogTagSDK, @"unsubscribeCameraWithCameraID failed, error: %@", error.error_description);
 
+            // When device not exist, unsubscribe operation invalid.
+            if (error.error_code == 50002) {
+                if (completion) {
+                    completion(YES, error);
+                }
+                
+                return;
+            }
+            
             if (completion) {
                 completion(NO, error);
             }
@@ -559,6 +586,15 @@
                 } failure:^(Error * _Nonnull error) {
                     SHLogError(SHLogTagSDK, @"unsubscribeCameraWithCameraID failed, error: %@", error.error_description);
 
+                    // When device not exist, unsubscribe operation invalid.
+                    if (error.error_code == 50002) {
+                        if (completion) {
+                            completion(YES, error);
+                        }
+                        
+                        return;
+                    }
+                    
                     if (completion) {
                         completion(NO, error);
                     }
