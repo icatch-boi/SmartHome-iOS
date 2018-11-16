@@ -50,6 +50,7 @@ static const CGFloat kSpeakerTopConsDefaultValue_Special = 6;
 static const CGFloat kSpeakerLeftConsDefaultValue = 40;
 static const CGFloat kAudioBtnDefaultWidth = 60;
 static const CGFloat kSpeakerBtnDefaultWidth = 80;
+static const NSTimeInterval kRingTimeout = 50.0;
 
 @interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate>
 
@@ -63,6 +64,8 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
 @property (nonatomic, strong) AVAudioPlayer *player;
 
 @property (nonatomic) SHObserver *bitRateObserver;
+
+@property (nonatomic, strong) NSTimer *ringTimer;
 
 @end
 
@@ -166,6 +169,11 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     [self stopPlayRing];
     _notification = nil;
     _managedObjectContext = nil;
+    
+    UIImage *image = [_shCameraObj.streamOper getLastFrameImage];
+    if (image != nil) {
+        _previewImageView.image = image;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1479,12 +1487,16 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
     self.player.numberOfLoops = -1;
     [self.player prepareToPlay];
     [self.player play];
+    
+    [self ringTimer];
 }
 
 - (void)stopPlayRing
 {
     [self.player stop];
     self.player = nil;
+    
+    [self releaseRingTimer];
 }
 
 - (void)hangupClick {
@@ -2057,6 +2069,22 @@ static const CGFloat kSpeakerBtnDefaultWidth = 80;
             self.audioButton.hidden = YES;
             self.bottomToolView.hidden = YES;
         }
+    }
+}
+
+#pragma mark - Ring Timer
+- (NSTimer *)ringTimer {
+    if (_ringTimer == nil) {
+        _ringTimer = [NSTimer scheduledTimerWithTimeInterval:kRingTimeout target:self selector:@selector(hangupClick) userInfo:nil repeats:NO];
+    }
+    
+    return _ringTimer;
+}
+
+- (void)releaseRingTimer {
+    if ([_ringTimer isValid]) {
+        [_ringTimer invalidate];
+        _ringTimer = nil;
     }
 }
 

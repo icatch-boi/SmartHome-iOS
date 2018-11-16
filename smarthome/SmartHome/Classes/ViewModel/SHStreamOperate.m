@@ -409,7 +409,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     if (self.currentVideoData.length > 0) {
         lastImage = [self.h264Decoder imageFromPixelBufferRef:self.currentVideoData];
         SHLogInfo(SHLogTagAPP, @"Current preview last image: %@", lastImage);
-        _lastFrameImage = lastImage;
+        _lastFrameImage = lastImage ? lastImage : _lastFrameImage;
     }
     
     return lastImage;
