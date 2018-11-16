@@ -142,7 +142,7 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (UIView *)tableFooterView {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kCWSCREENWIDTH * 0.75, 50)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MIN(UIScreen.screenWidth, UIScreen.screenHeight)/*kCWSCREENWIDTH*/ * 0.75, 50)];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"leftbar-logo"]];
     imageView.center = view.center;

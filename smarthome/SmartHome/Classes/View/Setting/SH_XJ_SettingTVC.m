@@ -520,6 +520,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"Deleting", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#ifdef USE_SYNC_REQUEST_PUSH
         if (![SHTutkHttp unregisterDevice:_shCamObj.camera.cameraUid]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
@@ -560,6 +561,23 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD showProgressHUDNotice:message showTime:2.0];
         });
+#endif
+#else
+        WEAK_SELF(self);
+        [SHTutkHttp unregisterDevice:_shCamObj.camera.cameraUid completionHandler:^(BOOL isSuccess) {
+            if (isSuccess == NO) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.progressHUD hideProgressHUD:YES];
+                    [weakself showDeleteCameraFailedInfo];
+                });
+            } else {
+                if (_shCamObj.camera.operable == 1) {
+                    [weakself unbindCameraWithCompletion:completion];
+                } else {
+                    [weakself unsubscribeCameraWithCompletion:completion];
+                }
+            }
+        }];
 #endif
     });
 }

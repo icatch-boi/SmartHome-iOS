@@ -44,6 +44,7 @@
 #import "SHQRCodeScanningVC.h"
 #import "SHPushTestNavController.h"
 //#import "XJLocalAssetHelper.h"
+#import "AppDelegate.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -426,6 +427,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 #else
     SHPushTestNavController *nav = [SHPushTestNavController pushTestNavController];
     nav.title = cell.viewModel.cameraObj.camera.cameraUid;
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isFullScreenPV = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:nav animated:YES completion:nil];
@@ -763,6 +766,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"Deleting", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#ifdef USE_SYNC_REQUEST_PUSH
         if (![SHTutkHttp unregisterDevice:shCamObj.camera.cameraUid]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
@@ -776,6 +780,23 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         } else {
             [self unsubscribeCameraWithCamObj:shCamObj completion:completion];
         }
+#else
+        WEAK_SELF(self);
+        [SHTutkHttp unregisterDevice:shCamObj.camera.cameraUid completionHandler:^(BOOL isSuccess) {
+            if (isSuccess == NO) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.progressHUD hideProgressHUD:YES];
+                    [weakself showDeleteCameraFailedInfo];
+                });
+            } else {
+                if (shCamObj.camera.operable == 1) {
+                    [weakself unbindCameraWithCamObj:shCamObj completion:completion];
+                } else {
+                    [weakself unsubscribeCameraWithCamObj:shCamObj completion:completion];
+                }
+            }
+        }];
+#endif
     });
 }
 

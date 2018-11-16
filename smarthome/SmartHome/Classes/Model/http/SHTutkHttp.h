@@ -8,9 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^PushRequestCompletionBlock)(BOOL isSuccess);
+//#define USE_SYNC_REQUEST_PUSH
+
 @interface SHTutkHttp : NSObject
 
 + (void)registerDevice:(SHCamera *)camera;
 + (BOOL)unregisterDevice:(NSString *)uid;
+
++ (void)unregisterDevice:(NSString *)uid completionHandler:(PushRequestCompletionBlock)completionHandler;
 
 @end
