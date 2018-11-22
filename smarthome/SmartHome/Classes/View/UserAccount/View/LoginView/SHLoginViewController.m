@@ -45,6 +45,7 @@ static const CGFloat kBottomDefaultValue = 80;
 
 @property (weak, nonatomic) IBOutlet UIButton *forgotPWDBtn;
 @property (weak, nonatomic) IBOutlet UIButton *signupBtn;
+@property (weak, nonatomic) IBOutlet UILabel *accountInfoLabel;
 
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 
@@ -65,6 +66,8 @@ static const CGFloat kBottomDefaultValue = 80;
 }
 
 - (void)setupGUI {
+    [self setupLocalizedString];
+
     _signinBtnBottomCons.constant = kBottomDefaultValue * kScreenHeightScale;
     
     [_signinButton setCornerWithRadius:_signinButton.bounds.size.height * 0.25 masksToBounds:NO];
@@ -88,6 +91,22 @@ static const CGFloat kBottomDefaultValue = 80;
     [self addLineForSignupBtn];
     
    _emailTextField.text = [[NSUserDefaults standardUserDefaults] objectForKey:kUserAccounts];
+}
+
+- (void)setupLocalizedString {
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateNormal];
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateHighlighted];
+    [_forgotPWDBtn setTitle:NSLocalizedString(@"kForgotPassword", nil) forState:UIControlStateNormal];
+    [_forgotPWDBtn setTitle:NSLocalizedString(@"kForgotPassword", nil) forState:UIControlStateHighlighted];
+    [_signupBtn setTitle:NSLocalizedString(@"kSignup", nil) forState:UIControlStateNormal];
+    [_signupBtn setTitle:NSLocalizedString(@"kSignup", nil) forState:UIControlStateHighlighted];
+    
+    _emailTextField.placeholder = NSLocalizedString(@"kEmail", nil);
+    _pwdTextField.placeholder = NSLocalizedString(@"kPassword", nil);
+    _accountInfoLabel.text = NSLocalizedString(@"kDonotHaveAccount", nil);
+    
+    [_forgotPWDBtn layoutIfNeeded];
+    [_signupBtn layoutIfNeeded];
 }
 
 - (void)addLineForForgotPWDBtn {
@@ -136,7 +155,7 @@ static const CGFloat kBottomDefaultValue = 80;
     __block NSRange passwordRange;
     
     self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:@"正在登录..."];
+    [self.progressHUD showProgressHUDWithMessage:/*@"正在登录..."*/NSLocalizedString(@"kLogining", nil)];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             emailRange = [_emailTextField.text rangeOfString:@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" options:NSRegularExpressionSearch];
@@ -146,7 +165,7 @@ static const CGFloat kBottomDefaultValue = 80;
         if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"输入的邮箱或密码无效，请重新输入" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"输入的邮箱或密码无效，请重新输入"*/NSLocalizedString(@"kInvalidEmailOrPassword", nil) preferredStyle:UIAlertControllerStyleAlert];
                 [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alertC animated:YES completion:nil];
             });
@@ -174,7 +193,7 @@ static const CGFloat kBottomDefaultValue = 80;
                         SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                         
                         weakself.progressHUD.detailsLabelText = error.error_description;
-                        NSString *notice = @"登录失败";
+                        NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
                         [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                     }
                 });

@@ -218,9 +218,9 @@
 - (void)reLogin {
     [[SHCameraManager sharedCameraManger] unmappingAllCamera];
     [[SHNetworkManager sharedNetworkManager].userAccount deleteUserAccount];
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Account login is invalid, please login again." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:/*@"Account login is invalid, please login again."*/NSLocalizedString(@"kLoginInvalid", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self userLogin];
     }]];
     

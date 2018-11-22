@@ -427,11 +427,11 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 - (void)startPlayRing
 {
     NSString *ringPath = [[NSBundle mainBundle] pathForResource:@"test.caf" ofType:nil];
-    
+#if 0
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *err = nil;  // 加上这两句，否则声音会很小
     [audioSession setCategory :AVAudioSessionCategoryPlayback error:&err];
-    
+#endif
     self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:ringPath] error:nil];
     self.player.numberOfLoops = -1;
     [self.player prepareToPlay];
@@ -505,9 +505,9 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
             if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
-                notice = @"Previewing by others";
+                notice = NSLocalizedString(@"kPreviewingByOthers", nil); //@"Previewing by others";
             } else if (errorCode == ICH_PLAYING_VIDEO_BY_OTHERS) {
-                notice = @"Playing video by others";
+                notice = NSLocalizedString(@"kPlayingVideoByOthers", nil); //@"Playing video by others";
             }
             [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
             [self enableUserInteraction:NO];
@@ -1019,7 +1019,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 #else
     [_shCameraObj.streamOper stillCaptureWithSuccessBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD showProgressHUDNotice:@"Capture success" showTime:1.0];
+            [self.progressHUD showProgressHUDNotice:/*@"Capture success"*/NSLocalizedString(@"kCaptureSuccess", nil) showTime:1.0];
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{

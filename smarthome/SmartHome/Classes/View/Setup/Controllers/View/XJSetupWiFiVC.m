@@ -39,6 +39,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *changePasswordBtn;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *exitButtonItem;
 
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, weak) UIView *coverView;
@@ -56,7 +58,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setupLocalizedString];
     [self setupGUI];
+}
+
+- (void)setupLocalizedString {
+    _titleLabel.text = NSLocalizedString(@"kSelectWiFiDescription", nil);
+    _ssidTextField.placeholder = NSLocalizedString(@"kWifiSSID", nil);
+    _pwdTextField.placeholder = NSLocalizedString(@"kWifiPassword", nil);
+    [_changePasswordBtn setTitle:NSLocalizedString(@"kChangeWiFiDescription", nil) forState:UIControlStateNormal];
+    [_changePasswordBtn setTitle:NSLocalizedString(@"kChangeWiFiDescription", nil) forState:UIControlStateHighlighted];
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
+    [_exitButtonItem setTitle:NSLocalizedString(@"kExit", nil)];
+    
+    [_changePasswordBtn layoutIfNeeded];
 }
 
 - (void)setupGUI {
@@ -263,7 +279,7 @@
 
 #pragma mark - Check Network Reachable
 - (void)showSurePasswordAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"⚠️ 请确保Wi-Fi名称和密码的正确性。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kMakeSureWiFiNameAndPassword", nil)/*@"⚠️ 请确保Wi-Fi名称和密码的正确性。"*/ preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:nil]];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -277,9 +293,9 @@
     NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
     
     if (netStatus == NotReachable) {
-        [self showNetworkNotReachableAlertView:@"⚠️ 当前网络不可用, 请检查手机网络设置。"];
+        [self showNetworkNotReachableAlertView:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil)];
     } else if (netStatus == ReachableViaWWAN) {
-        [self showNetworkNotReachableAlertView:@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"];
+        [self showNetworkNotReachableAlertView:/*@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"*/NSLocalizedString(@"kWiFiNotReachable", nil)];
     } else {
         [self performSegueWithIdentifier:@"go2SetupDeviceSSIDVCSegue" sender:nil];
     }

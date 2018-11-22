@@ -43,6 +43,10 @@ static const CGFloat kQRBottomDefaultValue = 12;
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *scanQRCodeDeviceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *scanQRCodeShareLabel;
+
 @end
 
 @implementation XJSetupScanTipsView
@@ -55,6 +59,7 @@ static const CGFloat kQRBottomDefaultValue = 12;
 - (void)awakeFromNib {
     [super awakeFromNib];
     
+    [self setupLocalizedString];
     [self setupGUI];
 }
 
@@ -75,6 +80,14 @@ static const CGFloat kQRBottomDefaultValue = 12;
 
 - (IBAction)closeClick:(id)sender {
     [self nextClick:nil];
+}
+
+- (void)setupLocalizedString {
+    _tipsLabel.text = NSLocalizedString(@"Tips", nil);
+    _scanQRCodeDeviceLabel.text = NSLocalizedString(@"kDeviceScanQRCodeDes", nil);
+    _scanQRCodeShareLabel.text = NSLocalizedString(@"kShareScanQRCodeDes", nil);
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
 }
 
 /*

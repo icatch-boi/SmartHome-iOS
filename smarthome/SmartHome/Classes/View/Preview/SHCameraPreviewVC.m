@@ -218,8 +218,8 @@ static const NSTimeInterval kRingTimeout = 50.0;
         NSString *errorMessage = [[[SHCamStaticData instance] tutkErrorDict] objectForKey:@(retValue)];
         NSString *errorInfo = @"";
         errorInfo = [errorInfo stringByAppendingFormat:@"[%@] %@",name,errorMessage];
-        errorInfo = [errorInfo stringByAppendingString:@"确定要退出Preview吗 ?"];
-        
+        errorInfo = [errorInfo stringByAppendingString:/*@"确定要退出Preview吗 ?"*/NSLocalizedString(@"kExitPreview", nil)];
+
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
         
         WEAK_SELF(self);
@@ -271,9 +271,9 @@ static const NSTimeInterval kRingTimeout = 50.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
             if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
-                notice = @"Previewing by others";
+                notice = NSLocalizedString(@"kPreviewingByOthers", nil); //@"Previewing by others";
             } else if (errorCode == ICH_PLAYING_VIDEO_BY_OTHERS) {
-                notice = @"Playing video by others";
+                notice = NSLocalizedString(@"kPlayingVideoByOthers", nil); //@"Playing video by others";
             }
             [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
             [self enableUserInteraction:NO];
@@ -354,12 +354,12 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)loginPrompt {
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"用户登录已过期，请重新登录." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"用户登录已过期，请重新登录."*/NSLocalizedString(@"kAccountLoginExpired", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertC addAction:[UIAlertAction actionWithTitle:@"登录" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:/*@"登录"*/NSLocalizedString(@"kLogin", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself stopPlayRing];
-//        [weakself closeCallView];
+        //        [weakself closeCallView];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
     }]];
@@ -788,7 +788,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
 #else
     [_shCameraObj.streamOper stillCaptureWithSuccessBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD showProgressHUDNotice:@"Capture success" showTime:1.0];
+            [self.progressHUD showProgressHUDNotice:/*@"Capture success"*/NSLocalizedString(@"kCaptureSuccess", nil) showTime:1.0];
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -980,11 +980,11 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)showDownloadingAlertView:(BOOL)doNotDisconnect {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Some files are being downloaded, exiting preview will cancel the download, are you sure you want to quit ?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:/*@"Some files are being downloaded, exiting preview will cancel the download, are you sure you want to quit ?"*/NSLocalizedString(@"kDownloadingSureQuitPreview", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancle" style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancle"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Sure"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [weakself returnBackHandle:doNotDisconnect];
     }]];
     
@@ -1478,11 +1478,11 @@ static const NSTimeInterval kRingTimeout = 50.0;
 - (void)startPlayRing
 {
     NSString *ringPath = [[NSBundle mainBundle] pathForResource:@"test.caf" ofType:nil];
-    
+#if 0
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *err = nil;  // 加上这两句，否则声音会很小
     [audioSession setCategory :AVAudioSessionCategoryPlayback error:&err];
-    
+#endif
     self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:ringPath] error:nil];
     self.player.numberOfLoops = -1;
     [self.player prepareToPlay];

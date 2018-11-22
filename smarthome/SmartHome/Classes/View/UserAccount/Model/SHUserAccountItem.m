@@ -44,4 +44,8 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
+- (void)setTitle:(NSString *)title {
+    _title = NSLocalizedString(title, nil);
+}
+
 @end

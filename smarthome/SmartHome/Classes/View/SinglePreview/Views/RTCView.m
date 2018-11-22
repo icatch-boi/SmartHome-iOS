@@ -254,7 +254,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     [self initUIForTopCommonViews];
     
     CGFloat btnW = kBtnW;
-    CGFloat btnH = kBtnW + 20;
+    CGFloat btnH = kBtnW + 30;
     CGFloat paddingX = (kRTCWidth - btnW * 2) / 4;
     self.hangupBtn.frame = CGRectMake(paddingX, kContainerH - btnH - 5 + 45, btnW, btnH);
     [self.btnContainerView addSubview:_hangupBtn];
@@ -957,7 +957,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 {
     if (!_hangupBtn) {
         if (_callee && !_answered) {
-            _hangupBtn = [[RTCButton alloc] initWithTitle:@"Refuse" /*@"拒绝"*/  noHandleImageName:@"icon_call_reject_normal"];
+            _hangupBtn = [[RTCButton alloc] initWithTitle:/*@"Refuse"*/NSLocalizedString(@"kRefuseRing", nil) /*@"拒绝"*/  noHandleImageName:@"icon_call_reject_normal"];
         } else {
             _hangupBtn = [[RTCButton alloc] initWithTitle:nil noHandleImageName:@"icon_call_reject_normal"];
         }
@@ -1009,7 +1009,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 - (RTCButton *)answerBtn
 {
     if (!_answerBtn) {
-        _answerBtn = [[RTCButton alloc] initWithTitle:@"Accept" /*@"接听"*/ noHandleImageName:@"icon_audio_receive_normal"];
+        _answerBtn = [[RTCButton alloc] initWithTitle:/*@"Accept"*/NSLocalizedString(@"kAcceptRing", nil) /*@"接听"*/ noHandleImageName:@"icon_audio_receive_normal"];
         [_answerBtn setImage:[UIImage imageNamed:@"icon_audio_receive_press"] forState:UIControlStateHighlighted];
 //        [_answerBtn addTarget:self action:@selector(answerClick) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -71,7 +71,7 @@
 }
 
 + (void)removeMediaDirectoryWithPath:(NSString *)path {
-//    NSAssert(path, @"path must not be nil.");
+    //    NSAssert(path, @"path must not be nil.");
     if (path == nil) {
         SHLogError(SHLogTagAPP, @"Media Directory path is nil.");
         return;
@@ -343,7 +343,7 @@
 }
 
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict {
-    const char *fileName = "file";
+    const char *fileName = ""; //"file";
     if ([tempDict.allKeys containsObject:@"file"]) {
         SHFile *file = tempDict[@"file"];
         
@@ -354,17 +354,17 @@
         }
     }
     
-    NSString *cameraName = @"One camera";
+    NSString *cameraName = NSLocalizedString(@"kDownloadDeviceDescription", nil); //@"One camera";
     if ([tempDict.allKeys containsObject:@"cameraName"]) {
         cameraName = tempDict[@"cameraName"];
     }
     
-    NSString *description = @"下载完成";
+    NSString *description = NSLocalizedString(@"kDownloadCompletion", nil); //@"下载完成";
     if ([tempDict.allKeys containsObject:@"Description"]) {
         description = tempDict[@"Description"];
     }
     
-    NSString *msg = [NSString stringWithFormat:@"%@ 中的文件 %s %@。", cameraName, fileName, description];
+    NSString *msg = [NSString stringWithFormat:/*@"%@ 中的文件 %s %@。"*/NSLocalizedString(@"kDownloadCompletionDescription", nil), cameraName, fileName, description];
     
     SHLogInfo(SHLogTagAPP, @"Download complete message: %@", msg);
     

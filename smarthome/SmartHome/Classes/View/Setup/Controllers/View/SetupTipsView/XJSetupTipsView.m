@@ -39,6 +39,12 @@ static const CGFloat kNextBtnBottomDefaultValue = 12;
 @property (weak, nonatomic) IBOutlet UIImageView *gifImageView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *nextButtonBottomCons;
 
+@property (weak, nonatomic) IBOutlet UILabel *tipsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tips1Label;
+@property (weak, nonatomic) IBOutlet UILabel *tips2Label;
+@property (weak, nonatomic) IBOutlet UILabel *tips3Label;
+
 @end
 
 @implementation XJSetupTipsView
@@ -64,6 +70,7 @@ static const CGFloat kNextBtnBottomDefaultValue = 12;
 - (void)awakeFromNib {
     [super awakeFromNib];
     
+    [self setupLocalizedString];
     [self setupGUI];
 }
 
@@ -99,6 +106,16 @@ static const CGFloat kNextBtnBottomDefaultValue = 12;
     }
     
     return imagesMArr.copy;
+}
+
+- (void)setupLocalizedString {
+    _tipsLabel.text = NSLocalizedString(@"Tips", nil);
+    _titleLabel.text = NSLocalizedString(@"kBeforeConfigureDevice", nil);
+    _tips1Label.text = NSLocalizedString(@"kCheckDeviceisPoweronDes", nil);
+    _tips2Label.text = NSLocalizedString(@"kChargebatteryFirstDes", nil);
+    _tips3Label.text = NSLocalizedString(@"kPressRestButtonDes", nil);
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
 }
 
 /*

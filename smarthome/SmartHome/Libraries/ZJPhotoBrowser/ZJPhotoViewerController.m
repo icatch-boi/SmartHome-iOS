@@ -25,7 +25,7 @@
 @property (nonatomic, assign) BOOL statusBarHidden;
 @property (nonatomic, assign) BOOL isRotationGesture;
 @property (nonatomic, strong) AVPlayerViewController *currentAVPlayerViewController;
-
+@property (nonatomic, weak) UILabel *messageLabel;
 
 @end
 
@@ -297,6 +297,22 @@
     
     [self addVideoIndicator];
     [self addGestureRecognizer];
+    [self setupMessageLabel];
+}
+
+- (void)setupMessageLabel {
+    UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 60)];
+    messageLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.6];
+    messageLabel.textColor = [UIColor whiteColor];
+    messageLabel.textAlignment = NSTextAlignmentCenter;
+    messageLabel.layer.cornerRadius = 6;
+    messageLabel.layer.masksToBounds = YES;
+    messageLabel.transform = CGAffineTransformMakeScale(0, 0);
+    
+    messageLabel.center = self.view.center;
+    [self.view addSubview:messageLabel];
+    
+    _messageLabel = messageLabel;
 }
 
 - (void)addVideoIndicator {
@@ -545,33 +561,34 @@
     
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Save to Album"/*@"保存至相册"*/ style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [actionSheet addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kSaveToAlbum", nil)/*@"Save to Album"*//*@"保存至相册"*/ style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImageWriteToSavedPhotosAlbum(self.imageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
     }]];
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel"/*@"取消"*/ style:UIAlertActionStyleCancel handler:nil]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)/*@"Cancel"*//*@"取消"*/ style:UIAlertActionStyleCancel handler:nil]];
     
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     
-//    NSString *message = (error == nil) ? @"保存成功" : @"保存失败";
-//
-//    _messageLabel.text = message;
-//
-//    [UIView
-//     animateWithDuration:0.7
-//     delay:0
-//     usingSpringWithDamping:0.8
-//     initialSpringVelocity:10
-//     options:0
-//     animations:^{
-//         self.messageLabel.transform = CGAffineTransformIdentity;
-//     } completion:^(BOOL finished) {
-//         [UIView animateWithDuration:0.5 animations:^{
-//             self.messageLabel.transform = CGAffineTransformMakeScale(0, 0);
-//         }];
-//     }];
+    NSString *message = (error == nil) ? NSLocalizedString(@"kSaveSuccess", nil) : NSLocalizedString(@"kSaveFailed", nil); //@"保存成功" : @"保存失败";
+    
+    _messageLabel.text = message;
+    
+    WEAK_SELF(self);
+    [UIView
+     animateWithDuration:0.7
+     delay:0
+     usingSpringWithDamping:0.8
+     initialSpringVelocity:10
+     options:0
+     animations:^{
+         weakself.messageLabel.transform = CGAffineTransformIdentity;
+     } completion:^(BOOL finished) {
+         [UIView animateWithDuration:0.5 animations:^{
+             weakself.messageLabel.transform = CGAffineTransformMakeScale(0, 0);
+         }];
+     }];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

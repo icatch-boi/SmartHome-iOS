@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Device List-->
+        <!--Home Table View Controller-->
         <scene sceneID="t5p-me-NtX">
             <objects>
                 <tableViewController id="cbt-YN-K43" customClass="SHHomeTableViewController" sceneMemberID="viewController">
@@ -42,7 +42,7 @@
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="b2f-JL-E3p"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Device List" id="kuT-ih-vbm">
+                    <navigationItem key="navigationItem" id="kuT-ih-vbm">
                         <barButtonItem key="leftBarButtonItem" image="nav-bt-list" id="Gst-2E-Rzb">
                             <connections>
                                 <action selector="enterUserAccountInfoAction:" destination="cbt-YN-K43" id="sCs-iD-1T5"/>

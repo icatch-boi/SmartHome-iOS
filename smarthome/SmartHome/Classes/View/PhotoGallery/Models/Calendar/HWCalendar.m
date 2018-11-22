@@ -87,7 +87,7 @@
 
 - (void)getDataSource
 {
-    _weekArray = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
+    _weekArray = @[NSLocalizedString(@"kSunday", nil), NSLocalizedString(@"kMonday", nil), NSLocalizedString(@"kTuesday", nil), NSLocalizedString(@"kWednesday", nil),NSLocalizedString(@"kThursday", nil), NSLocalizedString(@"kFriday", nil), NSLocalizedString(@"kSaturday", nil)]; //@[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
     _timeArray = @[@[@"00", @"01", @"02", @"03", @"04", @"05", @"06", @"07", @"08", @"09", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22", @"23"], @[@"01", @"02", @"03", @"04", @"05", @"06", @"07", @"08", @"09", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22", @"23", @"24", @"25", @"26", @"27", @"28", @"29", @"30", @"31", @"32", @"33", @"34", @"35", @"36", @"37", @"38", @"39", @"40", @"41", @"42", @"43", @"44", @"45", @"46", @"47", @"48", @"49", @"50", @"51", @"52", @"53", @"54", @"55", @"56", @"57", @"58", @"59"]];
     
     NSInteger firstYear = _year - KShowYearsCount / 2;
@@ -96,7 +96,7 @@
         [yearArray addObject:[NSString stringWithFormat:@"%zd", firstYear + i]];
     }
     _yearArray = yearArray;
-    _monthArray = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12"];
+    _monthArray = @[NSLocalizedString(@"kJanuary", nil), NSLocalizedString(@"kFebruary", nil), NSLocalizedString(@"kMarch", nil), NSLocalizedString(@"kApril", nil), NSLocalizedString(@"kMay", nil), NSLocalizedString(@"kJune", nil), NSLocalizedString(@"kJuly", nil), NSLocalizedString(@"kAugust", nil), NSLocalizedString(@"kSeptember", nil), NSLocalizedString(@"kOctober", nil), NSLocalizedString(@"kNovember", nil), NSLocalizedString(@"kDecember", nil)];//@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12"];
 }
 
 - (void)setDefaultInfo
@@ -185,7 +185,7 @@
     UIButton *backTodayBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextBtn.frame) + padding, 0, todayBtnW, KBtnH)];
     backTodayBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
     [backTodayBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [backTodayBtn setTitle:@"返回今天" forState:UIControlStateNormal];
+    [backTodayBtn setTitle:/*@"返回今天"*/NSLocalizedString(@"kReturnToday", nil) forState:UIControlStateNormal];
     [backTodayBtn addTarget:self action:@selector(backTodayBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backTodayBtn];
     
@@ -235,7 +235,7 @@
     //确认按钮
     UIButton *sureBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(backTodayBtn.frame), CGRectGetMaxY(calendarView.frame) - 24, yearBtnW, KBtnH)];
     sureBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
-    [sureBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [sureBtn setTitle:/*@"确定"*/NSLocalizedString(@"Sure", nil) forState:UIControlStateNormal];
     [sureBtn setTitleColor:KMainColor forState:UIControlStateNormal];
     [sureBtn addTarget:self action:@selector(sureBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:sureBtn];
@@ -243,7 +243,7 @@
     //取消按钮
     UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(sureBtn.frame) - yearBtnW, CGRectGetMinY(sureBtn.frame), yearBtnW, KBtnH)];
     cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
-    [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancelBtn setTitle:/*@"取消"*/NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
     [cancelBtn setTitleColor:KMainColor forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(cancelBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:cancelBtn];
@@ -331,7 +331,7 @@
     
     SHLogInfo(SHLogTagAPP, @"startDate: %@, endDate: %@", startDate, endDate);
     
-    [self.progressHUD showProgressHUDWithMessage:@"正在加载..."];
+    [self.progressHUD showProgressHUDWithMessage:/*@"正在加载..."*/NSLocalizedString(@"kLoading", nil)];
      [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:startDate endDate:endDate judge:YES completeBlock:^(id obj) {
          self.storageInfoDit = obj;
          
@@ -352,9 +352,9 @@
     
     _yearLabel.text = [NSString stringWithFormat:@"%ld", _year];
     _monthLabel.text = [NSString stringWithFormat:@"%ld月", _month];
-    _yearBtn.title = [NSString stringWithFormat:@"%ld年", _year];
-    _monthBtn.title = [NSString stringWithFormat:@"%ld月", _month];
-    
+    _yearBtn.title = [NSString stringWithFormat:@"%ld", _year];
+    _monthBtn.title = _monthArray[_month - 1]; //[NSString stringWithFormat:@"%ld月", _month];
+
     for (int i = 0; i < KMaxCount; i++) {
         UIButton *btn = (UIButton *)[self.calendarView viewWithTag:i + KBtnTag];
         btn.selected = NO;
@@ -530,10 +530,10 @@
 {
     if (optionButton.title.length > 2) {
         _year = [optionButton.title integerValue];
-        _yearBtn.title = [NSString stringWithFormat:@"%ld年", _year];
+        _yearBtn.title = [NSString stringWithFormat:@"%ld", _year];
     }else {
         _month = [optionButton.title integerValue];
-        _monthBtn.title = [NSString stringWithFormat:@"%ld月", _month];
+        _monthBtn.title = optionButton.title; //[NSString stringWithFormat:@"%ld月", _month];
     }
     
 //    [self reloadData];

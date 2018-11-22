@@ -168,7 +168,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)showLoadCameraListFailedTips {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"Failed to get the camera list, please check if the network connection is normal." /*@"获取相机列表失败，请检测网络连接是否正常。"*/ preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"Failed to get the camera list, please check if the network connection is normal."*/NSLocalizedString(@"kGetDeviceListFailed", nil) /*@"获取相机列表失败，请检测网络连接是否正常。"*/ preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
     
@@ -421,8 +421,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
-    tvc.title = @"Camera Roll";
-    
+    tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
+
     [self.navigationController pushViewController:tvc animated:YES];
 #else
     SHPushTestNavController *nav = [SHPushTestNavController pushTestNavController];
@@ -466,8 +466,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     if (curSHCameraObj.camera.operable == 1) {
         SHQRCodeShareVC *vc = [SHQRCodeShareVC qrCodeShareVC];
         vc.camera = curSHCameraObj.camera;
-        vc.title = @"Share";
-        
+        vc.title = NSLocalizedString(@"kShare", nil); //@"Share";
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.navigationController pushViewController:vc animated:YES];
         });
@@ -852,7 +852,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                 [weakself.progressHUD hideProgressHUD:YES];
                 
                 Error *error = result;
-                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:@"解除账户相机绑定失败. \n%@", error.error_description]];
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"解除账户相机绑定失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnbindDeviceFailed", nil), error.error_description]];
             });
         }
     }];
@@ -870,7 +870,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                 [weakself.progressHUD hideProgressHUD:YES];
                 
                 Error *error = result;
-                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:@"取消订阅失败. \n%@", error.error_description]];
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"取消订阅失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnsubscribeFailed", nil), error.error_description]];
             });
         }
     }];

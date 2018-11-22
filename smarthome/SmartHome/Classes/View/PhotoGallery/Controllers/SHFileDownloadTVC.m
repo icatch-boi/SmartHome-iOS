@@ -258,7 +258,7 @@
 	}else{
 		SHLogError(SHLogTagAPP, @"cancel failed.");
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[self.progressHUD showProgressHUDNotice:@"cancel failed." showTime:1.5];
+			[self.progressHUD showProgressHUDNotice:/*@"cancel failed."*/NSLocalizedString(@"kCancelDownloadFailed", nil) showTime:1.5];
 			[self updateDownloadInfo];
 		});
 	}

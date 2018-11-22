@@ -1478,12 +1478,12 @@
 		3897E0AA2180743000E72417 /* SetupTipsView */ = {
 			isa = PBXGroup;
 			children = (
+				3897E0AF2180743000E72417 /* XJSetupTipsView.h */,
 				3897E0AB2180743000E72417 /* XJSetupTipsView.m */,
 				3897E0AC2180743000E72417 /* XJSetupTipsView.xib */,
+				3897E0B02180743000E72417 /* XJSetupScanTipsView.h */,
 				3897E0AD2180743000E72417 /* XJSetupScanTipsView.m */,
 				3897E0AE2180743000E72417 /* XJSetupScanTipsView.xib */,
-				3897E0AF2180743000E72417 /* XJSetupTipsView.h */,
-				3897E0B02180743000E72417 /* XJSetupScanTipsView.h */,
 			);
 			path = SetupTipsView;
 			sourceTree = "<group>";

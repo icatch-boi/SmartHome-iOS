@@ -65,6 +65,15 @@ static const CGFloat kLogoTopConsDefaultVaule = 80;
     }
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateNormal];
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateHighlighted];
+    [_signupButton setTitle:NSLocalizedString(@"kNewuser", nil) forState:UIControlStateNormal];
+    [_signupButton setTitle:NSLocalizedString(@"kNewuser", nil) forState:UIControlStateHighlighted];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

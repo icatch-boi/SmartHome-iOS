@@ -365,7 +365,7 @@
         dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
         if ((dispatch_semaphore_wait(_semaphore, time) != 0)) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showProgressHUDNotice:@"Timeout!" showTime:2.0];
+                [self showProgressHUDNotice:/*@"Timeout!"*/NSLocalizedString(@"ActionTimeOut", nil) showTime:2.0];
             });
         } else {
             if (_played) {
@@ -587,7 +587,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (caching) {
             //[_al pause];
-            [self.notificationView showGCDNoteWithMessage:@"Buffering ..." withAnimated:YES withAcvity:YES];
+            [self.notificationView showGCDNoteWithMessage:/*@"Buffering ..."*/NSLocalizedString(@"kBuffering", nil) withAnimated:YES withAcvity:YES];
         } else {
             //[_al play];
             [self.notificationView hideGCDiscreetNoteView:YES];
@@ -605,7 +605,7 @@
             dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
             if (dispatch_semaphore_wait(_semaphore, time) != 0) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self showProgressHUDNotice:@"Timeout!" showTime:2.0];
+                    [self showProgressHUDNotice:/*@"Timeout!"*/NSLocalizedString(@"ActionTimeOut", nil) showTime:2.0];
                 });
             } else {
                 self.played = ![_ctrl.pbCtrl stopWithCamera:_shCamObj];
@@ -787,7 +787,7 @@
                     _videoPbElapsedTime.text = [NSString translateSecsToString:_playedSecs];
                 } else {
                     SHLogInfo(SHLogTagAPP, @"Seek failed.");
-                    [self showProgressHUDNotice:@"Seek failed" showTime:2.0];
+                    [self showProgressHUDNotice:/*@"Seek failed"*/NSLocalizedString(@"kSeekFailed", nil) showTime:2.0];
                 }
                 self.pbTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                               target  :self
@@ -839,7 +839,7 @@
         dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
         if(dispatch_semaphore_wait(self.semaphore, time) != 0)  {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showProgressHUDNotice:@"Timeout!" showTime:2.0];
+                [self showProgressHUDNotice:/*@"Timeout!"*/NSLocalizedString(@"ActionTimeOut", nil) showTime:2.0];
             });
         } else {
             dispatch_semaphore_signal(self.semaphore);
@@ -870,11 +870,11 @@
                         if (_totalSecs <= 0) {
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if (_totalSecs == ICH_PREVIEWING_BY_OTHERS) {
-                                    [self showProgressHUDNotice:@"Previewing by others" showTime:2.0];
+                                    [self showProgressHUDNotice:/*@"Previewing by others"*/NSLocalizedString(@"kPreviewingByOthers", nil) showTime:2.0];
                                 } else if (_totalSecs == ICH_PLAYING_VIDEO_BY_OTHERS) {
-                                    [self showProgressHUDNotice:@"Playing video by others" showTime:2.0];
+                                    [self showProgressHUDNotice:/*@"Playing video by others"*/NSLocalizedString(@"kPlayingVideoByOthers", nil) showTime:2.0];
                                 } else {
-                                    [self showProgressHUDNotice:@"Failed to play" showTime:2.0];
+                                    [self showProgressHUDNotice:/*@"Failed to play"*/NSLocalizedString(@"kPlaybackFailed", nil) showTime:2.0];
                                 }
                             });
                             
@@ -909,8 +909,8 @@
                                                                           userInfo:nil
                                                                           repeats :YES];
                             [self hideProgressHUD:YES];
-                            [self.notificationView showGCDNoteWithMessage:@"Buffering ..."
-                                            withAnimated:YES withAcvity:YES];
+                            [self.notificationView showGCDNoteWithMessage:/*@"Buffering ..."*/NSLocalizedString(@"kBuffering", nil)
+                                                             withAnimated:YES withAcvity:YES];
                         });
                         
                         if ([_ctrl.pbCtrl audioPlaybackStreamEnabledWithCamera:_shCamObj]) {
@@ -1599,7 +1599,7 @@
 
 #pragma mark - Disconnect & Reconnect
 - (void)showDisconnectAlert:(SHCameraObject *)shCamObj {
-    UIAlertController *alertVc = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ 断开连接", shCamObj.camera.cameraName] message:@"相机连接断开,请保证网络的正确性及相机的正常连接." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVc = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ %@", shCamObj.camera.cameraName, NSLocalizedString(@"kDisconnect", nil)] message:/*@"相机连接断开,请保证网络的正确性及相机的正常连接."*/NSLocalizedString(@"kDisconnectTipsInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __weak typeof(self) weakSelf = self;
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Exit", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
@@ -1618,7 +1618,7 @@
 }
 
 - (void)reconnect:(SHCameraObject *)shCamObj {
-    [self.progressHUD showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ 正在重连...", shCamObj.camera.cameraName]];
+    [self.progressHUD showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", nil)]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         int retValue = [shCamObj connectCamera];
         if (retValue == ICH_SUCCEED) {

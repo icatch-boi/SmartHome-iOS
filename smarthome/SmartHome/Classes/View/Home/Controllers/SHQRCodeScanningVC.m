@@ -334,7 +334,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
         return nil;
     } else {
         if ([uid containsString:@" "]) {
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"The uid contains Spaces, please check." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"The uid contains Spaces, please check."*/NSLocalizedString(@"kDeviceUIDInvalid", nil) preferredStyle:UIAlertControllerStyleAlert];
             
             [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -361,7 +361,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     
     switch (result) {
         case ICH_QR_VALID:
-            message = @"无效二维码，请扫描机台上的二维码或APP内生成的分享二维码。"/*NSLocalizedString(@"kQRCodeInvalidTipsInfo", nil)*/;
+            message = NSLocalizedString(@"kQRCodeInvalidTipsDescription", nil); //@"无效二维码，请扫描机台上的二维码或APP内生成的分享二维码。"/*NSLocalizedString(@"kQRCodeInvalidTipsInfo", nil)*/;
             break;
             
         case ICH_QR_DIE:
@@ -424,7 +424,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     
     if (camObj) {
         hasExist = YES;
-        [self showDeviceExistAlertWithMessage:@"Device Already Exist."];
+        [self showDeviceExistAlertWithMessage:/*@"Device Already Exist."*/NSLocalizedString(@"kDeviceAlreadyExist", nil)];
     }
     
     return hasExist;
@@ -436,7 +436,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     for (SHCameraObject *obj in [SHCameraManager sharedCameraManger].smarthomeCams) {
         if ([obj.camera.id isEqualToString:cameraID]) {
             hasExist = YES;
-            [self showDeviceExistAlertWithMessage:@"Device Already Exist."];
+            [self showDeviceExistAlertWithMessage:/*@"Device Already Exist."*/NSLocalizedString(@"kDeviceAlreadyExist", nil)];
 
             break;
         }
@@ -446,9 +446,9 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 }
 
 - (void)showDeviceExistAlertWithMessage:(NSString *)message {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self viewWillAppear:YES];
         });
@@ -478,7 +478,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 }
 
 - (void)checkDeviceHasExistsHandler {
-    [self.progressHUD showProgressHUDWithMessage:@"Checking..."];
+    [self.progressHUD showProgressHUDWithMessage:/*@"Checking..."*/NSLocalizedString(@"kCheckDeviceWhetherBind", nil)];
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
         NSLog(@"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
@@ -488,19 +488,19 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
         if (isSuccess) {
             NSNumber *exist = result;
             if (exist.integerValue == 1) {
-                [weakself showDeviceExistAlertWithMessage:@"Device have been bind by other accounts."];
+                [weakself showDeviceExistAlertWithMessage:/*@"Device have been bind by other accounts."*/NSLocalizedString(@"kDeviceBindByOtherAccounts", nil)];
             } else {
                 XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
                 [weakself.navigationController pushViewController:vc animated:YES];
             }
         } else {
-            [weakself showDeviceExistAlertWithMessage:@"Check the device has exists operation failed, please try again."];
+            [weakself showDeviceExistAlertWithMessage:/*@"Check the device has exists operation failed, please try again."*/NSLocalizedString(@"kCheckDeviceWhetherBindFailed", nil)];
         }
     }];
 }
 
 - (void)showNetworkNotReachableAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"⚠️ 当前网络不可用, 请检查手机网络设置。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -35,6 +35,9 @@ static const CGFloat kTipsViewDefaultHeight = 140;
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipsViewHeightCons;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *chooseWifiDesLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *exitButtonItem;
 
 @end
 
@@ -44,7 +47,16 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setupLocalizedString];
     [self setupGUI];
+}
+
+- (void)setupLocalizedString {
+    _titleLabel.text = NSLocalizedString(@"kSelectDeviceWiFi", nil);
+    _chooseWifiDesLabel.text = [NSString stringWithFormat:NSLocalizedString(@"kSelectDeviceWiFiDes", nil), kCameraSSIDPrefix];
+    [_nextButton setTitle:NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateHighlighted];
+    [_exitButtonItem setTitle:NSLocalizedString(@"kExit", nil)];
 }
 
 - (void)setupGUI {
@@ -97,13 +109,13 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     NSString *currentSSID = array.firstObject;
     SHLogInfo(SHLogTagAPP, @"currentSSID: %@", currentSSID);
     if ([currentSSID hasPrefix:kCameraSSIDPrefix] || [currentSSID hasPrefix:@"SH-IPC_"]) {
-        [_nextButton setTitle:@"Next" forState:UIControlStateNormal];
-        [_nextButton setTitle:@"Next" forState:UIControlStateHighlighted];
+        [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
+        [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
         _nextButton.tag = 1;
         [self nextClick:nil];
     } else {
-        [_nextButton setTitle:@"Go to wifi setting" forState:UIControlStateNormal];
-        [_nextButton setTitle:@"Go to wifi setting" forState:UIControlStateHighlighted];
+        [_nextButton setTitle:/*@"Go to wifi setting"*/NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateNormal];
+        [_nextButton setTitle:/*@"Go to wifi setting"*/NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateHighlighted];
         _nextButton.tag = 0;
     }
 }

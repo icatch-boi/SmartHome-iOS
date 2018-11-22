@@ -40,6 +40,7 @@
     sysnLock = nil;
 
     NSLog(@"PCMDataPlayer dealloc...");
+    [self resetAudioSession];
 }
 
 static void AQInputCallback (void                   * inUserData,
@@ -237,13 +238,15 @@ static void AudioPlayerAQInputCallback(void* inUserData, AudioQueueRef outQ, Aud
 //    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,
 //                             sizeof (audioRouteOverride),
 //                             &audioRouteOverride);
-    
+#if 0
     NSError *err = nil;
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setActive:NO error:&err];
     [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&err];
     [audioSession setActive:YES error:&err];
-    
+#else
+    [self setAudioSession];
+#endif
     //初始化音频缓冲区
     for (int i = 0; i < QUEUE_BUFFER_SIZE; i++) {
         int result = AudioQueueAllocateBuffer(audioQueue, MIN_SIZE_PER_FRAME, &audioQueueBuffers[i]); ///创建buffer区，MIN_SIZE_PER_FRAME为每一侦所需要的最小的大小，该大小应该比每次往buffer里写的最大的一次还大
@@ -253,6 +256,32 @@ static void AudioPlayerAQInputCallback(void* inUserData, AudioQueueRef outQ, Aud
     NSLog(@"PCMDataPlayer reset");
     
     AudioQueueStart(audioQueue, NULL);
+}
+
+- (void)setAudioSession {
+    //设置AVAudioSession
+    NSError *error = nil;
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+    
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+    if (error != nil) {
+        NSLog(@"AudioSession setCategory(AVAudioSessionCategoryPlayAndRecord) error:%@", error.localizedDescription);
+    }
+    
+    [session setActive:YES error:&error];
+    if (error != nil) {
+        NSLog(@"AudioSession setActive error:%@", error.localizedDescription);
+    }
+}
+
+- (void)resetAudioSession {
+    NSError *error = nil;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    [audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+    if (error != nil) {
+        NSLog(@"AudioSession setActive error:%@", error.localizedDescription);
+    }
 }
 
 //初始化会话

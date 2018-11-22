@@ -641,14 +641,14 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     [self fillMemorySizeTable];
     
     SHSettingData *myCard = [[SHSettingData alloc] init];
-    myCard.textLabel = @"Usage";
+    myCard.textLabel = NSLocalizedString(@"kUsage", nil); //@"Usage";
      NSString *sizeStr = nil;
     if(_sdCardExisted) {
         int usedSize = (_SDTotalSize - _SDUseableSize);
         sizeStr = [DiskSpaceTool transformStringFromMBytes:usedSize];
         NSLog(@"total : %d, used : %d", _SDTotalSize, _SDUseableSize);
     } else {
-       sizeStr = @"no card";
+        sizeStr = NSLocalizedString(@"kNoSDcard", nil); //@"no card";
     }
      myCard.detailTextLabel = sizeStr;
     [self.mainMenuSDCardTable addObject:myCard];
@@ -722,7 +722,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     if (_shCamObj.cameraProperty.memorySizeData) {
         memorySizeData = _shCamObj.cameraProperty.memorySizeData;
         NSString *sizeStr = memorySizeData.detailTextLabel;
-        if([sizeStr compare:@"no card"] != 0) {
+        if([sizeStr compare:/*@"no card"*/NSLocalizedString(@"kNoSDcard", nil)] != 0) {
             //查找空格位置
             NSRange range = [sizeStr rangeOfString:@" "];
             if(range.location != NSNotFound) {
@@ -739,7 +739,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         memorySizeData = [[SHSettingData alloc] init];
        // memorySizeData.textLabel = NSLocalizedString(@"SETTING_MEMORY_SIZE", nil);
         memorySizeData.textLabel = NSLocalizedString(@"SETTING_MEMORY_SIZE", nil);
-        memorySizeData.detailTextLabel = memorySize == -1 ? @"no card" : [DiskSpaceTool transformStringFromMBytes:memorySize]; //[NSString stringWithFormat:@"%d MB", memorySize];
+        memorySizeData.detailTextLabel = memorySize == -1 ? /*@"no card"*/NSLocalizedString(@"kNoSDcard", nil) : [DiskSpaceTool transformStringFromMBytes:memorySize]; //[NSString stringWithFormat:@"%d MB", memorySize];
         if(memorySize == -1) {
              _sdCardExisted = NO;
         } else {
@@ -807,8 +807,8 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         recStatusData = [[SHSettingData alloc] init];
         recStatusData.textLabel = NSLocalizedString(@"SETTING_REC_STATUS", nil);
 //        recStatusData.detailLastItem = recStatus;
-        recStatusData.detailTextLabel = recStatus ? @"On" : @"Off";
-        
+        recStatusData.detailTextLabel = recStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
         _shCamObj.cameraProperty.recStatusData = recStatusData;
     }
     
@@ -832,8 +832,8 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         fasterConnectionData = [[SHSettingData alloc] init];
         fasterConnectionData.textLabel = NSLocalizedString(@"SETTING_ULTRA_POWER_SAVING_MODE", nil);
 //        fasterConnectionData.detailLastItem = pushMsgStatus;
-        fasterConnectionData.detailTextLabel = fasterConStatus ? @"On" : @"Off";
-        
+        fasterConnectionData.detailTextLabel = fasterConStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
         _shCamObj.cameraProperty.fasterConnectionData = fasterConnectionData;
     }
     

@@ -77,7 +77,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     
     [self setupGUI];
     [self initParameter];
-    [self loadSettingData];
+//    [self loadSettingData];
 }
 
 - (void)initParameter {
@@ -95,6 +95,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 }
 
 - (void)loadSettingData {
+    [self.mainMenuTable removeAllObjects];
     if (_shCamObj.isConnect) {
 //        if (!self.shCamObj.cameraProperty.fwUpdate && ![self.shCamObj.cameraProperty checkSupportPropertyExist]) {
 //            [_ctrl.propCtrl.ssp readFromPath:self.shCamObj.camera.cameraUid.md5];
@@ -120,10 +121,11 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (_hasLoad) {
+    if (_hasLoad && _shCamObj.isConnect) {
         return;
     }
     
+    [self loadSettingData];
     _shCamObj.isConnect ? [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"LOAD_SETTING_DATA", nil)] : void();
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -256,7 +258,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 
                 if ([self validityCheckOfIndexPath:indexPath]) {
                     NSString *deleteCellTitle = self.mainMenuTable[indexPath.section][indexPath.row];
-                    ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : @"Delete";
+                    ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : /*@"Delete"*/NSLocalizedString(@"Delete", nil);
                 }
             }
         }
@@ -276,7 +278,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             
             if ([self validityCheckOfIndexPath:indexPath]) {
                 NSString *deleteCellTitle = self.mainMenuTable[indexPath.section][indexPath.row];
-                ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : @"Delete";
+                ((SHDeleteCameraCell *)cell).titleLabel.text = deleteCellTitle ? deleteCellTitle : /*@"Delete"*/NSLocalizedString(@"Delete", nil);
             }
         }
     }
@@ -400,7 +402,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 _shCamObj.cameraProperty.pushMsgStatusData.detailLastItem = sender.isOn;
                 
                 _shCamObj.cameraProperty.recStatusData.detailLastItem = sender.isOn;
-                _shCamObj.cameraProperty.recStatusData.detailTextLabel = sender.isOn ? @"On" : @"Off";
+                _shCamObj.cameraProperty.recStatusData.detailTextLabel = sender.isOn ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
             } else if (indexPath.row == 1) {
 
             } else if (indexPath.row == 2) {
@@ -633,7 +635,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
                 
-                [weakself showFailedTipsWithInfo:@"解除账户相机绑定失败."];
+                [weakself showFailedTipsWithInfo:NSLocalizedString(@"kUnbindDeviceFailed", nil)/*@"解除账户相机绑定失败."*/];
             });
         }
     }];
@@ -650,7 +652,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
                 
-                [weakself showFailedTipsWithInfo:@"取消订阅失败."];
+                [weakself showFailedTipsWithInfo:NSLocalizedString(@"kUnsubscribeFailed", nil)/*@"取消订阅失败."*/];
             });
         }
     }];
@@ -725,7 +727,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)fillDeviceInfoTable {
     SHSettingData *deviceInfoData = [[SHSettingData alloc] init];
     
-    deviceInfoData.textLabel = @"Device Information";
+    deviceInfoData.textLabel = NSLocalizedString(@"kDeviceInformation", nil);//@"Device Information";
     deviceInfoData.methodName = @"enterDeviceInfo:";
     
     if (deviceInfoData != nil) {
@@ -754,7 +756,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)fillAlbumTable {
     SHSettingData *albumData = [[SHSettingData alloc] init];
     
-    albumData.textLabel = @"SD card album"; //NSLocalizedString(@"CameraAlbum", nil);
+    albumData.textLabel = NSLocalizedString(@"kSDcardAlbum", nil); //@"SD card album"; //NSLocalizedString(@"CameraAlbum", nil);
     albumData.methodName = @"enterAlbum";
     
     if (albumData != nil) {
@@ -766,7 +768,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     [self.mainMenuDeleteCameraTable removeAllObjects];
     
     [self.mainMenuDeleteCameraTable addObject:@"Push Test"];
-    [self.mainMenuDeleteCameraTable addObject:@"Delete"];
+    [self.mainMenuDeleteCameraTable addObject:/*@"Delete"*/NSLocalizedString(@"Delete", nil)];
 }
 
 - (void)fillPushMsgStatusTable {
@@ -822,7 +824,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"STREAM_SET_ERROR", @"") showTime:2.0];
         } else {
             _shCamObj.cameraProperty.recStatusData.detailLastItem = recStatus;
-            _shCamObj.cameraProperty.recStatusData.detailTextLabel = recStatus ? @"On" : @"Off";
+            _shCamObj.cameraProperty.recStatusData.detailTextLabel = recStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
         }
     }
     
@@ -880,8 +882,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         recStatusData = [[SHSettingData alloc] init];
         recStatusData.textLabel = NSLocalizedString(@"SETTING_REC_STATUS", nil);
         recStatusData.detailLastItem = recStatus;
-        recStatusData.detailTextLabel = recStatus ? @"On" : @"Off";
-        
+        recStatusData.detailTextLabel = recStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
         _shCamObj.cameraProperty.recStatusData = recStatusData;
     }
 }
@@ -899,8 +901,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         fasterConnectionData = [[SHSettingData alloc] init];
         fasterConnectionData.textLabel = NSLocalizedString(@"SETTING_ULTRA_POWER_SAVING_MODE", nil);
         //        fasterConnectionData.detailLastItem = pushMsgStatus;
-        fasterConnectionData.detailTextLabel = fasterConStatus ? @"On" : @"Off";
-        
+        fasterConnectionData.detailTextLabel = fasterConStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
         _shCamObj.cameraProperty.fasterConnectionData = fasterConnectionData;
     }
 }
@@ -914,7 +916,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         memorySizeData = [[SHSettingData alloc] init];
         // memorySizeData.textLabel = NSLocalizedString(@"SETTING_MEMORY_SIZE", nil);
         memorySizeData.textLabel = NSLocalizedString(@"SETTING_MEMORY_SIZE", nil);
-        memorySizeData.detailTextLabel = memorySize == -1 ? @"no card" : [DiskSpaceTool transformStringFromMBytes:memorySize]; //[NSString stringWithFormat:@"%d MB", memorySize];
+        memorySizeData.detailTextLabel = memorySize == -1 ? /*@"no card"*/NSLocalizedString(@"kNoSDcard", nil) : [DiskSpaceTool transformStringFromMBytes:memorySize]; //[NSString stringWithFormat:@"%d MB", memorySize];
 
         _shCamObj.cameraProperty.memorySizeData = memorySizeData;
     }

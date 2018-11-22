@@ -72,11 +72,12 @@
 //    audioDataLength = 0;
 //    audioDataCurLength = 0;
 //    audioPts = 0.0;
-    
+#if 0
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     //默认情况下扬声器播放
     [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     [audioSession setActive:YES error:nil];
+#endif
 }
 
 - (void)initAudioUnit {

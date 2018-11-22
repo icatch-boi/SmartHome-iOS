@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *avatorImgView;
 @property (weak, nonatomic) IBOutlet UILabel *nickNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
+@property (weak, nonatomic) IBOutlet UILabel *modifyPWDLabel;
 
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 
@@ -45,6 +46,10 @@
     UIImage *placeholderImage = [UIImage imageNamed:@"portrait-1"];
     _avatorImgView.image = [placeholderImage ic_avatarImageWithSize:placeholderImage.size backColor:[UIColor whiteColor] lineColor:[UIColor lightGrayColor] lineWidth:1.0];
     _nickNameLabel.text = SHNetworkManager.sharedNetworkManager.userAccount.screen_name;
+    
+    [_logoutButton setTitle:NSLocalizedString(@"kLogout", nil) forState:UIControlStateNormal];
+    [_logoutButton setTitle:NSLocalizedString(@"kLogout", nil) forState:UIControlStateHighlighted];
+    _modifyPWDLabel.text = NSLocalizedString(@"kModifyPassword", nil);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,11 +62,11 @@
     [[SHNetworkManager sharedNetworkManager] logout];
     [self.navigationController popViewControllerAnimated:YES];
 #endif
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"Alert" message:@"Here is a message where we an put absolutely anything we want." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:/*@"Alert"*/NSLocalizedString(@"Tips", nil) message:/*@"Here is a message where we an put absolutely anything we want."*/NSLocalizedString(@"kLogoutAlertInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alertC addAction:[UIAlertAction actionWithTitle:@"Log out" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertC addAction:[UIAlertAction actionWithTitle:/*@"Log out"*/NSLocalizedString(@"kLogout", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [weakself logout];
     }]];
     
@@ -84,8 +89,8 @@
                 [weakself.progressHUD hideProgressHUD:YES];
             });
         } else {
-            weakself.progressHUD.detailsLabelText = @"please try again later";
-            [weakself.progressHUD showProgressHUDNotice:@"Sign out failed" showTime:1.5];
+            weakself.progressHUD.detailsLabelText = NSLocalizedString(@"kLogoutAgain", nil); //@"please try again later";
+            [weakself.progressHUD showProgressHUDNotice:/*@"Sign out failed"*/NSLocalizedString(@"kLogoutFailed", nil) showTime:1.5];
         }
     }];
 }
@@ -130,13 +135,13 @@
 }
 
 - (void)modifyPassword {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Change password" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Change password"*/NSLocalizedString(@"kModifyPassword", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *oldPWDField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.returnKeyType = UIReturnKeyDone;
-        textField.placeholder = @"Old password";
+        textField.placeholder = NSLocalizedString(@"kOldPassword", nil); //@"Old password";
         textField.secureTextEntry = YES;
         
         oldPWDField = textField;
@@ -146,7 +151,7 @@
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.returnKeyType = UIReturnKeyDone;
-        textField.placeholder = @"New password";
+        textField.placeholder = NSLocalizedString(@"kNewPassword", nil); //@"New password";
         textField.secureTextEntry = YES;
 
         newPWDField = textField;
@@ -156,15 +161,15 @@
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.returnKeyType = UIReturnKeyDone;
-        textField.placeholder = @"Sure password";
+        textField.placeholder = NSLocalizedString(@"kSurePassword", nil); //@"Sure password";
         textField.secureTextEntry = YES;
 
         surePWDField = textField;
     }];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([weakself checkPassword:oldPWDField.text newPassword:newPWDField.text surePassword:surePWDField.text]) {
             [weakself changePasswordWithOldPassword:oldPWDField.text newPassword:newPWDField.text];
         }
@@ -175,12 +180,12 @@
 
 - (BOOL)checkPassword:(NSString *)password newPassword:(NSString *)newPassword surePassword:(NSString *)surePassword {
     if (![newPassword isEqualToString:surePassword]) {
-        [self showAlertWithTitle:@"Change password failed" message:@"Sorry, the new password and confirming password disagree!"];
+        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the new password and confirming password disagree!"*/NSLocalizedString(@"kNewPasswordDisagree", nil)];
         return NO;
     }
     
     if ([password isEqualToString:newPassword]) {
-        [self showAlertWithTitle:@"Change password failed" message:@"Sorry, the old password and new password agree!"];
+        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the old password and new password agree!"*/NSLocalizedString(@"kOldAndNewPasswordAgree", nil)];
         return NO;
     }
 
@@ -190,7 +195,7 @@
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
 }
@@ -204,15 +209,15 @@
         SHLogInfo(SHLogTagAPP, @"changePasswordWithOldPassword is success: %d", isSuccess);
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *message = @"Change password success.";
-            
+            NSString *message = NSLocalizedString(@"kModifyPasswordSuccess", nil); //@"Change password success.";
+
             if (!isSuccess) {
                 Error *error = result;
                 SHLogError(SHLogTagAPP, @"changePasswordWithOldPassword is failed, error: %@", error.error_description);
                 
                 weakself.progressHUD.detailsLabelText = error.error_description;
                 
-                message = @"Change password failed";
+                message = NSLocalizedString(@"kModifyPasswordFailed", nil); //@"Change password failed";
             }
             
             [weakself.progressHUD showProgressHUDNotice:message showTime:2.0];
@@ -249,16 +254,16 @@
             [self presentViewController:imagePicker animated:YES completion:nil];
             
         } else if (status == PHAuthorizationStatusDenied) { // 用户拒绝当前应用访问相册
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"⚠️ 警告" message:[NSString stringWithFormat:@"请去-> [设置 - 隐私 - 照片 - %@] 打开访问开关", APP_NAME] preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:/*@"⚠️ 警告"*/[NSString stringWithFormat:@"⚠️ %@", NSLocalizedString(@"Warning", nil)] message:/*[NSString stringWithFormat:@"请去-> [设置 - 隐私 - 照片 - %@] 打开访问开关", APP_NAME]*/NSLocalizedString(@"kCameraAccessWarningInfo", nil) preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:/*@"确定"*/NSLocalizedString(@"Sure", nil) style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
             
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
         } else if (status == PHAuthorizationStatusRestricted) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"由于系统原因, 无法访问相册" preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:/*@"温馨提示"*/NSLocalizedString(@"Tips", nil) message:/*@"由于系统原因, 无法访问相册"*/NSLocalizedString(@"kNotAccessSystemAlbum", nil) preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:/*@"确定"*/NSLocalizedString(@"Sure", nil) style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
             

@@ -52,14 +52,16 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setupLocalizedString];
+
     [self initParameter];
     [self setupGUI];
 }
 
 - (void)initParameter {
     if (_resetPWD) {
-        [_logonButton setTitle:@"Reset password" forState:UIControlStateNormal];
-        [_logonButton setTitle:@"Reset password" forState:UIControlStateHighlighted];
+        [_logonButton setTitle:/*@"Reset password"*/NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateNormal];
+        [_logonButton setTitle:/*@"Reset password"*/NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateHighlighted];
         
         _agreeDesLabel.hidden = YES;
         _userAgreementButton.hidden = YES;
@@ -102,6 +104,28 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     [self addLineForSigninBtn];
 }
 
+- (void)setupLocalizedString {
+    _emailTextField.placeholder = NSLocalizedString(@"kEmail", nil);
+    _verifycodeTextField.placeholder = NSLocalizedString(@"kVerifycode", nil);
+    [_getVerifycodeBtn setTitle:NSLocalizedString(@"kGetVerifycode", nil) forState:UIControlStateNormal];
+    [_getVerifycodeBtn setTitle:NSLocalizedString(@"kGetVerifycode", nil) forState:UIControlStateHighlighted];
+    _pwdTextField.placeholder = NSLocalizedString(@"kPassword", nil);
+    _surePWDTextField.placeholder = NSLocalizedString(@"kEnterPasswordAgain", nil);
+    [_logonButton setTitle:NSLocalizedString(@"kSignupWithEmail", nil) forState:UIControlStateNormal];
+    [_logonButton setTitle:NSLocalizedString(@"kSignupWithEmail", nil) forState:UIControlStateHighlighted];
+    [_userAgreementButton setTitle:NSLocalizedString(@"kTerms", nil) forState:UIControlStateNormal];
+    [_userAgreementButton setTitle:NSLocalizedString(@"kTerms", nil) forState:UIControlStateHighlighted];
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateNormal];
+    [_signinButton setTitle:NSLocalizedString(@"kLogin", nil) forState:UIControlStateHighlighted];
+    _agreeDesLabel.text = NSLocalizedString(@"kAgreeTermsDes", nil);
+    _andLabel.text = NSLocalizedString(@"kAlreadyHaveAnAccount", nil);
+    
+    [_userAgreementButton layoutIfNeeded];
+    [_signinButton layoutIfNeeded];
+    [_agreeDesLabel layoutIfNeeded];
+    [_andLabel layoutIfNeeded];
+}
+
 - (void)addLineForTermsBtn {
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _userAgreementButton.frame.size.height - 2, _userAgreementButton.frame.size.width, 1)];
     line.backgroundColor = _userAgreementButton.currentTitleColor;
@@ -138,7 +162,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 }
 
 - (IBAction)logonClick:(id)sender {
-    NSString *notice = _resetPWD ? @"正在重置密码..." : @"正在注册...";
+    NSString *notice = _resetPWD ? NSLocalizedString(@"kResetPasswording", nil) : NSLocalizedString(@"kSignuping", nil); //@"正在重置密码..." : @"正在注册...";
     
     [self accountHandleWithTipsTitle:notice];
 }
@@ -167,18 +191,21 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
             passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
             surePWDRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
         });
-        if(_verifycodeTextField.text.length != 6) {
-            NSString *errInfo = @"验证码无效，请重新输入.";
-            if(_verifycodeTextField.text.length == 0) {
-                errInfo = @"请输入验证码.";
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(_verifycodeTextField.text.length != 6) {
+                NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil); //@"验证码无效，请重新输入.";
+                if(_verifycodeTextField.text.length == 0) {
+                    errInfo = NSLocalizedString(@"kEnterVerifycode", nil); //@"请输入验证码.";
+                }
+                [self showTipsWithInfo:errInfo];
+                return;
             }
-            [self showTipsWithInfo:errInfo];
-            return;
-        }
-        if(_pwdTextField.text.length < 8 || _pwdTextField.text.length > 16) {
-            [self showTipsWithInfo:@"请确保密码长度在8-16位之间."];
-            return;
-        }
+            if(_pwdTextField.text.length < 8 || _pwdTextField.text.length > 16) {
+                [self showTipsWithInfo:/*@"请确保密码长度在8-16位之间."*/NSLocalizedString(@"kAccountPasswordDes", nil)];
+                return;
+            }
+        });
         if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound || surePWDRange.location == NSNotFound) {
 #if 0
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -188,7 +215,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
                 [self presentViewController:alertC animated:YES completion:nil];
             });
 #else
-            [self showTipsWithInfo:@"输入的邮箱或密码无效，请重新输入."];
+            [self showTipsWithInfo:/*@"输入的邮箱或密码无效，请重新输入."*/NSLocalizedString(@"kInvalidEmailOrPassword", nil)];
 #endif
         } else {
             __block NSString *email = nil;
@@ -213,15 +240,15 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
                     [self presentViewController:alertVC animated:YES completion:nil];
                 });
 #else
-                [self showTipsWithInfo:@"两次密码输入不一致，请重新输入."];
+                [self showTipsWithInfo:/*@"两次密码输入不一致，请重新输入."*/NSLocalizedString(@"kEnterAccoutPasswordDisagree", nil)];
 #endif
                 return;
 
             }
             if (_resetPWD) {
-                [self resetPasswordWithEmail:email password:password checkCode:checkCode failedNotice:@"重置密码失败"];
+                [self resetPasswordWithEmail:email password:password checkCode:checkCode failedNotice:/*@"重置密码失败"*/NSLocalizedString(@"kResetPasswordFailed", nil)];
             } else {
-                [self signupWithEmail:email password:password checkCode:checkCode failedNotice:@"注册失败"];
+                [self signupWithEmail:email password:password checkCode:checkCode failedNotice:/*@"注册失败"*/NSLocalizedString(@"kSignupFailed", nil)];
             }
         }
     });
@@ -287,7 +314,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 
 - (void)loginHandle {
     self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:@"正在登录..."];
+    [self.progressHUD showProgressHUDWithMessage:/*@"正在登录..."*/NSLocalizedString(@"kLogining", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSString *email = nil;
@@ -313,7 +340,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
                     SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                     
                     weakself.progressHUD.detailsLabelText = error.error_description;
-                    NSString *notice = @"登录失败";
+                    NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
                     [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                 }
                 
@@ -417,7 +444,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
         if (emailRange.location == NSNotFound ) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"输入的邮箱无效，请重新输入." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"输入的邮箱无效，请重新输入."*/NSLocalizedString(@"kInvalidEmail", nil) preferredStyle:UIAlertControllerStyleAlert];
                 [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alertC animated:YES completion:nil];
             });
@@ -458,8 +485,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 
 - (void)getVerifycodeFailedTips:(id)result isSuccess:(BOOL)success {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *notice = @"校验码已发送到邮箱";
-        
+        NSString *notice = NSLocalizedString(@"kVerifycodeAlreadySend", nil); //@"校验码已发送到邮箱";
+
         if (success) {
             _getVerifycodeBtn.enabled = NO;
             _getVerifycodeBtn.titleLabel.font = [UIFont systemFontOfSize:kVerifycodeBtnDisableFontSize];
@@ -470,7 +497,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
             Error *error = result;
             
             self.progressHUD.detailsLabelText = error.error_description;
-            notice = @"校验码发送失败";
+            notice = NSLocalizedString(@"kVerifycodeSendFailed", nil); //@"校验码发送失败";
         }
         
         [self.progressHUD showProgressHUDNotice:notice showTime:1.5];
