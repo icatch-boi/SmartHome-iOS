@@ -152,7 +152,7 @@ static int const kNewFileIconTag = 888;
     [self initPhotoGallery];
     
     //    [self stringToDate:@"2017/04/20 11:11:11" andFormat:kDateFormat]
-    [self updateShowDate:_remoteDateTime];
+//    [self updateShowDate:_remoteDateTime];
     [self addCameraPropertyValueChangeBlock];
 }
 
@@ -206,12 +206,29 @@ static int const kNewFileIconTag = 888;
 //        _readyGoToFileDownloadVC = NO;
 //        return;
 //    }
-	
+    [self updateShowDate:_remoteDateTime];
     self.curDate = [_remoteDateTime convertToStringWithFormat:kDateFormat];//[SHGUIHandleTool dateToString:_remoteDateTime andFormat:kDateFormat];
     
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
- 
-    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:YES completeBlock:^(id obj) {
+    WEAK_SELF(self);
+    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:YES completeBlock:^(BOOL isSuccess, id obj) {
+        STRONG_SELF(self);
+        if (isSuccess == NO) {
+            [self showGetRemoteAlbumDataFailedAlertView];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return ;
+        }
+        
+        if (obj == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
         self.storageInfoArray = obj;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -220,6 +237,16 @@ static int const kNewFileIconTag = 888;
             [self updateMpbGUI];
         });
     }];
+}
+
+- (void)showGetRemoteAlbumDataFailedAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kGetSDCardAlbumDataFailed", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertVC animated:YES completion:nil];
+    });
 }
 
 -(void)viewWillLayoutSubviews {
@@ -385,7 +412,7 @@ static int const kNewFileIconTag = 888;
 //日期按钮的背景设置，表示当前日期
 - (void)updateButtonBackgroundColor:(NSString *)date {
     NSString *day = [date substringFromIndex:8];
-    //    SHLogInfo(SHLogTagAPP, @"day: %@", day);
+    SHLogInfo(SHLogTagAPP, @"day: %@", day);
     int temp = [day intValue];
     
     [self initButtonBackgroundColor];
@@ -417,12 +444,12 @@ static int const kNewFileIconTag = 888;
 //设置日期栏的显示，有点无点，文字颜色，是否可以点击，背景？
 - (void)setMpbGUIDisplay:(NSString *)key {
     NSString *day = [key substringFromIndex:8];
-    //    SHLogInfo(SHLogTagAPP, @"day: %@", day);
+    SHLogInfo(SHLogTagAPP, @"day: %@", day);
     
     int temp = [day intValue];
     
     if (temp == [self getButtonTitle:_firstButton]) {
-        [self setMpbSceneWith:_firstButton andView:_fifthView];
+        [self setMpbSceneWith:_firstButton andView:_firstView];
     } else if (temp == [self getButtonTitle:_secondButton]) {
         [self setMpbSceneWith:_secondButton andView:_secondView];
     } else if (temp == [self getButtonTitle:_thirdButton]) {
@@ -442,7 +469,7 @@ static int const kNewFileIconTag = 888;
 
 - (int)getButtonTitle:(UIButton *)btn {
     int temp = [btn.currentTitle intValue];
-    //    SHLogInfo(SHLogTagAPP, @"btnTitle: %d", temp);
+    SHLogInfo(SHLogTagAPP, @"btnTitle: %d", temp);
     return temp;
 }
 
@@ -1286,8 +1313,26 @@ static int const kNewFileIconTag = 888;
     [self updateShowDate:curDate];
     self.curDate = [curDate convertToStringWithFormat:kDateFormat];//[SHGUIHandleTool dateToString:curDate andFormat:kDateFormat];
     
+    WEAK_SELF(self);
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
-    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:NO completeBlock:^(id obj) {
+    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:NO completeBlock:^(BOOL isSuccess, id obj) {
+        STRONG_SELF(self);
+        if (isSuccess == NO) {
+            [self showGetRemoteAlbumDataFailedAlertView];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
+        if (obj == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
         self.storageInfoArray = obj;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1296,6 +1341,10 @@ static int const kNewFileIconTag = 888;
             [self updateMpbGUI];
         });
     }];
+}
+
+- (void)calendarWithGetDataFailedHandler:(HWCalendar *)calendar {
+    [self showGetRemoteAlbumDataFailedAlertView];
 }
 
 - (BOOL)isCurrentDate:(NSDate *)newDate {
@@ -1840,8 +1889,26 @@ static int const kNewFileIconTag = 888;
             [self.progressHUDFilter showProgressHUDNotice:NSLocalizedString(@"kSetFilterFailed", nil) showTime:2.0];
             return;
         } else {
+            WEAK_SELF(self);
             [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
-            [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:NO completeBlock:^(id obj) {
+            [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:self.curDate endDate:nil judge:NO completeBlock:^(BOOL isSuccess ,id obj) {
+                STRONG_SELF(self);
+                if (isSuccess == NO) {
+                    [self showGetRemoteAlbumDataFailedAlertView];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.progressHUD hideProgressHUD:YES];
+                    });
+                    return;
+                }
+                
+                if (obj == nil) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.progressHUD hideProgressHUD:YES];
+                    });
+                    return;
+                }
+                
                 self.storageInfoArray = obj;
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -1972,8 +2039,25 @@ static int const kNewFileIconTag = 888;
 
 - (void)updateCameraFileList {
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
-    
-    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:[_latestFileDate stringByAppendingString:@" 00:00:00"] endDate:nil judge:YES completeBlock:^(id obj) {
+    WEAK_SELF(self);
+    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:[_latestFileDate stringByAppendingString:@" 00:00:00"] endDate:nil judge:YES completeBlock:^(BOOL isSuccess, id obj) {
+        STRONG_SELF(self);
+        if (isSuccess == NO) {
+            [self showGetRemoteAlbumDataFailedAlertView];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
+        if (obj == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
         self.storageInfoArray = obj;
         
         dispatch_async(dispatch_get_main_queue(), ^{

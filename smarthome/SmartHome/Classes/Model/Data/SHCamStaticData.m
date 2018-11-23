@@ -48,10 +48,10 @@
 #pragma mark - Global static table
 -(NSDictionary *)captureDelayDict
 {
-  return @{@(CAP_DELAY_NO):@"Off",
-           @(CAP_DELAY_2S):@"2s",
-           @(5000):@"5s",
-           @(CAP_DELAY_10S):@"10s"};
+    return @{};/*@{@(CAP_DELAY_NO):@"Off",
+                @(CAP_DELAY_2S):@"2s",
+                @(5000):@"5s",
+                @(CAP_DELAY_10S):@"10s"};*/
 }
 
 -(NSDictionary *)liveSizeDict
@@ -252,19 +252,19 @@
 
 -(NSDictionary *)burstNumberDict
 {
-  return @{@(BRUST_NUMBER_HS):@(0),
-           @(BURST_NUMBER_10):@(10),
-           @(BURST_NUMBER_5):@(5),
-           @(BURST_NUMBER_3):@(3)};
+    return @{};/*@{@(BRUST_NUMBER_HS):@(0),
+                @(BURST_NUMBER_10):@(10),
+                @(BURST_NUMBER_5):@(5),
+                @(BURST_NUMBER_3):@(3)};*/
 }
 
 -(NSDictionary *)delayCaptureDict
 {
-  
-  return @{@(CAP_DELAY_NO):@(0),
-           @(CAP_DELAY_2S):@(2),
-           @(5000):@(5),
-           @(CAP_DELAY_10S):@(10)};
+    
+    return @{};/*@{@(CAP_DELAY_NO):@(0),
+                @(CAP_DELAY_2S):@(2),
+                @(5000):@(5),
+                @(CAP_DELAY_10S):@(10)};*/
 }
 
 -(NSDictionary *)whiteBalanceDict
@@ -278,11 +278,11 @@
 
 -(NSDictionary *)burstNumberStringDict
 {
-  return @{@(BRUST_NUMBER_HS):@[NSLocalizedString(@"SETTING_BURST_HIGHEST_SPEED", nil), @""],
-           @(BURST_NUMBER_OFF):@[NSLocalizedString(@"SETTING_BURST_OFF", nil), @""],
-           @(BURST_NUMBER_3):@[NSLocalizedString(@"SETTING_BURST_3_PHOTOS", nil), @"continuous_shot_1"],
-           @(BURST_NUMBER_5):@[NSLocalizedString(@"SETTING_BURST_5_PHOTOS", nil), @"continuous_shot_2"],
-           @(BURST_NUMBER_10):@[NSLocalizedString(@"SETTING_BURST_10_PHOTOS", nil), @"continuous_shot_3"]};
+    return @{};/*@{@(BRUST_NUMBER_HS):@[NSLocalizedString(@"SETTING_BURST_HIGHEST_SPEED", nil), @""],
+                @(BURST_NUMBER_OFF):@[NSLocalizedString(@"SETTING_BURST_OFF", nil), @""],
+                @(BURST_NUMBER_3):@[NSLocalizedString(@"SETTING_BURST_3_PHOTOS", nil), @"continuous_shot_1"],
+                @(BURST_NUMBER_5):@[NSLocalizedString(@"SETTING_BURST_5_PHOTOS", nil), @"continuous_shot_2"],
+                @(BURST_NUMBER_10):@[NSLocalizedString(@"SETTING_BURST_10_PHOTOS", nil), @"continuous_shot_3"]};*/
 }
 
 -(NSDictionary *)powerFrequencyDict
@@ -293,9 +293,9 @@
 
 -(NSDictionary *)dateStampDict
 {
-  return @{@(DATE_STAMP_OFF):NSLocalizedString(@"SETTING_DATESTAMP_OFF", nil),
-           @(DATE_STAMP_DATE):NSLocalizedString(@"SETTING_DATESTAMP_DATE", nil),
-           @(DATE_STAMP_DATE_TIME):NSLocalizedString(@"SETTING_DATESTAMP_DATE_TIME", nil)};
+    return @{};/*@{@(DATE_STAMP_OFF):NSLocalizedString(@"SETTING_DATESTAMP_OFF", nil),
+                @(DATE_STAMP_DATE):NSLocalizedString(@"SETTING_DATESTAMP_DATE", nil),
+                @(DATE_STAMP_DATE_TIME):NSLocalizedString(@"SETTING_DATESTAMP_DATE_TIME", nil)};*/
 }
 
 -(NSDictionary *)timelapseIntervalDict

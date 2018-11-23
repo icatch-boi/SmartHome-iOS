@@ -9,9 +9,6 @@
 #ifndef SHSDKPrivate_h
 #define SHSDKPrivate_h
 
-#include "type/ICatchBurstNumber.h"
-#include "type/ICatchCameraProperty.h"
-#include "type/ICatchCaptureDelay.h"
 #include "type/ICatchEvent.h"
 #include "type/ICatchEventID.h"
 #include "type/ICatchError.h"
@@ -22,11 +19,8 @@
 #include "type/ICatchH264StreamParam.h"
 #include "type/ICatchLightFrequency.h"
 #include "type/ICatchMJPGStreamParam.h"
-#include "type/ICatchMode.h"
-#include "type/ICatchPreviewMode.h"
 #include "type/ICatchStreamParam.h"
 #include "type/ICatchWhiteBalance.h"
-#include "type/ICatchVideoSize.h"
 //#include "type/ICatchLogLevel.h"
 #include "type/ICatchCameraVersion.h"
 #include "type/ICatchFileMonitorType.h"

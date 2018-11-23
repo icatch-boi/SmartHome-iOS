@@ -316,17 +316,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-tips" translatesAutoresizingMaskIntoConstraints="NO" id="EBM-PM-tKg">
-                                <rect key="frame" x="125" y="330" width="50" height="50"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tips" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fv4-lI-WML">
-                                <rect key="frame" x="165" y="343" width="37" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Green light flash is connecting to Home's Wi-Fi Green light keep on and off mean it's connect successfuly" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDc-WJ-qkH">
-                                <rect key="frame" x="16" y="375" width="288" height="54"/>
+                                <rect key="frame" x="16" y="380" width="288" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -362,24 +353,48 @@
                                     <constraint firstAttribute="height" constant="1" id="iuL-vy-JaS"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SUK-pM-sRK">
+                                <rect key="frame" x="121.5" y="330" width="77" height="50"/>
+                                <subviews>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-tips" translatesAutoresizingMaskIntoConstraints="NO" id="EBM-PM-tKg">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="6au-jt-NKG"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tips" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fv4-lI-WML">
+                                        <rect key="frame" x="40" y="13" width="37" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="EBM-PM-tKg" firstAttribute="top" secondItem="SUK-pM-sRK" secondAttribute="top" id="CXY-J8-V5B"/>
+                                    <constraint firstItem="fv4-lI-WML" firstAttribute="leading" secondItem="EBM-PM-tKg" secondAttribute="trailing" constant="-10" id="PNs-9h-3F5"/>
+                                    <constraint firstAttribute="bottom" secondItem="EBM-PM-tKg" secondAttribute="bottom" id="UDT-5A-k8o"/>
+                                    <constraint firstAttribute="trailing" secondItem="fv4-lI-WML" secondAttribute="trailing" id="V7G-KA-eAP"/>
+                                    <constraint firstItem="fv4-lI-WML" firstAttribute="centerY" secondItem="EBM-PM-tKg" secondAttribute="centerY" id="eRQ-6E-55O"/>
+                                    <constraint firstItem="EBM-PM-tKg" firstAttribute="leading" secondItem="SUK-pM-sRK" secondAttribute="leading" id="lOW-9E-Ccn"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="XDc-WJ-qkH" firstAttribute="top" secondItem="SUK-pM-sRK" secondAttribute="bottom" id="83J-vJ-npL"/>
                             <constraint firstAttribute="trailing" secondItem="XDc-WJ-qkH" secondAttribute="trailing" constant="16" id="8Qi-8G-t3K"/>
-                            <constraint firstItem="EBM-PM-tKg" firstAttribute="top" secondItem="QDv-gO-jwE" secondAttribute="bottom" id="9lA-dr-DlV"/>
+                            <constraint firstItem="xDV-pl-Ghv" firstAttribute="bottom" secondItem="SUK-pM-sRK" secondAttribute="bottom" constant="100" id="H5v-sX-SW1"/>
                             <constraint firstItem="XDc-WJ-qkH" firstAttribute="leading" secondItem="xDV-pl-Ghv" secondAttribute="leading" constant="16" id="Iui-Ww-FQd"/>
                             <constraint firstItem="U4r-i1-TUc" firstAttribute="centerX" secondItem="RTI-RW-hg7" secondAttribute="centerX" id="K7e-Wn-PDV"/>
-                            <constraint firstItem="EBM-PM-tKg" firstAttribute="centerX" secondItem="RTI-RW-hg7" secondAttribute="centerX" constant="-10" id="KTD-Z0-Uex"/>
+                            <constraint firstItem="SUK-pM-sRK" firstAttribute="top" secondItem="QDv-gO-jwE" secondAttribute="bottom" id="LFZ-Ux-KxR"/>
                             <constraint firstItem="QDv-gO-jwE" firstAttribute="leading" secondItem="xDV-pl-Ghv" secondAttribute="leading" constant="16" id="LU9-3A-Sdl"/>
-                            <constraint firstItem="fv4-lI-WML" firstAttribute="centerY" secondItem="EBM-PM-tKg" secondAttribute="centerY" id="TPL-TQ-AND"/>
+                            <constraint firstItem="SUK-pM-sRK" firstAttribute="centerX" secondItem="RTI-RW-hg7" secondAttribute="centerX" id="VLx-Fd-r2b"/>
                             <constraint firstItem="Az5-BW-vrI" firstAttribute="centerY" secondItem="U4r-i1-TUc" secondAttribute="centerY" constant="-10" id="Zz9-Pz-zMC"/>
-                            <constraint firstItem="fv4-lI-WML" firstAttribute="leading" secondItem="EBM-PM-tKg" secondAttribute="trailing" constant="-10" id="j6L-s6-6F7"/>
                             <constraint firstItem="xDV-pl-Ghv" firstAttribute="trailing" secondItem="QDv-gO-jwE" secondAttribute="trailing" constant="16" id="oMb-iC-GYZ"/>
                             <constraint firstItem="U4r-i1-TUc" firstAttribute="centerY" secondItem="RTI-RW-hg7" secondAttribute="centerY" constant="-50" id="qYy-IF-DGR"/>
-                            <constraint firstItem="XDc-WJ-qkH" firstAttribute="top" secondItem="fv4-lI-WML" secondAttribute="bottom" constant="8" id="rd6-V4-57y"/>
                             <constraint firstItem="QDv-gO-jwE" firstAttribute="centerX" secondItem="RTI-RW-hg7" secondAttribute="centerX" id="uIg-uj-7Ty"/>
                             <constraint firstItem="Az5-BW-vrI" firstAttribute="centerX" secondItem="U4r-i1-TUc" secondAttribute="centerX" id="v3S-Uw-dV2"/>
-                            <constraint firstItem="xDV-pl-Ghv" firstAttribute="bottom" secondItem="EBM-PM-tKg" secondAttribute="bottom" constant="100" id="xDc-Rf-iCq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xDV-pl-Ghv"/>
                     </view>

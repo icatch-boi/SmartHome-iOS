@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSMutableDictionary *curMonthStorageInfoDict;
 @property (nonatomic, copy) NSString *curDate;
 @property (nonatomic, copy) NSString *curMonth;
+@property (nonatomic, assign) BOOL isSuccess;
 
 @end
 
@@ -44,8 +45,10 @@
     self.curMonth = nil;
 }
 
-- (void)resetPhotoGalleryDataWithStartDate:(NSString *)startDate endDate:(NSString *)endDate judge:(BOOL)isJudge completeBlock:(void (^)(id obj))completeBlock {
+- (void)resetPhotoGalleryDataWithStartDate:(NSString *)startDate endDate:(NSString *)endDate judge:(BOOL)isJudge completeBlock:(requestPhotoGalleryDataBlock)completeBlock {
+    WEAK_SELF(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        STRONG_SELF(self);
 		if (isJudge) {
             if (endDate) {
                 if (![self isCurrentMonth:startDate]) {
@@ -62,9 +65,9 @@
         
         if (completeBlock) {
             if (endDate) {
-                completeBlock(self.curMonthStorageInfoDict);
+                completeBlock(self.isSuccess, self.curMonthStorageInfoDict);
             } else {
-                completeBlock(self.curDateStorageInfoArray);
+                completeBlock(self.isSuccess, self.curDateStorageInfoArray);
             }
         }
     });
@@ -111,8 +114,8 @@
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
     [dateformatter setDateFormat:kDateFormat];
     NSDate *curDate = [dateformatter dateFromString:date];
-    NSDate *prDate = [NSDate dateWithTimeInterval:-24 * 60 * 60 * (kDateSpan - 1) sinceDate:curDate];
-    
+    NSDate *prDate = [NSDate dateWithTimeInterval:-24 * 60 * 60 * (kDateSpan /*- 1*/) sinceDate:curDate];
+
     NSString *startDate = [dateformatter stringFromDate:prDate];
     NSString *endDate = [dateformatter stringFromDate:curDate];
     
@@ -123,6 +126,7 @@
 	SHLogInfo(SHLogTagAPP, @"storageInfoMap storageInfoMap storageInfoMap");
     map<string, int> storageInfoMap = [_shCamObj.sdk getFilesStorageInfoWithStartDate:startDate andEndDate:endDate success:&success];
     
+    self.isSuccess = success;
     // clear
     [self.curDateStorageInfoArray removeAllObjects];
     
@@ -147,6 +151,7 @@
     BOOL success;
     map<string, int> storageInfoMap = [_shCamObj.sdk getFilesStorageInfoWithStartDate:startDate andEndDate:endDate success:&success];
     
+    self.isSuccess = success;
     //clear
     [self.curMonthStorageInfoDict removeAllObjects];
     

@@ -451,7 +451,7 @@
 "kToCheck" = "去查看";
 "kMonitorTypeRing" = "门铃";
 "kShowPassword" = "显示密码";
-"kUnregisterDeviceFailed" = "注销设备失败，请重试！";
+"kUnregisterDeviceFailed" = "注销设备推送功能失败，请重试！";
 "kCameraPowerOff" = "相机已关机";
 "kCameraPowerOffByRemoveSDCard" = "拔卡引起相机关机";
 "kSDKVersionInfo" = "SDK版本号";
@@ -593,3 +593,4 @@
 "kSelectDeviceWiFi" = "选择设备Wi-Fi";
 "kSelectDeviceWiFiDes" = "请切换您的Wi-Fi至 \"%@xxx\"，然后返回到app中。";
 "kConfigureDeviceDescription" = "绿灯闪烁表示正在连接家庭中的Wi-Fi，绿灯保持开启意味着已成功连接上Wi-Fi。";
+"kGetSDCardAlbumDataFailed" = "获取SD卡相册数据失败";

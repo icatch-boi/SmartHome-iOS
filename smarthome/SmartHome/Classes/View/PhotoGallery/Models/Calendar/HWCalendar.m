@@ -330,9 +330,28 @@
     NSString *endDate = [NSString stringWithFormat:@"%zd/%02zd/%zd", _year, _month, [self numberOfDaysInMonth]];
     
     SHLogInfo(SHLogTagAPP, @"startDate: %@, endDate: %@", startDate, endDate);
-    
+    WEAK_SELF(self);
     [self.progressHUD showProgressHUDWithMessage:/*@"正在加载..."*/NSLocalizedString(@"kLoading", nil)];
-     [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:startDate endDate:endDate judge:YES completeBlock:^(id obj) {
+    [_shCamObj.gallery resetPhotoGalleryDataWithStartDate:startDate endDate:endDate judge:YES completeBlock:^(BOOL isSuccess, id obj) {
+        STRONG_SELF(self);
+        if (isSuccess == NO) {
+            if ([self.delegate respondsToSelector:@selector(calendarWithGetDataFailedHandler:)]) {
+                [self.delegate calendarWithGetDataFailedHandler:self];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
+        if (obj == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+            return;
+        }
+        
          self.storageInfoDit = obj;
          
          dispatch_async(dispatch_get_main_queue(), ^{

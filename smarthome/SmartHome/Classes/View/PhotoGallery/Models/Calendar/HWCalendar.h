@@ -13,6 +13,7 @@
 @protocol HWCalendarDelegate <NSObject>
 
 - (void)calendar:(HWCalendar *)calendar didClickSureButtonWithDate:(NSString *)date;
+- (void)calendarWithGetDataFailedHandler:(HWCalendar *)calendar;
 
 @end
 

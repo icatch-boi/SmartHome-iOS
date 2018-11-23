@@ -447,7 +447,7 @@
 "kToCheck" = "去查看";
 "kMonitorTypeRing" = "門鈴";
 "kShowPassword" = "顯示密碼";
-"kUnregisterDeviceFailed" = "註銷設備失敗，請重試！";
+"kUnregisterDeviceFailed" = "註銷設備推送功能失敗，請重試！";
 "kCameraPowerOff" = "相機已關機";
 "kCameraPowerOffByRemoveSDCard" = "拔卡引起相機關機";
 "kSDKVersionInfo" = "SDK版本號";

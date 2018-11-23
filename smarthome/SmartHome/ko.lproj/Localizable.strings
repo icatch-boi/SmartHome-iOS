@@ -433,7 +433,7 @@
 "kToCheck" = "Check";
 "kMonitorTypeRing" = "Ring";
 "kShowPassword" = "Show Password";
-"kUnregisterDeviceFailed" = "Unregister the device failed, please try again!";
+"kUnregisterDeviceFailed" = "Unregister the device push function failed, please try again!";
 "kCameraPowerOff" = "The camera has power off.";
 "kCameraPowerOffByRemoveSDCard" = "Pull the SD card to cause the camera to shut down.";
 "kSDKVersionInfo" = "SDK Version";

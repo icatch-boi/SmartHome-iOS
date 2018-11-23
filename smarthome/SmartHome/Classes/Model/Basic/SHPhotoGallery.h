@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void(^requestPhotoGalleryDataBlock)(BOOL isSuccess, id obj);
+
 @class SHCameraObject;
 @interface SHPhotoGallery : NSObject
 
 @property (nonatomic, weak) SHCameraObject *shCamObj;
 
-- (void)resetPhotoGalleryDataWithStartDate:(NSString *)startDate endDate:(NSString *)endDate judge:(BOOL)isJudge completeBlock:(void (^)(id obj))completeBlock;
+- (void)resetPhotoGalleryDataWithStartDate:(NSString *)startDate endDate:(NSString *)endDate judge:(BOOL)isJudge completeBlock:(requestPhotoGalleryDataBlock)completeBlock;
 - (void)cleanDateInfo;
 
 @end

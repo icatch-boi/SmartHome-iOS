@@ -156,6 +156,9 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+    
     [super viewWillDisappear:animated];
     
 //    if (_TalkBackRun) {
@@ -181,8 +184,8 @@ static const NSTimeInterval kRingTimeout = 50.0;
 //    [self removeVideoBitRateObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self releaseCurrentDateTimer];
-    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
-    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+//    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+//    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -917,7 +920,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
     
     UINavigationController *nav = self.navigationController;
     NSLog(@"==> nav : %@", nav);
-    BOOL doNotDisconnect = _managedObjectContext && ![NSStringFromClass(nav.class) isEqualToString:@"SHMainViewController"];
+    BOOL doNotDisconnect = /*_managedObjectContext &&*/ ![NSStringFromClass(nav.class) isEqualToString:@"SHMainViewController"];
 #if 0
     NSString *message = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDisconnect", @"")];
     if (doNotDisconnect) {
@@ -1708,6 +1711,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    SHLogInfo(SHLogTagAPP, @"Observer keyPath: %@", keyPath);
     if ([keyPath isEqualToString:@"serverOpened"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
