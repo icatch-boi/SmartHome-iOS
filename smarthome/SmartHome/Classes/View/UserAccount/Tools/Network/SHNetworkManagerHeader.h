@@ -13,5 +13,6 @@
 #import "SHNetworkManager+SHCamera.h"
 #import "SHUserAccount.h"
 #import "SHNetworkManager+SHPush.h"
+#import "SHNetworkRequestErrorDes.h"
 
 #endif /* SHNetworkManagerHeader_h */

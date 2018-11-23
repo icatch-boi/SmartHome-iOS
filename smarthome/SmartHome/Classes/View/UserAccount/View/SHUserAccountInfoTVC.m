@@ -215,8 +215,8 @@
                 Error *error = result;
                 SHLogError(SHLogTagAPP, @"changePasswordWithOldPassword is failed, error: %@", error.error_description);
                 
-                weakself.progressHUD.detailsLabelText = error.error_description;
-                
+                weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
+
                 message = NSLocalizedString(@"kModifyPasswordFailed", nil); //@"Change password failed";
             }
             
@@ -304,7 +304,7 @@
         } else {
             Error *error = result;
             SHLogError(SHLogTagAPP, @"setUserAvatorWithData failed, error: %@", error.error_description);
-            weakself.progressHUD.detailsLabelText = error.error_description;
+            weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
             [weakself.progressHUD showProgressHUDNotice:NSLocalizedString(@"STREAM_SET_ERROR", nil) showTime:2.0];
         }
     }];

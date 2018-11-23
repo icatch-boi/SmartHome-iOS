@@ -138,6 +138,7 @@
 		38D867C421A7A99400AB6FB2 /* .cp in Resources */ = {isa = PBXBuildFile; fileRef = 38D867B821A7A99400AB6FB2 /* .cp */; };
 		38D867C521A7A99400AB6FB2 /* libicatch_iot_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D867B921A7A99400AB6FB2 /* libicatch_iot_sdk.a */; };
 		38D867C621A7A99400AB6FB2 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38D867BA21A7A99400AB6FB2 /* libswscale.a */; };
+		38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */; };
 		38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */; };
 		38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFEA20A3F5AE003004E0 /* SHCameraObjManager.m */; };
 		38E5C14F20A3F5AF003004E0 /* SHCamera.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFED20A3F5AE003004E0 /* SHCamera.xcdatamodeld */; };
@@ -669,6 +670,8 @@
 		38D867B821A7A99400AB6FB2 /* .cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .cp; sourceTree = "<group>"; };
 		38D867B921A7A99400AB6FB2 /* libicatch_iot_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libicatch_iot_sdk.a; sourceTree = "<group>"; };
 		38D867BA21A7A99400AB6FB2 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
+		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
+		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
 		38D912711FD15AB300E9AC8B /* libSmartConnection.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSmartConnection.a; sourceTree = "<group>"; };
 		38D912721FD15AB400E9AC8B /* elian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = elian.h; sourceTree = "<group>"; };
 		38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHHomeTableViewController.m; sourceTree = "<group>"; };
@@ -2103,6 +2106,8 @@
 				38E5C07E20A3F5AE003004E0 /* SHNetworkManager+SHCamera.m */,
 				3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */,
 				3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */,
+				38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */,
+				38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */,
 				38E5C08020A3F5AE003004E0 /* Model */,
 			);
 			path = Network;
@@ -3198,6 +3203,7 @@
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38E5C3E720A41A0B003004E0 /* CWLateralSlideConfiguration.m in Sources */,
+				38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */,
 				38E5C32E20A40F49003004E0 /* SHAbout.m in Sources */,
 				38E5C3D220A419E0003004E0 /* SHUserAccountInfoVC.m in Sources */,
 				386FAF6B20AD2BD9007655CF /* ZJSlidingDrawerViewController.m in Sources */,

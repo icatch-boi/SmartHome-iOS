@@ -19,6 +19,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
 @property (weak, nonatomic) IBOutlet UIImageView *qrCodeImageView;
 
 @property (weak, nonatomic) IBOutlet UIButton *qrCodeUpdateBtn;
+@property (weak, nonatomic) IBOutlet UILabel *qrCodeDescriptionLabel;
 
 @property (nonatomic) MBProgressHUD *progressHUD;
 
@@ -34,7 +35,16 @@ static NSString * const kSaveQRImageName = @"shareQR";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupLocalizedString];
     [self setupGUI];
+}
+
+- (void)setupLocalizedString {
+    _describeLabel.text = NSLocalizedString(@"kShareDoorbellToYourFamilyOrFriends", nil);
+    _qrCodeDescriptionLabel.text = NSLocalizedString(@"kQRCodeDescription", nil);
+    [_qrCodeUpdateBtn setTitle:NSLocalizedString(@"kRedrawShareQRCode", nil) forState:UIControlStateNormal];
+    [_qrCodeUpdateBtn setTitle:NSLocalizedString(@"kRedrawShareQRCode", nil) forState:UIControlStateHighlighted];
 }
 
 - (void)setupGUI {
@@ -96,8 +106,8 @@ static NSString * const kSaveQRImageName = @"shareQR";
                                 } else {
                                     Error *error = result;
                                     
-                                    self.progressHUD.detailsLabelText = error.error_description;
-                                    [self.progressHUD showProgressHUDNotice:@"生成分享二维码失败" showTime:2.0];
+                                    self.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
+                                    [self.progressHUD showProgressHUDNotice:/*@"生成分享二维码失败"*/NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
                                     self.navigationItem.rightBarButtonItem.enabled = NO;
                                 }
                             });
@@ -109,7 +119,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD showProgressHUDNotice:@"生成分享二维码失败" showTime:2.0];
+            [self.progressHUD showProgressHUDNotice:/*@"生成分享二维码失败"*/NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
             _qrCodeImageView.image = [UIImage imageNamed:@"empty_photo"];
         });
     });

@@ -714,7 +714,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [weakself.progressHUD hideProgressHUD:YES];
                             
-                            [weakself showFailedAlertViewWithTitle:/*@"Failed to get the camera"*/NSLocalizedString(@"kGetDeviceFailed", nil) message:error.error_description];
+                            [weakself showFailedAlertViewWithTitle:/*@"Failed to get the camera"*/NSLocalizedString(@"kGetDeviceFailed", nil) message:/*error.error_description*/[SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]];
                         });
                     }
                 }];
@@ -1122,8 +1122,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 - (void)bindDeviceFailedHandler:(Error *)error {
     NSString *title = NSLocalizedString(@"kBindDeviceFailed", nil); //@"Bind device failed";
-    NSString *message = error.error_description;
-    
+    NSString *message = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
+
     if (error.error_code == 50034) {
         message = NSLocalizedString(@"kDeviceBindByOtherAccounts", nil); //@"Device have been bind by other accounts.";
     }

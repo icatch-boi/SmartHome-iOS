@@ -192,7 +192,7 @@ static const CGFloat kBottomDefaultValue = 80;
                         Error *error = result;
                         SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                         
-                        weakself.progressHUD.detailsLabelText = error.error_description;
+                        weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
                         NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
                         [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                     }

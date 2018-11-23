@@ -1419,6 +1419,7 @@
                     </view>
                     <connections>
                         <outlet property="describeLabel" destination="i1f-7d-hiM" id="230-bJ-cDw"/>
+                        <outlet property="qrCodeDescriptionLabel" destination="xCZ-PX-tSm" id="2IV-vK-QsZ"/>
                         <outlet property="qrCodeImageView" destination="Ma5-6a-c4p" id="Kki-22-kxt"/>
                         <outlet property="qrCodeUpdateBtn" destination="GtH-4Z-akK" id="PFD-LW-tPr"/>
                     </connections>

@@ -282,7 +282,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
         } else {
             Error *error = result;
             
-            weakself.progressHUD.detailsLabelText = error.error_description;
+            weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
             //weakself.progressHUD.detailsLabelText = @"验证码无效";
             NSString *notice = failedNotice;
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -302,7 +302,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
         } else {
             Error *error = result;
             
-            weakself.progressHUD.detailsLabelText = error.error_description;
+            weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
             NSString *notice = failedNotice; //@"重置密码失败";
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -339,7 +339,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
                     Error *error = result;
                     SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                     
-                    weakself.progressHUD.detailsLabelText = error.error_description;
+                    weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
                     NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
                     [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                 }
@@ -496,7 +496,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
         } else {
             Error *error = result;
             
-            self.progressHUD.detailsLabelText = error.error_description;
+            self.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
             notice = NSLocalizedString(@"kVerifycodeSendFailed", nil); //@"校验码发送失败";
         }
         

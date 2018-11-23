@@ -852,7 +852,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                 [weakself.progressHUD hideProgressHUD:YES];
                 
                 Error *error = result;
-                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"解除账户相机绑定失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnbindDeviceFailed", nil), error.error_description]];
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"解除账户相机绑定失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnbindDeviceFailed", nil), /*error.error_description*/[SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]]];
             });
         }
     }];
@@ -870,7 +870,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                 [weakself.progressHUD hideProgressHUD:YES];
                 
                 Error *error = result;
-                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"取消订阅失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnsubscribeFailed", nil), error.error_description]];
+                [weakself showFailedTipsWithInfo:[NSString stringWithFormat:/*@"取消订阅失败. \n%@"*/@"%@ \n%@", NSLocalizedString(@"kUnsubscribeFailed", nil), /*error.error_description*/[SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]]];
             });
         }
     }];
