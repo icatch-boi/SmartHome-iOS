@@ -103,8 +103,9 @@
     NSString *time = [NSString stringWithFormat:@"%@", aps[@"time"]];
     NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
 
+    NSString *tempDevID = devID;
     devID = [self getCameraName:devID];
-    devID = devID ? devID : @"";
+    devID = devID ? devID : [tempDevID substringToIndex:5]; //@"";
     
     NSString *str = nil;
     if ([msgType isEqualToString:@"100"]) {

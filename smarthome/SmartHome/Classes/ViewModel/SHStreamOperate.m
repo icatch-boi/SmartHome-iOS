@@ -201,6 +201,7 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             [_shCamObj.sdk addObserver:self.streamObserver];
             */
             [self play];
+            [self tryStartAudioUnit];
             if (_shCamObj.cameraProperty.serverOpened == NO) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [_shCamObj openAudioServer];
@@ -212,6 +213,11 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             }
         }
     });
+}
+
+- (void)tryStartAudioUnit {
+    [self.audioUnitRecord startAudioUnit];
+    [self.audioUnitRecord stopAudioUnit];
 }
 
 - (void)saveVideoForTest {

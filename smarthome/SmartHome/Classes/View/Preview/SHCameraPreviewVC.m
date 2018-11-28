@@ -156,8 +156,8 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
-    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+//    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+//    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
     
     [super viewWillDisappear:animated];
     
@@ -186,6 +186,14 @@ static const NSTimeInterval kRingTimeout = 50.0;
     [self releaseCurrentDateTimer];
 //    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
 //    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+    @try {
+        [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+    } @finally {
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -909,6 +917,8 @@ static const NSTimeInterval kRingTimeout = 50.0;
         [_shCameraObj.streamOper stopTalkBack];
         [self releaseTalkAnimTimer];
     }
+    
+    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
 }
 
 - (void)returnBack {
