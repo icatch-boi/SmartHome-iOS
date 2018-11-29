@@ -3,6 +3,23 @@
     {
       "extent" : "full-screen",
       "idiom" : "iphone",
+      "subtype" : "2688h",
+      "filename" : "iPhoneXmax_portrait.png",
+      "minimum-system-version" : "12.0",
+      "orientation" : "portrait",
+      "scale" : "3x"
+    },
+    {
+      "orientation" : "portrait",
+      "idiom" : "iphone",
+      "extent" : "full-screen",
+      "minimum-system-version" : "12.0",
+      "subtype" : "1792h",
+      "scale" : "2x"
+    },
+    {
+      "extent" : "full-screen",
+      "idiom" : "iphone",
       "subtype" : "2436h",
       "filename" : "iPhoneX_portrait.png",
       "minimum-system-version" : "11.0",

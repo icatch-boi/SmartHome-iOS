@@ -36,6 +36,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupGUI];
+}
+
+- (void)setupGUI {
+    self.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
+    self.navigationBar.translucent = NO;
+    self.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning {

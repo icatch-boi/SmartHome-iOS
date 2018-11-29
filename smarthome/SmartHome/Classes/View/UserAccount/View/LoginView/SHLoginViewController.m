@@ -76,7 +76,7 @@ static const CGFloat kBottomDefaultValue = 80;
     _emailTextField.delegate = self;
     _pwdTextField.delegate = self;
     
-    UIColor *color = [UIColor ic_colorWithHex:kButtonThemeColor];
+    UIColor *color = [UIColor ic_colorWithHex:kButtonThemeColor alpha:0.87];
     _emailTextField.lineColor = color;
     _pwdTextField.lineColor = color;
     

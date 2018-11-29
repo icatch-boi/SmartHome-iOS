@@ -43,9 +43,10 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 
 - (void)setupGUI {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(close) isBack:NO];
-    
+#if 0
     [self.navigationController.view addSubview:[self coverView]];
     _coverView ? [self addTapGesture] : void();
+#endif
 }
 
 - (void)addTapGesture {

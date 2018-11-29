@@ -112,7 +112,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self updateTitle];
 //    [self prepareVideoSizeData];
     [self setupCallView];
-    [self enableUserInteraction:NO];
 #if 0
     if (!_shCameraObj.isConnect) {
         [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];
@@ -492,6 +491,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self setupTopToolView];
     [self setupBottomToolView];
 #endif
+    [self enableUserInteraction:NO];
 }
 
 - (void)setupSampleBufferDisplayLayer {

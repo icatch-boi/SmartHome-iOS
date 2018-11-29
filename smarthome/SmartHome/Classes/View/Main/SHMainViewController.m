@@ -62,6 +62,9 @@
     [self setToolbarHidden:NO];
     self.toolbar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
 #endif
+    self.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
+    self.navigationBar.translucent = NO;
+    self.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
