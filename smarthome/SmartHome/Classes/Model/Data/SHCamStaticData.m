@@ -346,20 +346,20 @@
 
 - (NSDictionary *)tutkErrorDict{
 	
-	return @{ @(ICH_TUTK_TIME_OUT) : NSLocalizedString(@"kConnectTimedout", nil),
-			  @(ICH_TUTK_INIT_RDT_FAILED) : NSLocalizedString(@"kInitRdtFailed", nil),
-			  @(ICH_TUTK_INIT_AVAPI_FAILED) : NSLocalizedString(@"kInitAvapiFailed", nil),
-			  @(ICH_TUTK_DEVICE_OFFLINE) : NSLocalizedString(@"kDeviceOffline", nil),
-			  @(ICH_TUTK_DEVICE_IS_SLEEP) : NSLocalizedString(@"kDeviceSleepping", nil),
-			  @(ICH_TUTK_SETUP_RELAY_FAILED) : NSLocalizedString(@"kSetupRelayModeFailed", nil),
-			  @(ICH_TUTK_NETWORK_UNREACHABLE) : NSLocalizedString(@"kNetworkUnreachable", nil),
-			  @(ICH_TUTK_DEVICE_ALREADY_CONNECTED) : NSLocalizedString(@"kDeviceConnectedByOtherUser", nil),
-			  @(ICH_TUTK_CAN_NOT_FIND_DEVICE) : NSLocalizedString(@"kCannotFindDevice", nil),
-			  @(ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) : NSLocalizedString(@"kConnectingExceedMaxSession", nil),
-			  @(ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER) : NSLocalizedString(@"kConnectionUnknownError", nil),
-              @(ICH_QR_USEABORT) : NSLocalizedString(@"kQrCodeAccessHasExpired", nil),
-              @(ICH_SESSION_PASSWORD_ERR) : @"password error, verify failed.",
-			  };
+    return @{ @(ICH_TUTK_TIME_OUT) : NSLocalizedString(@"kConnectTimedout", nil),
+              @(ICH_TUTK_INIT_RDT_FAILED) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kInitRdtFailed", nil),
+              @(ICH_TUTK_INIT_AVAPI_FAILED) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kInitAvapiFailed", nil),
+              @(ICH_TUTK_DEVICE_OFFLINE) : NSLocalizedString(@"kDeviceOffline", nil),
+              @(ICH_TUTK_DEVICE_IS_SLEEP) : NSLocalizedString(@"kDeviceSleepping", nil),
+              @(ICH_TUTK_SETUP_RELAY_FAILED) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kSetupRelayModeFailed", nil),
+              @(ICH_TUTK_NETWORK_UNREACHABLE) : NSLocalizedString(@"kNetworkUnreachable", nil),
+              @(ICH_TUTK_DEVICE_ALREADY_CONNECTED) : NSLocalizedString(@"kDeviceConnectedByOtherUser", nil),
+              @(ICH_TUTK_CAN_NOT_FIND_DEVICE) : NSLocalizedString(@"kCannotFindDevice", nil),
+              @(ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) : NSLocalizedString(@"kConnectingExceedMaxSession", nil),
+              @(ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kConnectionUnknownError", nil),
+              @(ICH_QR_USEABORT) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kQrCodeAccessHasExpired", nil),
+              @(ICH_SESSION_PASSWORD_ERR) : NSLocalizedString(@"kConnectTimedout", nil),//@"password error, verify failed.",
+              };
 }
 
 @end

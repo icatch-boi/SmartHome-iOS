@@ -51,6 +51,9 @@ static const CGFloat kSpeakerLeftConsDefaultValue = 40;
 static const CGFloat kAudioBtnDefaultWidth = 60;
 static const CGFloat kSpeakerBtnDefaultWidth = 80;
 static const NSTimeInterval kRingTimeout = 50.0;
+static const NSTimeInterval kConnectAndPreviewTimeout = 120.0;
+static const NSTimeInterval kConnectAndPreviewSpecialSleepTime = 5.0;
+static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 @interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate>
 
@@ -66,6 +69,12 @@ static const NSTimeInterval kRingTimeout = 50.0;
 @property (nonatomic) SHObserver *bitRateObserver;
 
 @property (nonatomic, strong) NSTimer *ringTimer;
+
+@property (nonatomic, strong) NSTimer *connectAndPreviewTimer;
+@property (nonatomic, assign) BOOL connectAndPreviewTimeout;
+@property (nonatomic, assign) NSUInteger connectTimes;
+@property (nonatomic, strong) MBProgressHUD *progressHUDPreview;
+@property (nonatomic, assign) BOOL alreadyBack;
 
 @end
 
@@ -103,6 +112,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
     [self updateTitle];
 //    [self prepareVideoSizeData];
     [self setupCallView];
+    [self enableUserInteraction:NO];
 #if 0
     if (!_shCameraObj.isConnect) {
         [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];
@@ -165,6 +175,8 @@ static const NSTimeInterval kRingTimeout = 50.0;
 //        [self talkBackAction:nil];
 //    }
     [self releaseTalkAnimTimer];
+    [self releaseConectAndPreview];
+    [self releaseRingTimer];
     
     [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:nil];
     [self.avslayer removeFromSuperlayer];
@@ -186,7 +198,13 @@ static const NSTimeInterval kRingTimeout = 50.0;
     [self releaseCurrentDateTimer];
 //    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
 //    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
-    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+    @try {
+        [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+    } @finally {
+        
+    }
     @try {
         [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
     } @catch (NSException *exception) {
@@ -257,11 +275,15 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)startMediaStream {
-    [self.progressHUD showProgressHUDWithMessage:nil];
+    [self.progressHUDPreview showProgressHUDWithMessage:NSLocalizedString(@"kStartStream", nil)];
 
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
             [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : [self.progressHUD hideProgressHUD:YES];
+#endif
+            [self.progressHUDPreview hideProgressHUD:YES];
+            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : void();
             //            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self enableUserInteraction:YES];
             [self prepareCameraPropertyData];
@@ -277,8 +299,10 @@ static const NSTimeInterval kRingTimeout = 50.0;
 //        [_shCameraObj initCamera];
         
         [_shCameraObj initCamera];
+        [self releaseConectAndPreview];
 //        [self addVideoBitRateObserver];
     } failedBlock:^(NSInteger errorCode) {
+#if 0
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
             if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
@@ -289,6 +313,9 @@ static const NSTimeInterval kRingTimeout = 50.0;
             [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
             [self enableUserInteraction:NO];
         });
+#else
+        [self reConnectWithSleepForTimeInterval:kConnectAndPreviewCommonSleepTime];
+#endif
         
 //        [_shCameraObj initCamera];
     } target:nil streamCloseCallback:nil];
@@ -918,15 +945,24 @@ static const NSTimeInterval kRingTimeout = 50.0;
         [self releaseTalkAnimTimer];
     }
     
-    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    @try {
+        [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+    } @finally {
+        
+    }
 }
 
 - (void)returnBack {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kCameraDisconnectNotification object:nil];
+    _alreadyBack = YES;
+#if 0
     if (!_shCameraObj.isConnect) {
         [self goHome];
         return;
     }
+#endif
     
     UINavigationController *nav = self.navigationController;
     NSLog(@"==> nav : %@", nav);
@@ -1019,6 +1055,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
     if (doNotDisconnect) {
         message = nil;
     }
+    [self.progressHUDPreview hideProgressHUD:YES];
     [self.progressHUD showProgressHUDWithMessage:message];
     dispatch_async(self.previewQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1299,14 +1336,14 @@ static const NSTimeInterval kRingTimeout = 50.0;
 }
 
 - (void)reconnect:(SHCameraObject *)shCamObj {
-    [self.progressHUD showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", @"")]];
+    [self.progressHUDPreview showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", @"")]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         int retValue = [shCamObj connectCamera];
         if (retValue == ICH_SUCCEED) {
 //            [shCamObj initCamera];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
+                [self.progressHUDPreview hideProgressHUD:YES];
                 
                 [self viewWillAppear:YES];
                 [self viewDidAppear:YES];
@@ -1337,7 +1374,7 @@ static const NSTimeInterval kRingTimeout = 50.0;
     }]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.progressHUD hideProgressHUD:YES];
+        [self.progressHUDPreview hideProgressHUD:YES];
         [self presentViewController:alertVc animated:YES completion:nil];
     });
 }
@@ -1425,6 +1462,14 @@ static const NSTimeInterval kRingTimeout = 50.0;
     }
     
     return _progressHUD;
+}
+
+- (MBProgressHUD *)progressHUDPreview {
+    if (_progressHUDPreview == nil) {
+        _progressHUDPreview = [MBProgressHUD progressHUDWithView:self.view];
+    }
+    
+    return _progressHUDPreview;
 }
 
 #pragma mark - CurrentDate
@@ -1571,11 +1616,13 @@ static const NSTimeInterval kRingTimeout = 50.0;
     _audioButton.enabled = enable;
     _speakerButton.enabled = enable;
     _captureButton.enabled = enable;
-    _pvFailedLabel.hidden = enable;
-    _pvFailedLabel.text = enable ? nil : NSLocalizedString(@"StartPVFailed", nil);
+//    _pvFailedLabel.hidden = enable;
+//    _pvFailedLabel.text = enable ? nil : NSLocalizedString(@"StartPVFailed", nil);
+    self.navigationItem.rightBarButtonItem.enabled = enable;
 }
 
 - (void)connectAndPreview {
+#if 0
     if (!_shCameraObj.isConnect) {
         NSString *message = _managedObjectContext ? nil : NSLocalizedString(@"kConnecting", @"");
         [self.progressHUD showProgressHUDWithMessage:message];
@@ -1630,6 +1677,9 @@ static const NSTimeInterval kRingTimeout = 50.0;
 #endif
         [self startPreview];
     }
+#else
+    [self connectAndPreviewHandler];
+#endif
 }
 
 - (void)showConnectFailedAlertView {
@@ -2100,6 +2150,170 @@ static const NSTimeInterval kRingTimeout = 50.0;
         [_ringTimer invalidate];
         _ringTimer = nil;
     }
+}
+
+#pragma mark - Connect and Preview Timer
+- (NSTimer *)connectAndPreviewTimer {
+    if (_connectAndPreviewTimer == nil) {
+        _connectAndPreviewTimer = [NSTimer scheduledTimerWithTimeInterval:kConnectAndPreviewTimeout target:self selector:@selector(connectAndPreviewTimeoutHandler) userInfo:nil repeats:NO];
+    }
+    
+    _connectAndPreviewTimeout = NO;
+    _connectTimes = 0;
+    
+    return _connectAndPreviewTimer;
+}
+
+- (void)releaseConectAndPreview {
+    if ([_connectAndPreviewTimer isValid]) {
+        [_connectAndPreviewTimer invalidate];
+        _connectAndPreviewTimer = nil;
+        _connectAndPreviewTimeout = NO;
+        _connectTimes = 0;
+    }
+}
+
+- (void)connectAndPreviewTimeoutHandler {
+    _connectAndPreviewTimeout = YES;
+    SHLogInfo(SHLogTagAPP, @"Connect and preview timeout, timeout time: %f", kConnectAndPreviewTimeout);
+}
+
+#pragma mark - Connect and Preview Handle
+- (void)connectAndPreviewHandler {
+    [self connectAndPreviewTimer];
+    
+    if (!_shCameraObj.isConnect) {
+        NSString *message = NSLocalizedString(@"kConnecting", @"");
+        [self.progressHUDPreview showProgressHUDWithMessage:message];
+        
+        WEAK_SELF(self);
+        dispatch_async(self.previewQueue, ^{
+            STRONG_SELF(self);
+            
+            [self connectCameraHandler];
+        });
+    } else {
+        [self initPlayer];
+        
+        [self startPreview];
+    }
+}
+
+- (void)connectCameraHandler {
+    int retValue = [_shCameraObj connectCamera];
+    SHLogInfo(SHLogTagAPP, @"Current connect times: %lu, is success: %d.", (unsigned long)++_connectTimes, retValue);
+    
+    if (self.alreadyBack) {
+        SHLogInfo(SHLogTagAPP, @"Already exit preview, don't start stream.");
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUDPreview hideProgressHUD:YES];
+        });
+        
+        return;
+    }
+    
+    if (retValue != ICH_SUCCEED) {
+        if (_connectAndPreviewTimeout) {
+            [self connectFiledHandler:retValue];
+        } else {
+            if (retValue == ICH_TUTK_DEVICE_OFFLINE) {
+                [self connectFiledHandler:retValue];
+            } else {
+                NSTimeInterval interval = kConnectAndPreviewCommonSleepTime;
+                if (retValue == ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) {
+                    interval = kConnectAndPreviewSpecialSleepTime;
+                }
+                
+                [self reConnectWithSleepForTimeInterval:interval];
+            }
+        }
+    } else {
+        [self connectSuccessHandler];
+    }
+}
+
+- (void)reConnectWithSleepForTimeInterval:(NSTimeInterval)interval {
+    SHLogInfo(SHLogTagAPP, @"Reconnect start, sleep time interval: %f.", interval);
+    
+    [_shCameraObj.sdk disableTutk];
+    
+    WEAK_SELF(self);
+    [_shCameraObj disConnectWithSuccessBlock:^{
+        STRONG_SELF(self);
+        if (self.alreadyBack) {
+            SHLogInfo(SHLogTagAPP, @"Already exit preview, don't reconnect.");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUDPreview hideProgressHUD:YES];
+            });
+            
+            return;
+        }
+        
+        [NSThread sleepForTimeInterval:interval];
+        [self connectCameraHandler];
+    } failedBlock:^{
+        SHLogError(SHLogTagAPP, @"disconnect failed.");
+    }];
+}
+
+- (void)connectSuccessHandler {
+    if (_shCameraObj.isConnect) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initPlayer];
+            [self updateTitle];
+            
+            [self startPreview];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUDPreview hideProgressHUD:YES];
+            
+            if (_shCameraObj == nil ||
+                _shCameraObj.camera == nil ||
+                _shCameraObj.camera.cameraUid == nil) {
+                [self showConnectFailedAlertView];
+            }
+        });
+    }
+}
+
+- (void)connectFiledHandler:(int)retValue {
+    [self updatePreviewFailedGUI];
+    
+    NSString *name = _shCameraObj.camera.cameraName;
+    NSString *errorMessage = [[[SHCamStaticData instance] tutkErrorDict] objectForKey:@(retValue)];
+    NSString *errorInfo = @"";
+    errorInfo = [errorInfo stringByAppendingFormat:@"[%@] %@",name,errorMessage];
+    errorInfo = [errorInfo stringByAppendingString:NSLocalizedString(@"kExitPreview", nil)];
+    
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.progressHUDPreview hideProgressHUD:YES];
+            [weakself enableUserInteraction:NO];
+        });
+    }]];
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.progressHUDPreview hideProgressHUD:YES];
+            [weakself goHome];
+        });
+    }]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertC animated:YES completion:nil];
+    });
+}
+
+- (void)updatePreviewFailedGUI {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _pvFailedLabel.hidden = NO;
+        _pvFailedLabel.text = NSLocalizedString(@"StartPVFailed", nil);
+    });
 }
 
 @end

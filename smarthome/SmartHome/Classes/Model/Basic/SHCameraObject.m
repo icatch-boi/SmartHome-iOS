@@ -205,6 +205,7 @@
 }
 
 - (int)connectCamera {
+    SHLogTRACE();
 	SHSDK *sdk = [[SHSDK alloc] init];
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
@@ -295,7 +296,8 @@
 }
 
 - (void)disConnectWithSuccessBlock:(void(^)())successBlock failedBlock:(void(^)())failedBlock {
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    SHLogTRACE();
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		
 		dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
 		if ((dispatch_semaphore_wait(self.semaphore, time) != 0)) {

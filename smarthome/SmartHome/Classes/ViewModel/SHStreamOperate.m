@@ -146,6 +146,7 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
 }
 
 - (void)startMediaStreamWithEnableAudio:(BOOL)enableAudio file:(ICatchFile *)file successBlock:(void (^)())successBlock failedBlock:(void (^)(NSInteger errorCode))failedBlock target:(id)aTarget streamCloseCallback:(SEL)streamCloseCallback {
+    SHLogTRACE();
     _AudioRun = enableAudio;
     
     if (!_avslayer) {

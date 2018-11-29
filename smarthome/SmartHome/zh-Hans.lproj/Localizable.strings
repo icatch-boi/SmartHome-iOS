@@ -650,3 +650,4 @@
 "kNetworkRequestError_50027" = "无效的订阅邀请/订阅申请";
 "kNetworkRequestError_50033" = "设备状态错误";
 "kNetworkRequestError_50034" = "设备已注册";
+"kStartStream" = "正在开流...";
