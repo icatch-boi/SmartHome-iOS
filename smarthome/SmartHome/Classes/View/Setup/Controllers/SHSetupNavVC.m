@@ -17,6 +17,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self setupGUI];
+}
+
+- (void)setupGUI {
+    [SHTool configureAppThemeWithController:self];
 }
 
 - (void)didReceiveMemoryWarning {

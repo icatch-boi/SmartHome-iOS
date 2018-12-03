@@ -932,6 +932,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     SH_XJ_SettingTVC *vc = (SH_XJ_SettingTVC *)navController.topViewController;
     vc.cameraUid = _cameraUid;
     vc.delegate = self;
+    [SHTool configureAppThemeWithController:navController];
     
 //    [self presentViewController:navController animated:YES completion:nil];
     return navController;
@@ -1403,7 +1404,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)talkAnimation {
     __block SHWaterView *waterView = [[SHWaterView alloc] initWithFrame:CGRectMake(0, 0, 120, 120)];
     waterView.center = _speakerButton.center;
-    waterView.strokeColor = [UIColor ic_colorWithHex:kButtonThemeColor]; //[UIColor colorWithRed:51/255.0 green:204/255.0 blue:204/255.0 alpha:1.0];
+    waterView.strokeColor = [UIColor ic_colorWithHex:kThemeColor]; //[UIColor colorWithRed:51/255.0 green:204/255.0 blue:204/255.0 alpha:1.0];
     waterView.radius = _speakerButton.bounds.size.width * 0.5;
     
     waterView.backgroundColor = [UIColor clearColor];

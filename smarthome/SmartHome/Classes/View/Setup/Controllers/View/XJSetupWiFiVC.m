@@ -91,9 +91,12 @@
     
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
     [self addLineForChangePasswordBtn];
+    _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
 }
 
 - (void)addLineForChangePasswordBtn {
+    [_changePasswordBtn setTintColor:[UIColor ic_colorWithHex:kTextThemeColor]];
+    
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _changePasswordBtn.frame.size.height - 5, _changePasswordBtn.frame.size.width, 1)];
     line.backgroundColor = _changePasswordBtn.currentTitleColor;
     

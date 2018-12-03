@@ -115,8 +115,10 @@ static NSString * const kLoginSuccessNotification = @"kLoginSuccessNotification"
 
 static int const kNetworkDetectionInterval = 2.0; //5.0;
 static NSUInteger const kThemeColor = 0xDE2F43; //0xF2F2F2; //0x00BFD2;
-static NSUInteger const kButtonThemeColor = 0x000000; //0x076EE4;
+static NSUInteger const kButtonThemeColor = 0x333333; //0x000000; //0x076EE4;
 static NSUInteger const kButtonDefaultColor = 0x9b9b9b;
+static NSUInteger const kTextThemeColor = 0x333333;
+static NSUInteger const kBackgroundThemeColor = 0xF2F2F2;
 
 static NSString * const kUserAccountStoryboardName = @"UserAccount";
 static NSString * const kSetupStoryboardName = @"Setup";

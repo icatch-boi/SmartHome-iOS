@@ -386,4 +386,16 @@
     return [NSString stringWithFormat:@"%.1f%@/s", numberOfBit, [tokens objectAtIndex:multiplyFactor]];
 }
 
++ (void)configureAppThemeWithController:(UINavigationController *)nav {
+    if (![nav isKindOfClass:[UINavigationController class]]) {
+        SHLogError(SHLogTagAPP, @"Controller is not NavigationController.");
+        return;
+    }
+    
+    nav.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
+//    nav.navigationBar.translucent = NO;
+    nav.navigationBar.tintColor = [UIColor whiteColor];
+    nav.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+}
+
 @end

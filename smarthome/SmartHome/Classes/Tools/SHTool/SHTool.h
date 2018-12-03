@@ -29,5 +29,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)databasePathWithName:(NSString *)databaseName;
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict;
 + (NSString *)bitRateStringFromBits:(CGFloat)bitCount;
++ (void)configureAppThemeWithController:(UINavigationController *)nav;
 
 @end

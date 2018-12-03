@@ -261,7 +261,7 @@
     vc.email = email;
     vc.resetPWD = reset;
     
-    [self pushViewController:vc];
+    [self pushViewController:nav];
 #if 0
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:nav animated:YES completion:^{

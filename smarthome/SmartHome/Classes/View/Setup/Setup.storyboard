@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--X-Sense-->
+        <!--SmartHome-->
         <scene sceneID="2es-BM-xN7">
             <objects>
                 <viewController id="MsN-Xj-Gde" customClass="XJSetupHomeVC" sceneMemberID="viewController">
@@ -74,7 +74,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jJx-hK-F1Q"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="MOO-qf-Wls"/>
+                    <navigationItem key="navigationItem" title="SmartHome" id="MOO-qf-Wls"/>
                     <connections>
                         <outlet property="nextButton" destination="Gkr-Md-uXH" id="oYq-Vn-Rra"/>
                         <outlet property="qrViewBottomCons" destination="suC-HD-qVk" id="wcc-MC-UXh"/>
@@ -108,7 +108,7 @@
             </objects>
             <point key="canvasLocation" x="814" y="-1139"/>
         </scene>
-        <!--X-Sense-->
+        <!--Setup Wi FiVC-->
         <scene sceneID="WqC-YH-07l">
             <objects>
                 <viewController storyboardIdentifier="XJSetupWiFiVCID" id="CcK-TQ-3Lt" customClass="XJSetupWiFiVC" sceneMemberID="viewController">
@@ -117,20 +117,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rZ-Lw-u5C">
-                                <rect key="frame" x="24" y="369.5" width="272" height="44"/>
-                                <color key="backgroundColor" red="0.027450980390000001" green="0.43137254899999999" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="272" id="8o9-KX-rCc"/>
-                                    <constraint firstAttribute="height" constant="44" id="QaK-Cg-4Lh"/>
-                                </constraints>
+                                <rect key="frame" x="24" y="369.5" width="272" height="56"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Next"/>
+                                <state key="normal" title="Next" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="nextClick:" destination="CcK-TQ-3Lt" eventType="touchUpInside" id="MQF-2h-vbN"/>
                                 </connections>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-wifi logo" translatesAutoresizingMaskIntoConstraints="NO" id="vuC-Pp-WfJ">
-                                <rect key="frame" x="129.5" y="57" width="61" height="61"/>
+                                <rect key="frame" x="122.5" y="12" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="aAd-So-aO5"/>
+                                    <constraint firstAttribute="height" constant="75" id="vBO-WH-OWu"/>
+                                </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a wifi want to connect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79N-4m-bXt">
                                 <rect key="frame" x="50" y="126" width="220" height="21"/>
@@ -177,11 +177,11 @@
                             <constraint firstItem="0rZ-Lw-u5C" firstAttribute="top" secondItem="TSC-Qk-LIP" secondAttribute="bottom" constant="60" id="1wK-iJ-Tlz"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="top" secondItem="1AO-uZ-M3q" secondAttribute="bottom" constant="40" id="2Pp-ZC-UAo"/>
                             <constraint firstItem="vuC-Pp-WfJ" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="5NX-9r-tOY"/>
+                            <constraint firstItem="vuC-Pp-WfJ" firstAttribute="top" secondItem="a7b-3V-bSj" secondAttribute="top" constant="12" id="6Vy-Fa-D1r"/>
                             <constraint firstItem="1AO-uZ-M3q" firstAttribute="centerY" secondItem="dK1-m5-iJq" secondAttribute="centerY" id="ADx-f5-JEB"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="centerY" secondItem="5It-NQ-7d2" secondAttribute="centerY" id="Dfh-if-HoH"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="centerY" secondItem="a7b-3V-bSj" secondAttribute="centerY" constant="10" id="GlY-lO-s16"/>
                             <constraint firstItem="5It-NQ-7d2" firstAttribute="leading" secondItem="OQ6-8g-bPC" secondAttribute="leading" constant="30" id="KSy-PD-dsW"/>
-                            <constraint firstItem="79N-4m-bXt" firstAttribute="top" secondItem="vuC-Pp-WfJ" secondAttribute="bottom" constant="8" id="Meh-IR-ego"/>
                             <constraint firstItem="dK1-m5-iJq" firstAttribute="top" secondItem="79N-4m-bXt" secondAttribute="bottom" constant="32" id="PNx-rr-B4O"/>
                             <constraint firstItem="0rZ-Lw-u5C" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="S0e-vF-9xV"/>
                             <constraint firstItem="TSC-Qk-LIP" firstAttribute="top" secondItem="PTB-pC-o5q" secondAttribute="bottom" constant="20" id="Tbx-23-0cu"/>
@@ -195,7 +195,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="OQ6-8g-bPC"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="dn4-4z-Gcf">
+                    <navigationItem key="navigationItem" id="dn4-4z-Gcf">
                         <barButtonItem key="rightBarButtonItem" title="Exit" id="8hc-xM-Uws">
                             <connections>
                                 <action selector="exitAddClick:" destination="CcK-TQ-3Lt" id="4us-Ig-Ufw"/>
@@ -216,7 +216,7 @@
             </objects>
             <point key="canvasLocation" x="2527.5" y="-1140"/>
         </scene>
-        <!--X-Sense-->
+        <!--Setup DeviceSSIDVC-->
         <scene sceneID="LUj-KT-X1C">
             <objects>
                 <viewController id="plb-wp-voB" customClass="XJSetupDeviceSSIDVC" sceneMemberID="viewController">
@@ -225,42 +225,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-setting" translatesAutoresizingMaskIntoConstraints="NO" id="o2g-Mu-SKp">
-                                <rect key="frame" x="122.5" y="38" width="75" height="75"/>
+                                <rect key="frame" x="122.5" y="12" width="75" height="75"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose device SSID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f4p-GP-tbJ">
-                                <rect key="frame" x="82.5" y="121" width="155" height="21"/>
+                                <rect key="frame" x="82.5" y="101" width="155" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please change your wifo to &quot;SH-IPC_xxx&quot; Back to this app" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E37-e7-gya">
-                                <rect key="frame" x="60" y="312" width="200" height="54"/>
+                                <rect key="frame" x="60" y="292" width="200" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pYt-Bf-MxV">
-                                <rect key="frame" x="24" y="426" width="272" height="44"/>
-                                <color key="backgroundColor" red="0.027450980390000001" green="0.43137254899999999" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="272" id="e8p-fu-PVp"/>
-                                    <constraint firstAttribute="height" constant="44" id="ybE-jP-aF5"/>
-                                </constraints>
+                                <rect key="frame" x="24" y="406" width="272" height="56"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Go to wifi setting"/>
+                                <state key="normal" title="Go to wifi setting" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="nextClick:" destination="plb-wp-voB" eventType="touchUpInside" id="QIn-WD-Kee"/>
                                     <action selector="nextClick:" destination="CcK-TQ-3Lt" eventType="touchUpInside" id="xut-b0-vEF"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="change wifi" translatesAutoresizingMaskIntoConstraints="NO" id="rPP-AB-IDV">
-                                <rect key="frame" x="0.0" y="160" width="320" height="140"/>
+                                <rect key="frame" x="0.0" y="140" width="320" height="140"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="140" id="nrf-nj-Pb5"/>
                                 </constraints>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="add-app logo" translatesAutoresizingMaskIntoConstraints="NO" id="Ama-s3-8AE">
-                                <rect key="frame" x="130" y="366" width="60" height="60"/>
+                                <rect key="frame" x="130" y="346" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Acq-m1-dth"/>
                                     <constraint firstAttribute="width" secondItem="Ama-s3-8AE" secondAttribute="height" id="ggA-Ke-Hjr"/>
@@ -271,7 +267,7 @@
                         <constraints>
                             <constraint firstItem="o2g-Mu-SKp" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="1ZO-Va-Lge"/>
                             <constraint firstItem="rPP-AB-IDV" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="4Dv-bI-OoJ"/>
-                            <constraint firstItem="f4p-GP-tbJ" firstAttribute="top" secondItem="o2g-Mu-SKp" secondAttribute="bottom" constant="8" id="ARi-vj-3TT"/>
+                            <constraint firstItem="o2g-Mu-SKp" firstAttribute="top" secondItem="uxg-Bb-Oba" secondAttribute="top" constant="12" id="8p6-bf-2dj"/>
                             <constraint firstItem="Ama-s3-8AE" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="BGS-FI-J9S"/>
                             <constraint firstItem="E37-e7-gya" firstAttribute="leading" secondItem="Q1R-Nz-Eqw" secondAttribute="leading" constant="60" id="ICj-kK-vYk"/>
                             <constraint firstItem="rPP-AB-IDV" firstAttribute="top" secondItem="f4p-GP-tbJ" secondAttribute="bottom" constant="18" id="MS5-9B-9g0"/>
@@ -284,11 +280,11 @@
                             <constraint firstItem="E37-e7-gya" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="lce-7R-tZM"/>
                             <constraint firstItem="pYt-Bf-MxV" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="nLR-2P-74w"/>
                             <constraint firstItem="Q1R-Nz-Eqw" firstAttribute="trailing" secondItem="rPP-AB-IDV" secondAttribute="trailing" id="otD-uS-9m7"/>
-                            <constraint firstItem="rPP-AB-IDV" firstAttribute="centerY" secondItem="uxg-Bb-Oba" secondAttribute="centerY" constant="-10" id="pX7-fr-eWr"/>
+                            <constraint firstItem="rPP-AB-IDV" firstAttribute="centerY" secondItem="uxg-Bb-Oba" secondAttribute="centerY" constant="-30" id="pX7-fr-eWr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Q1R-Nz-Eqw"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="Umz-Rc-HiD">
+                    <navigationItem key="navigationItem" id="Umz-Rc-HiD">
                         <barButtonItem key="rightBarButtonItem" title="Exit" id="1qk-Kp-26u">
                             <connections>
                                 <action selector="exitAddClick:" destination="plb-wp-voB" id="2jT-jE-Wke"/>
@@ -308,7 +304,7 @@
             </objects>
             <point key="canvasLocation" x="3348.75" y="-1140"/>
         </scene>
-        <!--X-Sense-->
+        <!--Setup Device InfoVC-->
         <scene sceneID="BoY-8V-Prs">
             <objects>
                 <viewController storyboardIdentifier="XJSetupDeviceInfoVCID" id="L7n-eu-pcC" customClass="XJSetupDeviceInfoVC" sceneMemberID="viewController">
@@ -398,7 +394,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xDV-pl-Ghv"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="GBx-S1-4sE"/>
+                    <navigationItem key="navigationItem" id="GBx-S1-4sE"/>
                     <connections>
                         <outlet property="configueDesLabel" destination="XDc-WJ-qkH" id="eaI-8y-C6d"/>
                         <outlet property="findView" destination="U4r-i1-TUc" id="ldl-dJ-8SD"/>
@@ -585,7 +581,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="z3N-Ue-5Qn"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="5RB-sl-0HK"/>
+                    <navigationItem key="navigationItem" title="SmartHome" id="5RB-sl-0HK"/>
                     <connections>
                         <outlet property="agreeDesLabel" destination="W8r-ge-qfm" id="ueJ-Vx-0Qe"/>
                         <outlet property="andLabel" destination="dHV-NZ-EGu" id="TNb-aD-dZc"/>
@@ -610,8 +606,10 @@
         <image name="add-setting" width="75" height="75"/>
         <image name="add-tips" width="50" height="50"/>
         <image name="add-wifi" width="75" height="75"/>
-        <image name="add-wifi logo" width="61" height="61"/>
+        <image name="add-wifi logo" width="62" height="62"/>
         <image name="change wifi" width="370" height="215.5"/>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
         <image name="ic_visibility_off_18dp" width="72" height="72"/>
         <image name="shareQRCode" width="316" height="316"/>
         <image name="sign up -enter password again" width="50" height="50"/>

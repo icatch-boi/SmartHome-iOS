@@ -41,9 +41,7 @@
 }
 
 - (void)setupGUI {
-    self.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
-    self.navigationBar.translucent = NO;
-    self.navigationBar.tintColor = [UIColor whiteColor];
+    [SHTool configureAppThemeWithController:self];
 }
 
 - (void)didReceiveMemoryWarning {

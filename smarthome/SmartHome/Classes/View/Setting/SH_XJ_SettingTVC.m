@@ -465,6 +465,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     nav.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor]};
     SHMpbTVC *vc = (SHMpbTVC *)nav.topViewController;
     vc.cameraUid = _shCamObj.camera.cameraUid;
+    [SHTool configureAppThemeWithController:nav];
     
     [self presentViewController:nav animated:YES completion:nil];
 }
@@ -488,6 +489,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)enterPustTestView {
     SHPushTestNavController *nav = [SHPushTestNavController pushTestNavController];
     nav.title = _shCamObj.camera.cameraUid;
+    [SHTool configureAppThemeWithController:nav];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;

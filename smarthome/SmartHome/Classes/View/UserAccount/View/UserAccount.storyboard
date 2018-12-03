@@ -608,7 +608,7 @@
             </objects>
             <point key="canvasLocation" x="2177" y="881"/>
         </scene>
-        <!--X-Sense-->
+        <!--SmartHome-->
         <scene sceneID="Srx-oG-cH8">
             <objects>
                 <viewController id="4ei-NP-AkY" customClass="SHLoginViewController" sceneMemberID="viewController">
@@ -617,19 +617,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GoZ-1m-DlW">
-                                <rect key="frame" x="24" y="356" width="272" height="44"/>
-                                <color key="backgroundColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="272" id="VxH-Jm-AKn"/>
-                                    <constraint firstAttribute="height" constant="44" id="Y2k-it-hTI"/>
-                                </constraints>
-                                <state key="normal" title="Sign in"/>
+                                <rect key="frame" x="24" y="354" width="272" height="56"/>
+                                <state key="normal" title="Sign in" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="loginClick" destination="4ei-NP-AkY" eventType="touchUpInside" id="pT0-Vt-AeD"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UY3-TD-BPL">
-                                <rect key="frame" x="105.5" y="406" width="109" height="24"/>
+                                <rect key="frame" x="105.5" y="416" width="109" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="pbJ-gd-a6L"/>
                                 </constraints>
@@ -640,13 +636,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dont't have account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYQ-Rm-CDc">
-                                <rect key="frame" x="67.5" y="430" width="137" height="17"/>
+                                <rect key="frame" x="67.5" y="440" width="137" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mai-lF-N12">
-                                <rect key="frame" x="208.5" y="426.5" width="49" height="24"/>
+                                <rect key="frame" x="208.5" y="436.5" width="49" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="ebH-eH-vVg"/>
                                 </constraints>
@@ -691,7 +687,7 @@
                             <constraint firstItem="wkB-U3-uYH" firstAttribute="top" secondItem="4Q2-Rw-eAU" secondAttribute="bottom" constant="40" id="EoK-qm-j0U"/>
                             <constraint firstItem="wkB-U3-uYH" firstAttribute="leading" secondItem="Ahs-hC-cbK" secondAttribute="trailing" constant="6" id="Lb3-Ea-DTm"/>
                             <constraint firstItem="wkB-U3-uYH" firstAttribute="centerY" secondItem="oKT-x8-0WV" secondAttribute="centerY" constant="-10" id="R88-lg-ahX"/>
-                            <constraint firstItem="rvK-DT-wO1" firstAttribute="bottom" secondItem="GoZ-1m-DlW" secondAttribute="bottom" constant="80" id="VhT-I2-qwY"/>
+                            <constraint firstItem="rvK-DT-wO1" firstAttribute="bottom" secondItem="GoZ-1m-DlW" secondAttribute="bottom" constant="70" id="VhT-I2-qwY"/>
                             <constraint firstItem="mai-lF-N12" firstAttribute="leading" secondItem="dYQ-Rm-CDc" secondAttribute="trailing" constant="4" id="bYR-2f-dgQ"/>
                             <constraint firstItem="wkB-U3-uYH" firstAttribute="centerY" secondItem="Ahs-hC-cbK" secondAttribute="centerY" id="bcC-g0-lJc"/>
                             <constraint firstItem="UY3-TD-BPL" firstAttribute="centerX" secondItem="oKT-x8-0WV" secondAttribute="centerX" id="ems-Ob-03Y"/>
@@ -706,7 +702,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rvK-DT-wO1"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="trd-gw-5kW"/>
+                    <navigationItem key="navigationItem" title="SmartHome" id="trd-gw-5kW"/>
                     <connections>
                         <outlet property="accountInfoLabel" destination="dYQ-Rm-CDc" id="Ejp-i0-AEu"/>
                         <outlet property="emailTextField" destination="4Q2-Rw-eAU" id="Q6g-VQ-ND7"/>
@@ -1160,25 +1156,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8s3-HN-dep">
-                                <rect key="frame" x="24" y="366" width="272" height="44"/>
-                                <color key="backgroundColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="ROS-tZ-4PO"/>
-                                    <constraint firstAttribute="width" constant="272" id="Y10-jq-PC6"/>
-                                </constraints>
-                                <state key="normal" title="Sign up with Email"/>
+                                <rect key="frame" x="24" y="354" width="272" height="56"/>
+                                <state key="normal" title="Sign up with Email" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="logonClick:" destination="csI-X8-4ST" eventType="touchUpInside" id="na4-bB-FkU"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By creating an account, you agree to our" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0CB-qu-vOG">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By creating an account, you agree to our" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0CB-qu-vOG">
                                 <rect key="frame" x="24" y="418" width="272" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mez-MA-bLg">
-                                <rect key="frame" x="24" y="435" width="40" height="24"/>
+                                <rect key="frame" x="33" y="435" width="40" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="Fc0-DM-KIT"/>
                                 </constraints>
@@ -1189,13 +1181,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ube-qy-1n0">
-                                <rect key="frame" x="68" y="438.5" width="166" height="17"/>
+                                <rect key="frame" x="77" y="438.5" width="166" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NAB-dz-Iow">
-                                <rect key="frame" x="238" y="435" width="44" height="24"/>
+                                <rect key="frame" x="247" y="435" width="44" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="VlE-d1-goM"/>
                                 </constraints>
@@ -1285,9 +1277,9 @@
                             <constraint firstItem="2Sa-kS-Df7" firstAttribute="centerY" secondItem="s7G-MC-E3D" secondAttribute="centerY" id="IQh-jw-NyM"/>
                             <constraint firstItem="0RD-32-b4k" firstAttribute="trailing" secondItem="2Sa-kS-Df7" secondAttribute="trailing" constant="30" id="KIm-XX-jRY"/>
                             <constraint firstItem="8s3-HN-dep" firstAttribute="centerX" secondItem="WSr-NG-itc" secondAttribute="centerX" id="LTJ-Cf-RVI"/>
-                            <constraint firstItem="Mez-MA-bLg" firstAttribute="leading" secondItem="0CB-qu-vOG" secondAttribute="leading" id="NYn-gZ-EGZ"/>
                             <constraint firstItem="udd-CU-F8Z" firstAttribute="leading" secondItem="0RD-32-b4k" secondAttribute="leading" constant="30" id="NrF-oz-AX5"/>
                             <constraint firstItem="0CB-qu-vOG" firstAttribute="leading" secondItem="8s3-HN-dep" secondAttribute="leading" id="Oep-qJ-fdF"/>
+                            <constraint firstItem="ube-qy-1n0" firstAttribute="centerX" secondItem="WSr-NG-itc" secondAttribute="centerX" id="QAV-rd-Ebf"/>
                             <constraint firstItem="0CB-qu-vOG" firstAttribute="top" secondItem="8s3-HN-dep" secondAttribute="bottom" constant="8" id="Qac-ri-eE4"/>
                             <constraint firstItem="bjf-52-5Nv" firstAttribute="top" secondItem="2Sa-kS-Df7" secondAttribute="bottom" constant="32" id="QwW-Mq-3XQ"/>
                             <constraint firstItem="0CB-qu-vOG" firstAttribute="trailing" secondItem="8s3-HN-dep" secondAttribute="trailing" id="RRd-bn-P5n"/>
@@ -1308,7 +1300,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0RD-32-b4k"/>
                     </view>
-                    <navigationItem key="navigationItem" title="X-Sense" id="DLH-s9-ATV"/>
+                    <navigationItem key="navigationItem" title="SmartHome" id="DLH-s9-ATV"/>
                     <connections>
                         <outlet property="agreeDesLabel" destination="0CB-qu-vOG" id="qiQ-fM-thM"/>
                         <outlet property="andLabel" destination="ube-qy-1n0" id="R6y-Kv-oka"/>
@@ -1431,8 +1423,8 @@
     </scenes>
     <resources>
         <image name="1024" width="1024" height="1024"/>
-        <image name="default-btn" width="272" height="55"/>
-        <image name="default-btn-pre" width="272" height="55"/>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
         <image name="default-logo" width="101" height="100.5"/>
         <image name="empty_photo" width="128" height="128"/>
         <image name="ic_add_black_24dp" width="24" height="24"/>

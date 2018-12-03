@@ -64,6 +64,9 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     _tipsViewHeightCons.constant = kTipsViewDefaultHeight * kScreenHeightScale;
     
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    
+    _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
+    _chooseWifiDesLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

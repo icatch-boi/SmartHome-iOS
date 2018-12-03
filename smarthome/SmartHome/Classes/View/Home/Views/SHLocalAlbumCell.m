@@ -582,6 +582,7 @@
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
     nc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     //    [self presentViewController:nc animated:YES completion:nil];
+    [SHTool configureAppThemeWithController:nc];
 #if 0
     if (self.showLocalMediaBrowserBlock) {
         self.showLocalMediaBrowserBlock(nc);

@@ -102,6 +102,10 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
     [self addLineForTermsBtn];
     [self addLineForSigninBtn];
+    
+    _agreeDesLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
+    _andLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
+    [self setupSignupState];
 }
 
 - (void)setupLocalizedString {
@@ -127,6 +131,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 }
 
 - (void)addLineForTermsBtn {
+    [_userAgreementButton setTintColor:[UIColor ic_colorWithHex:kTextThemeColor]];
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _userAgreementButton.frame.size.height - 2, _userAgreementButton.frame.size.width, 1)];
     line.backgroundColor = _userAgreementButton.currentTitleColor;
     
@@ -134,6 +140,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 }
 
 - (void)addLineForSigninBtn {
+    [_signinButton setTintColor:[UIColor ic_colorWithHex:kTextThemeColor]];
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _signinButton.frame.size.height - 2, _signinButton.frame.size.width, 1)];
     line.backgroundColor = _signinButton.currentTitleColor;
     
@@ -410,10 +418,18 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     
+#if 0
     uint32_t colorValue = ![_emailTextField.text isEqualToString:@""] && ![_verifycodeTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && ![_surePWDTextField.text isEqualToString:@""] ? kButtonThemeColor : kButtonDefaultColor;
     _logonButton.backgroundColor = [UIColor ic_colorWithHex:colorValue];
+#else
+    [self setupSignupState];
+#endif
     
     return YES;
+}
+
+- (void)setupSignupState {
+    _logonButton.enabled = ![_emailTextField.text isEqualToString:@""] && ![_verifycodeTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && ![_surePWDTextField.text isEqualToString:@""];
 }
 
 /*

@@ -135,7 +135,7 @@ static const CGFloat kTableViewRowHeight = 60;
     tableView.rowHeight = kTableViewRowHeight;
     [self.view addSubview:tableView];
     [tableView registerNib:[UINib nibWithNibName:@"AccountTableViewCell" bundle:nil] forCellReuseIdentifier:kAccountCellID];
-    tableView.backgroundColor = [UIColor ic_colorWithHex:kThemeColor];
+    tableView.backgroundColor = [UIColor ic_colorWithHex:kBackgroundThemeColor];
     tableView.tableFooterView = [self tableFooterView];
 
     _tableView = tableView;
@@ -217,7 +217,7 @@ static const CGFloat kTableViewRowHeight = 60;
     vc.title = item.title;
     vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil target:[ZJSlidingDrawerViewController sharedSlidingDrawerVC] action:@selector(popViewController) isBack:YES];
     
-    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] pushViewController:vc];
+    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] pushViewController:[[UserAccountPortraitNavVC alloc] initWithRootViewController:vc]];
 }
 
 - (void)enterAbout:(SHUserAccountItem *)item {
@@ -281,7 +281,7 @@ static const CGFloat kTableViewRowHeight = 60;
     }
     
     controller.mailComposeDelegate = self;
-    NSString *email = @"yiwei.wu@szxiaojun.com";
+    NSString *email = @"service@example.com"; //@"yiwei.wu@szxiaojun.com";
     
     //設定收件人與主旨等資訊
     [controller setToRecipients:[NSArray arrayWithObjects:email, nil]];

@@ -76,7 +76,7 @@ static const CGFloat kBottomDefaultValue = 80;
     _emailTextField.delegate = self;
     _pwdTextField.delegate = self;
     
-    UIColor *color = [UIColor ic_colorWithHex:kButtonThemeColor alpha:0.87];
+    UIColor *color = [UIColor ic_colorWithHex:kButtonThemeColor];
     _emailTextField.lineColor = color;
     _pwdTextField.lineColor = color;
     
@@ -91,6 +91,7 @@ static const CGFloat kBottomDefaultValue = 80;
     [self addLineForSignupBtn];
     
    _emailTextField.text = [[NSUserDefaults standardUserDefaults] objectForKey:kUserAccounts];
+    _accountInfoLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
 }
 
 - (void)setupLocalizedString {
@@ -110,6 +111,8 @@ static const CGFloat kBottomDefaultValue = 80;
 }
 
 - (void)addLineForForgotPWDBtn {
+    [_forgotPWDBtn setTintColor:[UIColor ic_colorWithHex:kTextThemeColor]];
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _forgotPWDBtn.frame.size.height - 2, _forgotPWDBtn.frame.size.width, 1)];
     line.backgroundColor = _forgotPWDBtn.currentTitleColor;
     
@@ -117,6 +120,8 @@ static const CGFloat kBottomDefaultValue = 80;
 }
 
 - (void)addLineForSignupBtn {
+    [_signupBtn setTintColor:[UIColor ic_colorWithHex:kTextThemeColor]];
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, _signupBtn.frame.size.height - 2, _signupBtn.frame.size.width, 1)];
     line.backgroundColor = _signupBtn.currentTitleColor;
     
@@ -124,8 +129,12 @@ static const CGFloat kBottomDefaultValue = 80;
 }
 
 - (void)setSigninButtonColor {
+#if 0
     uint32_t colorValue = ![_emailTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] ? kButtonThemeColor : kButtonDefaultColor;
     _signinButton.backgroundColor = [UIColor ic_colorWithHex:colorValue];
+#else
+    _signinButton.enabled = ![_emailTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+#endif
 }
 
 - (void)close {
