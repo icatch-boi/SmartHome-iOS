@@ -40,8 +40,12 @@
         return;
     }
     
+    NSString *pushName = @"apns";
+#ifdef DEBUG
+    pushName = @"apns_dev";
+#endif
     NSDictionary *parameters = @{
-                                 @"push_name": @"apns",
+                                 @"push_name": pushName,
                                  @"push_type": @"ios",
                                  @"push_token": deviceToken,
                                  };
@@ -95,6 +99,9 @@
         baseURL = @"http://push.iotcplatform.com/tpns?";
     }
     NSString *urlString = [NSString stringWithFormat:@"%@cmd=event&img=1&uid=%@&msg=%@", baseURL, uid, message];
+    if (pushType == SHPushTypeOur) {
+        urlString = [NSString stringWithFormat:@"%@cmd=event&appkey=XXXXXXX1C5262CC1&img=1&uid=%@&msg=%@", baseURL, uid, message];
+    }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
 
@@ -126,11 +133,15 @@
         }
     };
     
-    urlString = [self requestURLString:urlString];
-    AFHTTPSessionManager *manager = [self facesRequestSessionManager];
+    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
+        urlString = [self requestURLString:urlString];
+    }
+    AFHTTPSessionManager *manager = [self pushRequestSessionManager];
     
-    //设置 https 请求证书
-    [self setCertificatesWithManager:manager];
+    if ([urlString hasPrefix:@"https:"] || [manager.baseURL.absoluteString hasPrefix:@"https:"]) {
+        //设置 https 请求证书
+        [self setCertificatesWithManager:manager];
+    }
     
     switch (method) {
         case SHRequestMethodGET:
@@ -154,7 +165,7 @@
     }
 }
 
-- (AFHTTPSessionManager *)facesRequestSessionManager {
+- (AFHTTPSessionManager *)pushRequestSessionManager {
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // https request must set baseURL
     NSURL *url = [NSURL URLWithString:ServerBaseUrl];

@@ -111,7 +111,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
             
             NSLog(@"index: %ld, delay: %f, obj: %@", (long)index, delay, obj);
             
-            NSString *temp = [NSString stringWithFormat:@"%ld %f", (long)index, delay];
+            NSString *temp = [NSString stringWithFormat:@"%ld %f", (long)index + 1, delay];
             if (temp != nil) {
                 [item replaceObjectAtIndex:index withObject:temp];
             }
