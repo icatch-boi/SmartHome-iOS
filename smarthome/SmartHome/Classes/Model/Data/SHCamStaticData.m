@@ -362,4 +362,21 @@
               };
 }
 
+- (NSDictionary *)monthStringDict {
+    return @{
+             @"01": NSLocalizedString(@"kJanuary", nil),
+             @"02": NSLocalizedString(@"kFebruary", nil),
+             @"03": NSLocalizedString(@"kMarch", nil),
+             @"04": NSLocalizedString(@"kApril", nil),
+             @"05": NSLocalizedString(@"kMay", nil),
+             @"06": NSLocalizedString(@"kJune", nil),
+             @"07": NSLocalizedString(@"kJuly", nil),
+             @"08": NSLocalizedString(@"kAugust", nil),
+             @"09": NSLocalizedString(@"kSeptember", nil),
+             @"10": NSLocalizedString(@"kOctober", nil),
+             @"11": NSLocalizedString(@"kNovember", nil),
+             @"12": NSLocalizedString(@"kDecember", nil),
+             };
+}
+
 @end

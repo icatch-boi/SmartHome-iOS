@@ -86,7 +86,7 @@ static const CGFloat kBottomDefaultValue = 80;
     
     [self setSigninButtonColor];
     
-    self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]]  gradient:NO];
     [self addLineForForgotPWDBtn];
     [self addLineForSignupBtn];
     

@@ -76,7 +76,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 - (void)setupGUI {
     [_logonButton setCornerWithRadius:_logonButton.bounds.size.height * 0.25 masksToBounds:NO];
 
-    self.navigationController.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
+//    self.navigationController.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil target:self action:@selector(close) isBack:YES];
     
@@ -99,7 +99,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     
     [self updateVerifycodeBtnState];
     
-    self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     [self addLineForTermsBtn];
     [self addLineForSigninBtn];
     

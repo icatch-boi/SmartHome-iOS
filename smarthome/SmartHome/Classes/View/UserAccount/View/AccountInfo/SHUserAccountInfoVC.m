@@ -128,7 +128,7 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (void)setupTableView {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight, MIN(UIScreen.screenWidth, UIScreen.screenHeight)/*kCWSCREENWIDTH*/ * 0.75, MAX(UIScreen.screenWidth, UIScreen.screenHeight)/*CGRectGetHeight(self.view.bounds)*/ - kHeaderViewHeight) style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight, MIN(UIScreen.screenWidth, UIScreen.screenHeight)/*kCWSCREENWIDTH*/ * 0.75, MAX(UIScreen.screenWidth, UIScreen.screenHeight)/*CGRectGetHeight(self.view.bounds)*/ - kHeaderViewHeight) style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

@@ -968,34 +968,39 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright © 2017年 iCatchTech" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2eu-UW-JWX">
-                                <rect key="frame" x="30" y="231.5" width="260" height="17"/>
+                                <rect key="frame" x="30" y="433" width="260" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="leftbar-logo" translatesAutoresizingMaskIntoConstraints="NO" id="ViL-xX-kt8">
-                                <rect key="frame" x="85" y="330" width="150" height="150"/>
-                            </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="default-logo" translatesAutoresizingMaskIntoConstraints="NO" id="CHD-ah-W3a">
-                                <rect key="frame" x="109.5" y="101.5" width="101" height="100"/>
+                                <rect key="frame" x="109.5" y="110" width="101" height="100"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qIN-x2-jGf">
+                                <rect key="frame" x="30" y="240" width="260" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="2eu-UW-JWX" firstAttribute="centerY" secondItem="yrw-fy-W57" secondAttribute="centerY" id="0sO-Ps-inG"/>
-                            <constraint firstItem="2eu-UW-JWX" firstAttribute="top" secondItem="CHD-ah-W3a" secondAttribute="bottom" constant="30" id="7wO-Gx-bEZ"/>
+                            <constraint firstItem="3mW-ER-UIa" firstAttribute="trailing" secondItem="qIN-x2-jGf" secondAttribute="trailing" constant="30" id="5tj-Kj-wV0"/>
                             <constraint firstItem="2eu-UW-JWX" firstAttribute="centerX" secondItem="yrw-fy-W57" secondAttribute="centerX" id="9lA-EG-tR6"/>
-                            <constraint firstItem="3mW-ER-UIa" firstAttribute="bottom" secondItem="ViL-xX-kt8" secondAttribute="bottom" id="BWk-Lk-KGg"/>
                             <constraint firstItem="CHD-ah-W3a" firstAttribute="centerX" secondItem="yrw-fy-W57" secondAttribute="centerX" id="FGh-MB-myr"/>
+                            <constraint firstItem="qIN-x2-jGf" firstAttribute="centerX" secondItem="yrw-fy-W57" secondAttribute="centerX" id="JTo-tG-RqD"/>
+                            <constraint firstItem="qIN-x2-jGf" firstAttribute="top" secondItem="CHD-ah-W3a" secondAttribute="bottom" constant="30" id="N6t-Rp-fHu"/>
+                            <constraint firstItem="qIN-x2-jGf" firstAttribute="centerY" secondItem="yrw-fy-W57" secondAttribute="centerY" id="S3a-IG-Hyi"/>
+                            <constraint firstItem="qIN-x2-jGf" firstAttribute="leading" secondItem="3mW-ER-UIa" secondAttribute="leading" constant="30" id="T8w-Th-A5B"/>
+                            <constraint firstItem="3mW-ER-UIa" firstAttribute="bottom" secondItem="2eu-UW-JWX" secondAttribute="bottom" constant="30" id="VgS-8M-6FH"/>
                             <constraint firstItem="2eu-UW-JWX" firstAttribute="leading" secondItem="3mW-ER-UIa" secondAttribute="leading" constant="30" id="b2A-fH-gAS"/>
-                            <constraint firstItem="ViL-xX-kt8" firstAttribute="centerX" secondItem="yrw-fy-W57" secondAttribute="centerX" id="exU-K1-Ch9"/>
                             <constraint firstItem="3mW-ER-UIa" firstAttribute="trailing" secondItem="2eu-UW-JWX" secondAttribute="trailing" constant="30" id="mcS-bj-Ue2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3mW-ER-UIa"/>
                     </view>
                     <connections>
+                        <outlet property="appVersionLab" destination="qIN-x2-jGf" id="lZu-9e-VwX"/>
                         <outlet property="copyrightLab" destination="2eu-UW-JWX" id="3Ro-fe-6sS"/>
-                        <outlet property="logoBottomCons" destination="7wO-Gx-bEZ" id="3Rd-5d-TxJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sdf-xZ-2sg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1375,12 +1380,9 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GtH-4Z-akK">
-                                <rect key="frame" x="80" y="420" width="160" height="34"/>
-                                <color key="backgroundColor" red="0.027450980390000001" green="0.43137254899999999" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="QfJ-T2-Gpw"/>
-                                </constraints>
-                                <state key="normal" title="Get new QR Code"/>
+                                <rect key="frame" x="24" y="420" width="272" height="56"/>
+                                <state key="normal" title="Get new QR Code" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="updateClick:" destination="daN-gb-rxg" eventType="touchUpInside" id="uvd-75-UrM"/>
                                 </connections>
@@ -1433,7 +1435,6 @@
         <image name="ic_visibility_off_18dp" width="72" height="72"/>
         <image name="icon_QRCode" width="512" height="512"/>
         <image name="icon_update" width="512" height="512"/>
-        <image name="leftbar-logo" width="150" height="150"/>
         <image name="portrait" width="70" height="70.5"/>
         <image name="sign up -enter password again" width="50" height="50"/>
         <image name="sign up-email" width="50" height="50"/>

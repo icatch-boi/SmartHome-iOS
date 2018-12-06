@@ -195,7 +195,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
 }
 
 - (UIImage *)addLogoImage:(UIImage *)superImage {
-    UIImage *logo = [UIImage imageNamed:@"leftbar-user"];
+    UIImage *logo = [UIImage imageNamed:@"share-logo"];
     logo = [self changeImageAlpha:logo];
     
     return [self addImageToSuperImage:superImage withSubImage:logo andSubImagePosition:CGRectMake((superImage.size.width - kLogoImageWidth) / 2, (superImage.size.height - kLogoImageWidth) / 2, kLogoImageWidth, kLogoImageWidth)]; // 增加logo

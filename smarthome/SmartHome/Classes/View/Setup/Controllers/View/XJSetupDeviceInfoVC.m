@@ -132,7 +132,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)setupGUI {
-    self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     self.navigationItem.hidesBackButton = YES;
 }
 
@@ -191,6 +191,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)configureCameraTimeoutHandler {
+    SHLogTRACE();
     self.findTimes = 0;
     [self releaseNetStatusTimer];
     
@@ -254,6 +255,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 - (void)setupLink {
     NSString *ssid = _wifiSSID; //self.ssidTextField.text;
     NSString *pwd = _wifiPWD; //self.pwdTextField.text;
+    SHLogInfo(SHLogTagAPP, @"set wifi ssid: %@, pwd: %@", ssid, pwd);
     
     if ([ssid isEqualToString:@""] || [pwd isEqualToString:@""]) {
         [self updateError:NSLocalizedString(@"kInvalidSSIDOrPassword", @"") error:0xff];
@@ -292,6 +294,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         
         int retVal = _link->link(content);
         _link->cancel();
+        SHLogInfo(SHLogTagAPP, @"link is success: %d", retVal);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
@@ -972,6 +975,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     });
 #else
     if (self.cameraUid == nil) {
+        SHLogError(SHLogTagAPP, @"camera uid is nil.");
         [self showConfigureDeviceFailedAlertView];
         return;
     }

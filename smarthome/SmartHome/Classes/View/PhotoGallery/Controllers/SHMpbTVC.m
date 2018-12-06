@@ -490,7 +490,7 @@ static int const kNewFileIconTag = 888;
     
     NSString *curMonth = [dateformatter_M stringFromDate:curDate];
     dispatch_async(dispatch_get_main_queue(), ^{
-        _titleLabel.text = [NSString stringWithFormat:@"%@%@", curMonth, NSLocalizedString(@"kMonth", nil)];
+        _titleLabel.text = [NSString stringWithFormat:@"%@", [[SHCamStaticData instance] monthStringDict][curMonth]];
     });
     
     BOOL done = NO;
@@ -506,7 +506,7 @@ static int const kNewFileIconTag = 888;
             if (!done) {
                 //夸月处理
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _titleLabel.text = [NSString stringWithFormat:@"%@%@/%@%@", month, NSLocalizedString(@"kMonth", nil), curMonth, NSLocalizedString(@"kMonth", nil)];
+                    _titleLabel.text = [NSString stringWithFormat:@"%@/%@", [[SHCamStaticData instance] monthStringDict][month], [[SHCamStaticData instance] monthStringDict][curMonth]];
                 });
                 done = YES;
             }

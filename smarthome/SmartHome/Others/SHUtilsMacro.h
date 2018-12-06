@@ -104,7 +104,7 @@ static NSString * const kCameraDisconnectNotification = @"kCameraDisconnectNotif
 static NSString * const kCameraNetworkConnectedNotification = @"kCameraNetworkConnectedNotification";
 static NSString * const kCameraPowerOffNotification = @"kCameraPowerOffNotification";
 static NSString * const kEnterAPMode = @"kEnterAPMode";
-static NSString * const kCameraSSIDPrefix = @"X-Sense-"; //@"SH-IPC_";
+static NSString * const kCameraSSIDPrefix = @"SH-IPC_";
 static NSString * const kPowerOffEventValue = @"kPowerOffEventValue";
 static NSString * const kAppGroupsName = @"group.com.xj.app.doorbell"; //@"group.com.icatchtek.smarthome";
 static NSString * const kShareCameraInfoKey = @"SHShareCameras";
@@ -114,7 +114,7 @@ static NSString * const kUserShouldLoginNotification = @"kUserShouldLoginNotific
 static NSString * const kLoginSuccessNotification = @"kLoginSuccessNotification";
 
 static int const kNetworkDetectionInterval = 2.0; //5.0;
-static NSUInteger const kThemeColor = 0xDE2F43; //0xF2F2F2; //0x00BFD2;
+static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;
 static NSUInteger const kButtonThemeColor = 0x333333; //0x000000; //0x076EE4;
 static NSUInteger const kButtonDefaultColor = 0x9b9b9b;
 static NSUInteger const kTextThemeColor = 0x333333;

@@ -392,10 +392,11 @@
         return;
     }
     
-    nav.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
-//    nav.navigationBar.translucent = NO;
+//    nav.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
+    nav.navigationBar.translucent = YES;
     nav.navigationBar.tintColor = [UIColor whiteColor];
     nav.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav"] forBarMetrics:UIBarMetricsDefault];
 }
 
 @end

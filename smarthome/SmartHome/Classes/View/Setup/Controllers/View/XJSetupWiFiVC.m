@@ -89,7 +89,7 @@
     
     [self setupSSID];
     
-    self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     [self addLineForChangePasswordBtn];
     _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
 }

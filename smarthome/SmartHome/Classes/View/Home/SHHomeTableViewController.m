@@ -114,7 +114,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 - (void)setupGUI {
     [self.tableView registerNib:[UINib nibWithNibName:@"SHCameraViewCell" bundle:nil] forCellReuseIdentifier:kCameraViewCellID];
 //    self.title = @"X-Sense";
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"nav-logo"]];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]]];
     
     self.tableView.rowHeight = [SHCameraViewModel rowHeight];
 }

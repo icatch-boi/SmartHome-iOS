@@ -56,7 +56,11 @@ static const CGFloat kLogoBottomCons_Default = 30;
     SDKInfo *sdkInfo = SDKInfo::getInstance();
     string sdkVString = sdkInfo->getSDKVersion();
     NSString *sdkVersion = [NSString stringWithFormat:@"SDK Version %s", sdkVString.c_str()];
-    _copyrightLab.text = [NSString stringWithFormat:@"%@ \n %@ \n\n Copyright © 2018年 iCatch Technology Inc. All rights reserved.", appVersion, sdkVersion];
+    _appVersionLab.text = [NSString stringWithFormat:@"%@ \n %@", appVersion, sdkVersion];
+    NSUInteger year = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    _copyrightLab.text = [NSString stringWithFormat:@"Copyright © 2017-%lu年 iCatch Technology Inc. All rights reserved.", (unsigned long)year];
+    _appVersionLab.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
+    _copyrightLab.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(close) isBack:NO];
     _logoBottomCons.constant = kLogoBottomCons_Default * kScreenHeightScale;

@@ -111,6 +111,10 @@
 }
 
 - (void)createCurrentPhotoGalleryWithDate:(NSString *)date {
+    if (date == nil) {
+        SHLogError(SHLogTagAPP, @"date is nil.");
+        return;
+    }
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
     [dateformatter setDateFormat:kDateFormat];
     NSDate *curDate = [dateformatter dateFromString:date];
@@ -146,7 +150,10 @@
 
 - (void)createCurMonthPhotoGalleryWithStartDate:(NSString *)startDate endDate:(NSString *)endDate {
     SHLogInfo(SHLogTagAPP, @"startDate: %@, endDate: %@", startDate, endDate);
-    
+    if (startDate == nil) {
+        SHLogError(SHLogTagAPP, @"startDate is nil.");
+        return;
+    }
 	
     BOOL success;
     map<string, int> storageInfoMap = [_shCamObj.sdk getFilesStorageInfoWithStartDate:startDate andEndDate:endDate success:&success];

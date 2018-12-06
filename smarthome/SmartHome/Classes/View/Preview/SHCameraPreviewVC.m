@@ -146,9 +146,10 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self connectAndPreview];
     }
 #endif
-    
+#if 0
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDisconnectHandle:) name:kCameraDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
+#endif
     
 //    [self currentDateTimer];
     self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
@@ -300,6 +301,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [_shCameraObj initCamera];
         [self releaseConectAndPreview];
 //        [self addVideoBitRateObserver];
+        [self addDeviceObserver];
     } failedBlock:^(NSInteger errorCode) {
 #if 0
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -325,6 +327,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self startMediaStream];
     } else {
 //        [self addVideoBitRateObserver];
+        [self addDeviceObserver];
         [self prepareCameraPropertyData];
     }
 }
@@ -2315,6 +2318,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         _pvFailedLabel.hidden = NO;
         _pvFailedLabel.text = NSLocalizedString(@"StartPVFailed", nil);
     });
+}
+
+- (void)addDeviceObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDisconnectHandle:) name:kCameraDisconnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
 }
 
 @end

@@ -63,7 +63,7 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     [_nextButton setCornerWithRadius:_nextButton.bounds.size.height * 0.25 masksToBounds:NO];
     _tipsViewHeightCons.constant = kTipsViewDefaultHeight * kScreenHeightScale;
     
-    self.navigationItem.titleView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"nav-logo"] gradient:NO];
+    self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     
     _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
     _chooseWifiDesLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
@@ -111,7 +111,7 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     
     NSString *currentSSID = array.firstObject;
     SHLogInfo(SHLogTagAPP, @"currentSSID: %@", currentSSID);
-    if ([currentSSID hasPrefix:kCameraSSIDPrefix] || [currentSSID hasPrefix:@"SH-IPC_"]) {
+    if ([currentSSID hasPrefix:kCameraSSIDPrefix] || [currentSSID hasPrefix:@"X-Sense-"]) {
         [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
         [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
         _nextButton.tag = 1;

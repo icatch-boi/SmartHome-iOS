@@ -126,7 +126,7 @@
                                 </connections>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-wifi logo" translatesAutoresizingMaskIntoConstraints="NO" id="vuC-Pp-WfJ">
-                                <rect key="frame" x="122.5" y="12" width="75" height="75"/>
+                                <rect key="frame" x="122.5" y="39" width="75" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="75" id="aAd-So-aO5"/>
                                     <constraint firstAttribute="height" constant="75" id="vBO-WH-OWu"/>
@@ -177,7 +177,6 @@
                             <constraint firstItem="0rZ-Lw-u5C" firstAttribute="top" secondItem="TSC-Qk-LIP" secondAttribute="bottom" constant="60" id="1wK-iJ-Tlz"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="top" secondItem="1AO-uZ-M3q" secondAttribute="bottom" constant="40" id="2Pp-ZC-UAo"/>
                             <constraint firstItem="vuC-Pp-WfJ" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="5NX-9r-tOY"/>
-                            <constraint firstItem="vuC-Pp-WfJ" firstAttribute="top" secondItem="a7b-3V-bSj" secondAttribute="top" constant="12" id="6Vy-Fa-D1r"/>
                             <constraint firstItem="1AO-uZ-M3q" firstAttribute="centerY" secondItem="dK1-m5-iJq" secondAttribute="centerY" id="ADx-f5-JEB"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="centerY" secondItem="5It-NQ-7d2" secondAttribute="centerY" id="Dfh-if-HoH"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="centerY" secondItem="a7b-3V-bSj" secondAttribute="centerY" constant="10" id="GlY-lO-s16"/>
@@ -185,6 +184,7 @@
                             <constraint firstItem="dK1-m5-iJq" firstAttribute="top" secondItem="79N-4m-bXt" secondAttribute="bottom" constant="32" id="PNx-rr-B4O"/>
                             <constraint firstItem="0rZ-Lw-u5C" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="S0e-vF-9xV"/>
                             <constraint firstItem="TSC-Qk-LIP" firstAttribute="top" secondItem="PTB-pC-o5q" secondAttribute="bottom" constant="20" id="Tbx-23-0cu"/>
+                            <constraint firstItem="79N-4m-bXt" firstAttribute="top" secondItem="vuC-Pp-WfJ" secondAttribute="bottom" constant="12" id="W3q-H5-HyL"/>
                             <constraint firstItem="1AO-uZ-M3q" firstAttribute="leading" secondItem="dK1-m5-iJq" secondAttribute="trailing" constant="6" id="gTv-dd-IDf"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="leading" secondItem="5It-NQ-7d2" secondAttribute="trailing" constant="6" id="geg-xb-Dzq"/>
                             <constraint firstItem="TSC-Qk-LIP" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="hxo-ZV-26W"/>
@@ -225,7 +225,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="add-setting" translatesAutoresizingMaskIntoConstraints="NO" id="o2g-Mu-SKp">
-                                <rect key="frame" x="122.5" y="12" width="75" height="75"/>
+                                <rect key="frame" x="122.5" y="14" width="75" height="75"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose device SSID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f4p-GP-tbJ">
                                 <rect key="frame" x="82.5" y="101" width="155" height="21"/>
@@ -267,7 +267,6 @@
                         <constraints>
                             <constraint firstItem="o2g-Mu-SKp" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="1ZO-Va-Lge"/>
                             <constraint firstItem="rPP-AB-IDV" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="4Dv-bI-OoJ"/>
-                            <constraint firstItem="o2g-Mu-SKp" firstAttribute="top" secondItem="uxg-Bb-Oba" secondAttribute="top" constant="12" id="8p6-bf-2dj"/>
                             <constraint firstItem="Ama-s3-8AE" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="BGS-FI-J9S"/>
                             <constraint firstItem="E37-e7-gya" firstAttribute="leading" secondItem="Q1R-Nz-Eqw" secondAttribute="leading" constant="60" id="ICj-kK-vYk"/>
                             <constraint firstItem="rPP-AB-IDV" firstAttribute="top" secondItem="f4p-GP-tbJ" secondAttribute="bottom" constant="18" id="MS5-9B-9g0"/>
@@ -275,6 +274,7 @@
                             <constraint firstItem="Ama-s3-8AE" firstAttribute="top" secondItem="E37-e7-gya" secondAttribute="bottom" id="Sp6-5V-yG6"/>
                             <constraint firstItem="rPP-AB-IDV" firstAttribute="leading" secondItem="Q1R-Nz-Eqw" secondAttribute="leading" id="W1s-Na-cah"/>
                             <constraint firstItem="pYt-Bf-MxV" firstAttribute="top" secondItem="Ama-s3-8AE" secondAttribute="bottom" id="cJc-Jw-Ud8"/>
+                            <constraint firstItem="f4p-GP-tbJ" firstAttribute="top" secondItem="o2g-Mu-SKp" secondAttribute="bottom" constant="12" id="eLT-FQ-CLP"/>
                             <constraint firstItem="Q1R-Nz-Eqw" firstAttribute="trailing" secondItem="E37-e7-gya" secondAttribute="trailing" constant="60" id="eWN-Y5-dH2"/>
                             <constraint firstItem="E37-e7-gya" firstAttribute="top" secondItem="rPP-AB-IDV" secondAttribute="bottom" constant="12" id="fvT-qb-cQh"/>
                             <constraint firstItem="E37-e7-gya" firstAttribute="centerX" secondItem="uxg-Bb-Oba" secondAttribute="centerX" id="lce-7R-tZM"/>

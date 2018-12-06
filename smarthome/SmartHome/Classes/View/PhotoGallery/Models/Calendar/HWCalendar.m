@@ -148,9 +148,10 @@
 //    [tipsView addSubview:dayLabel];
 //    self.dayLabel = dayLabel;
     
+    CGSize titleSize = [NSLocalizedString(@"kReturnToday", nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]} context:nil].size;
     CGFloat yearBtnW = 70.0f;
     CGFloat monthbtnW = 60.0f;
-    CGFloat todayBtnW = 70.0f;
+    CGFloat todayBtnW = titleSize.width; //70.0f;
     CGFloat padding = (self.bounds.size.width - KTipsW - yearBtnW - monthbtnW - todayBtnW - KBtnW * 2) * 0.25;
     
     //年份按钮
@@ -547,11 +548,11 @@
 #pragma mark - HWOptionButtonDelegate
 - (void)didSelectOptionInHWOptionButton:(HWOptionButton *)optionButton
 {
-    if (optionButton.title.length > 2) {
+    if (optionButton.title.length > 3) {
         _year = [optionButton.title integerValue];
         _yearBtn.title = [NSString stringWithFormat:@"%ld", _year];
     }else {
-        _month = [optionButton.title integerValue];
+        _month = [_monthArray indexOfObject:optionButton.title] + 1; //[optionButton.title integerValue];
         _monthBtn.title = optionButton.title; //[NSString stringWithFormat:@"%ld月", _month];
     }
     

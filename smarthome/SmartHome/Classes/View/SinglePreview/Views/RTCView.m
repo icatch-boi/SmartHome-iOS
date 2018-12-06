@@ -821,7 +821,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
         _bgImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"im_skin_icon_audiocall_bg.jpg"]];
 #else
         _bgImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        _bgImageView.backgroundColor = [UIColor ic_colorWithHex:kThemeColor];
+        _bgImageView.backgroundColor = [UIColor ic_colorWithHex:0xF2F2F2];
 #endif
     }
     
