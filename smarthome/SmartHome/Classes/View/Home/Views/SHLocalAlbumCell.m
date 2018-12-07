@@ -106,6 +106,7 @@
         //[image ic_cornerImageWithSize:_photoButton.bounds.size radius:kImageCornerRadius];
         //[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
         //_photoLabel.text = [NSString stringWithFormat:@"%@ (0)", NSLocalizedString(@"PhotosLabel", nil)];
+        [_thumnailImgView setImage:image];
     }
     
     if(_mediaType) {
@@ -122,14 +123,14 @@
     [_thumnailButton addTarget:self action:@selector(setNormalBackground) forControlEvents:UIControlEventTouchUpInside];
     
     NSString *countStr = [NSString stringWithFormat:@"(%zd)", photoAssets.count];
-    [_thumnailImgView setImage:image];
+//    [_thumnailImgView setImage:image];
     _mediaTypeLabel.text = [NSString stringWithFormat:@"%@", typeStr];
     _mediaCountLabel.text = [NSString stringWithFormat:@"%@", countStr];
 
 }
 
 - (void)updatePhotoThumnailWithAsset:(PHAsset *)asset {
-    PHCachingImageManager *manager = [[PHCachingImageManager alloc] init];
+    PHCachingImageManager *manager = (PHCachingImageManager *)[PHCachingImageManager defaultManager]; //[[PHCachingImageManager alloc] init];
     PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
     options.resizeMode = PHImageRequestOptionsResizeModeExact;
     
@@ -140,7 +141,8 @@
                     resultHandler:^(UIImage *result, NSDictionary *info) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             UIImage *image = [UIImage imageNamed:@"camera roll-btn-photo-loading"];
-                            
+                            SHLogInfo(SHLogTagAPP, @"photo thumnail: %@", result);
+
                             if (result) {
                                 image = result;
                             }
@@ -152,7 +154,7 @@
 }
 
 - (void)updateVideoThumnailWithAsset:(PHAsset *)asset {
-    PHCachingImageManager *manager = [[PHCachingImageManager alloc] init];
+    PHCachingImageManager *manager = (PHCachingImageManager *)[PHCachingImageManager defaultManager]; //[[PHCachingImageManager alloc] init];
     PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
     options.resizeMode = PHImageRequestOptionsResizeModeExact;
     [manager requestImageForAsset:asset
@@ -162,7 +164,8 @@
                     resultHandler:^(UIImage *result, NSDictionary *info) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             UIImage *image = [UIImage imageNamed:@"camera roll-btn-video-loading"];
-                            
+                            SHLogInfo(SHLogTagAPP, @"video thumnail: %@", result);
+
                             if (result) {
                                 image = result;
                             }
