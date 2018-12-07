@@ -64,10 +64,11 @@
 	SHLogInfo(SHLogTagAPP, @"cancelDownloadFile filename is %s", file.f.getFileName().c_str());
 	id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
 	SHDownloader *downloader = [self.downLoaderCache objectForKey:key];
+    SHLogInfo(SHLogTagAPP, @"downloader is: %@", downloader);
 	if(downloader == nil){//current file is not downloading
-		self.cancelDownloadNum++;
+		self.downloadFailedNum++;
 		int position = [self findPositionByFile:file];
-		[self.downloadArray removeObject:file];
+//        [self.downloadArray removeObject:file];
 		id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
 		[self.downLoaderCache removeObjectForKey:key];
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -98,7 +99,8 @@
 -(void)clearDownloadingByUid:(NSString*) uid{
 	//delete download list while disconnect
 	NSMutableArray *downloadList = [SHDownloadManager shareDownloadManger].downloadArray;
-	if(downloadList != nil && downloadList.count > 0){
+    SHLogInfo(SHLogTagAPP, @"download list num: %lu", (unsigned long)downloadList.count);
+    if(downloadList != nil && downloadList.count > 0){
 		for(int ii = 0; ii < downloadList.count;){
 			SHFile *file = [downloadList objectAtIndex:ii];
 			if([file.uid isEqualToString:uid]){
@@ -117,12 +119,14 @@
 	if([self isExistInDownloadListByFile:file] == YES){
 		return;
 	}
+#if 0
 	//reset the stastics when starting new download
 	if(self.downloadArray.count == 0){
 		self.downloadFailedNum = 0;
 		self.downloadSuccessedNum = 0;
 		self.cancelDownloadNum = 0;
 	}
+#endif
 	[self.downloadArray insertObject:file atIndex:(self.downloadArray.count)];
     SHLogInfo(SHLogTagAPP, "addDownloadFile cout is : %lu", (unsigned long)self.downloadArray.count);
 }

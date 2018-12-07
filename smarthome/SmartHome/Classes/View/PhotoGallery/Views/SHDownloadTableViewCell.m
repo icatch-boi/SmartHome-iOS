@@ -131,7 +131,13 @@
 
 - (IBAction)cancelClick:(id)sender {
 //    [self.progressView ZWProgramTimerStart];
+#if 0
     [[SHDownloadManager shareDownloadManger] cancelDownloadFile:self.file];
+#else
+    if ([self.delegate respondsToSelector:@selector(cancelDownloadHandler:)]) {
+        [self.delegate cancelDownloadHandler:self];
+    }
+#endif
 }
 
 

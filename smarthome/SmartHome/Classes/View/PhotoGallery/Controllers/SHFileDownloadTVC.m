@@ -11,7 +11,7 @@
 #import "SHDownloadManager.h"
 #import "SHLocalAlbumTVC.h"
 
-@interface SHFileDownloadTVC () <SHDownloadAboutInfoDelegate>
+@interface SHFileDownloadTVC () <SHDownloadAboutInfoDelegate, SHDownloadTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *downloadInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *detailInfoButton;
@@ -99,6 +99,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SHDownloadTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DownloadCellID" forIndexPath:indexPath];
 	cell.file = self.downloadArray[indexPath.row];
+    cell.delegate = self;
 //	cell.shCamObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:cell.file.uid];
 //	
 //	[cell setDownloadCompleteBlock:^ (SHDownloadTableViewCell *dcell) {
@@ -273,6 +274,15 @@
 
 - (void)onAllDownloadComplete{
 	
+}
+
+#pragma mark - SHDownloadTableViewCellDelegate
+- (void)cancelDownloadHandler:(SHDownloadTableViewCell *)cell {
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[SHDownloadManager shareDownloadManger] cancelDownloadFile:cell.file];
+    });
 }
 
 @end
