@@ -283,7 +283,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : [self.progressHUD hideProgressHUD:YES];
 #endif
             [self.progressHUDPreview hideProgressHUD:YES];
-            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : void();
+//            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : void();
+            [self isRing] ? [self talkBackAction:_speakerButton] : void();
             //            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self enableUserInteraction:YES];
             [self prepareCameraPropertyData];
@@ -1781,10 +1782,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
         });
         
+#if 0
 //        if (_shCameraObj.cameraProperty.serverOpened) {
             BOOL isRing = _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
             isRing ? [self talkBackAction:_speakerButton] : void();
 //        }
+#endif
     } else if ([keyPath isEqualToString:@"bounds"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CATransaction begin];

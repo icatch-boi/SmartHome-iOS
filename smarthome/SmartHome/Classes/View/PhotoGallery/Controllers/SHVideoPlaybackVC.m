@@ -276,7 +276,7 @@
                 [self presentViewController:alertC animated:YES completion:nil];
             });
         } else {
-            [self playbackButtonPressed:self.playbackButton];
+//            [self playbackButtonPressed:self.playbackButton];
         }
     });
 }
@@ -341,6 +341,13 @@
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     app.isVideoPB = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    SHLogInfo(SHLogTagAPP, @"Current device is connect: %d", _shCamObj.isConnect);
+    if (self.view.frame.size.width < self.view.frame.size.height) {
+        [self initControlPanel];
+    } else {
+        [self landscapeControlPanel];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -348,7 +355,7 @@
     [super viewDidAppear:animated];
     
     if (_shCamObj.isConnect) {
-        [self playbackButtonPressed:self.playbackButton];
+//        [self playbackButtonPressed:self.playbackButton];
     } else {
         [self connectCamera];
     }
@@ -452,7 +459,7 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     self.played = NO;
     
-    [self playbackButtonPressed:self.playbackButton];
+//    [self playbackButtonPressed:self.playbackButton];
 }
 
 - (void)handleDisconnection:(NSNotification *)nc
