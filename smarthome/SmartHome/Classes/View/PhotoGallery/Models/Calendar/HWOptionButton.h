@@ -24,6 +24,7 @@
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) BOOL showSearchBar; //default is NO.
 @property (nonatomic, weak) id<HWOptionButtonDelegate> delegate;
+@property (nonatomic, assign) CGFloat fontSize;
 
 @end
 

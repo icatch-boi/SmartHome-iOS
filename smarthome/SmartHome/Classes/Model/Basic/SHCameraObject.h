@@ -35,6 +35,7 @@
 @property (nonatomic) BOOL isEnterBackground;
 
 @property (nonatomic, assign) BOOL startPV;
+@property (nonatomic, assign) ICatchVideoQuality streamQuality;
 
 + (instancetype)cameraObjectWithCamera:(SHCamera *)camera;
 

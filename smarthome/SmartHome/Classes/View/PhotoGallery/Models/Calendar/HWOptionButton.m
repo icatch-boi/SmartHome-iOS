@@ -24,6 +24,7 @@
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, weak) UIView *view;
 @property (nonatomic, weak) UIButton *button;
+@property (nonatomic, strong) UIFont *currentFont;
 
 @end
 
@@ -50,10 +51,11 @@ static NSString *KOptionButtonCell = @"KOptionButtonCell";
 }
 
 - (void)setup {
+    _currentFont = KFont;
     //按钮
     UIButton *button = [[UIButton alloc] initWithFrame:self.bounds];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    button.titleLabel.font = KFont;
+    button.titleLabel.font = _currentFont;
     [button setImage:[UIImage imageNamed:@"bottom"] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"bottom"] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -113,7 +115,7 @@ static NSString *KOptionButtonCell = @"KOptionButtonCell";
     
     //显示选项按钮
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, self.frame.size.width, self.frame.size.height)];
-    button.titleLabel.font = KFont;
+    button.titleLabel.font = _currentFont;
     [button setTitle:_button.titleLabel.text forState:UIControlStateNormal];
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(btnOnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -270,12 +272,13 @@ static NSString *KOptionButtonCell = @"KOptionButtonCell";
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:KOptionButtonCell];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:KOptionButtonCell];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:KOptionButtonCell];
     }
     cell.textLabel.text = _searchArray[indexPath.row];
     cell.backgroundColor = [UIColor whiteColor];
-    cell.textLabel.font = KFont;
-    
+    cell.textLabel.font = _currentFont;
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+
     return cell;
 }
 
@@ -288,6 +291,16 @@ static NSString *KOptionButtonCell = @"KOptionButtonCell";
     if (_delegate && [_delegate respondsToSelector:@selector(didSelectOptionInHWOptionButton:)]) {
         [_delegate didSelectOptionInHWOptionButton:self];
     }
+}
+
+- (void)setFontSize:(CGFloat)fontSize {
+    if (fontSize <= 0) {
+        _currentFont = KFont;
+    } else {
+        _currentFont = [UIFont systemFontOfSize:fontSize];
+    }
+    
+    self.button.titleLabel.font = _currentFont;
 }
 
 @end

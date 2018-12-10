@@ -55,7 +55,7 @@ static const NSTimeInterval kConnectAndPreviewTimeout = 120.0;
 static const NSTimeInterval kConnectAndPreviewSpecialSleepTime = 5.0;
 static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
-@interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate>
+@interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate, HWOptionButtonDelegate>
 
 @property (nonatomic, strong) SHSettingData *videoSizeData;
 @property (nonatomic, assign) BOOL disconnectHandling;
@@ -112,6 +112,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self updateTitle];
 //    [self prepareVideoSizeData];
     [self setupCallView];
+    [self updateResolutionButton:_shCameraObj.streamQuality];
 #if 0
     if (!_shCameraObj.isConnect) {
         [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];
@@ -496,6 +497,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self setupBottomToolView];
 #endif
     [self enableUserInteraction:NO];
+    [self setupResolutionButton];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -2326,6 +2328,43 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)addDeviceObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDisconnectHandle:) name:kCameraDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
+}
+
+#pragma mark - Resolution Handle
+- (void)setupResolutionButton {
+    _resolutionButton.array = [[SHCamStaticData instance] streamQualityArray];
+    _resolutionButton.delegate = self;
+    _resolutionButton.fontSize = 15.0;
+}
+
+- (void)updateResolutionButton:(ICatchVideoQuality)quality {
+    _resolutionButton.row = quality;
+    _resolutionButton.title = [[SHCamStaticData instance] streamQualityArray][quality];
+}
+
+- (void)didSelectOptionInHWOptionButton:(HWOptionButton *)optionButton {
+    NSInteger index = optionButton.row;
+    SHLogInfo(SHLogTagAPP, @"Current select row: %ld", (long)index);
+    
+    ICatchVideoQuality quality = (ICatchVideoQuality)index;
+    if (quality == _shCameraObj.streamQuality) {
+        SHLogInfo(SHLogTagAPP, @"Current quality already exist.");
+        return;
+    }
+    
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_TARGET_QUEUE_DEFAULT, 0), ^{
+        BOOL success = [_shCameraObj.sdk setVideoQuality:quality];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                _shCameraObj.streamQuality = quality;
+                [self.progressHUD hideProgressHUD:YES];
+            } else {
+                [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kChangeStreamQualityFailed", nil) showTime:2.0];
+            }
+        });
+    });
 }
 
 @end

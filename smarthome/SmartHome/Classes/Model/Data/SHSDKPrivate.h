@@ -26,6 +26,7 @@
 #include "type/ICatchFileMonitorType.h"
 #include "type/ICatchFileTag.h"
 #include "type/ICatchTimeZone.h"
+#include "type/ICatchVideoQuality.h"
 
 #include "Control.h"
 #include "Listener.h"

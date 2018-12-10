@@ -647,3 +647,6 @@
 "kNetworkRequestError_50033" = "設備狀態錯誤";
 "kNetworkRequestError_50034" = "設備已註冊";
 "kStartStream" = "正在開流...";
+"kResolution_Smooth" = "流暢";
+"kResolution_HD" = "高清";
+"kChangeStreamQualityFailed"= "切換Stream流暢度失敗！";

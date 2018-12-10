@@ -633,3 +633,6 @@
 "kNetworkRequestError_50033" = "Device status error";
 "kNetworkRequestError_50034" = "Device is registered";
 "kStartStream" = "Start Streaming...";
+"kResolution_Smooth" = "Smooth";
+"kResolution_HD" = "HD";
+"kChangeStreamQualityFailed"= "Switch the Stream fluency failed!";

@@ -34,5 +34,6 @@
 @property(nonatomic, readonly) NSDictionary *tutkModeDict;
 @property(nonatomic, readonly) NSDictionary *tutkErrorDict;
 @property (nonatomic, readonly) NSDictionary *monthStringDict;
+@property (nonatomic, readonly) NSArray *streamQualityArray;
 
 @end

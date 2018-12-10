@@ -13,13 +13,13 @@
 
 class SHH264StreamParameter:public ICatchStreamParam {
 public:
-    SHH264StreamParameter(int width, int height, int bitrate, int framerate);
+    SHH264StreamParameter(int width, int height, int bitrate, int framerate, int quality = 0);
     string getCmdLineParam();
     int getVideoWidth();
     int getVideoHeight();
     
 private:
-    int width, height, bitrate, framerate;
+    int width, height, bitrate, framerate, quality;
 };
 
 #endif /* SHH264StreamParameter_hpp */

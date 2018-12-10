@@ -379,4 +379,10 @@
              };
 }
 
+- (NSArray *)streamQualityArray {
+    return @[NSLocalizedString(@"kResolution_Smooth", nil),
+             NSLocalizedString(@"kResolution_HD", nil),
+             ];
+}
+
 @end

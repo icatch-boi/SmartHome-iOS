@@ -39,7 +39,8 @@
 	obj.gallery = [[SHPhotoGallery alloc] init];
 	obj.cameraProperty = [[SHCameraProperty alloc] init];
 	obj.camera = camera;
-	
+    obj.streamQuality = VIDEO_QUALITY_SMOOTH;
+
 	return obj;
 }
 

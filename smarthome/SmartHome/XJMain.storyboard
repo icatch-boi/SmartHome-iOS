@@ -141,6 +141,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TXA-de-l86" userLabel="View_footer">
                                 <rect key="frame" x="0.0" y="300" width="320" height="50"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rLi-aB-MIk" customClass="HWOptionButton">
+                                        <rect key="frame" x="165" y="0.0" width="90" height="50"/>
+                                        <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="rLi-aB-MIk" secondAttribute="height" multiplier="1.8" id="UG7-a5-lQF"/>
+                                        </constraints>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I5e-Z7-j2P">
                                         <rect key="frame" x="260" y="0.0" width="50" height="50"/>
                                         <constraints>
@@ -165,9 +172,12 @@
                                     <constraint firstItem="I5e-Z7-j2P" firstAttribute="centerY" secondItem="TXA-de-l86" secondAttribute="centerY" id="9mT-sT-cL3"/>
                                     <constraint firstAttribute="trailing" secondItem="I5e-Z7-j2P" secondAttribute="trailing" constant="10" id="C8f-sw-guQ"/>
                                     <constraint firstItem="VXz-F7-Lag" firstAttribute="leading" secondItem="TXA-de-l86" secondAttribute="leading" constant="16" id="Hz1-PG-d0I"/>
+                                    <constraint firstItem="I5e-Z7-j2P" firstAttribute="leading" secondItem="rLi-aB-MIk" secondAttribute="trailing" constant="5" id="LpP-2B-Cod"/>
                                     <constraint firstAttribute="bottom" secondItem="I5e-Z7-j2P" secondAttribute="bottom" id="Twg-SE-S2a"/>
                                     <constraint firstAttribute="height" constant="50" id="YdO-dJ-lm5"/>
+                                    <constraint firstItem="rLi-aB-MIk" firstAttribute="top" secondItem="TXA-de-l86" secondAttribute="top" id="b8l-NA-k46"/>
                                     <constraint firstItem="I5e-Z7-j2P" firstAttribute="top" secondItem="TXA-de-l86" secondAttribute="top" id="eBf-Yw-JBt"/>
+                                    <constraint firstAttribute="bottom" secondItem="rLi-aB-MIk" secondAttribute="bottom" id="nA1-4w-drQ"/>
                                 </constraints>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="StartPVFailed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yC0-lo-qNY">
@@ -213,6 +223,7 @@
                         <outlet property="headerView" destination="OAB-41-i5J" id="z8e-cP-odh"/>
                         <outlet property="previewImageView" destination="ecE-gD-tQd" id="3Wx-2O-iPY"/>
                         <outlet property="pvFailedLabel" destination="yC0-lo-qNY" id="riL-39-gLE"/>
+                        <outlet property="resolutionButton" destination="rLi-aB-MIk" id="mg5-JN-QeE"/>
                         <outlet property="speakerBtnWidthCons" destination="FK6-AM-Hg4" id="bMB-9I-6zP"/>
                         <outlet property="speakerButton" destination="clr-na-M94" id="pEI-nC-9hk"/>
                         <outlet property="speakerLeftCons" destination="zLl-Zx-PZK" id="rsi-gL-0me"/>
@@ -222,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ibG-c5-alI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2057" y="180"/>
+            <point key="canvasLocation" x="2056.875" y="180"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="lCK-LE-IC2">
@@ -928,12 +939,12 @@ AAAAAAAosQ
 </mutableData>
         </image>
         <image name="default_thumb" width="245.75999450683594" height="183.36000061035156"/>
-        <image name="full screen video-btn-mute-pre_1" width="51" height="51.5"/>
-        <image name="full screen video-btn-mute_1" width="51" height="51"/>
-        <image name="full screen-video-btn-screenshot" width="51" height="51"/>
-        <image name="full screen-video-btn-screenshot-pre" width="51" height="51"/>
-        <image name="full screen-video-btn-speak" width="66.5" height="66"/>
-        <image name="full screen-video-btn-speak-pre" width="66.5" height="66"/>
+        <image name="full screen video-btn-mute-pre_1" width="52" height="52"/>
+        <image name="full screen video-btn-mute_1" width="52" height="52"/>
+        <image name="full screen-video-btn-screenshot" width="52" height="52"/>
+        <image name="full screen-video-btn-screenshot-pre" width="52" height="52"/>
+        <image name="full screen-video-btn-speak" width="67" height="67"/>
+        <image name="full screen-video-btn-speak-pre" width="67" height="67"/>
         <image name="ic_battery_full_green_24dp" width="24" height="24"/>
         <image name="ic_fullscreen_white_24dp" width="48" height="48"/>
         <image name="ic_mic_white_48dp" width="48" height="48"/>
@@ -941,16 +952,16 @@ AAAAAAAosQ
         <image name="ic_signal_wifi_4_bar_black_24dp" width="24" height="24"/>
         <image name="ic_unmute_white_36dp" width="36" height="36"/>
         <image name="icon_voice" width="29" height="27"/>
-        <image name="nav-add" width="44" height="44"/>
-        <image name="nav-bt-list" width="44" height="44"/>
-        <image name="nav-btn-back" width="44" height="44"/>
+        <image name="nav-add" width="28" height="28"/>
+        <image name="nav-bt-list" width="28" height="28"/>
+        <image name="nav-btn-back" width="28" height="28"/>
         <image name="vedieo-buttery_2" width="50" height="50"/>
         <image name="video-btn-full screen" width="50" height="50"/>
         <image name="video-btn-mute-pre_1" width="75" height="75"/>
         <image name="video-btn-mute_1" width="75" height="75"/>
-        <image name="video-btn-screenshot" width="74.5" height="75"/>
-        <image name="video-btn-screenshot-pre" width="75" height="74.5"/>
-        <image name="video-btn-speak" width="96.5" height="96.5"/>
-        <image name="video-btn-speak-pre" width="97" height="96.5"/>
+        <image name="video-btn-screenshot" width="75" height="75"/>
+        <image name="video-btn-screenshot-pre" width="75" height="75"/>
+        <image name="video-btn-speak" width="97" height="97"/>
+        <image name="video-btn-speak-pre" width="97" height="97"/>
     </resources>
 </document>

@@ -60,6 +60,7 @@ enum SHRetrunType {
 
 // MEDIA
 - (int)startMediaStreamWithEnableAudio:(BOOL)enableAudio camera:(SHCameraObject *)cameraObj;
+- (BOOL)setVideoQuality:(ICatchVideoQuality)quality;
 - (int)previewPlay;
 - (BOOL)stopMediaStream;
 - (int)previewStop;

@@ -422,6 +422,20 @@
     return startRetVal;
 }
 
+- (BOOL)setVideoQuality:(ICatchVideoQuality)quality {
+    int retVal = ICH_NULL;
+    
+    if (_preview == nil) {
+        SHLogError(SHLogTagSDK, @"SHSDK doesn't work!!!");
+        return NO;
+    }
+    
+    retVal = _preview->setVideoQuality(quality);
+    SHLogInfo(SHLogTagAPP, @"Set video quality: %d", retVal);
+    
+    return retVal == ICH_SUCCEED ? YES : NO;
+}
+
 - (int)previewPlay {
     int retVal = ICH_NULL;
     
