@@ -650,3 +650,6 @@
 "kResolution_Smooth" = "流暢";
 "kResolution_HD" = "高清";
 "kChangeStreamQualityFailed"= "切換Stream流暢度失敗！";
+"kFileDownloadSuccess" = "下載成功";
+"kFileDownloadFailed" = "下載失敗";
+"kFileDownloadCancel" = "取消下載";

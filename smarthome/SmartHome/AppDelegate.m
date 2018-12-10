@@ -1183,6 +1183,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSString *msg = [SHTool createDownloadComplete:tempDict];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+        UIViewController *vc = nav.visibleViewController;
+        if ([NSStringFromClass([vc class]) isEqualToString:@"SHHomeTableViewController"]) {
+            SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+            return;
+        }
+        
         [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"Tips", nil) showTime:kShowDownloadCompleteNoteTime * 0.6];
         _progressHUD.detailsLabelText = msg;
     });

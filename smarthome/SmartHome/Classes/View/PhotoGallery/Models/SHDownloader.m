@@ -248,7 +248,7 @@
     
     int value = sender.intValue1;
 //    NSString *downloadInfo = nil;
-    NSString *description = @"下载成功";
+    NSString *description = NSLocalizedString(@"kFileDownloadSuccess", nil);
 
     switch (value) {
         case 0:
@@ -268,7 +268,7 @@
             
 //            [self.shCamObj.sdk addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
             [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
-            description = @"下载成功";
+            description = NSLocalizedString(@"kFileDownloadSuccess", nil);
             break;
          
         case -1:
@@ -278,7 +278,7 @@
                 SHLogInfo(SHLogTagAPP, @"notify onDownloadComplete, fw happen error.");
                 [self.delegate onDownloadComplete:self.file retvalue:NO];
             }
-            description = @"下载失败";
+            description = NSLocalizedString(@"kFileDownloadFailed", nil);
             break;
             
         case -2:
@@ -288,7 +288,7 @@
             if ([self.delegate respondsToSelector:@selector(onCancelDownloadComplete:retvalue:)]) {
                 [self.delegate onCancelDownloadComplete:self.file retvalue:YES];
             }
-            description = @"取消下载";
+            description = NSLocalizedString(@"kFileDownloadCancel", nil);
             break;
             
         default:

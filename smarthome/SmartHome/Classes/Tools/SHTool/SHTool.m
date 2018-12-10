@@ -364,7 +364,16 @@
         description = tempDict[@"Description"];
     }
     
-    NSString *msg = [NSString stringWithFormat:/*@"%@ 中的文件 %s %@。"*/NSLocalizedString(@"kDownloadCompletionDescription", nil), cameraName, fileName, description];
+    NSString *msg = nil;
+    // 获取当前设备语言
+    NSArray *appLanguages = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"];
+    NSString *languageName = [appLanguages objectAtIndex:0];
+    
+    if ([languageName isEqualToString:@"zh-Hans-CN"] || [languageName isEqualToString:@"zh-Hant-CN"]) {
+        msg = [NSString stringWithFormat:/*@"%@ 中的文件 %s %@。"*/NSLocalizedString(@"kDownloadCompletionDescription", nil), cameraName, fileName, description];
+    } else {
+        msg = [NSString stringWithFormat:NSLocalizedString(@"kDownloadCompletionDescription", nil), fileName, description, cameraName];
+    }
     
     SHLogInfo(SHLogTagAPP, @"Download complete message: %@", msg);
     

@@ -498,7 +498,7 @@
 "kAccountLoginExpired" = "Account login has expired, log in again.";
 "kDownloadingSureQuitPreview" = "Some files are being downloaded, exiting will cancel download, are you sure want to quit?";
 "kDownloadCompletion" = "Download completed.";
-"kDownloadCompletionDescription" = "%@ 中的文件 %s %@。";
+"kDownloadCompletionDescription" = "There are %s %@ on %@.";
 "kDownloadDeviceDescription" = "Current device";
 "kCaptureSuccess" = "Capture sucessfully";
 "kRefuseRing" = "Hang up";
@@ -637,3 +637,6 @@
 "kResolution_Smooth" = "Smooth";
 "kResolution_HD" = "HD";
 "kChangeStreamQualityFailed"= "Switch the Stream fluency failed!";
+"kFileDownloadSuccess" = "download successfully";
+"kFileDownloadFailed" = "download failed";
+"kFileDownloadCancel" = "cancel downlaod";
