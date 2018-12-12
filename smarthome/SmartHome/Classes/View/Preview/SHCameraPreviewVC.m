@@ -288,7 +288,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self isRing] ? [self talkBackAction:_speakerButton] : void();
             //            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self enableUserInteraction:YES];
-            [self prepareCameraPropertyData];
+//            [self prepareCameraPropertyData];
         });
         
         //        NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
@@ -325,12 +325,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)startPreview {
+    [self prepareCameraPropertyData];
+
     if (!_shCameraObj.streamOper.PVRun) {
         [self startMediaStream];
     } else {
 //        [self addVideoBitRateObserver];
         [self addDeviceObserver];
-        [self prepareCameraPropertyData];
     }
 }
 
@@ -1248,9 +1249,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #pragma mark - DisconnectHandle
 - (void)cameraDisconnectHandle:(NSNotification *)nc {
     if (_disconnectHandling) {
+        SHLogInfo(SHLogTagAPP, @"Already do with disconnect event.");
         return;
     }
     
+    SHLogTRACE();
     _notification = nil;
     _disconnectHandling = YES;
     SHCameraObject *shCamObj = nc.object;
@@ -1277,9 +1280,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)cameraPowerOffHandle:(NSNotification *)nc {
     if (_poweroffHandling) {
+        SHLogInfo(SHLogTagAPP, @"Already do with poweroff event.");
         return;
     }
     
+    SHLogTRACE();
     [self stopCurrentTalkBack];
     
     _disconnectHandling = YES;
@@ -1343,6 +1348,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)reconnect:(SHCameraObject *)shCamObj {
+    SHLogTRACE();
     [self.progressHUDPreview showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", @"")]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         int retValue = [shCamObj connectCamera];
@@ -2326,6 +2332,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)addDeviceObserver {
+    SHLogTRACE();
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDisconnectHandle:) name:kCameraDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
 }

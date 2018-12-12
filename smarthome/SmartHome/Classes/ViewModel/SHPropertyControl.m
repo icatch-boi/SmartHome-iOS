@@ -126,6 +126,7 @@
         }
     });
 //    return [self transBatteryLevel2NStr:level];
+    SHLogInfo(SHLogTagAPP, @"battery level: %d", level);
     return level;
 }
 
@@ -149,6 +150,7 @@
         retVal = @"vedieo-buttery_2";
     }
     
+    SHLogInfo(SHLogTagAPP, @"battery level: %d, string: %@", value, retVal);
     return retVal;
 }
 

@@ -406,7 +406,7 @@
 
 "kPirRecording" = "Pir is video record!";
 "kAPPRecording" = "APP is video record!";
-"kNotificationInfoTitle" = "Receive notice from the camera";
+"kNotificationInfoTitle" = "Receive notice from the doorbell";
 "kDoorbellTips" = "Someone rang the bell, answer?";
 "kDoorbellOverdueTips" = "Someone rang the bell [the notice has been expired]";
 "kDetectSome" = "Detect has someone";

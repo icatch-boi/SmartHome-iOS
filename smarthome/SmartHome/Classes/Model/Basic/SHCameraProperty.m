@@ -25,6 +25,7 @@
     self.pushMsgStatusData = nil;
     self.fasterConnectionData = nil;
     self.serverOpened = NO;
+    self.curBatteryLevel = nil;
 }
 
 //- (NSMutableArray *)downloadArray {

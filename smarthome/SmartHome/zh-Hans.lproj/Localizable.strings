@@ -423,7 +423,7 @@
 
 "kPirRecording" = "运动侦测正在录影!";
 "kAPPRecording" = "应用程序正在录影!";
-"kNotificationInfoTitle" = "收到相机通知";
+"kNotificationInfoTitle" = "收到门铃通知";
 "kDoorbellTips" = "有人按门铃,是否接听?";
 "kDoorbellOverdueTips" = "有人按门铃 [该通知已过期]";
 "kDetectSome" = "侦测到有人";

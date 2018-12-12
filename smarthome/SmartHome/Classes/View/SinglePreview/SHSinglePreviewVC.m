@@ -482,12 +482,14 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 }
 
 - (void)startPreview {
+    [self initCameraPropertyGUI];
+
 //    [self.progressHUD showProgressHUDWithMessage:nil];
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
             [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
-            [self initCameraPropertyGUI];
+//            [self initCameraPropertyGUI];
             
             [self enableUserInteraction:YES];
         });

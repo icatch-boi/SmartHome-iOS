@@ -275,6 +275,7 @@
 }
 
 - (void)openAudioServer {
+    SHLogTRACE();
     if (self.cameraProperty.serverOpened) {
         SHLogInfo(SHLogTagAPP, @"Audio server already opened.");
         return;
@@ -361,6 +362,8 @@
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
+    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
+
 	if (self.cameraPropertyValueChangeBlock) {
 		self.cameraPropertyValueChangeBlock(evt);
 	}

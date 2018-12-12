@@ -419,7 +419,7 @@
 
 "kPirRecording" = "運動偵測正在錄影!";
 "kAPPRecording" = "應用程序正在錄影!";
-"kNotificationInfoTitle" = "收到相機通知";
+"kNotificationInfoTitle" = "收到門鈴通知";
 "kDoorbellTips" = "有人按門鈴,是否接聽?";
 "kDoorbellOverdueTips" = "有人按門鈴 [該通知已過期]";
 "kDetectSome" = "偵測到有人";

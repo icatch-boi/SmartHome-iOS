@@ -35,4 +35,21 @@
     return evt;
 }
 
+- (NSString *)description {
+    NSDictionary *dict = @{@"eventID": [NSString stringWithFormat:@"0x%x", self.eventID],
+                           @"sessionID": [NSString stringWithFormat:@"%d", self.sessionID],
+                           @"intValue1": [NSString stringWithFormat:@"%d", self.intValue1],
+                           @"intValue2": [NSString stringWithFormat:@"%d", self.intValue2],
+                           @"intValue3": [NSString stringWithFormat:@"%d", self.intValue3],
+                           @"doubleValue1": [NSString stringWithFormat:@"%f", self.doubleValue1],
+                           @"doubleValue2": [NSString stringWithFormat:@"%f", self.doubleValue2],
+                           @"doubleValue3": [NSString stringWithFormat:@"%f", self.doubleValue3],
+                           @"stringValue1": self.stringValue1,
+                           @"stringValue2": self.stringValue2,
+                           @"stringValue3": self.stringValue3,
+                           };
+    
+    return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, dict.description];
+}
+
 @end

@@ -624,6 +624,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)stopMediaStreamWithComplete:(void(^)())completeBlock {
+    SHLogTRACE();
     if (!_PVRun) {
         SHLogInfo(SHLogTagAPP, @"streaming already stopped.");
         return;
@@ -674,6 +675,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)isMute:(BOOL)mute successBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
+    SHLogTRACE();
     _shCamObj.cameraProperty.mute = !mute;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -717,6 +719,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)startTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
+    SHLogTRACE();
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 //        [_shCamObj.sdk setAECEnabled:NO];
 
@@ -768,6 +771,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)stopTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
+    SHLogTRACE();
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 //        Config::getInstance()->closeSaveAudio();
 
@@ -804,6 +808,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)stillCaptureWithSuccessBlock:(void(^)())successBlock failedBlock:(void (^)())failedBlock {
+    SHLogTRACE();
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (self.currentVideoData.length > 0) {
             UIImage *currentImage = [self.h264Decoder imageFromPixelBufferRef:self.currentVideoData];
