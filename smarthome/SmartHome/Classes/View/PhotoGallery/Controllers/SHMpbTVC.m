@@ -18,6 +18,7 @@
 #import "SHFileDownloadTVC.h"
 #import "SHGUIHandleTool.h"
 #import "SHDownloadManager.h"
+#import <MJRefresh/MJRefresh.h>
 
 static int const kNewFileIconWidth = 10.0;
 static int const kNewFileIconTag = 888;
@@ -154,6 +155,49 @@ static int const kNewFileIconTag = 888;
     //    [self stringToDate:@"2017/04/20 11:11:11" andFormat:kDateFormat]
 //    [self updateShowDate:_remoteDateTime];
     [self addCameraPropertyValueChangeBlock];
+    [self setupRefreshView];
+}
+
+- (void)setupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakself updateDataHandler];
+    }];
+    
+    // 设置文字
+    [header setTitle:@"Pull down to refresh" forState:MJRefreshStateIdle];
+    [header setTitle:@"Release to refresh" forState:MJRefreshStatePulling];
+    [header setTitle:@"Loading ..." forState:MJRefreshStateRefreshing];
+    
+    // 设置字体
+    header.stateLabel.font = [UIFont systemFontOfSize:15];
+    header.lastUpdatedTimeLabel.font = [UIFont systemFontOfSize:14];
+    
+    // 设置颜色
+    header.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    header.lastUpdatedTimeLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+    
+    header.automaticallyChangeAlpha = YES;
+    
+    // 设置刷新控件
+    self.tableView.mj_header = header;
+}
+
+- (void)updateDataHandler {
+    UIView *iconView = [self.view viewWithTag:kNewFileIconTag];
+    if (iconView) {
+        [UIView animateWithDuration:0.25 animations:^{
+            iconView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [iconView removeFromSuperview];
+        }];
+        
+        [self updateCameraFileList];
+    } else {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView.mj_header endRefreshing];
+        });
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -407,6 +451,7 @@ static int const kNewFileIconTag = 888;
     _curFileTable = tempTable;
     [self updateButtonBackgroundColor:_curFileTable.fileCreateDate];
     [self.tableView reloadData];
+    [self.tableView.mj_header endRefreshing];
 }
 
 //日期按钮的背景设置，表示当前日期

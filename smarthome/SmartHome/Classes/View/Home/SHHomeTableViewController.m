@@ -45,6 +45,7 @@
 #import "SHPushTestNavController.h"
 //#import "XJLocalAssetHelper.h"
 #import "AppDelegate.h"
+#import <MJRefresh/MJRefresh.h>
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -81,7 +82,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 //    [self loadData];
 #if useAccountManager
 //    [SHNetworkManager sharedNetworkManager].userLogin ? [self loadData] : void();
-    [SHNetworkManager sharedNetworkManager].userLogin ? [self loadUserData] : void();
+//    [SHNetworkManager sharedNetworkManager].userLogin ? [self loadUserData] : void();
 #endif
 //    [self addSlideGesture];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:kLoginSuccessNotification object:nil];
@@ -117,6 +118,36 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]]];
     
     self.tableView.rowHeight = [SHCameraViewModel rowHeight];
+    
+    [self setupRefreshView];
+}
+
+- (void)setupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [SHNetworkManager sharedNetworkManager].userLogin ? [self loadUserData] : weakself.tableView.mj_header.endRefreshing;
+    }];
+    
+    // 设置文字
+    [header setTitle:@"Pull down to refresh" forState:MJRefreshStateIdle];
+    [header setTitle:@"Release to refresh" forState:MJRefreshStatePulling];
+    [header setTitle:@"Loading ..." forState:MJRefreshStateRefreshing];
+    
+    // 设置字体
+    header.stateLabel.font = [UIFont systemFontOfSize:15];
+    header.lastUpdatedTimeLabel.font = [UIFont systemFontOfSize:14];
+    
+    // 设置颜色
+    header.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    header.lastUpdatedTimeLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+    
+    header.automaticallyChangeAlpha = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置刷新控件
+    self.tableView.mj_header = header;
 }
 
 - (UIView *)coverView {
@@ -133,6 +164,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
     if (_notRequiredLogin) {
 //        _notRequiredLogin = NO;
+        [self.tableView.mj_header endRefreshing];
         return;
     }
     
@@ -163,6 +195,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 //                [weakself showLoadCameraListFailedTips];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
             }
+            
+            [weakself.tableView.mj_header endRefreshing];
         });
     }];
 }

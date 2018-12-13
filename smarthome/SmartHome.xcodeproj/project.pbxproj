@@ -138,6 +138,9 @@
 		38A7523D1EA894B100C0ACB0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887447C1EA4A57E004802D7 /* AudioToolbox.framework */; };
 		38A837F11E9CB4D200553985 /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837F01E9CB4D200553985 /* SmartHomeTests.m */; };
 		38A837FC1E9CB4D200553985 /* SmartHomeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */; };
+		38C7940421C2279600E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
+		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
+		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */; };
 		38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */; };
 		38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFEA20A3F5AE003004E0 /* SHCameraObjManager.m */; };
@@ -395,6 +398,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				38A6000E208EFFC80052B257 /* SHAccountManagementKit.framework in Embed Frameworks */,
+				38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */,
 				38A60010208EFFC80052B257 /* AFNetworking.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -670,6 +674,7 @@
 		38A837F71E9CB4D200553985 /* SmartHomeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartHomeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartHomeUITests.m; sourceTree = "<group>"; };
 		38A837FD1E9CB4D200553985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
 		38D912711FD15AB300E9AC8B /* libSmartConnection.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSmartConnection.a; sourceTree = "<group>"; };
@@ -1100,9 +1105,11 @@
 				3887447B1EA4A4BF004802D7 /* CoreGraphics.framework in Frameworks */,
 				38F525C31F2F041E00F5A5A2 /* libMWPhotoBrowser.a in Frameworks */,
 				38A6000D208EFFC80052B257 /* SHAccountManagementKit.framework in Frameworks */,
+				38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */,
 				38A6000F208EFFC80052B257 /* AFNetworking.framework in Frameworks */,
 				388407891F2A1299005911E5 /* MessageUI.framework in Frameworks */,
 				381A246F21BE0D4E003F89C8 /* libturbojpeg.a in Frameworks */,
+				38C7940421C2279600E55F96 /* MJRefresh.framework in Frameworks */,
 				381A247121BE0D4E003F89C8 /* libavfilter.a in Frameworks */,
 				380770B91FDA2DED006E7B92 /* Bugly.framework in Frameworks */,
 				388407871F2A1259005911E5 /* AssetsLibrary.framework in Frameworks */,
@@ -2626,6 +2633,7 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				38C7940321C2279600E55F96 /* MJRefresh.framework */,
 				381E790921900FA500E733DD /* SDAutoLayout */,
 				384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */,
 				386FAF6720AD2BD9007655CF /* SlidingDrawer */,
@@ -3510,6 +3518,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SmartHome/Libraries/UserAccountLib",
+					"$(PROJECT_DIR)/SmartHome/Libraries",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -3565,6 +3574,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SmartHome/Libraries/UserAccountLib",
+					"$(PROJECT_DIR)/SmartHome/Libraries",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
