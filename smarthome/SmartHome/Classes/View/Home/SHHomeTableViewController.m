@@ -46,6 +46,7 @@
 //#import "XJLocalAssetHelper.h"
 #import "AppDelegate.h"
 #import <MJRefresh/MJRefresh.h>
+#import "Reachability.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -62,6 +63,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 @property (nonatomic, weak) SHUserAccountInfoVC *userAccountInfoVC;
 @property (nonatomic, strong) UIView *coverView;
+@property (nonatomic, strong) NSTimer *netStatusTimer;
 
 @end
 
@@ -257,6 +259,18 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         _notRequiredLogin = NO;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self startCheckNetworkStatus];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self releaseNetStatusTimer];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -817,6 +831,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 #else
         WEAK_SELF(self);
         [SHTutkHttp unregisterDevice:shCamObj.camera.cameraUid completionHandler:^(BOOL isSuccess) {
+#if 0
             if (isSuccess == NO) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakself.progressHUD hideProgressHUD:YES];
@@ -829,6 +844,13 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                     [weakself unsubscribeCameraWithCamObj:shCamObj completion:completion];
                 }
             }
+#else
+            if (shCamObj.camera.operable == 1) {
+                [weakself unbindCameraWithCamObj:shCamObj completion:completion];
+            } else {
+                [weakself unsubscribeCameraWithCamObj:shCamObj completion:completion];
+            }
+#endif
         }];
 #endif
     });
@@ -922,48 +944,78 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     [self presentViewController:alertC animated:YES completion:nil];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+#pragma mark - Network Reachability
+- (void)startCheckNetworkStatus {
+    [self checkNetworkStatus];
+    [self netStatusTimer];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (NSTimer *)netStatusTimer {
+    if (_netStatusTimer == nil) {
+        _netStatusTimer = [NSTimer scheduledTimerWithTimeInterval:kNetworkDetectionInterval target:self selector:@selector(checkNetworkStatus) userInfo:nil repeats:YES];
+    }
+    
+    return _netStatusTimer;
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+- (void)releaseNetStatusTimer {
+    if ([_netStatusTimer isValid]) {
+        [_netStatusTimer invalidate];
+        _netStatusTimer = nil;
+    }
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+- (void)checkNetworkStatus {
+    WEAK_SELF(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            STRONG_SELF(self);
+            
+            if (netStatus == NotReachable) {
+                if (self.tableView.tableHeaderView == nil) {
+                    SHLogWarn(SHLogTagAPP, @"Current network Unreachable.");
+                    
+                    self.tableView.tableHeaderView = [self createHeaderView];
+                }
+            } else {
+                if (self.tableView.tableHeaderView != nil) {
+                    [self.tableView.tableHeaderView removeFromSuperview];
+                    self.tableView.tableHeaderView = nil;
+                    
+                    [self.tableView.mj_header beginRefreshing];
+                }
+            }
+        });
+    });
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (UIView *)createHeaderView {
+    CGFloat width = CGRectGetWidth(self.view.bounds);
+    
+    NSString *title = NSLocalizedString(@"kNetworkBad", nil);
+    UIFont *font = [UIFont systemFontOfSize:16.0];
+    
+    CGFloat height = [title boundingRectWithSize:CGSizeMake(width * 0.9, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: font} context:nil].size.height;
+    CGFloat margin = 2;
+    CGFloat viewHeight = ceil(height) + 2 * margin;
+    
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, viewHeight)];
+    v.backgroundColor = self.tableView.backgroundColor;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width * 0.9, viewHeight)];
+    label.text = title;
+    label.textColor = [UIColor ic_colorWithHex:kTextColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = font;
+    label.numberOfLines = 0;
+    [label sizeToFit];
+    label.center = v.center;
+    
+    [v addSubview:label];
+    
+    return v;
 }
-*/
 
 @end

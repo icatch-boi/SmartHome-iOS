@@ -119,6 +119,7 @@ static NSUInteger const kButtonThemeColor = 0x333333; //0x000000; //0x076EE4;
 static NSUInteger const kButtonDefaultColor = 0x9b9b9b;
 static NSUInteger const kTextThemeColor = 0x333333;
 static NSUInteger const kBackgroundThemeColor = 0xF2F2F2;
+static NSUInteger const kTextColor = 0x47525E;
 
 static NSString * const kUserAccountStoryboardName = @"UserAccount";
 static NSString * const kSetupStoryboardName = @"Setup";
