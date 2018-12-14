@@ -10,7 +10,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 // playback
-#define QUEUE_BUFFER_SIZE 2 //队列缓冲个数
+#define QUEUE_BUFFER_SIZE 6 //队列缓冲个数
 #define MIN_SIZE_PER_FRAME 4096 //每帧最小数据长度
 
 //record

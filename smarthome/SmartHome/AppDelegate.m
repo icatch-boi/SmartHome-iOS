@@ -93,6 +93,7 @@
     NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
     [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSLog(@"###### Run Date: %@", [dateformatter stringFromDate:date]);
+    NSLog(@"###### Device info: %@", [SHTool deviceInfo]);
     NSLog(@"===============================================================");
     
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];

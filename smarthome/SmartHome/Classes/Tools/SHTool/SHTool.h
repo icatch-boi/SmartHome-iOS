@@ -30,5 +30,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict;
 + (NSString *)bitRateStringFromBits:(CGFloat)bitCount;
 + (void)configureAppThemeWithController:(UINavigationController *)nav;
++ (NSString *)deviceInfo;
 
 @end
