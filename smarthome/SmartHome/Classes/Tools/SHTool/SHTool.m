@@ -10,6 +10,7 @@
 //#import "LogSet.h"
 #import "type/ICatchLogLevel.h"
 #import <sys/utsname.h>
+#import "AppDelegate.h"
 
 #define kFileFilterPlistPath [[NSBundle mainBundle] pathForResource:@"SHFileFilter" ofType:@"plist"]
 
@@ -504,6 +505,38 @@
     if ([phoneModel isEqualToString:@"i386"] || [phoneModel isEqualToString:@"x86_64"]) return @"iPhone Simulator";
     
     return phoneModel;
+}
+
++ (void)setupCurrentFullScreen:(BOOL)fullscreen {
+    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    app.isFullScreenPV = fullscreen;
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+
+    if (fullscreen == YES) {
+        if (orientation == UIInterfaceOrientationPortrait) {
+            [self setupInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
+        }
+    } else {
+        if (orientation != UIInterfaceOrientationPortrait) {
+            [self setupInterfaceOrientation:UIInterfaceOrientationPortrait];
+        }
+    }
+}
+
++ (void)setupInterfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        NSInvocation * invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = orientation;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+        
+    }
 }
 
 @end

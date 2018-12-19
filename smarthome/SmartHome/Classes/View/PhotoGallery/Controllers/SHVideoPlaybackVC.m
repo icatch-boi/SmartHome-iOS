@@ -276,7 +276,7 @@
                 [self presentViewController:alertC animated:YES completion:nil];
             });
         } else {
-//            [self playbackButtonPressed:self.playbackButton];
+            [self playbackButtonPressed:self.playbackButton];
         }
     });
 }
@@ -355,7 +355,7 @@
     [super viewDidAppear:animated];
     
     if (_shCamObj.isConnect) {
-//        [self playbackButtonPressed:self.playbackButton];
+        [self playbackButtonPressed:self.playbackButton];
     } else {
         [self connectCamera];
     }
@@ -459,7 +459,7 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
     self.played = NO;
     
-//    [self playbackButtonPressed:self.playbackButton];
+    [self playbackButtonPressed:self.playbackButton];
 }
 
 - (void)handleDisconnection:(NSNotification *)nc

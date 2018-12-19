@@ -108,6 +108,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [SHTool setupCurrentFullScreen:NO];
     [super viewWillAppear:animated];
     [self updateTitle];
 //    [self prepareVideoSizeData];

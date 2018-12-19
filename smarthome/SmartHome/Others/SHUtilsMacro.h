@@ -135,8 +135,8 @@ static NSString * const kRecvNotificationCount = @"kRecvNotificationCount";
 
 #define USE_ENCRYP 0
 
-#define kScreenWidthScale [UIScreen mainScreen].bounds.size.width / 320.0
-#define kScreenHeightScale [UIScreen mainScreen].bounds.size.height / 480.0
+#define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
+#define kScreenHeightScale MAX([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width) / 480.0
 
 #define WEAK_SELF(obj) __weak typeof(obj) weak##obj = obj;
 #define STRONG_SELF(obj) __strong typeof(obj) obj = weak##obj;

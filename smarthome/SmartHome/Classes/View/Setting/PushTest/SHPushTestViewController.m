@@ -87,6 +87,12 @@ static const NSInteger kChartBarWidthOfRow = 20;
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [SHTool setupCurrentFullScreen:YES];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
