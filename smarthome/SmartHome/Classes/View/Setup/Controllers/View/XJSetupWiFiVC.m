@@ -298,6 +298,8 @@
     NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
     
     if (netStatus == NotReachable) {
+        SHLogWarn(SHLogTagAPP, @"Current network Unreachable.");
+
         [self showNetworkNotReachableAlertView:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil)];
     } else if (netStatus == ReachableViaWWAN) {
         [self showNetworkNotReachableAlertView:/*@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"*/NSLocalizedString(@"kWiFiNotReachable", nil)];

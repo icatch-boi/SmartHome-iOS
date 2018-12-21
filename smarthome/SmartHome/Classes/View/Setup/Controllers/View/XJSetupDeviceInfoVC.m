@@ -383,7 +383,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
         
         if (netStatus == NotReachable) {
-            
+            SHLogWarn(SHLogTagAPP, @"Current network Unreachable.");
         } else {
             [self releaseNetStatusTimer];
             

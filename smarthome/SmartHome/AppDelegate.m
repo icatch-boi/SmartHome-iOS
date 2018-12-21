@@ -30,6 +30,7 @@
 #import "type/ICatchLogLevel.h"
 #import "XJLocalAssetHelper.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate, NSFetchedResultsControllerDelegate>
 
@@ -71,6 +72,8 @@
     
     [XJLocalAssetHelper sharedLocalAssetHelper];
     [SHSDK loadTutkLibrary];
+
+    [self addNetworkStatusObserver];
 
 	return YES;
 }
@@ -1205,6 +1208,53 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     _progressHUD = [MBProgressHUD progressHUDWithView:self.window];
     
     return _progressHUD;
+}
+
+#pragma mark - Monitor Network Status
+- (void)addNetworkStatusObserver {
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    [manager startMonitoring];
+    
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        NSString *netStatus = nil;
+        
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+                netStatus = @"Unknown";
+                
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+                netStatus = @"NotReachable";
+                
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                netStatus = @"ReachableViaWWAN";
+                
+                break;
+                
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                netStatus = @"ReachableViaWiFi";
+                
+                break;
+        }
+        
+        if (status == AFNetworkReachabilityStatusNotReachable) {
+            [self showNetworkNotReachableAlertView];
+        }
+        
+        SHLogInfo(SHLogTagAPP, @"Current network status: %@", netStatus);
+    }];
+}
+
+- (void)showNetworkNotReachableAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kNetworkBad", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    [vc presentViewController:alertVC animated:YES completion:nil];
 }
 
 @end

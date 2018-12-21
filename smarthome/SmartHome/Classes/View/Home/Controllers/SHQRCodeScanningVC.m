@@ -472,6 +472,8 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     NetworkStatus netStatus = [[Reachability reachabilityWithHostName:@"https://www.baidu.com"] currentReachabilityStatus];
     
     if (netStatus == NotReachable) {
+        SHLogWarn(SHLogTagAPP, @"Current network Unreachable.");
+
         [self showNetworkNotReachableAlertView];
     } else {
         [self checkDeviceHasExistsHandler];
