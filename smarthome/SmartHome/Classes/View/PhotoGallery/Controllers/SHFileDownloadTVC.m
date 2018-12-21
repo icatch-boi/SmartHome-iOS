@@ -245,14 +245,16 @@
 - (void)onDownloadComplete:(int)position retValue:(Boolean)ret{
 	
 	NSIndexPath *curIndexPath = [NSIndexPath indexPathForRow:position inSection:0];
-	SHDownloadTableViewCell *cell = [self.tableView cellForRowAtIndexPath:curIndexPath];
 	[self.tableView deleteRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	[self updateDownloadInfo];
 }
 
 - (void)onCancelDownloadComplete:(int)position retValue:(Boolean)ret{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressHUD hideProgressHUD:YES];
+    });
+    
 	NSIndexPath *curIndexPath = [NSIndexPath indexPathForRow:position inSection:0];
-	SHDownloadTableViewCell *cell = [self.tableView cellForRowAtIndexPath:curIndexPath];
 	[self.tableView deleteRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	if(ret == YES){
 		SHLogInfo(SHLogTagAPP, @"cancel success.");

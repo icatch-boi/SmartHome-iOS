@@ -15,6 +15,7 @@
 @property (nonatomic, readwrite) int downloadSuccessedNum;
 @property (nonatomic, readwrite) int downloadFailedNum;
 @property (nonatomic, readwrite) int cancelDownloadNum;
+@property (nonatomic, assign) BOOL cleanDownload;
 
 @end
 
@@ -68,7 +69,9 @@
 	if(downloader == nil){//current file is not downloading
 		self.downloadFailedNum++;
 		int position = [self findPositionByFile:file];
-//        [self.downloadArray removeObject:file];
+        if (self.cleanDownload == NO) {
+            [self.downloadArray removeObject:file];
+        }
 		id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
 		[self.downLoaderCache removeObjectForKey:key];
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -97,6 +100,7 @@
 
 
 -(void)clearDownloadingByUid:(NSString*) uid{
+    self.cleanDownload = YES;
 	//delete download list while disconnect
 	NSMutableArray *downloadList = [SHDownloadManager shareDownloadManger].downloadArray;
     SHLogInfo(SHLogTagAPP, @"download list num: %lu", (unsigned long)downloadList.count);
@@ -113,6 +117,7 @@
 			}
 		}
 	}
+    self.cleanDownload = NO;
 }
 
 - (void)addDownloadFile:(SHFile *)file{
