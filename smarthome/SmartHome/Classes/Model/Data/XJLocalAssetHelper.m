@@ -120,7 +120,7 @@ static XJLocalAssetHelper *instance = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:kLocalAlbumName];
     } completionHandler:^(BOOL success, NSError *error) {
-        NSLog(@"Finished adding asset collection. %@", (success ? @"Success" : error));
+        SHLogInfo(SHLogTagAPP, @"Finished adding asset collection. %@", (success ? @"Success" : error));
     }];
 }
 
@@ -247,10 +247,10 @@ static XJLocalAssetHelper *instance = nil;
                         [PHAssetChangeRequest deleteAssets:@[obj]];
                     } completionHandler:^(BOOL success, NSError *error) {
                         if (success) {
-                            NSLog(@"删除成功!");
+                            SHLogInfo(SHLogTagAPP, @"删除成功!");
                             [self deleteLocalIdentifier:localIdentifier forKey:key];
                         } else {
-                            NSLog(@"删除失败:%@", error);
+                            SHLogError(SHLogTagAPP, @"删除失败:%@", error);
                         }
                         
                         if (completionHandler) {
@@ -276,7 +276,7 @@ static XJLocalAssetHelper *instance = nil;
     
     NSArray *desArray = [desDict objectForKey:key];
     if (desDict == nil || desArray == nil) {
-        NSLog(@"No have local asset, key: %@", key);
+        SHLogWarn(SHLogTagAPP, @"No have local asset, key: %@", key);
         
         if (completionHandler) {
             completionHandler(YES);
@@ -287,7 +287,7 @@ static XJLocalAssetHelper *instance = nil;
     NSArray *deleteAssets = [self retrieveAssetsWithLocalIdentifier:desArray];
     
     if (deleteAssets.count <= 0) {
-        NSLog(@"System album no have asset, key: %@", key);
+        SHLogWarn(SHLogTagAPP, @"System album no have asset, key: %@", key);
         
         [array removeObject:desDict];
         [self writeDataToPlist:array];
@@ -315,9 +315,9 @@ static XJLocalAssetHelper *instance = nil;
         [PHAssetChangeRequest deleteAssets:deleteAssets];
     } completionHandler:^(BOOL success, NSError *error) {
         if (success) {
-            NSLog(@"删除成功!");
+            SHLogInfo(SHLogTagAPP, @"删除成功!");
         } else {
-            NSLog(@"删除失败:%@", error);
+            SHLogError(SHLogTagAPP, @"删除失败:%@", error);
         }
         
         if (completionHandler) {
@@ -355,17 +355,17 @@ static XJLocalAssetHelper *instance = nil;
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
         NSString *path = [paths objectAtIndex:0];
         NSString *filePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", plistName]];
-        NSLog(@"plist路径:%@", filePath);
+        SHLogInfo(SHLogTagAPP, @"plist路径:%@", filePath);
         NSFileManager* fm = [NSFileManager defaultManager];
         if (![fm fileExistsAtPath:filePath]) {
             BOOL success = [fm createFileAtPath:filePath contents:nil attributes:nil];
             if (!success) {
-                NSLog(@"创建plist文件失败!");
+                SHLogError(SHLogTagAPP, @"创建plist文件失败!");
             } else {
-                NSLog(@"创建plist文件成功!");
+                SHLogInfo(SHLogTagAPP, @"创建plist文件成功!");
             }
         } else {
-            NSLog(@"沙盒中已有该plist文件，无需创建!");
+            SHLogWarn(SHLogTagAPP, @"沙盒中已有该plist文件，无需创建!");
         }
     }
     

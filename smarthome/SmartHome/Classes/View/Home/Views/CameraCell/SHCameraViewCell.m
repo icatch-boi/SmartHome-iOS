@@ -99,7 +99,7 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
         return;
     }
     
-    NSLog(@"longPressGesture");
+    SHLogInfo(SHLogTagAPP, @"longPressGesture");
     if ([self.delegate respondsToSelector:@selector(longPressDeleteCamera:)]) {
         [self.delegate longPressDeleteCamera:self];
     }

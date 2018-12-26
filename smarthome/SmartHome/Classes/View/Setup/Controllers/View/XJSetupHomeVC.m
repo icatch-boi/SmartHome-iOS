@@ -117,7 +117,7 @@ static const CGFloat kQRBottomDefaultValue = 24;
             [self presentViewController:alertC animated:YES completion:nil];
             
         } else if (status == AVAuthorizationStatusRestricted) {
-            NSLog(@"因为系统原因, 无法访问相册");
+            SHLogError(SHLogTagAPP, @"因为系统原因, 无法访问相册");
         }
     } else {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", @"") message:NSLocalizedString(@"kCameraNotDetected", @"") preferredStyle:(UIAlertControllerStyleAlert)];

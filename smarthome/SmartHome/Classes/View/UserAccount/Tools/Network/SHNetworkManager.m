@@ -23,9 +23,9 @@
     if(sender) {
         Error *err = sender.object;
 
-        NSLog(@"sender : %@", err.error_description);
+        SHLogInfo(SHLogTagAPP, @"sender : %@", err.error_description);
     } else {
-        NSLog(@"nil object !!!");
+        SHLogError(SHLogTagAPP, @"nil object !!!");
     }
 }
 + (instancetype)sharedNetworkManager {
@@ -109,10 +109,10 @@
 
 - (void)loadAccessTokenByEmail:(NSString *)email password:(NSString *)password completion:(RequestCompletionBlock)completion {
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
-    NSLog(@"This is device Token: %@", deviceToken);
+    SHLogInfo(SHLogTagAPP, @"This is device Token: %@", deviceToken);
     
     [self.tokenOperate getTokenByEmail:email andPassword:password andDeviceIdentification:deviceToken /*@"smarthome-v1"*/ success:^(Token * _Nonnull token) {
-        NSLog(@"access token: %@", token.access_token);
+        SHLogInfo(SHLogTagAPP, @"access token: %@", token.access_token);
         
         self.userAccount.access_token = token.access_token;
         self.userAccount.expires_in = token.expires_in;
@@ -126,7 +126,7 @@
             
             [self.userAccount saveUserAccount];
             
-            NSLog(@"userAccount: %@", self.userAccount);
+            SHLogInfo(SHLogTagAPP, @"userAccount: %@", self.userAccount);
             [[NSUserDefaults standardUserDefaults] setObject:email forKey:kUserAccounts];
             if (completion) {
                 completion(YES, account);
@@ -141,7 +141,7 @@
         }];
         
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
-            NSLog(@"register client success: %d", isSuccess);
+            SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
@@ -160,8 +160,8 @@
             completion(YES, account);
         }
     } failure:^(Error * _Nonnull error) {
-        NSLog(@"logon failed error: %@", error.error_description);
-        NSLog(@"error code: %ld", (long)error.error_code);
+        SHLogError(SHLogTagAPP, @"logon failed error: %@", error.error_description);
+        SHLogError(SHLogTagAPP, @"error code: %ld", (long)error.error_code);
         
         if (completion) {
             completion(NO, error);
@@ -233,15 +233,15 @@
             
             [self.userAccount saveUserAccount];
             
-            NSLog(@"userAccount: %@", self.userAccount);
+            SHLogInfo(SHLogTagAPP, @"userAccount: %@", self.userAccount);
         } failure:^(Error * _Nonnull error) {
-            NSLog(@"acquireAccountInfoWithToken failed, error: %@", error.error_description);
+            SHLogError(SHLogTagAPP, @"acquireAccountInfoWithToken failed, error: %@", error.error_description);
         }];
         
         NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
-        NSLog(@"This is device Token: %@", deviceToken);
+        SHLogInfo(SHLogTagAPP, @"This is device Token: %@", deviceToken);
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
-            NSLog(@"register client success: %d", isSuccess);
+            SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"refreshToken failed, error: %@", error.error_description);

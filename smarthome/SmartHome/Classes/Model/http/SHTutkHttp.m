@@ -198,10 +198,10 @@ static NSString * const keychain_key = @"push.udid";
 
 + (void)registerClientWithCompletionHandler:(PushRequestCompletionBlock)completionHandler {
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
-    NSLog(@"This is device Token: %@", deviceToken);
+    SHLogInfo(SHLogTagAPP, @"This is device Token: %@", deviceToken);
     
     NSString *identifierNumber = [self getDeviceUUID];
-    NSLog(@"手机序列号: %@",identifierNumber);
+    SHLogInfo(SHLogTagAPP, @"手机序列号: %@",identifierNumber);
     
     if (deviceToken == nil || identifierNumber == nil) {
         if (completionHandler) {

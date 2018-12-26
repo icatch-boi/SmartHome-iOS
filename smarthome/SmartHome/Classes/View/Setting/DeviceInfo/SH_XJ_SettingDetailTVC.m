@@ -646,7 +646,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     if(_sdCardExisted) {
         int usedSize = (_SDTotalSize - _SDUseableSize);
         sizeStr = [DiskSpaceTool transformStringFromMBytes:usedSize];
-        NSLog(@"total : %d, used : %d", _SDTotalSize, _SDUseableSize);
+        SHLogInfo(SHLogTagAPP, @"total : %d, used : %d", _SDTotalSize, _SDUseableSize);
     } else {
         sizeStr = NSLocalizedString(@"kNoSDcard", nil); //@"no card";
     }

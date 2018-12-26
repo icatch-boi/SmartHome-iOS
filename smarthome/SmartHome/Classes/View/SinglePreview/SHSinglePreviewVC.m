@@ -806,7 +806,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
         } else if (status == AVAuthorizationStatusRestricted) {
-            NSLog(@"因为系统原因, 无法访问麦克风");
+            SHLogError(SHLogTagAPP, @"因为系统原因, 无法访问麦克风");
             failedHander();
         }
     } else {

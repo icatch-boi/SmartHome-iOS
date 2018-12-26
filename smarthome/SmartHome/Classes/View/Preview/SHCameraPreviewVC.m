@@ -636,12 +636,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     NSString *pvTime = evt.stringValue1;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"before set, lastPreviewTime is : %@", self.shCameraObj.camera.pvTime);
+        SHLogInfo(SHLogTagAPP, @"before set, lastPreviewTime is : %@", self.shCameraObj.camera.pvTime);
         
         [self.shCameraObj updatePreviewThumbnailWithPvTime:pvTime];
         dispatch_async(dispatch_get_main_queue(),^(void){
 
-            NSLog(@"lastPreviewTime is : %@", self.shCameraObj.camera.pvTime);
+            SHLogInfo(SHLogTagAPP, @"lastPreviewTime is : %@", self.shCameraObj.camera.pvTime);
         });
     });
 }
@@ -691,7 +691,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
         } else if (status == AVAuthorizationStatusRestricted) {
-            NSLog(@"因为系统原因, 无法访问麦克风");
+            SHLogError(SHLogTagAPP, @"因为系统原因, 无法访问麦克风");
             failedHander();
         }
     } else {
@@ -974,7 +974,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #endif
     
     UINavigationController *nav = self.navigationController;
-    NSLog(@"==> nav : %@", nav);
+    SHLogInfo(SHLogTagAPP, @"==> nav : %@", nav);
     BOOL doNotDisconnect = /*_managedObjectContext &&*/ ![NSStringFromClass(nav.class) isEqualToString:@"SHMainViewController"];
 #if 0
     NSString *message = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDisconnect", @"")];

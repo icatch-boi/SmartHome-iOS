@@ -146,7 +146,7 @@
         
         NSError *error = nil;
         if (![self.managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
             
             isSuccess = NO;
 #ifdef DEBUG
@@ -178,7 +178,7 @@
     
     NSError *error = nil;
     if (![self.managedObjectContext save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
         
         isSuccess = NO;
 #ifdef DEBUG
@@ -251,7 +251,7 @@
     NSError *error = nil;
     NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (!error && fetchedObjects && fetchedObjects.count>0) {
-        NSLog(@"Already have one camera, update camera info.");
+        SHLogInfo(SHLogTagAPP, @"Already have one camera, update camera info.");
         
         SHCamera *camera = (SHCamera *)fetchedObjects.firstObject;
         camera.cameraName = cameraInfo.cameraName ? cameraInfo.cameraName : camera.cameraName;
@@ -270,19 +270,19 @@
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         camera.createTime = [df stringFromDate:currentDate];
-        NSLog(@"Create time is %@", camera.createTime);
+        SHLogInfo(SHLogTagAPP, @"Create time is %@", camera.createTime);
         
         // Save data to sqlite
         NSError *error = nil;
         if (![camera.managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
             
             isSuccess = NO;
 #ifdef DEBUG
             abort();
 #endif
         } else {
-            NSLog(@"Saved to sqlite.");
+            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
 //            if (!camera.mapToTutk) {
@@ -290,7 +290,7 @@
 //            }
         }
     } else {
-        NSLog(@"Create a camera");
+        SHLogInfo(SHLogTagAPP, @"Create a camera");
         SHCamera *savedCamera = (SHCamera *)[NSEntityDescription insertNewObjectForEntityForName:kEntityName inManagedObjectContext:self.managedObjectContext];
 
         savedCamera.cameraName = cameraInfo.cameraName;
@@ -311,7 +311,7 @@
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         savedCamera.createTime = [df stringFromDate:currentDate];
-        NSLog(@"Create time is %@", savedCamera.createTime);
+        SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
         
         // Save data to sqlite
         NSError *error = nil;
@@ -321,14 +321,14 @@
              
              abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
              */
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
             
             isSuccess = NO;
 #ifdef DEBUG
             abort();
 #endif
         } else {
-            NSLog(@"Saved to sqlite.");
+            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
             [SHTutkHttp registerDevice:savedCamera];
         }
@@ -372,7 +372,7 @@
                 [self.managedObjectContext deleteObject:camera];
                 
                 if (![self.managedObjectContext save:&error]) {
-                    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                    SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
                     abort();
 #endif
@@ -447,7 +447,7 @@
     UINavigationController *mainVC = (UINavigationController *)slidingVC.mainVC;
     UIViewController *visibleVC = mainVC.visibleViewController;
     
-    NSLog(@"current visibleViewController: %@", visibleVC);
+    SHLogInfo(SHLogTagAPP, @"current visibleViewController: %@", visibleVC);
     if ([NSStringFromClass([visibleVC class]) isEqualToString:@"UIAlertController"]) {
         UIAlertController *vc = (UIAlertController *)visibleVC;
         if ([vc.message isEqualToString:NSLocalizedString(@"Are you sure you want to remove this record", nil)]) {

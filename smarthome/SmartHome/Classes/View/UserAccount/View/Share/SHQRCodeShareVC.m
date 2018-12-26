@@ -138,7 +138,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
     
     // Write image to PNG
     BOOL isSuccess = [UIImagePNGRepresentation(image) writeToFile:pngPath atomically:YES];
-    NSLog(@"Write QRData to file is : %@", isSuccess ? @"Succeed." : @"Failed.");
+    SHLogInfo(SHLogTagAPP, @"Write QRData to file is : %@", isSuccess ? @"Succeed." : @"Failed.");
 }
 
 - (void)shareQRClick:(UIBarButtonItem *)sender {

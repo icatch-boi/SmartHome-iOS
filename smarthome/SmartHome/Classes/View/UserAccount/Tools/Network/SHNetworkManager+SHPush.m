@@ -79,13 +79,13 @@
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
         if (respose.statusCode == 403) {
-            NSLog(@"Token invalid.");
+            SHLogError(SHLogTagAPP, @"Token invalid.");
             
             // FIXME: 发送通知
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        NSLog(@"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
         
         if (finished) {
             finished(NO, err);
@@ -120,13 +120,13 @@
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
         if (respose.statusCode == 403) {
-            NSLog(@"Token invalid.");
+            SHLogError(SHLogTagAPP, @"Token invalid.");
             
             // FIXME:发送通知
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        NSLog(@"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
         
         if (finished) {
             finished(NO, err);

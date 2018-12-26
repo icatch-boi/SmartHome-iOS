@@ -484,7 +484,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     [self.progressHUD showProgressHUDWithMessage:/*@"Checking..."*/NSLocalizedString(@"kCheckDeviceWhetherBind", nil)];
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
-        NSLog(@"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
+        SHLogInfo(SHLogTagAPP, @"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
         
         [weakself.progressHUD hideProgressHUD:YES];
         

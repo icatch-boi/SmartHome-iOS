@@ -77,7 +77,7 @@
 
 - (void)updatePreviewThumbnail {
 	NSString *tempPVTime = [self.controler.propCtrl retrieveLastPreviewTimeWithCamera:self curResult:self.curResult];
-	NSLog(@"tempPVTime is : %@",tempPVTime);
+	SHLogInfo(SHLogTagAPP, @"tempPVTime is : %@",tempPVTime);
 
 	if (![tempPVTime isEqualToString:_camera.pvTime] || _camera.pvTime == nil) {
 		self.camera.pvTime = tempPVTime;
@@ -89,9 +89,9 @@
             //上传到服务器 add by j.chen
             [[SHNetworkManager sharedNetworkManager] updateCameraCoverByCameraID:self.camera.id andCoverData:imgData completion:^(BOOL isSuccess, id  _Nonnull result) {
                 if(isSuccess) {
-                    NSLog(@"update thumnail success");
+                    SHLogInfo(SHLogTagAPP, @"update thumnail success");
                 } else {
-                    NSLog(@"update thumnail fail");
+                    SHLogError(SHLogTagAPP, @"update thumnail fail");
                 }
             }];
 		}
@@ -132,9 +132,9 @@
                 NSData *coverData = UIImageJPEGRepresentation(thumbnail, 0.5);
                 [[SHNetworkManager sharedNetworkManager] updateCameraCoverByCameraID:self.camera.id andCoverData:coverData completion:^(BOOL isSuccess, id  _Nonnull result) {
                     if(isSuccess) {
-                        NSLog(@"update device cover success");
+                        SHLogInfo(SHLogTagAPP, @"update device cover success");
                     } else {
-                        NSLog(@"update device cover failure");
+                        SHLogError(SHLogTagAPP, @"update device cover failure");
                     }
                 }];
             }
@@ -167,7 +167,7 @@
 	dispatch_async([sdk sdkQueue], ^{
 		int totalCheckCount = 2;
 		while (totalCheckCount-- > 0) {
-			NSLog(@" to connect camera,camera name is : %@",self.camera.cameraName);
+			SHLogInfo(SHLogTagAPP, @" to connect camera,camera name is : %@",self.camera.cameraName);
 			if ([sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword] == ICH_SUCCEED) {
 				
 				self.streamOper = [[SHStreamOperate alloc] initWithCameraObject:self];
@@ -210,7 +210,7 @@
 	SHSDK *sdk = [[SHSDK alloc] init];
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
-		NSLog(@" to connect camera,camera name is : %@",self.camera.cameraName);
+		SHLogInfo(SHLogTagAPP, @" to connect camera,camera name is : %@",self.camera.cameraName);
     if (self.camera == nil || self.camera.cameraUid == nil) {
         SHLogError(SHLogTagAPP, @"camera or camera uid is nil.");
 

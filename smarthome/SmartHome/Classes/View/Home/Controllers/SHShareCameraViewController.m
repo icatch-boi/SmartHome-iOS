@@ -195,7 +195,7 @@ static const CGFloat kLogoImageWidth = 42.5 * UIScreen.scale;
     
     // Write image to PNG
     BOOL isSuccess = [UIImagePNGRepresentation(image) writeToFile:pngPath atomically:YES];
-    NSLog(@"Write QRData to file is : %@", isSuccess ? @"Succeed." : @"Failed.");
+    SHLogInfo(SHLogTagAPP, @"Write QRData to file is : %@", isSuccess ? @"Succeed." : @"Failed.");
 }
 
 #pragma mark - qr code

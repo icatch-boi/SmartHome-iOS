@@ -96,7 +96,7 @@ static const CGFloat kNickNameLabelMinFontSize = 20;
         realWidth = [self calcNickNameLabelRealWidthWithFontSize:fontSize];
     }
     
-    NSLog(@"font size: %f, label real width: %f", fontSize, realWidth);
+    SHLogInfo(SHLogTagAPP, @"font size: %f, label real width: %f", fontSize, realWidth);
     _nickNameLabel.font = [UIFont systemFontOfSize:fontSize];
 }
 

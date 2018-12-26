@@ -115,7 +115,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
             double delay = [obj[@"client"] doubleValue] - [obj[@"device"] doubleValue];
             delay *= 1000;
             
-            NSLog(@"index: %ld, delay: %f, obj: %@", (long)index, delay, obj);
+            SHLogInfo(SHLogTagAPP, @"index: %ld, delay: %f, obj: %@", (long)index, delay, obj);
             
             NSString *temp = [NSString stringWithFormat:@"%ld %f", (long)index + 1, delay];
             if (temp != nil) {
@@ -198,16 +198,16 @@ static const NSInteger kChartBarWidthOfRow = 20;
         sum += temp;
     }];
     
-    NSLog(@"delay max: %ld, min: %ld, sum: %ld", max, min, sum);
-    NSLog(@"not receive count: %ld \n --> %@", notRecv.count, notRecv);
+    SHLogInfo(SHLogTagAPP, @"delay max: %ld, min: %ld, sum: %ld", max, min, sum);
+    SHLogInfo(SHLogTagAPP, @"not receive count: %ld \n --> %@", notRecv.count, notRecv);
     
     CGFloat successCount = kPushNum - notRecv.count;
     CGFloat sendRate = successCount / kPushNum;
 
-    NSLog(@"successfully send rate: %f", sendRate);
+    SHLogInfo(SHLogTagAPP, @"successfully send rate: %f", sendRate);
     
     CGFloat averageDelay = delay.count > 2 ? (CGFloat)(sum - max - min) / (delay.count - 2) : (CGFloat)sum  / delay.count;
-    NSLog(@"average Delay: %f", averageDelay);
+    SHLogInfo(SHLogTagAPP, @"average Delay: %f", averageDelay);
     
     self.resultArray = @[
                         @{@"未收到": [NSString stringWithFormat:@"%ld 条", notRecv.count]},
@@ -257,11 +257,11 @@ static const NSInteger kChartBarWidthOfRow = 20;
     
     if (![self.pushNumField.text isEqualToString:@""]) {
         NSInteger pushNum = self.pushNumField.text.integerValue;
-        NSLog(@"enter push num: %ld", (long)pushNum);
+        SHLogInfo(SHLogTagAPP, @"enter push num: %ld", (long)pushNum);
         
         kPushNum = pushNum > 0 ? pushNum : kPushNum;
         
-        NSLog(@"reality push num: %ld", (long)kPushNum);
+        SHLogInfo(SHLogTagAPP, @"reality push num: %ld", (long)kPushNum);
     }
     
     [self.delegate cleanMessageCache];
@@ -290,7 +290,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
 
 - (void)pushMessageHelper {
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSLog(@"start push message");
+    SHLogInfo(SHLogTagAPP, @"start push message");
         NSDate *date = [NSDate date];
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -307,7 +307,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
                                };
     
     if (temp == nil) {
-        NSLog(@"error: temp is nil.");
+        SHLogError(SHLogTagAPP, @"error: temp is nil.");
         self.pushCount--;
         return;
     }
@@ -318,7 +318,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
         msg =  [msg stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
         [[SHNetworkManager sharedNetworkManager] pushMessageWithUID:self.cameraUid message:msg pushType:self.pushType finished:^(BOOL isSuccess, id  _Nullable result) {
-            NSLog(@"push message success: %d", isSuccess);
+            SHLogInfo(SHLogTagAPP, @"push message success: %d", isSuccess);
             
             NSArray *messages = self.delegate.messages;
             [self drawChartViewWithMessages:messages.copy];
@@ -337,7 +337,7 @@ static const NSInteger kChartBarWidthOfRow = 20;
             
             NSTimeInterval end = [NSDate date].timeIntervalSince1970;
             if (end - start > kTimeout) {
-                NSLog(@"recv timeout, current recv: %lu message.", (unsigned long)messages.count);
+                SHLogWarn(SHLogTagAPP, @"recv timeout, current recv: %lu message.", (unsigned long)messages.count);
                 break;
             }
             

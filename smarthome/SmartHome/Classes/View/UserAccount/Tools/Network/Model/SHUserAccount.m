@@ -23,7 +23,7 @@ static NSString * const kSHUserAccount = @"kSHUserAccount";
             [self setValuesForKeysWithDictionary:dict];
             
             if ([self.expiresDate compare:[NSDate date]] != NSOrderedDescending) {
-                NSLog(@"账户过期");
+                SHLogWarn(SHLogTagAPP, @"账户过期");
                 
 //                self.access_token = nil;
             }
@@ -59,7 +59,7 @@ static NSString * const kSHUserAccount = @"kSHUserAccount";
     [tempMDict removeObjectForKey:@"expires_in"];
     
     [[NSUserDefaults standardUserDefaults] setObject:tempMDict.copy forKey:kSHUserAccount];
-    NSLog(@"用户账户保存成功 %@", NSHomeDirectory());
+    SHLogInfo(SHLogTagAPP, @"用户账户保存成功 %@", NSHomeDirectory());
 }
 
 - (void)deleteUserAccount {

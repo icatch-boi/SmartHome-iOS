@@ -209,7 +209,7 @@
     if (launchOptions != nil) {
         _loaded = YES;
         NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-        NSLog(@"pushNotificationKey: %@", pushNotificationKey);
+        SHLogInfo(SHLogTagAPP, @"pushNotificationKey: %@", pushNotificationKey);
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
@@ -252,7 +252,7 @@
     if (launchOptions != nil) {
         _loaded = YES;
         NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-        NSLog(@"pushNotificationKey: %@", pushNotificationKey);
+        SHLogInfo(SHLogTagAPP, @"pushNotificationKey: %@", pushNotificationKey);
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
@@ -281,7 +281,7 @@
         homeVC.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext; //self.managedObjectContext;
 	} else {
 		NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-		NSLog(@"pushNotificationKey: %@", pushNotificationKey);
+		SHLogInfo(SHLogTagAPP, @"pushNotificationKey: %@", pushNotificationKey);
 		
 		NSDictionary *aps = [self parseNotification:pushNotificationKey];
 		
@@ -335,13 +335,13 @@
 		[center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
 			if (granted) {
 				// 点击允许
-				NSLog(@"注册成功");
+				SHLogInfo(SHLogTagAPP, @"注册成功");
 				[center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
-					NSLog(@"%@", settings);
+					SHLogInfo(SHLogTagAPP, @"%@", settings);
 				}];
 			} else {
 				// 点击不允许
-				NSLog(@"注册失败");
+				SHLogError(SHLogTagAPP, @"注册失败");
 			}
 			
 		}];
@@ -750,15 +750,15 @@
 }
 
 void uncaughtExceptionHandler(NSException *exception){
-	NSLog(@"Crash:%@",exception);
-	NSLog(@"Stack trace:%@",[exception callStackSymbols]);
+	SHLogInfo(SHLogTagAPP, @"Crash:%@",exception);
+	SHLogInfo(SHLogTagAPP, @"Stack trace:%@",[exception callStackSymbols]);
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 	//    NSLog(@"This is device token: %@", deviceToken);
 	NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-	NSLog(@"This is device token: %@", token);
+	SHLogInfo(SHLogTagAPP, @"This is device token: %@", token);
 //    self.deviceToken = token;
     if (token != nil) {
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:kDeviceToken];
@@ -772,14 +772,14 @@ void uncaughtExceptionHandler(NSException *exception){
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
 	//Optional
-	NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+	SHLogInfo(SHLogTagAPP, @"did Fail To Register For Remote Notifications With Error: %@", error);
 }
 
 #pragma mark - NotificationDelegate
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	
-	NSLog(@"iOS6及以下系统，收到通知:%@", [self logDic:userInfo]);
+	SHLogInfo(SHLogTagAPP, @"iOS6及以下系统，收到通知:%@", [self logDic:userInfo]);
     [self postNotification:userInfo];
 }
 
@@ -807,13 +807,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 #if 0
 	if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
 		//        NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
-		NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+		SHLogInfo(SHLogTagAPP, @"iOS10 前台收到远程通知:%@", userInfo);
 //        NSLog(@"收到的 alert: %@", [self parseNotification:userInfo]);
         
         [self postNotification:userInfo];
 	} else {
 		// 判断为本地通知
-		NSLog(@"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
+		SHLogInfo(SHLogTagAPP, @"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
 	}
 	
 	completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
@@ -822,13 +822,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (![defaults boolForKey:@"kPushTest"]) {
         if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
             //        NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
-            NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+            SHLogInfo(SHLogTagAPP, @"iOS10 前台收到远程通知:%@", userInfo);
             //        NSLog(@"收到的 alert: %@", [self parseNotification:userInfo]);
             
             [self postNotification:userInfo];
         } else {
             // 判断为本地通知
-            NSLog(@"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
+            SHLogInfo(SHLogTagAPP, @"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
         }
         
         completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
@@ -847,7 +847,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [self addReceiveMessage:userInfo];
     } else {
         // 判断为本地通知
-        NSLog(@"iOS10 前台收到本地通知");
+        SHLogInfo(SHLogTagAPP, @"iOS10 前台收到本地通知");
     }
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kQuiesce"]) {
@@ -870,10 +870,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	
 	if ([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
 		//        NSLog(@"iOS10 收到远程通知:%@", [self logDic:userInfo]);
-		NSLog(@"iOS10 前台收到远程通知:%@", userInfo);
+		SHLogInfo(SHLogTagAPP, @"iOS10 前台收到远程通知:%@", userInfo);
 	} else {
 		// 判断为本地通知
-		NSLog(@"iOS10 收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
+		SHLogInfo(SHLogTagAPP, @"iOS10 收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
 	}
 	
 	// Warning: UNUserNotificationCenter delegate received call to -userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler: but the completion handler was never called.
@@ -934,7 +934,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 #endif
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
     UIViewController *vc = nav.visibleViewController;
-    NSLog(@"vc: %@", vc);
+    SHLogInfo(SHLogTagAPP, @"vc: %@", vc);
     
     NSDictionary *aps = [self parseNotification:userInfo];
     NSString *uid = aps[@"devID"];
@@ -1083,7 +1083,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 		AVAudioSessionRecordPermission permissionStatus = [[AVAudioSession sharedInstance] recordPermission];
 		switch (permissionStatus) {
 			case AVAudioSessionRecordPermissionUndetermined:{
-				NSLog(@"第一次调用，是否允许麦克风弹框");
+				SHLogInfo(SHLogTagAPP, @"第一次调用，是否允许麦克风弹框");
 				[[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
 					// CALL YOUR METHOD HERE - as this assumes being called only once from user interacting with permission alert!
 					if (granted) {
@@ -1097,10 +1097,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 			}
 			case AVAudioSessionRecordPermissionDenied:
 				// direct to settings...
-				NSLog(@"已经拒绝麦克风弹框");
+				SHLogWarn(SHLogTagAPP, @"已经拒绝麦克风弹框");
 				break;
 			case AVAudioSessionRecordPermissionGranted:
-				NSLog(@"已经允许麦克风弹框");
+				SHLogInfo(SHLogTagAPP, @"已经允许麦克风弹框");
 				// mic access ok...
 				break;
 			default:
@@ -1122,7 +1122,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSString *msgID = notification[@"msgID"];
     NSString *tmdbg = notification[@"tmdbg"];
     if (msgID == nil || tmdbg == nil) {
-        NSLog(@"msgID or tmdbg is nil, msgID: %@, tmdbg: %@", msgID, tmdbg);
+        SHLogInfo(SHLogTagAPP, @"msgID or tmdbg is nil, msgID: %@, tmdbg: %@", msgID, tmdbg);
         return;
     }
     

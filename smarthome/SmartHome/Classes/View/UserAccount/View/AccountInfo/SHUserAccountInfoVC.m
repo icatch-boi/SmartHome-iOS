@@ -260,14 +260,14 @@ static const CGFloat kTableViewRowHeight = 60;
     NSString *systemVersionStr = [[UIDevice currentDevice] systemVersion];//手机系统版本号
     
     NSString *deviceInfo = [NSString stringWithFormat:@"iPhone OS %@ (%@)", systemVersionStr, userPhoneNameStr];
-    NSLog(@"deviceInfo: %@", deviceInfo);
+    SHLogInfo(SHLogTagAPP, @"deviceInfo: %@", deviceInfo);
     
     return deviceInfo;
 }
 
 - (NSString *)appInfo {
     NSString *appInfo = [NSString stringWithFormat:@"App Version: %@ (%@)", APP_VERSION, APP_BUILDNUMBER];
-    NSLog(@"appInfo: %@", appInfo);
+    SHLogInfo(SHLogTagAPP, @"appInfo: %@", appInfo);
     
     return appInfo;
 }

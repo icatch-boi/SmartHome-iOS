@@ -31,7 +31,7 @@ static NSString * const kSurePasswordCellID = @"surePasswordReuseID";
     UINib *nib = [UINib nibWithNibName:@"SHLoginView" bundle:nil];
     SHLoginView *view = [nib instantiateWithOwner:nil options:nil][0];
     view.frame = [[UIScreen mainScreen] bounds];
-    NSLog(@"frame: %@", NSStringFromCGRect(view.frame));
+    SHLogInfo(SHLogTagAPP, @"frame: %@", NSStringFromCGRect(view.frame));
     
     return view;
 }

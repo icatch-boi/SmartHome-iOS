@@ -344,7 +344,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 #pragma mark - show warning dialog
 - (void)showWarningAlertDialog:(NSString*)warningMessage {
     if([warningMessage isEqualToString:@""] == YES) {
-        NSLog(@"showWarningAlertDialog :: No Message To Show");
+        SHLogWarn(SHLogTagAPP, @"showWarningAlertDialog :: No Message To Show");
         return;
     }
     
@@ -583,7 +583,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             [self presentViewController:alertC animated:YES completion:nil];
             
         } else if (status == AVAuthorizationStatusRestricted) {
-            NSLog(@"因为系统原因, 无法访问相册");
+            SHLogError(SHLogTagAPP, @"因为系统原因, 无法访问相册");
         }
     } else {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", @"") message:NSLocalizedString(@"kCameraNotDetected", @"") preferredStyle:(UIAlertControllerStyleAlert)];
@@ -782,7 +782,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     NSError *error = nil;
     NSArray *fetchedObjects = [[CoreDataHandler sharedCoreDataHander].managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (!error && fetchedObjects && fetchedObjects.count>0) {
-        NSLog(@"Already have one camera: %@", camera_server.uid);
+        SHLogWarn(SHLogTagAPP, @"Already have one camera: %@", camera_server.uid);
         isExist = YES;
         
         SHCamera *camera = fetchedObjects.firstObject;
@@ -795,12 +795,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         // Save data to sqlite
         NSError *error = nil;
         if (![camera.managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
             abort();
 #endif
         } else {
-            NSLog(@"Saved to sqlite.");
+            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
             [SHTutkHttp registerDevice:camera];
 #if 0
@@ -811,7 +811,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 #endif
         }
     } else {
-        NSLog(@"Create a camera");
+        SHLogInfo(SHLogTagAPP, @"Create a camera");
         SHCamera *savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
         savedCamera.cameraName = camera_server.name;
         savedCamera.cameraUid = camera_server.uid;
@@ -826,17 +826,17 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         savedCamera.createTime = [df stringFromDate:currentDate];
-        NSLog(@"Create time is %@", savedCamera.createTime);
+        SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
         
         // Save data to sqlite
         NSError *error = nil;
         if (![savedCamera.managedObjectContext save:&error]) {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
             abort();
 #endif
         } else {
-            NSLog(@"Saved to sqlite.");
+            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
             [SHTutkHttp registerDevice:savedCamera];
 #if 0
@@ -867,7 +867,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         [fetchRequest setEntity:entity];
 
         [[SHNetworkManager sharedNetworkManager] bindCameraWithCameraUid:cameraUid name:cameraName password:kDeviceDefaultPassword completion:^(BOOL isSuccess, id result) {
-            NSLog(@"bindCmaera is success: %d", isSuccess);
+            SHLogInfo(SHLogTagAPP, @"bindCmaera is success: %d", isSuccess);
             
             if (isSuccess) {
                 Camera *camera_server = result;
@@ -880,7 +880,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                 NSError *error = nil;
                 NSArray *fetchedObjects = [[CoreDataHandler sharedCoreDataHander].managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 if (!error && fetchedObjects && fetchedObjects.count > 0) {
-                    NSLog(@"Already have one camera: %@", cameraUid);
+                    SHLogWarn(SHLogTagAPP, @"Already have one camera: %@", cameraUid);
                     isExist = YES;
                     
                     SHCamera *camera = fetchedObjects.firstObject;
@@ -893,17 +893,17 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     // Save data to sqlite
                     NSError *error = nil;
                     if (![camera.managedObjectContext save:&error]) {
-                        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
                         abort();
 #endif
                     } else {
-                        NSLog(@"Saved to sqlite.");
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
                         [SHTutkHttp registerDevice:camera];
                     }
                 } else {
-                    NSLog(@"Create a camera");
+                    SHLogInfo(SHLogTagAPP, @"Create a camera");
                     self.savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
                     self.savedCamera.cameraUid = cameraUid; //@"3AW1YKX6HWYG2M8X111A";
                     self.savedCamera.cameraName = cameraName;
@@ -918,7 +918,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
                     [df setDateFormat:@"yyyyMMdd HHmmss"];
                     self.savedCamera.createTime = [df stringFromDate:currentDate];
-                    NSLog(@"Create time is %@",self.savedCamera.createTime);
+                    SHLogInfo(SHLogTagAPP, @"Create time is %@",self.savedCamera.createTime);
                     
                     // Save data to sqlite
                     NSError *error = nil;
@@ -928,12 +928,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                          
                          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
                          */
-                        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
                         abort();
 #endif
                     } else {
-                        NSLog(@"Saved to sqlite.");
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
                         [SHTutkHttp registerDevice:self.savedCamera];
                     }
@@ -1000,7 +1000,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         
         WEAK_SELF(self);
         [[SHNetworkManager sharedNetworkManager] bindCameraWithCameraUid:cameraUid name:cameraName password:kDeviceDefaultPassword completion:^(BOOL isSuccess, id result) {
-            NSLog(@"bindCmaera is success: %d", isSuccess);
+            SHLogInfo(SHLogTagAPP, @"bindCmaera is success: %d", isSuccess);
             
             if (isSuccess) {
                 Camera *camera_server = result;
@@ -1013,7 +1013,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                 NSError *error = nil;
                 NSArray *fetchedObjects = [[CoreDataHandler sharedCoreDataHander].managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 if (!error && fetchedObjects && fetchedObjects.count > 0) {
-                    NSLog(@"Already have one camera: %@", cameraUid);
+                    SHLogWarn(SHLogTagAPP, @"Already have one camera: %@", cameraUid);
                     isExist = YES;
                     
                     SHCamera *camera = fetchedObjects.firstObject;
@@ -1026,17 +1026,17 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     // Save data to sqlite
                     NSError *error = nil;
                     if (![camera.managedObjectContext save:&error]) {
-                        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
                         abort();
 #endif
                     } else {
-                        NSLog(@"Saved to sqlite.");
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
                         [SHTutkHttp registerDevice:camera];
                     }
                 } else {
-                    NSLog(@"Create a camera");
+                    SHLogInfo(SHLogTagAPP, @"Create a camera");
                     weakself.savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
                     weakself.savedCamera.cameraUid = cameraUid; //@"3AW1YKX6HWYG2M8X111A";
                     weakself.savedCamera.cameraName = cameraName;
@@ -1051,7 +1051,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
                     [df setDateFormat:@"yyyyMMdd HHmmss"];
                     self.savedCamera.createTime = [df stringFromDate:currentDate];
-                    NSLog(@"Create time is %@", weakself.savedCamera.createTime);
+                    SHLogInfo(SHLogTagAPP, @"Create time is %@", weakself.savedCamera.createTime);
                     
                     // Save data to sqlite
                     NSError *error = nil;
@@ -1061,12 +1061,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                          
                          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
                          */
-                        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
 #ifdef DEBUG
                         abort();
 #endif
                     } else {
-                        NSLog(@"Saved to sqlite.");
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
                         [SHTutkHttp registerDevice:weakself.savedCamera];
                     }

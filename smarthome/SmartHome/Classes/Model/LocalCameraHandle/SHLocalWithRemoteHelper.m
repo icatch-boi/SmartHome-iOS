@@ -54,7 +54,7 @@
                 [self checkDevicesStatus:result];
             } else {
                 Error *error = result;
-                NSLog(@"getCameraList is faild: %@", error.error_description);
+                SHLogError(SHLogTagAPP, @"getCameraList is faild: %@", error.error_description);
                 
                 if (completion) {
                     completion(isSuccess);
@@ -104,7 +104,7 @@
         permission = camera_server.operable;
     }
     
-    NSLog(@"own camera : %@ operable = %d", permission == -1 ? @"YES" : @"NO", permission);
+    SHLogInfo(SHLogTagAPP, @"own camera : %@ operable = %d", permission == -1 ? @"YES" : @"NO", permission);
     NSString *name = camera_server.name;
     if (permission != -1 ) {
         name = camera_server.memoname;
@@ -120,7 +120,7 @@
         permission = 0;
     }
     
-    NSLog(@"own camera : %@ operable = %d", permission == 1 ? @"YES" : @"NO", permission);
+    SHLogInfo(SHLogTagAPP, @"own camera : %@, camera uid: %@", permission == 1 ? @"YES" : @"NO", camera_server.uid);
 
     NSString *name = camera_server.name;
     if (permission != 1) {
@@ -160,7 +160,7 @@
                 NSError *err = nil;
                 [[NSFileManager defaultManager] removeItemAtURL:result error:&err];
                 if (err != nil) {
-                    NSLog(@"delete file err:%@", err);
+                    SHLogError(SHLogTagAPP, @"delete file err:%@", err);
                 }
             }
         }
@@ -192,7 +192,7 @@
                     UIImage *thumbnail = [[UIImage alloc] initWithData:data];
                     
                     if (thumbnail != nil) {
-                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %lu.", data.length);
+                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %u.", data.length);
                         
                         SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
                         [[CoreDataHandler sharedCoreDataHander] addCamera:camera];

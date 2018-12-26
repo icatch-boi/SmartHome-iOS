@@ -459,9 +459,9 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             // upload thumbnail to server
             [[SHNetworkManager sharedNetworkManager] updateCameraCoverByCameraID:self.shCamObj.camera.id andCoverData:coverData completion:^(BOOL isSuccess, id  _Nonnull result) {
                 if (isSuccess) {
-                    NSLog(@"update device cover success");
+                    SHLogInfo(SHLogTagAPP, @"update device cover success");
                 } else {
-                    NSLog(@"update device cover failure");
+                    SHLogError(SHLogTagAPP, @"update device cover failure");
                 }
                 
                 self.currentVideoData.length = 0;
@@ -853,7 +853,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
                            time1->tm_sec];
     
     NSString *fullPath = [NSString stringWithFormat:@"%@%@",photoPath, imageName];
-    NSLog(@"Capture path: %@", fullPath);
+    SHLogInfo(SHLogTagAPP, @"Capture path: %@", fullPath);
     
     return fullPath;
 }
@@ -882,7 +882,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     
     // Write out the contents of home directory to console
-    NSLog(@"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error]);
+    SHLogInfo(SHLogTagAPP, @"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error]);
 }
 
 @end

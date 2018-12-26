@@ -336,7 +336,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             [self presentViewController:alertC animated:YES completion:nil];
             
         } else if (status == AVAuthorizationStatusRestricted) {
-            NSLog(@"因为系统原因, 无法访问相册");
+            SHLogError(SHLogTagAPP, @"因为系统原因, 无法访问相册");
         }
     } else {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", @"") message:NSLocalizedString(@"kCameraNotDetected", @"") preferredStyle:(UIAlertControllerStyleAlert)];
@@ -646,7 +646,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 //                [weakself unbindCameras:result];
             } else {
                 Error *error = result;
-                NSLog(@"getCameraList is faild: %@", error.error_description);
+                SHLogError(SHLogTagAPP, @"getCameraList is faild: %@", error.error_description);
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -726,7 +726,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     if([camera_server.ownerId compare:owner] != 0) {
         permission = camera_server.operable;
     }
-    NSLog(@"own camera : %@ operable = %d", permission == -1 ? @"YES" : @"NO", permission);
+    SHLogInfo(SHLogTagAPP, @"own camera : %@ operable = %d", permission == -1 ? @"YES" : @"NO", permission);
     NSString *name = camera_server.name;
     if(permission != -1 ) {
         name = camera_server.memoname;

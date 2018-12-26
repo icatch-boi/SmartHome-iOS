@@ -150,7 +150,7 @@
                 NSURL *fileURL = nil;
                 if (imageName != nil) {
                     NSString *fullPath = [NSString stringWithFormat:@"%@%@",photoPath, imageName];
-                    NSLog(@"%@", fullPath);
+                    SHLogInfo(SHLogTagAPP, @"%@", fullPath);
                     fileURL = [NSURL fileURLWithPath:fullPath];
                     
 //                    [_shCamObj.sdk addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_IMAGE forKey:_shCamObj.camera.cameraUid];
