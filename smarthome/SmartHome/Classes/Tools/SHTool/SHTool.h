@@ -33,4 +33,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)deviceInfo;
 + (void)setupCurrentFullScreen:(BOOL)fullscreen;
 
++ (BOOL)isValidDeviceName:(NSString *)deviceName;
+
 @end

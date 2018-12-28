@@ -132,6 +132,8 @@ static NSString * const kLocalAlbumName = @"SmartHome"; //@"XJ doorbell";
 static NSTimeInterval const kDataBaseFileStorageTime = 7 * 24 * 3600;
 static NSString * const kUserAccounts = @"kUserAccounts";
 static NSString * const kRecvNotificationCount = @"kRecvNotificationCount";
+static const NSUInteger kDeviceNameMinLength = 1;
+static const NSUInteger kDeviceNameMaxLength = 12;
 
 #define USE_ENCRYP 0
 

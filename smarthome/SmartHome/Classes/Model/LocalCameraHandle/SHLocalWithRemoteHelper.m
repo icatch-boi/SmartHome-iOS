@@ -197,10 +197,10 @@
                         SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
                         [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
                     } else {
-                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %u.", data.length);
                     }
                 } else {
-                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %u.", data.length);
                 }
             } else {
                 SHLogError(SHLogTagAPP, @"Request failed, error: %@", error);

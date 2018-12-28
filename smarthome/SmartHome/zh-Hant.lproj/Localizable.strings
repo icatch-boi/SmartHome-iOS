@@ -653,3 +653,6 @@
 "kFileDownloadSuccess" = "下載成功";
 "kFileDownloadFailed" = "下載失敗";
 "kFileDownloadCancel" = "取消下載";
+"kModifyDeviceNameSuccess" = "修改設備名稱成功!";
+"kModifyDeviceNameFailed" = "修改設備名稱失敗，請稍後再試!";
+"kDeviceNameInvalidDescription" = "無效的設備名稱，請確保輸入的內容為[%lu-%lu]字符長度的中文或英文。";

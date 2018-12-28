@@ -640,3 +640,6 @@
 "kFileDownloadSuccess" = "download successfully";
 "kFileDownloadFailed" = "download failed";
 "kFileDownloadCancel" = "cancel downlaod";
+"kModifyDeviceNameSuccess" = "Modify the device name successfully!";
+"kModifyDeviceNameFailed" = "Failed to modify device name, please try again later!";
+"kDeviceNameInvalidDescription" = "Invalid device name, please make sure that the input content is [%lu-%lu] characters in Chinese or English.";

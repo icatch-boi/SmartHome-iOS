@@ -539,4 +539,31 @@
     }
 }
 
+//得到中英文混合字符串长度
++ (NSInteger)getCharLength:(NSString*)strtemp
+{
+    NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSData* da = [strtemp dataUsingEncoding:enc];
+    return [da length];
+}
+
++ (BOOL)isValidDeviceName:(NSString *)deviceName {
+    NSUInteger length = [self getCharLength:deviceName];
+    SHLogInfo(SHLogTagAPP, @"Current string: %@, length: %lu", deviceName, (unsigned long)length);
+    
+    if (length > kDeviceNameMaxLength || length < kDeviceNameMinLength) {
+        SHLogWarn(SHLogTagAPP, @"String too log or too short (valid length range: [%lu-%lu]).", (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength);
+        return NO;
+    }
+    
+    NSString *regex = [NSString stringWithFormat:@"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}", (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength];
+    NSRange nameRange = [deviceName rangeOfString:regex options:NSRegularExpressionSearch];
+    if (nameRange.location == NSNotFound) {
+        SHLogWarn(SHLogTagAPP, @"String mismatching.");
+        return NO;
+    }
+    
+    return YES;
+}
+
 @end

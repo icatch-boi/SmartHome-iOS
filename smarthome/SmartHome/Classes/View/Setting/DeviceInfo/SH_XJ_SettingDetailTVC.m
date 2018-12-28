@@ -351,10 +351,16 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:nil]];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         
+        if ([SHTool isValidDeviceName:nameField.text] == NO) {
+            [self showNewDeviceNameInvalidAlertView];
+            return;
+        }
+
         if ([nameField.text isEqualToString:@""] || [nameField.text isEqualToString:_shCamObj.camera.cameraName]) {
             return ;
         }
         
+        [self.progressHUD showProgressHUDWithMessage:nil];
 //        _shCamObj.camera.cameraName = nameField.text;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -386,8 +392,11 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
             
             if(_shCamObj.camera.operable == 1) {
                 [[SHNetworkManager sharedNetworkManager] renameCameraByCameraID:_shCamObj.camera.id andNewName:newName completion:^(BOOL isSuccess, id  _Nonnull result) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.progressHUD hideProgressHUD:YES];
+                    });
                     if(isSuccess) {
-                        [self showAlertWithContent:@"修改名称成功!"];
+                        [self showAlertWithContent:NSLocalizedString(@"kModifyDeviceNameSuccess", nil)];
                         
                         [_shCamObj.camera.managedObjectContext performBlockAndWait:^{
                             self.shCamObj.camera.cameraName = newName;
@@ -416,13 +425,16 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
                             }
                         }];
                     } else {
-                        [self showAlertWithContent:@"修改名称失败!"];
+                        [self showAlertWithContent:NSLocalizedString(@"kModifyDeviceNameFailed", nil)];
                     }
                 }];
             } else {
                 [[SHNetworkManager sharedNetworkManager] fixedAliasByCameraID:_shCamObj.camera.id andAlias:newName completion:^(BOOL isSuccess, id  _Nonnull result) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.progressHUD hideProgressHUD:YES];
+                    });
                     if(isSuccess) {
-                        [self showAlertWithContent:@"修改名称成功!"];
+                        [self showAlertWithContent:NSLocalizedString(@"kModifyDeviceNameSuccess", nil)];
                         
                         [_shCamObj.camera.managedObjectContext performBlockAndWait:^{
                             self.shCamObj.camera.cameraName = newName;
@@ -450,12 +462,25 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
                             }
                         }];
                     } else {
-                        [self showAlertWithContent:@"修改名称失败!"];
+                        [self showAlertWithContent:NSLocalizedString(@"kModifyDeviceNameFailed", nil)];
                     }
                 }];
             }
             
         });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)showNewDeviceNameInvalidAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kDeviceNameInvalidDescription", nil), (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength] preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        
+        [self modifyCameraName];
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];

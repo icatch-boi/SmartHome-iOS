@@ -458,7 +458,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil); //@"Success";
     __block NSString *cameraName = [_cameraUid substringToIndex:5];
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kSetupSuccess", nil)/*@"Success"*/ message:/*@"Please set doorbell name"*/NSLocalizedString(@"kSetDeviceName", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConfigureSuccess", nil)/*@"Success"*/ message:/*@"Please set doorbell name"*/NSLocalizedString(@"kSetDeviceName", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *deviceNameField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -471,11 +471,29 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
+            [weakself showDeviceNameInvalidAlertView];
+            return;
+        }
+        
         if (![deviceNameField.text isEqualToString:@""]) {
             cameraName = deviceNameField.text;
         }
         
         [weakself addCameraWithName:cameraName];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)showDeviceNameInvalidAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kDeviceNameInvalidDescription", nil), (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength] preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        
+        [self showAddDeviceTips];
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
