@@ -265,13 +265,15 @@
         camera.id = cameraInfo.id ? cameraInfo.id : camera.id;
         camera.thumbnail = cameraInfo.thumnail ? cameraInfo.thumnail : camera.thumbnail;
         camera.operable = cameraInfo.operable;
-        
+#if 0
         NSDate *currentDate = [NSDate date];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         camera.createTime = [df stringFromDate:currentDate];
         SHLogInfo(SHLogTagAPP, @"Create time is %@", camera.createTime);
-        
+#else
+        camera.createTime = cameraInfo.addTime;
+#endif
         // Save data to sqlite
         NSError *error = nil;
         if (![camera.managedObjectContext save:&error]) {
@@ -304,7 +306,7 @@
         savedCamera.id = cameraInfo.id;
         savedCamera.thumbnail = cameraInfo.thumnail;
         savedCamera.operable = cameraInfo.operable;
-        
+#if 0
         NSDate *date = [NSDate date];
         NSTimeInterval sec = [date timeIntervalSinceNow];
         NSDate *currentDate = [[NSDate alloc] initWithTimeIntervalSinceNow:sec];
@@ -312,7 +314,9 @@
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         savedCamera.createTime = [df stringFromDate:currentDate];
         SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
-        
+#else
+        savedCamera.createTime = cameraInfo.addTime;
+#endif
         // Save data to sqlite
         NSError *error = nil;
         if (![savedCamera.managedObjectContext save:&error]) {

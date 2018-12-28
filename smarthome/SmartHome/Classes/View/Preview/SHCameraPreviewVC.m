@@ -2307,12 +2307,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
+#if 0
     [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.progressHUDPreview hideProgressHUD:YES];
             [weakself enableUserInteraction:NO];
         });
     }]];
+#endif
     [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.progressHUDPreview hideProgressHUD:YES];

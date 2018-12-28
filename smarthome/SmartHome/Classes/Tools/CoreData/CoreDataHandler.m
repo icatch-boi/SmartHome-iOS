@@ -187,7 +187,7 @@ static id instance = nil;
         
         // Edit the sort key as appropriate.
         // 当key值为createTime时获取到的数组元素会根据createTime来进行排序
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"cameraUid" ascending:YES];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:/*@"cameraUid"*/@"createTime" ascending:YES];
         NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
         [fetchRequest setSortDescriptors:sortDescriptors];
         

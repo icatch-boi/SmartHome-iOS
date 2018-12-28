@@ -39,6 +39,7 @@
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, strong) UIImage *thumnail;
 @property (nonatomic) int operable;
+@property (nonatomic, copy) NSString *addTime;
 
 #if USE_ENCRYP
 + (instancetype)cameraWithName:(NSString *)cameraName

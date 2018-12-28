@@ -56,7 +56,7 @@
     //NSArray *properties = [self propertiesWithClass:self.class];
     
     //return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, [self dictionaryWithValuesForKeys:properties].description];
-    return  [NSString stringWithFormat:@"SHCameraHelper -\n name : %@ \n, uuid : %@ \n, password : %@ operate : %d\n", _cameraName, _cameraUid, _devicePassword, _operable];
+    return  [NSString stringWithFormat:@"SHCameraHelper -\n name : %@ \n, uuid : %@ \n, password : %@ operate : %d\n, addTime: %@\n", _cameraName, _cameraUid, _devicePassword, _operable, _addTime];
 }
 
 /********************************************************/

@@ -168,6 +168,7 @@
     }];
 #endif
     SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
+    camera.addTime = [SHTool localDBTimeStringFromServer:camera_server.time];
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];

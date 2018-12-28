@@ -810,6 +810,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         camera.id = camera_server.id;
         camera.operable = operable;
         
+        camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+
         // Save data to sqlite
         NSError *error = nil;
         if (![camera.managedObjectContext save:&error]) {
@@ -836,7 +838,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         savedCamera.devicePassword = camera_server.devicepassword;
         savedCamera.id = camera_server.id;
         savedCamera.operable = operable;
-        
+#if 0
         NSDate *date = [NSDate date];
         NSTimeInterval sec = [date timeIntervalSinceNow];
         NSDate *currentDate = [[NSDate alloc] initWithTimeIntervalSinceNow:sec];
@@ -845,7 +847,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         savedCamera.createTime = [df stringFromDate:currentDate];
         SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
-        
+#else
+        savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+#endif
         // Save data to sqlite
         NSError *error = nil;
         if (![savedCamera.managedObjectContext save:&error]) {
@@ -1041,6 +1045,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     camera.id = camera_server.id;
                     camera.operable = operable;
                     
+                    camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+
                     // Save data to sqlite
                     NSError *error = nil;
                     if (![camera.managedObjectContext save:&error]) {
@@ -1061,7 +1067,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     weakself.savedCamera.devicePassword = kDeviceDefaultPassword;
                     weakself.savedCamera.id = camera_server.id;
                     weakself.savedCamera.operable = operable;
-                    
+#if 0
                     NSDate *date = [NSDate date];
                     NSTimeInterval sec = [date timeIntervalSinceNow];
                     NSDate *currentDate = [[NSDate alloc] initWithTimeIntervalSinceNow:sec];
@@ -1070,7 +1076,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     [df setDateFormat:@"yyyyMMdd HHmmss"];
                     self.savedCamera.createTime = [df stringFromDate:currentDate];
                     SHLogInfo(SHLogTagAPP, @"Create time is %@", weakself.savedCamera.createTime);
-                    
+#else
+                    weakself.savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+#endif
                     // Save data to sqlite
                     NSError *error = nil;
                     if (![weakself.savedCamera.managedObjectContext save:&error]) {

@@ -34,5 +34,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (void)setupCurrentFullScreen:(BOOL)fullscreen;
 
 + (BOOL)isValidDeviceName:(NSString *)deviceName;
++ (NSString *)localDBTimeStringFromServer:(NSString *)remoteTime;
 
 @end
