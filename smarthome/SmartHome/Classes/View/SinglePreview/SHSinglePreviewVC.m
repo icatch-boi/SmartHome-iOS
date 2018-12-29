@@ -113,6 +113,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     if(_shCameraObj.cameraProperty.talk ) {
         _TalkBackRun = _shCameraObj.cameraProperty.talk;
         [self talkAnimTimer];
+        _noHidden = YES;
     }
 }
 

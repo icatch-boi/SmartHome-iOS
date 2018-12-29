@@ -375,6 +375,14 @@
             [self.cameraProperty updateSDCardInfo:self];
             break;
             
+        case ICATCH_EVENT_SDCARD_INFO_CHANGED:
+            self.cameraProperty.SDUseableSize = evt.intValue1;
+            
+            if (evt.intValue1 == -1) {
+                self.cameraProperty.memorySizeData = nil;
+            }
+            break;
+            
         default:
             break;
     }

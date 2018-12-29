@@ -73,6 +73,7 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic) ICatchAudioFormat *audioFormat;
 
 @property (nonatomic) SHICatchEvent *curBatteryLevel;
+@property (nonatomic, assign) int SDUseableSize;
 
 - (void)cleanCurrentCameraAllProperty;
 - (BOOL)checkSupportPropertyExist;

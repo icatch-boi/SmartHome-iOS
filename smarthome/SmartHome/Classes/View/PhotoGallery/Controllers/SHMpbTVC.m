@@ -1780,7 +1780,7 @@ static int const kNewFileIconTag = 888;
     
     //    NSString *cachedKey = [NSString stringWithFormat:@"ID%d", file.getFileHandle()];
     _videoPlaybackIndex = indexPath.row;
-    
+#if 0
     //    UIImage *image = [self.mpbCache objectForKey:cachedKey];
     UIImage *image = [self getFileThumbnail:file];
     if (!image) {
@@ -1824,6 +1824,15 @@ static int const kNewFileIconTag = 888;
         _videoPlaybackThumb = image;
         [self performSegueWithIdentifier:@"go2PlaybackVideoSegue" sender:nil];
     }
+#else
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"STREAM_ERROR_CAPTURING_CAPTURE", nil)
+                                  detailsMessage:nil
+                                            mode:MBProgressHUDModeIndeterminate];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressHUD hideProgressHUD:YES];
+        [self performSegueWithIdentifier:@"go2PlaybackVideoSegue" sender:nil];
+    });
+#endif
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

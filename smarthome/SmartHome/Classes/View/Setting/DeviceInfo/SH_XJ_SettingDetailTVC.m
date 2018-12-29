@@ -669,9 +669,9 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     myCard.textLabel = NSLocalizedString(@"kUsage", nil); //@"Usage";
      NSString *sizeStr = nil;
     if(_sdCardExisted) {
-        int usedSize = (_SDTotalSize - _SDUseableSize);
+        int usedSize = (_SDTotalSize - /*_SDUseableSize*/self.shCamObj.cameraProperty.SDUseableSize);
         sizeStr = [DiskSpaceTool transformStringFromMBytes:usedSize];
-        SHLogInfo(SHLogTagAPP, @"total : %d, used : %d", _SDTotalSize, _SDUseableSize);
+        SHLogInfo(SHLogTagAPP, @"total : %d, used : %d", _SDTotalSize, /*_SDUseableSize*/self.shCamObj.cameraProperty.SDUseableSize);
     } else {
         sizeStr = NSLocalizedString(@"kNoSDcard", nil); //@"no card";
     }
@@ -952,7 +952,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 #pragma mark - Action Progress
 - (MBProgressHUD *)progressHUD {
     if (!_progressHUD) {
-        _progressHUD = [MBProgressHUD progressHUDWithView:self.navigationController.view.window];
+        _progressHUD = [MBProgressHUD progressHUDWithView:self.navigationController.view];
     }
     
     return _progressHUD;

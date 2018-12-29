@@ -909,6 +909,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     UIViewController *vc = [self prepareSettingViewController];
     
     if (_shCameraObj.streamOper.PVRun) {
+#if 0
         [self.progressHUD showProgressHUDWithMessage:nil];
 
         dispatch_async(/*self.previewQueue*/dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -924,6 +925,19 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 });
             }];
         });
+#else
+        dispatch_async(self.previewQueue, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:vc animated:YES completion:nil];
+            });
+            
+            [self stopCurrentTalkBack];
+            
+            [_shCameraObj.streamOper stopMediaStreamWithComplete:^{
+                SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
+            }];
+        });
+#endif
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
