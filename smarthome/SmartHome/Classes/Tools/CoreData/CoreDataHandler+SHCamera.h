@@ -36,5 +36,6 @@ static NSString * const kNeedReloadDataBase = @"NeedReloadDataBase";
 - (NSArray *)fetchedCamera;
 - (void)deleteAllCameras;
 - (void)updateLocalCamerasWithRemoteCameras:(NSArray *)remoteCameras;
+- (BOOL)updateCameraThumbnail:(SHCameraHelper *)cameraInfo;
 
 @end

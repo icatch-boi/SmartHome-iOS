@@ -348,6 +348,7 @@
 		38F525B41F2F020400F5A5A2 /* SGWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F5257E1F2F020400F5A5A2 /* SGWebView.m */; };
 		38F525C31F2F041E00F5A5A2 /* libMWPhotoBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38F525C01F2F03F800F5A5A2 /* libMWPhotoBrowser.a */; };
 		38F525C71F2F04F000F5A5A2 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */; };
+		38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */; };
 		38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9B711EADF54E00F3470C /* OpenAL.framework */; };
 		38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9FE51EB1C89200F3470C /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
@@ -1071,6 +1072,8 @@
 		38F5257E1F2F020400F5A5A2 /* SGWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGWebView.m; sourceTree = "<group>"; };
 		38F525BB1F2F03F800F5A5A2 /* MWPhotoBrowser.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MWPhotoBrowser.xcodeproj; path = MWPhotoBrowser/MWPhotoBrowser.xcodeproj; sourceTree = "<group>"; };
 		38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MWPhotoBrowser.bundle; path = Libraries/MWPhotoBrowser/MWPhotoBrowser.bundle; sourceTree = "<group>"; };
+		38F604A521DC86EA00B0F6D0 /* XDSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSDropDownMenu.h; sourceTree = "<group>"; };
+		38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDSDropDownMenu.m; sourceTree = "<group>"; };
 		38FB9B711EADF54E00F3470C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		38FB9FE51EB1C89200F3470C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -2633,6 +2636,7 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				38F604A421DC86EA00B0F6D0 /* XDSDropDownMenu */,
 				38C7940321C2279600E55F96 /* MJRefresh.framework */,
 				381E790921900FA500E733DD /* SDAutoLayout */,
 				384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */,
@@ -2747,6 +2751,15 @@
 				38F525C01F2F03F800F5A5A2 /* libMWPhotoBrowser.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		38F604A421DC86EA00B0F6D0 /* XDSDropDownMenu */ = {
+			isa = PBXGroup;
+			children = (
+				38F604A521DC86EA00B0F6D0 /* XDSDropDownMenu.h */,
+				38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */,
+			);
+			path = XDSDropDownMenu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3311,6 +3324,7 @@
 				38E5C26820A3F66D003004E0 /* SHCameraManager.m in Sources */,
 				38E5C15520A3F5AF003004E0 /* SHQRCodeScanningVC.m in Sources */,
 				38E5C19520A3F5AF003004E0 /* SHMessagesListTVC.m in Sources */,
+				38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */,
 				38E5C37C20A41027003004E0 /* CoreDataHandler+SHCamera.m in Sources */,
 				3818D69321709BA100AF846C /* XYBarCell.m in Sources */,
 				38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */,

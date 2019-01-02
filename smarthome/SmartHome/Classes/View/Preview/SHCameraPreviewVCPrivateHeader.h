@@ -27,7 +27,6 @@
 
 #import "SHCameraPreviewVC.h"
 #import "CustomIOS7AlertView.h"
-#import "HWOptionButton.h"
 
 @interface SHCameraPreviewVC ()
 
@@ -52,7 +51,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *footerView;
-@property (weak, nonatomic) IBOutlet HWOptionButton *resolutionButton;
+@property (weak, nonatomic) IBOutlet UIButton *resolutionButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *resolutionBtnWidthCons;
 
 @property (nonatomic, weak) UIView *topToolView;
 @property (nonatomic, weak) UIButton *topCloseBtn;

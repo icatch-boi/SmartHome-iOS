@@ -193,15 +193,15 @@
                     UIImage *thumbnail = [[UIImage alloc] initWithData:data];
                     
                     if (thumbnail != nil) {
-                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %u.", data.length);
+                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %lu.", data.length);
                         
                         SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:camera_server.uid devicePassword:camera_server.devicepassword id:camera_server.id thumbnail:thumbnail operable:permission];
-                        [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
+                        [[CoreDataHandler sharedCoreDataHander] updateCameraThumbnail:camera];
                     } else {
-                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %u.", data.length);
+                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
                     }
                 } else {
-                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %u.", data.length);
+                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
                 }
             } else {
                 SHLogError(SHLogTagAPP, @"Request failed, error: %@", error);

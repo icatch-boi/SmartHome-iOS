@@ -41,6 +41,7 @@
 #import "AppDelegate.h"
 #import "SDAutoLayout.h"
 #import "SHDownloadManager.h"
+#import "XDSDropDownMenu.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -55,7 +56,7 @@ static const NSTimeInterval kConnectAndPreviewTimeout = 120.0;
 static const NSTimeInterval kConnectAndPreviewSpecialSleepTime = 5.0;
 static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
-@interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate, HWOptionButtonDelegate>
+@interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate, XDSDropDownMenuDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) SHSettingData *videoSizeData;
 @property (nonatomic, assign) BOOL disconnectHandling;
@@ -75,6 +76,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 @property (nonatomic, assign) NSUInteger connectTimes;
 @property (nonatomic, strong) MBProgressHUD *progressHUDPreview;
 @property (nonatomic, assign) BOOL alreadyBack;
+@property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
 
 @end
 
@@ -104,7 +106,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self constructPreviewData];
 //    [self prepareVideoSizeData];
 //    [self prepareCameraPropertyData];
-    [self addTapGesture];
+//    [self addTapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -191,6 +193,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     if (image != nil) {
         _previewImageView.image = image;
     }
+    
+    [self hideResolutionMenu];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -500,6 +504,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #endif
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
+    [self addGestureRecognizers];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -1647,6 +1652,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 //    _pvFailedLabel.hidden = enable;
 //    _pvFailedLabel.text = enable ? nil : NSLocalizedString(@"StartPVFailed", nil);
     self.navigationItem.rightBarButtonItem.enabled = enable;
+    self.resolutionButton.enabled = enable;
 }
 
 - (void)connectAndPreview {
@@ -2356,21 +2362,94 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 #pragma mark - Resolution Handle
 - (void)setupResolutionButton {
-    _resolutionButton.array = [[SHCamStaticData instance] streamQualityArray];
-    _resolutionButton.delegate = self;
-    _resolutionButton.fontSize = 15.0;
+    [self setupResolutionButtonFrame];
+    
+    [_resolutionButton setCornerWithRadius:CGRectGetHeight(_resolutionButton.bounds) * 0.2 masksToBounds:NO];
+    [_resolutionButton setBorderWidth:1.0 borderColor:[UIColor ic_colorWithHex:kThemeColor]];
+    [_resolutionButton setTitleColor:[UIColor ic_colorWithHex:kThemeColor] forState:UIControlStateNormal];
+    
+    [self setupResolutionMenu];
+}
+
+- (void)setupResolutionMenu {
+    self.resolutionMenu = [[XDSDropDownMenu alloc] init];
+    self.resolutionMenu.tag = 1000;
+    
+    self.resolutionMenu.delegate = self;//设置代理
+}
+
+- (void)setupResolutionButtonFrame {
+    NSArray *temp = [[SHCamStaticData instance] streamQualityArray];
+    CGFloat width = 0;
+    for (NSString *str in temp) {
+        CGFloat w = [self stringSize:str font:_resolutionButton.titleLabel.font].width;
+        width = MAX(width, w);
+    }
+    
+    CGFloat resolutionBtnWidth = width * 1.6;
+    resolutionBtnWidth = resolutionBtnWidth > 85.0 ? resolutionBtnWidth : 85.0;
+    SHLogInfo(SHLogTagAPP, @"String MAX width: %f, Resolution button width: %f", width, resolutionBtnWidth);
+    
+    _resolutionBtnWidthCons.constant = resolutionBtnWidth;
+}
+
+- (CGSize)stringSize:(NSString *)str font:(UIFont *)font {
+    return [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
 }
 
 - (void)updateResolutionButton:(ICatchVideoQuality)quality {
-    _resolutionButton.row = quality;
-    _resolutionButton.title = [[SHCamStaticData instance] streamQualityArray][quality];
+    _resolutionMenu.currentRow = quality;
+    [_resolutionButton setTitle:[[SHCamStaticData instance] streamQualityArray][quality] forState:UIControlStateNormal];
 }
 
-- (void)didSelectOptionInHWOptionButton:(HWOptionButton *)optionButton {
-    NSInteger index = optionButton.row;
-    SHLogInfo(SHLogTagAPP, @"Current select row: %ld", (long)index);
+- (void)setupDropDownMenu:(XDSDropDownMenu *)dropDownMenu withTitleArray:(NSArray *)titleArray andButton:(UIButton *)button andDirection:(NSString *)direction{
     
-    ICatchVideoQuality quality = (ICatchVideoQuality)index;
+    CGRect btnFrame = [self getBtnFrame:button];
+    
+    if(dropDownMenu.tag == 1000){
+        /*
+         如果dropDownMenu的tag值为1000，表示dropDownMenu没有打开，则打开dropDownMenu
+         */
+        
+        //初始化选择菜单
+        [dropDownMenu showDropDownMenu:button withButtonFrame:btnFrame arrayOfTitle:titleArray arrayOfImage:nil animationDirection:direction];
+        
+        //添加到主视图上
+        [self.view addSubview:dropDownMenu];
+        
+        //将dropDownMenu的tag值设为2000，表示已经打开了dropDownMenu
+        dropDownMenu.tag = 2000;
+    } else {
+        /*
+         如果dropDownMenu的tag值为2000，表示dropDownMenu已经打开，则隐藏dropDownMenu
+         */
+        [self hideResolutionMenu];
+    }
+}
+
+- (CGRect)getBtnFrame:(UIButton *)button{
+    return [button.superview convertRect:button.frame toView:self.view];
+}
+
+- (void)hideResolutionMenu {
+    [self.resolutionMenu hideDropDownMenuWithBtnFrame:[self getBtnFrame:self.resolutionButton]];
+    self.resolutionMenu.tag = 1000;
+}
+
+#pragma mark - 下拉菜单代理
+/*
+ 在点击下拉菜单后，将其tag值重新设为1000
+ */
+- (void)setDropDownDelegate:(XDSDropDownMenu *)sender {
+    sender.tag = 1000;
+    
+    [self changeResolutionWithRow:sender.currentRow];
+}
+
+- (void)changeResolutionWithRow:(NSInteger)row {
+    SHLogInfo(SHLogTagAPP, @"Current select row: %ld", (long)row);
+    
+    ICatchVideoQuality quality = (ICatchVideoQuality)row;
     if (quality == _shCameraObj.streamQuality) {
         SHLogInfo(SHLogTagAPP, @"Current quality already exist.");
         return;
@@ -2389,6 +2468,38 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         });
     });
+}
+
+- (IBAction)changeResolutionClick:(id)sender {
+    [self setupDropDownMenu:self.resolutionMenu withTitleArray:[[SHCamStaticData instance] streamQualityArray] andButton:sender andDirection:@"up"];
+}
+
+#pragma mark - UITapGestureRecognizer
+- (void)addGestureRecognizers {
+    //单指单击
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleFingerTapHandler:)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)singleFingerTapHandler:(UITapGestureRecognizer *)sender {
+    if (self.resolutionMenu.tag == 1000) {
+        return;
+    }
+    
+    CGPoint point = [sender locationInView:sender.view];
+    if (!CGRectContainsPoint(self.resolutionMenu.frame, point)) {
+        [self hideResolutionMenu];
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    // 若为UITableViewCellContentView（即点击了tableViewCell），则不截获Touch事件
+    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

@@ -32,7 +32,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *batteryImgView;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *hdButton;
+@property (weak, nonatomic) IBOutlet UIButton *resolutionButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *resolutionBtnWidthCons;
 @property (weak, nonatomic) IBOutlet UILabel *bitRateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *batteryLabel;
 @property (nonatomic) SHObserver *bitRateObserver;

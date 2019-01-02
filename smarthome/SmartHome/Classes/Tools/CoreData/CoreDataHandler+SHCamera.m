@@ -341,6 +341,67 @@
     return isSuccess;
 }
 
+- (BOOL)updateCameraThumbnail:(SHCameraHelper *)cameraInfo {
+    __block BOOL isSuccess = YES;
+    
+    WEAK_SELF(self);
+    [self.managedObjectContext performBlockAndWait:^{
+        isSuccess = [weakself updateCameraThumbnailHandler:cameraInfo];
+    }];
+    
+    return isSuccess;
+}
+
+- (BOOL)updateCameraThumbnailHandler:(SHCameraHelper *)cameraInfo {
+    // when uid is nil, don't update camera.
+    if (cameraInfo.cameraUid == nil) {
+        SHLogError(SHLogTagAPP, @"camera uid is nil.");
+        return NO;
+    }
+    
+    if (cameraInfo.thumnail == nil) {
+        SHLogError(SHLogTagAPP, @"camera thumnail is nil.");
+        return NO;
+    }
+    
+    BOOL isSuccess = YES;
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:kEntityName inManagedObjectContext:self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSPredicate *predicate = [NSPredicate
+                              predicateWithFormat:@"cameraUid = %@", cameraInfo.cameraUid];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (!error && fetchedObjects && fetchedObjects.count>0) {
+        SHLogInfo(SHLogTagAPP, @"Already have one camera, update camera info.");
+        
+        SHCamera *camera = (SHCamera *)fetchedObjects.firstObject;
+        
+        camera.thumbnail = cameraInfo.thumnail ? cameraInfo.thumnail : camera.thumbnail;
+        
+        // Save data to sqlite
+        NSError *error = nil;
+        if (![camera.managedObjectContext save:&error]) {
+            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
+            
+            isSuccess = NO;
+#ifdef DEBUG
+            abort();
+#endif
+        } else {
+            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+        }
+    }
+    
+    return isSuccess;
+}
+
 - (void)deleteAllCameras {
     SHLogTRACE();
     
