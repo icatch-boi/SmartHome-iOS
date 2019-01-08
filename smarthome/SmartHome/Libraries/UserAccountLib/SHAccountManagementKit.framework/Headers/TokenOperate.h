@@ -12,6 +12,7 @@
 
 @interface TokenOperate : NSObject
 -(void)checkMailValid:(NSString *)email
+           customerid:(NSString * _Nonnull)customerid
               success:(nullable void (^)(void))success
               failure:(nullable void (^)(Error* _Nonnull error))failure;
 

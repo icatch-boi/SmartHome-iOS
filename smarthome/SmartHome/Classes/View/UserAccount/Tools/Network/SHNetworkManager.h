@@ -16,14 +16,15 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^RequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
 //static NSString * const ServerBaseUrl = @"http://52.79.113.238:3006/";
+static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";
 
-#define Use_OurServer 0
+#define Use_OurServer 1
 #define Use_LocalServer 1
 
 #if Use_OurServer
 
 #if Use_LocalServer
-static NSString * const ServerBaseUrl = @"http://172.28.28.17:80";
+static NSString * const ServerBaseUrl = @"http://172.28.28.17:80/";
 #else
 static NSString * const ServerBaseUrl = @"http://www.smarthome.icatchtek.com/";
 #endif

@@ -18,7 +18,7 @@
 /**
  *
  */
-#define kApiKey @"smarthome"
+#define kApiKey @"icatch_smarthome"
 
 /**
  *

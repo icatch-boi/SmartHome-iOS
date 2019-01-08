@@ -127,6 +127,7 @@ static NSString * const kSettingStoryboardName = @"Setting";
 static NSString * const kAlbumStoryboardName = @"Album";
 static NSString * const kMainStoryboardName = @"XJMain";
 static NSString * const kMessageCenterStoryboardName = @"MessageCenter";
+static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
 
 static NSString * const kLocalAlbumName = @"SmartHome"; //@"XJ doorbell";
 static NSTimeInterval const kDataBaseFileStorageTime = 7 * 24 * 3600;

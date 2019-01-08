@@ -20,6 +20,7 @@
                  andEmail:(NSString *_Nonnull)email
               andPassword:(NSString *_Nonnull)password
              andCheckCode:(NSString *_Nonnull)code
+               customerid:(NSString *_Nonnull)customerid
                   success:(nullable void (^)(Account* _Nonnull account))success
                   failure:(nullable void (^)(Error* _Nonnull error))failure;
 
@@ -29,12 +30,14 @@
 
 
 -(void)restUserPwdBegWithMail:(NSString *_Nonnull)email
+                   customerid:(NSString *_Nonnull)customerid
               success:(nullable void (^)(void))success
               failure:(nullable void (^)(Error* _Nonnull error))failure;
 
 -(void)resetUserPwdWithEmail:(NSString *_Nonnull)email
           andNewPwd:(NSString * _Nonnull)newPwd
        andCheckCode:(NSString * _Nonnull)code
+                  customerid:(NSString *_Nonnull)customerid
             success:(nullable void (^)(Account* _Nonnull account))success
             failure:(nullable void (^)(Error* _Nonnull error))failure;
 
@@ -52,12 +55,14 @@
 -(void)changeAccountPasswrodWithToken:(Token * _Nonnull)Token
                        andOldPassword:(NSString * _Nonnull)oldPwd
                        andNewPasswrod:(NSString * _Nonnull)newPwd
+                           customerid:(NSString * _Nonnull)customerid
                               success:(nullable void (^)(Account* _Nonnull account))success
                               failure:(nullable void (^)(Error* _Nonnull error))failure;
 //add v2.4
 -(void)changeAccountInfoWithToken:(Token * _Nonnull)Token
                            andNewName:(NSString * _Nullable)name
                            andNewInfo:(NSString * _Nullable)info
+                       customerid:(NSString * _Nonnull)customerid
                               success:(nullable void (^)(Account* _Nonnull account))success
                               failure:(nullable void (^)(Error* _Nonnull error))failure;
 
@@ -67,6 +72,7 @@
                        andOldPassword:(NSString *_Nonnull)oldPwd
                        andNewPasswrod:(NSString *_Nonnull)newPwd
                            andNewInfo:(NSString *_Nonnull)info
+                           customerid:(NSString * _Nonnull)customerid
                               success:(nullable void (^)(Account* _Nonnull account))success
                               failure:(nullable void (^)(Error* _Nonnull error))failure;
 

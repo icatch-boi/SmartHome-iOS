@@ -102,7 +102,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 2;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {    
@@ -125,6 +125,10 @@
             [self modifyPassword];
             break;
             
+        case 1:
+            [self enterFaceRecognition];
+            break;
+            
         case 2:
             [self modifyPassword];
             break;
@@ -132,6 +136,12 @@
         default:
             break;
     }
+}
+
+- (void)enterFaceRecognition {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:kFaceRecognitionStoryboardName bundle:nil];
+    UINavigationController *nav = [sb instantiateInitialViewController];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)modifyPassword {

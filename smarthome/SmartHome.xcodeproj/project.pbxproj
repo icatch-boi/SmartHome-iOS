@@ -18,6 +18,7 @@
 		380770391FD66C3C006E7B92 /* test.caf in Resources */ = {isa = PBXBuildFile; fileRef = 380770381FD66C3B006E7B92 /* test.caf */; };
 		380770B71FDA2CFB006E7B92 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 38A59B0B1EA6178E0071C8CB /* libc++.tbd */; };
 		380770B91FDA2DED006E7B92 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 380770B81FDA2DEC006E7B92 /* Bugly.framework */; };
+		38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */; };
 		3810273B20622E4200B0B806 /* XJMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3810273A20622E4200B0B806 /* XJMain.storyboard */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
@@ -138,6 +139,19 @@
 		38A7523D1EA894B100C0ACB0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887447C1EA4A57E004802D7 /* AudioToolbox.framework */; };
 		38A837F11E9CB4D200553985 /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837F01E9CB4D200553985 /* SmartHomeTests.m */; };
 		38A837FC1E9CB4D200553985 /* SmartHomeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */; };
+		38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */; };
+		38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263421DF08EE00270CE1 /* ZJFaceRecognition.m */; };
+		38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263A21DF08EE00270CE1 /* ZJRequestError.m */; };
+		38BB265421DF08EE00270CE1 /* FRDFaceResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264221DF08EE00270CE1 /* FRDFaceResult.m */; };
+		38BB265521DF08EE00270CE1 /* FRDFaceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264321DF08EE00270CE1 /* FRDFaceInfo.m */; };
+		38BB265621DF08EE00270CE1 /* FRDResultHandleVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264521DF08EE00270CE1 /* FRDResultHandleVC.m */; };
+		38BB265721DF08EE00270CE1 /* FRDFaceDetectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264621DF08EE00270CE1 /* FRDFaceDetectionVC.m */; };
+		38BB265821DF08EE00270CE1 /* FRDHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264721DF08EE00270CE1 /* FRDHomeViewController.m */; };
+		38BB265921DF08EE00270CE1 /* FRDFaceDisplayVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264821DF08EE00270CE1 /* FRDFaceDisplayVC.m */; };
+		38BB265A21DF08EE00270CE1 /* FRDFacesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB264C21DF08EE00270CE1 /* FRDFacesViewController.m */; };
+		38BB265F21DF110000270CE1 /* FaceRecognition.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38BB265E21DF110000270CE1 /* FaceRecognition.storyboard */; };
+		38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB266A21DF40E000270CE1 /* FaceCollectionViewCell.m */; };
+		38BB266E21DF5E2900270CE1 /* FRDFaceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB266D21DF5E2900270CE1 /* FRDFaceData.m */; };
 		38C7940421C2279600E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -351,6 +365,10 @@
 		38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */; };
 		38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9B711EADF54E00F3470C /* OpenAL.framework */; };
 		38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9FE51EB1C89200F3470C /* CoreAudio.framework */; };
+		6C19E9C3F0245DBC11C5DEF3 /* libPods-SmartHomeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */; };
+		7B869602C3727D1D14B7C6B8 /* libPods-NotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA5721B86FD6E612BF7BE0C /* libPods-NotificationServiceExtension.a */; };
+		D36253B5DFBE08B989ACCBC3 /* libPods-SmartHomeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA0BB109BB48A4375D32690 /* libPods-SmartHomeTests.a */; };
+		F7A349829F422411ABFFFEA2 /* libPods-SmartHome.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D53E20A763401A2A5B28F1AC /* libPods-SmartHome.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -419,6 +437,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		062B4B1D540F3CFD00816049 /* Pods-SmartHomeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHomeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHomeUITests/Pods-SmartHomeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		0B68D9211F9EDA780045EBB0 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0B68D9231F9EDAF10045EBB0 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		1209ABB320D0F3880014F684 /* icatchtek.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = icatchtek.cer; sourceTree = "<group>"; };
@@ -430,8 +449,11 @@
 		1234BC7D20B92DD2003CD9AB /* XJMessageDetailTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XJMessageDetailTableViewCell.xib; sourceTree = "<group>"; };
 		1234BC8720BB8F4B003CD9AB /* XJMessageCenterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XJMessageCenterViewController.h; sourceTree = "<group>"; };
 		1234BC8820BB8F4B003CD9AB /* XJMessageCenterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XJMessageCenterViewController.m; sourceTree = "<group>"; };
+		35222DB79C2AA8F745B90CBA /* Pods-SmartHomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHomeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHomeTests/Pods-SmartHomeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		380770381FD66C3B006E7B92 /* test.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.caf; sourceTree = "<group>"; };
 		380770B81FDA2DEC006E7B92 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = SOURCE_ROOT; };
+		38080EFB21E320C500676B5F /* SHNetworkManager+SHFaceHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHFaceHandle.h"; sourceTree = "<group>"; };
+		38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHFaceHandle.m"; sourceTree = "<group>"; };
 		3809230020B7DAC0002E502B /* LoginCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginCommonHeader.h; sourceTree = "<group>"; };
 		380B4EE01FEB9118004209F5 /* SimpleLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLink.h; sourceTree = "<group>"; };
 		380B4EE11FEB9118004209F5 /* SimpleLinkErrorID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLinkErrorID.h; sourceTree = "<group>"; };
@@ -675,6 +697,32 @@
 		38A837F71E9CB4D200553985 /* SmartHomeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartHomeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartHomeUITests.m; sourceTree = "<group>"; };
 		38A837FD1E9CB4D200553985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38BB262F21DF08EE00270CE1 /* FRDFaceInfoViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceInfoViewModel.h; sourceTree = "<group>"; };
+		38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceInfoViewModel.m; sourceTree = "<group>"; };
+		38BB263321DF08EE00270CE1 /* ZJFaceRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJFaceRecognition.h; sourceTree = "<group>"; };
+		38BB263421DF08EE00270CE1 /* ZJFaceRecognition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJFaceRecognition.m; sourceTree = "<group>"; };
+		38BB263821DF08EE00270CE1 /* ZJRequestError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJRequestError.h; sourceTree = "<group>"; };
+		38BB263A21DF08EE00270CE1 /* ZJRequestError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJRequestError.m; sourceTree = "<group>"; };
+		38BB263E21DF08EE00270CE1 /* FRDCommonHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDCommonHeader.h; sourceTree = "<group>"; };
+		38BB264021DF08EE00270CE1 /* FRDFaceResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceResult.h; sourceTree = "<group>"; };
+		38BB264121DF08EE00270CE1 /* FRDFaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceInfo.h; sourceTree = "<group>"; };
+		38BB264221DF08EE00270CE1 /* FRDFaceResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceResult.m; sourceTree = "<group>"; };
+		38BB264321DF08EE00270CE1 /* FRDFaceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceInfo.m; sourceTree = "<group>"; };
+		38BB264521DF08EE00270CE1 /* FRDResultHandleVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDResultHandleVC.m; sourceTree = "<group>"; };
+		38BB264621DF08EE00270CE1 /* FRDFaceDetectionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceDetectionVC.m; sourceTree = "<group>"; };
+		38BB264721DF08EE00270CE1 /* FRDHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDHomeViewController.m; sourceTree = "<group>"; };
+		38BB264821DF08EE00270CE1 /* FRDFaceDisplayVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceDisplayVC.m; sourceTree = "<group>"; };
+		38BB264921DF08EE00270CE1 /* FRDFacesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFacesViewController.h; sourceTree = "<group>"; };
+		38BB264A21DF08EE00270CE1 /* FRDResultHandleVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDResultHandleVC.h; sourceTree = "<group>"; };
+		38BB264B21DF08EE00270CE1 /* FRDFaceDetectionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceDetectionVC.h; sourceTree = "<group>"; };
+		38BB264C21DF08EE00270CE1 /* FRDFacesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFacesViewController.m; sourceTree = "<group>"; };
+		38BB264D21DF08EE00270CE1 /* FRDHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDHomeViewController.h; sourceTree = "<group>"; };
+		38BB264E21DF08EE00270CE1 /* FRDFaceDisplayVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceDisplayVC.h; sourceTree = "<group>"; };
+		38BB265E21DF110000270CE1 /* FaceRecognition.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceRecognition.storyboard; sourceTree = "<group>"; };
+		38BB266921DF40E000270CE1 /* FaceCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceCollectionViewCell.h; sourceTree = "<group>"; };
+		38BB266A21DF40E000270CE1 /* FaceCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceCollectionViewCell.m; sourceTree = "<group>"; };
+		38BB266C21DF5E2900270CE1 /* FRDFaceData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRDFaceData.h; sourceTree = "<group>"; };
+		38BB266D21DF5E2900270CE1 /* FRDFaceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRDFaceData.m; sourceTree = "<group>"; };
 		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
@@ -1076,6 +1124,16 @@
 		38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDSDropDownMenu.m; sourceTree = "<group>"; };
 		38FB9B711EADF54E00F3470C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		38FB9FE51EB1C89200F3470C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		4C939773EAF2B9450A3991E1 /* Pods-SmartHome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHome/Pods-SmartHome.release.xcconfig"; sourceTree = "<group>"; };
+		655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartHomeUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7611601B8D29426A9F8A8AA4 /* Pods-SmartHomeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHomeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHomeUITests/Pods-SmartHomeUITests.release.xcconfig"; sourceTree = "<group>"; };
+		86B9DEFFA2DCEFA7EBF4F79A /* Pods-SmartHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHome.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHome/Pods-SmartHome.debug.xcconfig"; sourceTree = "<group>"; };
+		9BA5721B86FD6E612BF7BE0C /* libPods-NotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDEE8CA9407FDB7E54B4A891 /* Pods-SmartHomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartHomeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmartHomeTests/Pods-SmartHomeTests.release.xcconfig"; sourceTree = "<group>"; };
+		D53E20A763401A2A5B28F1AC /* libPods-SmartHome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartHome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95FE5355F432606D3789ED6 /* Pods-NotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		FBA0BB109BB48A4375D32690 /* libPods-SmartHomeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartHomeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1133,6 +1191,7 @@
 				388744811EA4A666004802D7 /* CoreImage.framework in Frameworks */,
 				388744861EA4A862004802D7 /* QuartzCore.framework in Frameworks */,
 				38A59B0E1EA61AAB0071C8CB /* CoreMedia.framework in Frameworks */,
+				F7A349829F422411ABFFFEA2 /* libPods-SmartHome.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,6 +1199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D36253B5DFBE08B989ACCBC3 /* libPods-SmartHomeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1147,6 +1207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C19E9C3F0245DBC11C5DEF3 /* libPods-SmartHomeUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,12 +1217,28 @@
 			files = (
 				38F442581FAC126300BDA6DF /* libresolv.tbd in Frameworks */,
 				38F442571FAC125600BDA6DF /* libz.tbd in Frameworks */,
+				7B869602C3727D1D14B7C6B8 /* libPods-NotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01A99037C079C5C995699D76 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E95FE5355F432606D3789ED6 /* Pods-NotificationServiceExtension.debug.xcconfig */,
+				469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */,
+				86B9DEFFA2DCEFA7EBF4F79A /* Pods-SmartHome.debug.xcconfig */,
+				4C939773EAF2B9450A3991E1 /* Pods-SmartHome.release.xcconfig */,
+				35222DB79C2AA8F745B90CBA /* Pods-SmartHomeTests.debug.xcconfig */,
+				CDEE8CA9407FDB7E54B4A891 /* Pods-SmartHomeTests.release.xcconfig */,
+				062B4B1D540F3CFD00816049 /* Pods-SmartHomeUITests.debug.xcconfig */,
+				7611601B8D29426A9F8A8AA4 /* Pods-SmartHomeUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		0B68D90F1F9896370045EBB0 /* libSmartLink */ = {
 			isa = PBXGroup;
 			children = (
@@ -1485,6 +1562,10 @@
 				388744761EA4A3A1004802D7 /* Foundation.framework */,
 				388744741EA4A39A004802D7 /* UIKit.framework */,
 				3884B1101E9F27B500609B55 /* CoreData.framework */,
+				9BA5721B86FD6E612BF7BE0C /* libPods-NotificationServiceExtension.a */,
+				D53E20A763401A2A5B28F1AC /* libPods-SmartHome.a */,
+				FBA0BB109BB48A4375D32690 /* libPods-SmartHomeTests.a */,
+				655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1635,6 +1716,7 @@
 				38F4424A1FAC079A00BDA6DF /* NotificationServiceExtension */,
 				38A837D41E9CB4D200553985 /* Products */,
 				3884B10F1E9F27B500609B55 /* Frameworks */,
+				01A99037C079C5C995699D76 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1678,6 +1760,101 @@
 				38A837FD1E9CB4D200553985 /* Info.plist */,
 			);
 			path = SmartHomeUITests;
+			sourceTree = "<group>";
+		};
+		38BB262C21DF08AB00270CE1 /* FaceRecognition */ = {
+			isa = PBXGroup;
+			children = (
+				38BB262D21DF08EE00270CE1 /* Classes */,
+			);
+			path = FaceRecognition;
+			sourceTree = "<group>";
+		};
+		38BB262D21DF08EE00270CE1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				38BB263F21DF08EE00270CE1 /* Model */,
+				38BB264421DF08EE00270CE1 /* View */,
+				38BB262E21DF08EE00270CE1 /* ViewModel */,
+				38BB263121DF08EE00270CE1 /* Tools */,
+				38BB263D21DF08EE00270CE1 /* Others */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		38BB262E21DF08EE00270CE1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				38BB262F21DF08EE00270CE1 /* FRDFaceInfoViewModel.h */,
+				38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		38BB263121DF08EE00270CE1 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				38BB263221DF08EE00270CE1 /* FaceRecognition */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		38BB263221DF08EE00270CE1 /* FaceRecognition */ = {
+			isa = PBXGroup;
+			children = (
+				38BB263321DF08EE00270CE1 /* ZJFaceRecognition.h */,
+				38BB263421DF08EE00270CE1 /* ZJFaceRecognition.m */,
+			);
+			path = FaceRecognition;
+			sourceTree = "<group>";
+		};
+		38BB263D21DF08EE00270CE1 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				38BB263E21DF08EE00270CE1 /* FRDCommonHeader.h */,
+				38BB265E21DF110000270CE1 /* FaceRecognition.storyboard */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
+		38BB263F21DF08EE00270CE1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38BB264021DF08EE00270CE1 /* FRDFaceResult.h */,
+				38BB264221DF08EE00270CE1 /* FRDFaceResult.m */,
+				38BB264121DF08EE00270CE1 /* FRDFaceInfo.h */,
+				38BB264321DF08EE00270CE1 /* FRDFaceInfo.m */,
+				38BB266C21DF5E2900270CE1 /* FRDFaceData.h */,
+				38BB266D21DF5E2900270CE1 /* FRDFaceData.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		38BB264421DF08EE00270CE1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				38BB266821DF408900270CE1 /* FaceCollectionCell */,
+				38BB264D21DF08EE00270CE1 /* FRDHomeViewController.h */,
+				38BB264721DF08EE00270CE1 /* FRDHomeViewController.m */,
+				38BB264921DF08EE00270CE1 /* FRDFacesViewController.h */,
+				38BB264C21DF08EE00270CE1 /* FRDFacesViewController.m */,
+				38BB264E21DF08EE00270CE1 /* FRDFaceDisplayVC.h */,
+				38BB264821DF08EE00270CE1 /* FRDFaceDisplayVC.m */,
+				38BB264B21DF08EE00270CE1 /* FRDFaceDetectionVC.h */,
+				38BB264621DF08EE00270CE1 /* FRDFaceDetectionVC.m */,
+				38BB264A21DF08EE00270CE1 /* FRDResultHandleVC.h */,
+				38BB264521DF08EE00270CE1 /* FRDResultHandleVC.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		38BB266821DF408900270CE1 /* FaceCollectionCell */ = {
+			isa = PBXGroup;
+			children = (
+				38BB266921DF40E000270CE1 /* FaceCollectionViewCell.h */,
+				38BB266A21DF40E000270CE1 /* FaceCollectionViewCell.m */,
+			);
+			path = FaceCollectionCell;
 			sourceTree = "<group>";
 		};
 		38E5BF3120A3F5AE003004E0 /* Classes */ = {
@@ -1874,6 +2051,7 @@
 		38E5BFE620A3F5AE003004E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38BB262C21DF08AB00270CE1 /* FaceRecognition */,
 				38E5C07620A3F5AE003004E0 /* UserAccount */,
 				3897E0992180743000E72417 /* Setup */,
 				38E5C0FF20A3F5AE003004E0 /* Main */,
@@ -2118,6 +2296,8 @@
 				3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */,
 				38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */,
 				38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */,
+				38080EFB21E320C500676B5F /* SHNetworkManager+SHFaceHandle.h */,
+				38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */,
 				38E5C08020A3F5AE003004E0 /* Model */,
 			);
 			path = Network;
@@ -2128,6 +2308,8 @@
 			children = (
 				38E5C08220A3F5AE003004E0 /* SHUserAccount.h */,
 				38E5C08120A3F5AE003004E0 /* SHUserAccount.m */,
+				38BB263821DF08EE00270CE1 /* ZJRequestError.h */,
+				38BB263A21DF08EE00270CE1 /* ZJRequestError.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2769,6 +2951,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38A838001E9CB4D200553985 /* Build configuration list for PBXNativeTarget "SmartHome" */;
 			buildPhases = (
+				6E7088F14FD1385D2E3FF942 /* [CP] Check Pods Manifest.lock */,
 				38A837CF1E9CB4D200553985 /* Sources */,
 				38A837D01E9CB4D200553985 /* Frameworks */,
 				38A837D11E9CB4D200553985 /* Resources */,
@@ -2793,6 +2976,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38A838031E9CB4D200553985 /* Build configuration list for PBXNativeTarget "SmartHomeTests" */;
 			buildPhases = (
+				7BFC21739E772F997717D9C3 /* [CP] Check Pods Manifest.lock */,
 				38A837E81E9CB4D200553985 /* Sources */,
 				38A837E91E9CB4D200553985 /* Frameworks */,
 				38A837EA1E9CB4D200553985 /* Resources */,
@@ -2811,6 +2995,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38A838061E9CB4D200553985 /* Build configuration list for PBXNativeTarget "SmartHomeUITests" */;
 			buildPhases = (
+				D3B4803C5E411DABD8CB86CB /* [CP] Check Pods Manifest.lock */,
 				38A837F31E9CB4D200553985 /* Sources */,
 				38A837F41E9CB4D200553985 /* Frameworks */,
 				38A837F51E9CB4D200553985 /* Resources */,
@@ -2829,6 +3014,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38F442551FAC079A00BDA6DF /* Build configuration list for PBXNativeTarget "NotificationServiceExtension" */;
 			buildPhases = (
+				2106EBD116664D646AF316A5 /* [CP] Check Pods Manifest.lock */,
 				38F442451FAC079900BDA6DF /* Sources */,
 				38F442461FAC079900BDA6DF /* Frameworks */,
 				38F442471FAC079900BDA6DF /* Resources */,
@@ -2957,6 +3143,7 @@
 				38E5C3B220A4199F003004E0 /* SHShareHomeHeaderView.xib in Resources */,
 				38E5C38020A41190003004E0 /* Setting.storyboard in Resources */,
 				386FAFD420AFB712007655CF /* SHLoginFirstView.xib in Resources */,
+				38BB265F21DF110000270CE1 /* FaceRecognition.storyboard in Resources */,
 				389C29E91F2EEA0D004C4806 /* ChangeMode.WAV in Resources */,
 				1209ABB420D0F3890014F684 /* icatchtek.cer in Resources */,
 				38E5C3DC20A419E0003004E0 /* SHAccountInfoHeaderView.xib in Resources */,
@@ -3029,6 +3216,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2106EBD116664D646AF316A5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NotificationServiceExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		380770BA1FDA3481006E7B92 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3096,6 +3301,60 @@
 			shellScript = "\n# xcode-version-bump.sh\n\n# @desc Auto-increment the version number (only) when a project is archived for export.\n\n# @usage\n\n# 1. Select: your Target in Xcode\n\n# 2. Select: Build Phases Tab\n\n# 3. Select: Add Build Phase -> Add Run Script\n\n# 4. Paste code below in to new \"Run Script\" section\n\n# 5. Check the checkbox \"Run script only when installing\"\n\n# 6. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n\n# 7. Insure your starting version number is in SemVer format (e.g. 1.0.0)\n\n\n\n\n# This splits a two-decimal version string, such as \"0.45.123\", allowing us to increment the third position.\n\nVERSIONNUM=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\n\nNEWSUBVERSION=`echo $VERSIONNUM | awk -F \".\" '{print $3}'`\n\nNEWSUBVERSION=$(($NEWSUBVERSION + 1))\n\nNEWVERSIONSTRING=`echo $VERSIONNUM | awk -F \".\" '{print $1 \".\" $2 \".'$NEWSUBVERSION'\" }'`\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $NEWVERSIONSTRING\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n\n\n\n# update build number and version number to Setting bundle\n\n/usr/libexec/PlistBuddy -c \"Set :PreferenceSpecifiers:1:DefaultValue $NEWVERSIONSTRING\" \"${PROJECT_DIR}/${PROJECT_NAME}/Settings.bundle/Root.plist\"\n\n";
 			showEnvVarsInLog = 0;
 		};
+		6E7088F14FD1385D2E3FF942 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartHome-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7BFC21739E772F997717D9C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartHomeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3B4803C5E411DABD8CB86CB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartHomeUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3105,6 +3364,7 @@
 			files = (
 				384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */,
 				3897E0BB2180743100E72417 /* MeasurNetTools.m in Sources */,
+				38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */,
 				38E5C2E520A3F7FA003004E0 /* SHDownloadManager.m in Sources */,
 				38E5C3A720A41983003004E0 /* SHShareOtherAccountVC.m in Sources */,
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
@@ -3138,6 +3398,7 @@
 				38E5C27F20A3F685003004E0 /* MsgFileInfo.m in Sources */,
 				38E5C37320A40FFC003004E0 /* UIImage+ICAddition.m in Sources */,
 				38E5C26720A3F66D003004E0 /* SHSDKEventListener.cpp in Sources */,
+				38BB265621DF08EE00270CE1 /* FRDResultHandleVC.m in Sources */,
 				38E5C2EC20A3F7FA003004E0 /* SHDownloader.m in Sources */,
 				38E5C3D020A419E0003004E0 /* SHAccountSettingCell.m in Sources */,
 				38E5C2FD20A3F80B003004E0 /* SHVideoPlaybackVC.m in Sources */,
@@ -3174,6 +3435,7 @@
 				38E5C22020A3F610003004E0 /* SimplePing.m in Sources */,
 				3897E0BA2180743100E72417 /* QBTools.m in Sources */,
 				38E5C26320A3F66D003004E0 /* SHControlCenter.m in Sources */,
+				38BB265421DF08EE00270CE1 /* FRDFaceResult.m in Sources */,
 				38E5C33120A40F49003004E0 /* SHLightFrequency.m in Sources */,
 				38E5C26120A3F66D003004E0 /* SHCameraObject.m in Sources */,
 				38E5C14F20A3F5AF003004E0 /* SHCamera.xcdatamodeld in Sources */,
@@ -3195,6 +3457,7 @@
 				38E5C2F920A3F80B003004E0 /* MpbPopoverViewController.m in Sources */,
 				38E5C36F20A40FFC003004E0 /* MBProgressHUD+SH.m in Sources */,
 				38F525AD1F2F020400F5A5A2 /* PCMDataPlayer.mm in Sources */,
+				38BB265521DF08EE00270CE1 /* FRDFaceInfo.m in Sources */,
 				38E5C35120A40F8A003004E0 /* SHCommonControl.m in Sources */,
 				38E5C29320A3F6AA003004E0 /* SHTutkHttp.m in Sources */,
 				381E790F21900FA500E733DD /* UIView+SDAutoLayout.m in Sources */,
@@ -3202,6 +3465,7 @@
 				38E5C3EB20A41A0B003004E0 /* CWInteractiveTransition.m in Sources */,
 				3897E0BE2180743100E72417 /* JJCPayCodeTextFieldCell.m in Sources */,
 				38E5C15120A3F5AF003004E0 /* SHShareCamera.m in Sources */,
+				38BB265821DF08EE00270CE1 /* FRDHomeViewController.m in Sources */,
 				1234BC7E20B92DD2003CD9AB /* XJMessageDetailTableViewCell.m in Sources */,
 				38E5C24020A3F650003004E0 /* SHSaveSupportedProperty.m in Sources */,
 				38E5C18F20A3F5AF003004E0 /* SHNetworkManager+SHCamera.m in Sources */,
@@ -3224,6 +3488,7 @@
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38E5C3E720A41A0B003004E0 /* CWLateralSlideConfiguration.m in Sources */,
+				38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */,
 				38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */,
 				38E5C32E20A40F49003004E0 /* SHAbout.m in Sources */,
 				38E5C3D220A419E0003004E0 /* SHUserAccountInfoVC.m in Sources */,
@@ -3231,6 +3496,7 @@
 				38E5C29E20A3F6C3003004E0 /* SHQRManager.m in Sources */,
 				38E5C33720A40F49003004E0 /* SHCameraBrightness.m in Sources */,
 				38E5C26420A3F66D003004E0 /* SHObserver.m in Sources */,
+				38BB265A21DF08EE00270CE1 /* FRDFacesViewController.m in Sources */,
 				38E5C37D20A41027003004E0 /* CoreDataHandler.m in Sources */,
 				384BBE4420C13A900047E152 /* SVIndefiniteAnimatedView.m in Sources */,
 				38E5C15620A3F5AF003004E0 /* SHLocalAlbumTVC.m in Sources */,
@@ -3250,6 +3516,7 @@
 				38E5C28120A3F685003004E0 /* MsgFileManager.m in Sources */,
 				38E5C28720A3F685003004E0 /* messagecenter_test.m in Sources */,
 				38E5C2E620A3F7FA003004E0 /* MpbSDKEventListener.cpp in Sources */,
+				38BB265721DF08EE00270CE1 /* FRDFaceDetectionVC.m in Sources */,
 				38E5C2D120A3F7DF003004E0 /* SHMsgFileViewController.m in Sources */,
 				3897E0BD2180743100E72417 /* JJCPayCodeTextField.m in Sources */,
 				38E5C23C20A3F650003004E0 /* SHGettingSupportedProperty.m in Sources */,
@@ -3265,6 +3532,7 @@
 				38E5C1B420A3F5AF003004E0 /* SHWiFiSettingCell.m in Sources */,
 				38E5C2FB20A3F80B003004E0 /* SHFileDownloadTVC.m in Sources */,
 				384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */,
+				38BB265921DF08EE00270CE1 /* FRDFaceDisplayVC.m in Sources */,
 				38E5C20B20A3F610003004E0 /* SHAudioUnit.m in Sources */,
 				38E5C15220A3F5AF003004E0 /* SHShareCameraViewController.m in Sources */,
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
@@ -3294,6 +3562,7 @@
 				38E5C28620A3F685003004E0 /* MessageInfo.m in Sources */,
 				38E5C16020A3F5AF003004E0 /* SHWaterView.m in Sources */,
 				38E5C21E20A3F610003004E0 /* Reachability.m in Sources */,
+				38BB266E21DF5E2900270CE1 /* FRDFaceData.m in Sources */,
 				38223C5320BD260B0057DC14 /* MessageDetailInfo.m in Sources */,
 				38E5C19420A3F5AF003004E0 /* SHMessageCell.m in Sources */,
 				38E5C32F20A40F49003004E0 /* SHVideoSize.m in Sources */,
@@ -3314,9 +3583,11 @@
 				38E5C2E820A3F7FA003004E0 /* HWCalendar.m in Sources */,
 				38E5C33320A40F49003004E0 /* SHTimeZone.m in Sources */,
 				38E5C31120A3F81F003004E0 /* SHMpbTableViewCell.m in Sources */,
+				38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */,
 				38A0C56620EDE63300AE7B7F /* UIImage+ZJTint.m in Sources */,
 				38E5C1C520A3F5AF003004E0 /* SHDeleteCameraCell.m in Sources */,
 				38E5C3B320A4199F003004E0 /* SHShareHomeTVC.m in Sources */,
+				38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */,
 				38E5C3A520A41983003004E0 /* SHShareWayViewController.m in Sources */,
 				38E5C33620A40F49003004E0 /* SHMICVolume.m in Sources */,
 				38E5C25F20A3F66D003004E0 /* SHICatchEvent.m in Sources */,
@@ -3336,6 +3607,7 @@
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
 				38E5C3EA20A41A0B003004E0 /* CWLateralSlideAnimator.m in Sources */,
 				38E5C28320A3F685003004E0 /* DBManager.m in Sources */,
+				38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3519,6 +3791,7 @@
 		};
 		38A838011E9CB4D200553985 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86B9DEFFA2DCEFA7EBF4F79A /* Pods-SmartHome.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -3556,6 +3829,7 @@
 				MiSDKRun = debug;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
+					"$(inherited)",
 					"-ObjC",
 					"-all_load",
 				);
@@ -3575,6 +3849,7 @@
 		};
 		38A838021E9CB4D200553985 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C939773EAF2B9450A3991E1 /* Pods-SmartHome.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -3607,6 +3882,7 @@
 				);
 				MiSDKRun = online;
 				OTHER_LDFLAGS = (
+					"$(inherited)",
 					"-ObjC",
 					"-all_load",
 				);
@@ -3626,6 +3902,7 @@
 		};
 		38A838041E9CB4D200553985 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 35222DB79C2AA8F745B90CBA /* Pods-SmartHomeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = MA4957F4LN;
@@ -3639,6 +3916,7 @@
 		};
 		38A838051E9CB4D200553985 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CDEE8CA9407FDB7E54B4A891 /* Pods-SmartHomeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = MA4957F4LN;
@@ -3652,6 +3930,7 @@
 		};
 		38A838071E9CB4D200553985 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 062B4B1D540F3CFD00816049 /* Pods-SmartHomeUITests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = MA4957F4LN;
 				INFOPLIST_FILE = SmartHomeUITests/Info.plist;
@@ -3664,6 +3943,7 @@
 		};
 		38A838081E9CB4D200553985 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7611601B8D29426A9F8A8AA4 /* Pods-SmartHomeUITests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = MA4957F4LN;
 				INFOPLIST_FILE = SmartHomeUITests/Info.plist;
@@ -3676,6 +3956,7 @@
 		};
 		38F442531FAC079A00BDA6DF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E95FE5355F432606D3789ED6 /* Pods-NotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -3711,6 +3992,7 @@
 		};
 		38F442541FAC079A00BDA6DF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

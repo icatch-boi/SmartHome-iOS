@@ -50,7 +50,7 @@
                                  @"push_token": deviceToken,
                                  };
     
-    [self requestWithMethod:SHRequestMethodPOST urlString:CLIENT_INFO parametes:parameters finished:finished];
+    [self pushRequestWithMethod:SHRequestMethodPOST urlString:CLIENT_INFO parametes:parameters finished:finished];
 }
 
 - (void)pushMessageWithUID:(NSString *)uid message:(NSString *)message pushType:(SHPushType)pushType finished:(_Nullable RequestCompletionBlock)finished {
@@ -109,7 +109,7 @@
 }
 
 #pragma mark - Request method
-- (void)requestWithMethod:(SHRequestMethod)method urlString:(NSString *)urlString parametes:(id)parametes finished:(RequestCompletionBlock)finished {
+- (void)pushRequestWithMethod:(SHRequestMethod)method urlString:(NSString *)urlString parametes:(id)parametes finished:(RequestCompletionBlock)finished {
     id success = ^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
         if (finished) {
             finished(YES, responseObject);

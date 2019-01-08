@@ -662,10 +662,16 @@
 - (void)postNotification:(NSDictionary *)userInfo {
     NSDictionary *aps = userInfo[@"aps"];
     NSString *alert = aps[@"alert"];
-	id json = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
-	
-	SHMessage *message = [SHMessage messageWithDict:json];
-	[[NSNotificationCenter defaultCenter] postNotificationName:kPushMessageNotification object:message];
+    @try {
+        id json = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
+        
+        SHMessage *message = [SHMessage messageWithDict:json];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPushMessageNotification object:message];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"JSON parse happen exception: %@", exception);
+    } @finally {
+        
+    }
 #if 0
     MessageCenter* msgCenter = [[MessageCenter alloc] initWithName:message.devID andMSGDelegate:nil];
     MessageInfo* info = [[MessageInfo alloc] initWithMsgID:message.msgID andDevID:message.devID andDatetime:message.time andMsgType:message.msgType];

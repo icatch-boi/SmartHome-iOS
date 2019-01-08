@@ -43,7 +43,7 @@
 
 - (void)getVerifyCodeWithEmail:(NSString *)email completion:(RequestCompletionBlock)completion
 {
-    [self.tokenOperate checkMailValid:email success:^{
+    [self.tokenOperate checkMailValid:email customerid:kServerCustomerid success:^{
         if (completion) {
             completion(YES, nil);
         }
@@ -59,7 +59,7 @@
 - (void)resetPwdGetVerifyCodeWithEmail:(NSString * _Nonnull)email
                             completion:(RequestCompletionBlock)completion
 {
-    [self.accountOperate restUserPwdBegWithMail:email success:^{
+    [self.accountOperate restUserPwdBegWithMail:email customerid:kServerCustomerid success:^{
         if (completion) {
             completion(YES, nil);
         }
@@ -77,7 +77,7 @@
                   andCode:(NSString * _Nonnull)code
                completion:(RequestCompletionBlock)completion
 {
-    [self.accountOperate resetUserPwdWithEmail:email andNewPwd:password andCheckCode:code success:^(Account * _Nonnull account) {
+    [self.accountOperate resetUserPwdWithEmail:email andNewPwd:password andCheckCode:code customerid:kServerCustomerid success:^(Account * _Nonnull account) {
         if (completion) {
             completion(YES, account);
         }
@@ -91,7 +91,7 @@
 }
 
 - (void)changePasswordWithOldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword completion:(RequestCompletionBlock)completion {
-    [self.accountOperate changeAccountPasswrodWithToken:[self createToken] andOldPassword:oldPassword andNewPasswrod:newPassword success:^(Account * _Nonnull account) {
+    [self.accountOperate changeAccountPasswrodWithToken:[self createToken] andOldPassword:oldPassword andNewPasswrod:newPassword customerid:kServerCustomerid success:^(Account * _Nonnull account) {
         
         [self loadAccessTokenByEmail:account.email password:newPassword completion:^(BOOL isSuccess, id  _Nonnull result) {
             if (completion) {
@@ -154,7 +154,7 @@
 }
 
 - (void)logonWithUserName:(NSString *)userName email:(NSString *)email password:(NSString *)password checkCode:(NSString *)checkCode completion:(RequestCompletionBlock)completion {
-    [self.accountOperate signUpWithUserName:[self repairNickName:userName] andEmail:email andPassword:password andCheckCode:checkCode success:^(Account * _Nonnull account) {
+    [self.accountOperate signUpWithUserName:[self repairNickName:userName] andEmail:email andPassword:password andCheckCode:checkCode customerid:kServerCustomerid success:^(Account * _Nonnull account) {
         
         if (completion) {
             completion(YES, account);
