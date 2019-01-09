@@ -42,6 +42,7 @@
 #import "SDAutoLayout.h"
 #import "SHDownloadManager.h"
 #import "XDSDropDownMenu.h"
+#import "SDWebImageManager.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -1564,6 +1565,72 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         _presentView.connectText = @"等待连接...";
         _presentView.netTipText = @"当前网络良好";
     });
+    
+    [self setupPresentViewNickName];
+    [self setupPresentViewPortrait];
+}
+
+- (void)setupPresentViewNickName {
+    NSString *nameString = _shCameraObj.camera.cameraName;
+    
+    if (_notification && [_notification.allKeys containsObject:@"name"]) {
+        NSString *name = _notification[@"name"];
+        if (name != nil && ![name isEqualToString:@""]) {
+            nameString = [NSString stringWithFormat:@"%@ 在按门铃，是否要接听？", name];
+        }
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _presentView.nickName = nameString;
+    });
+}
+
+- (void)setupPresentViewPortrait {
+    if (_notification && [_notification.allKeys containsObject:@"attachment"]) {
+        NSString *urlStr = _notification[@"attachment"];
+        NSURL *url = [[NSURL alloc] initWithString:urlStr];
+        
+        if (url) {
+            WEAK_SELF(self);
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (image) {
+                        weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
+                    }
+                });
+            }];
+        }
+    }
+}
+
+- (UIImage *)reDrawOrangeImage:(UIImage *)image rangeRect:(CGRect)rect {
+    NSLog(@"image size: %@", NSStringFromCGSize(image.size));
+    
+//    CGFloat scale = image.size.width / image.size.height;
+//
+//    image = [self compressImage:image scale:scale];
+    
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+//    CGRect rect = CGRectMake(_preRect.origin.x , _preRect.origin.y , _preRect.size.width / scale, _preRect.size.height);
+    
+    CGContextAddRect(ctx, rect);
+    
+    CGContextClip(ctx);
+    
+//    size = CGSizeMake(kFaceBoxWidth * scale, kFaceBoxWidth);
+//    rect = CGRectMake(_preRect.origin.x, 0, size.width, size.height);
+    [image drawInRect:rect];
+    
+    UIImage *drawImage =  UIGraphicsGetImageFromCurrentImageContext();
+    NSLog(@"drawImage: %@", drawImage);
+    
+    UIGraphicsEndImageContext();
+    
+    return drawImage;
 }
 
 - (void)startPlayRing

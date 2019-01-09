@@ -285,15 +285,15 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     self.bgImageView.frame = self.frame;
     [self addSubview:_bgImageView];
     
-    CGFloat portraitW = 130 * kRTCRate;
+    CGFloat portraitW = 150 * kRTCRate;
     self.portraitImageView.frame = CGRectMake(0, 0, portraitW, portraitW);
     self.portraitImageView.center = CGPointMake(centerX, portraitW);
     self.portraitImageView.layer.cornerRadius = portraitW * 0.5;
     self.portraitImageView.layer.masksToBounds = YES;
     [self addSubview:_portraitImageView];
     
-    self.nickNameLabel.frame = CGRectMake(0, 0, kRTCWidth, 30);
-    self.nickNameLabel.center = CGPointMake(centerX, CGRectGetMaxY(self.portraitImageView.frame) + 16);
+    self.nickNameLabel.frame = CGRectMake(0, 0, kRTCWidth - 20, 30);
+    self.nickNameLabel.center = CGPointMake(centerX, CGRectGetMaxY(self.portraitImageView.frame) + 24);
     self.nickNameLabel.text = self.nickName ? :@"飞翔的昵称";
     [self addSubview:_nickNameLabel];
     
@@ -850,6 +850,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 {
     if (!_portraitImageView) {
         _portraitImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"portrait.jpg"]];
+        _portraitImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     
     return _portraitImageView;
@@ -860,9 +861,10 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     if (!_nickNameLabel) {
         _nickNameLabel = [[UILabel alloc] init];
         _nickNameLabel.text = @"飞翔的昵称";
-        _nickNameLabel.font = [UIFont systemFontOfSize:24.0f];
+        _nickNameLabel.font = [UIFont systemFontOfSize:20.0f];
         _nickNameLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor]; //[UIColor darkGrayColor];
         _nickNameLabel.textAlignment = NSTextAlignmentCenter;
+        _nickNameLabel.numberOfLines = 0;
     }
     
     return _nickNameLabel;
@@ -1054,6 +1056,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 {
     _nickName = nickName;
     self.nickNameLabel.text = _nickName;
+    [self.nickNameLabel sizeToFit];
 }
 
 - (void)setConnectText:(NSString *)connectText

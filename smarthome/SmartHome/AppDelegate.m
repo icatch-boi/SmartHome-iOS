@@ -214,7 +214,7 @@
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-        if ([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) {
+        if ([msgType isEqualToString:@"201"] /*&& ![self checkNotificationWhetherOverdue:aps]*/) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
         
             vc.cameraUid = aps[@"devID"]; //@"CVL32D1VV9BJ4XLN111A";
@@ -897,6 +897,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (NSDictionary *)parseNotification:(NSDictionary *)userInfo {
+#if 0
     if (userInfo == nil) {
         return nil;
     }
@@ -907,6 +908,29 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 //    NSLog(@"receive dict: %@", alertDict);
 	
 	return alertDict;
+#else
+    if (userInfo == nil) {
+        return nil;
+    }
+    
+    if ([userInfo.allKeys containsObject:@"handle"]) {
+        if ([userInfo[@"handle"] intValue]) {
+            NSDictionary *aps = userInfo[@"aps"];
+            NSString *alert = aps[@"alert"];
+            NSDictionary *alertDict = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
+            
+            return alertDict;
+        } else {
+            return userInfo;
+        }
+    } else {
+        NSDictionary *aps = userInfo[@"aps"];
+        NSString *alert = aps[@"alert"];
+        NSDictionary *alertDict = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
+        
+        return alertDict;
+    }
+#endif
 }
 
 - (void)presentSinglePreview:(NSDictionary *)userInfo {

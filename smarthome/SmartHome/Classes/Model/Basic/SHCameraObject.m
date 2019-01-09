@@ -313,7 +313,8 @@
             //delete download list before disconnect
             [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
             [self.sdk destroySHSDK];
-            [self.streamOper uploadPreviewThumbnailToServer];
+            // FIXME: - 暂时mark
+//            [self.streamOper uploadPreviewThumbnailToServer];
             [self cleanCamera];
 
             if (successBlock) {

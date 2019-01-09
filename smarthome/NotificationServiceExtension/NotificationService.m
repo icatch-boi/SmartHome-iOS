@@ -27,6 +27,7 @@
     
     // Modify the notification content here...
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
+#if 0
     [self test];
     
 #if 0
@@ -40,6 +41,22 @@
     self.contentHandler(self.bestAttemptContent);
 #endif
 //    [self updateBadgeNumber];
+#else
+    if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"handle"]) {
+        if ([self.bestAttemptContent.userInfo[@"handle"] intValue]) {
+            [self test];
+            self.contentHandler(self.bestAttemptContent);
+        } else {
+            NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
+            [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
+                self.contentHandler(self.bestAttemptContent);
+            }];
+        }
+    } else {
+        [self test];
+        self.contentHandler(self.bestAttemptContent);
+    }
+#endif
 }
 
 - (void)serviceExtensionTimeWillExpire {
