@@ -591,7 +591,7 @@
 "kConfigureDeviceDescription" = "綠燈閃爍表示正在連接家庭中的Wi-Fi，綠燈保持開啓意味著已成功連接上Wi-Fi。";
 "kGetSDCardAlbumDataFailed" = "獲取SD卡相冊數據失敗";
 "kShareDoorbellToYourFamilyOrFriends" = "分享門鈴給您的家人或朋友";
-"kQRCodeDescription" = "二維碼在2分鐘內有效，相機可以使用7天。";
+"kQRCodeDescription" = "二維碼在24小時內有效，相機可以使用7天。";
 
 "kNetworkRequestError_10001" = "無效或失效的接口請求";
 "kNetworkRequestError_10011" = "無效的文件類型請求";

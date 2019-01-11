@@ -578,4 +578,8 @@
     return localTime;
 }
 
++ (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font {
+    return [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
+}
+
 @end

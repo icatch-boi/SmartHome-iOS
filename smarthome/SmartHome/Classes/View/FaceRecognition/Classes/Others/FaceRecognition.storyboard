@@ -168,7 +168,7 @@
             </objects>
             <point key="canvasLocation" x="1826" y="128"/>
         </scene>
-        <!--人脸获取-->
+        <!--人脸捕捉-->
         <scene sceneID="REX-CA-hzW">
             <objects>
                 <viewController id="zIg-xU-mAl" customClass="FRDFaceDetectionVC" sceneMemberID="viewController">
@@ -178,7 +178,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="uvf-3p-Qpr"/>
                     </view>
-                    <navigationItem key="navigationItem" title="人脸获取" id="3wQ-LS-fiu"/>
+                    <navigationItem key="navigationItem" title="人脸捕捉" id="3wQ-LS-fiu"/>
                     <connections>
                         <segue destination="GH0-pz-2xo" kind="show" identifier="resultHandleSugue" id="eRy-Zp-Yx9"/>
                     </connections>
@@ -187,10 +187,10 @@
             </objects>
             <point key="canvasLocation" x="1022" y="906"/>
         </scene>
-        <!--Result HandleVC-->
+        <!--添加人脸-->
         <scene sceneID="R7l-xw-b3Q">
             <objects>
-                <viewController id="GH0-pz-2xo" customClass="FRDResultHandleVC" sceneMemberID="viewController">
+                <viewController title="添加人脸" id="GH0-pz-2xo" customClass="FRDResultHandleVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gJM-ST-Urr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -292,6 +292,100 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ntT-lZ-dsc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1856.25" y="904.22535211267609"/>
+        </scene>
+        <!--添加人脸-->
+        <scene sceneID="8Pr-0G-vBB">
+            <objects>
+                <collectionViewController storyboardIdentifier="FRDAddFaceCollectionVCSBID" title="添加人脸" id="fon-5y-BX2" customClass="FRDAddFaceCollectionVC" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="jYR-oI-wmq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lvf-gr-t9J">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="50" height="186"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FaceCollectionViewCellID" id="qkK-AH-KlU" customClass="FaceCollectionViewCell">
+                                <rect key="frame" x="0.0" y="186" width="100" height="140"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="140"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uc3-zI-2Jb">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="uc3-zI-2Jb" secondAttribute="height" multiplier="1:1" id="kVP-lp-7Sz"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BDr-q0-yqr">
+                                            <rect key="frame" x="4" y="102" width="92" height="38"/>
+                                            <state key="normal" title="Add"/>
+                                            <connections>
+                                                <action selector="addFaceClick:" destination="qkK-AH-KlU" eventType="touchUpInside" id="8gf-FK-zXO"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="BDr-q0-yqr" secondAttribute="trailing" constant="4" id="6PI-nf-PCa"/>
+                                    <constraint firstItem="BDr-q0-yqr" firstAttribute="centerX" secondItem="qkK-AH-KlU" secondAttribute="centerX" id="9pA-w8-zzG"/>
+                                    <constraint firstItem="BDr-q0-yqr" firstAttribute="top" secondItem="uc3-zI-2Jb" secondAttribute="bottom" constant="2" id="Clg-Zz-jbw"/>
+                                    <constraint firstAttribute="trailing" secondItem="uc3-zI-2Jb" secondAttribute="trailing" id="O8R-xx-Uhz"/>
+                                    <constraint firstAttribute="bottom" secondItem="BDr-q0-yqr" secondAttribute="bottom" id="ZYj-go-jgs"/>
+                                    <constraint firstItem="uc3-zI-2Jb" firstAttribute="leading" secondItem="qkK-AH-KlU" secondAttribute="leading" id="Zht-IR-Ldf"/>
+                                    <constraint firstItem="BDr-q0-yqr" firstAttribute="leading" secondItem="qkK-AH-KlU" secondAttribute="leading" constant="4" id="lmh-Kl-Nlc"/>
+                                    <constraint firstItem="uc3-zI-2Jb" firstAttribute="top" secondItem="qkK-AH-KlU" secondAttribute="top" id="v9M-5W-N3X"/>
+                                </constraints>
+                                <size key="customSize" width="100" height="140"/>
+                                <connections>
+                                    <outlet property="faceImgView" destination="uc3-zI-2Jb" id="qGT-Ik-2XW"/>
+                                    <outlet property="opertionButton" destination="BDr-q0-yqr" id="erA-MA-UI5"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FaceCollectionViewCellHeaderID" id="zgc-Ko-YL6" customClass="FaceCollectionReusableView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="186"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uRr-ij-8Qs">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="145.5"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择要添加的人脸" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tja-gz-WUE">
+                                    <rect key="frame" x="10" y="155.5" width="300" height="20.5"/>
+                                    <color key="backgroundColor" red="0.98039215686274506" green="0.20000000000000001" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="uRr-ij-8Qs" firstAttribute="centerX" secondItem="zgc-Ko-YL6" secondAttribute="centerX" id="4GQ-Vx-3lW"/>
+                                <constraint firstAttribute="bottom" secondItem="Tja-gz-WUE" secondAttribute="bottom" constant="10" id="F8r-bg-EVZ"/>
+                                <constraint firstItem="Tja-gz-WUE" firstAttribute="leading" secondItem="zgc-Ko-YL6" secondAttribute="leading" constant="10" id="JqE-ta-gE4"/>
+                                <constraint firstAttribute="trailing" secondItem="uRr-ij-8Qs" secondAttribute="trailing" id="NVp-aM-wsu"/>
+                                <constraint firstItem="uRr-ij-8Qs" firstAttribute="leading" secondItem="zgc-Ko-YL6" secondAttribute="leading" id="Uup-Bt-nkN"/>
+                                <constraint firstAttribute="trailing" secondItem="Tja-gz-WUE" secondAttribute="trailing" constant="10" id="Y2g-Ur-4jd"/>
+                                <constraint firstItem="uRr-ij-8Qs" firstAttribute="top" secondItem="zgc-Ko-YL6" secondAttribute="top" id="Zqe-Q0-4Fu"/>
+                                <constraint firstItem="Tja-gz-WUE" firstAttribute="top" secondItem="uRr-ij-8Qs" secondAttribute="bottom" constant="10" id="eTn-lQ-VOy"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="faceImageView" destination="uRr-ij-8Qs" id="apf-iZ-qL7"/>
+                                <outlet property="facesRecDesLabel" destination="Tja-gz-WUE" id="WWu-cm-vj9"/>
+                            </connections>
+                        </collectionReusableView>
+                        <connections>
+                            <outlet property="dataSource" destination="fon-5y-BX2" id="mEa-cM-BBu"/>
+                            <outlet property="delegate" destination="fon-5y-BX2" id="hyn-GN-rfp"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lqk-Hu-Map" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2671.875" y="903.16901408450701"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pv8-zf-FE2">

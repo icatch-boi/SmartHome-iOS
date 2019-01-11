@@ -60,12 +60,15 @@
                 NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
                 SHCamera *camera = (SHCamera *)[self.fetchedResultsController objectAtIndexPath:indexPath];
                 SHLogDebug(SHLogTagAPP, @"uid: %@ - name: %@ create time is %@", camera.cameraUid, camera.cameraName,camera.createTime);
-                
+#if 0
                 if ([self checkCameraExpires:camera]) {
                     [overdueMArray addObject:camera];
                 } else {
                     [tempMArray addObject:camera];
                 }
+#else
+                [tempMArray addObject:camera];
+#endif
             }
         }
     }

@@ -47,6 +47,8 @@
 #import "AppDelegate.h"
 #import <MJRefresh/MJRefresh.h>
 #import "Reachability.h"
+#import "SDWebImageManager.h"
+#import "FRDAddFaceCollectionVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -258,6 +260,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     if (_notRequiredLogin) {
         _notRequiredLogin = NO;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
+    } else {
+        [self checkFacesHandler];
     }
 }
 
@@ -1016,6 +1020,103 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     [v addSubview:label];
     
     return v;
+}
+
+- (void)checkFacesHandler {
+    NSDictionary *notification = [self getFaceNotification];
+    
+    if (notification && [notification.allKeys containsObject:@"result"] && [notification.allKeys containsObject:@"attachment"]) {
+        int result = [notification[@"result"] intValue];
+        if (result == 0) {
+            [self showAddFacesAlertView];
+        } else {
+            [self cleanFaceNotification];
+        }
+    } else {
+        [self cleanFaceNotification];
+    }
+}
+
+- (void)showAddFacesAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"系统识别到有陌生人在按门铃，是否要将其加入到人脸数据库中？" preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"不添加" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakself cleanFaceNotification];
+    }]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        
+        [self getFacesImages];
+        [self cleanFaceNotification];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)getFacesImages {
+    NSDictionary *notification = [self getFaceNotification];
+    SHLogInfo(SHLogTagAPP, @"Recognition faces rect: %@", notification[@"faces"]);
+
+    NSArray *temp = [self parseFacesRect:notification[@"faces"]];
+    
+    if (notification && [notification.allKeys containsObject:@"attachment"]) {
+        NSString *urlStr = notification[@"attachment"];
+        NSURL *url = [[NSURL alloc] initWithString:urlStr];
+        
+        if (url) {
+            WEAK_SELF(self);
+            [self.progressHUD showProgressHUDWithMessage:nil];
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                
+                STRONG_SELF(self);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressHUD hideProgressHUD:YES];
+                    
+                    if (image) {
+                        SHLogInfo(SHLogTagAPP, @"Face image: %@", image);
+                        [self enterAddFaceViewWithFaceImage:image facesRect:temp];
+                    }
+                });
+            }];
+        }
+    }
+}
+
+- (NSArray *)parseFacesRect:(NSArray *)facesRectArray {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:facesRectArray.count];
+    
+    [facesRectArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *faceRectDict = obj;
+        
+        CGFloat x = [faceRectDict[@"left"] floatValue];
+        CGFloat y = [faceRectDict[@"top"] floatValue];
+        CGFloat width = [faceRectDict[@"width"] floatValue];
+        CGFloat height = [faceRectDict[@"height"] floatValue];
+        
+        CGRect rect = CGRectMake(x, y, width, height);
+        SHLogInfo(SHLogTagAPP, @"rect ===> %@", NSStringFromCGRect(rect));
+        
+        [temp addObject:NSStringFromCGRect(rect)];
+    }];
+    
+    return temp.copy;
+}
+
+- (void)enterAddFaceViewWithFaceImage:(UIImage *)image facesRect:(NSArray *)facesRectArray {
+    FRDAddFaceCollectionVC *vc = [FRDAddFaceCollectionVC addFaceCollectionVC];
+    vc.originalImage = image;
+    vc.facesRectArray = facesRectArray;
+
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (NSDictionary *)getFaceNotification {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kRecvNotification];
+}
+
+- (void)cleanFaceNotification {
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kRecvNotification];
 }
 
 @end

@@ -83,6 +83,8 @@
 		386FAFD420AFB712007655CF /* SHLoginFirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 386FAFD320AFB712007655CF /* SHLoginFirstView.xib */; };
 		386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAFD620AFC1FE007655CF /* SHLoginViewController.m */; };
 		386FAFDD20B01693007655CF /* UserAccountPortraitNavVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAFDC20B01693007655CF /* UserAccountPortraitNavVC.m */; };
+		3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3875AC0321E6150100481AE9 /* FRDAddFaceCollectionVC.m */; };
+		3875AC0C21E743C500481AE9 /* FaceCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3875AC0B21E743C500481AE9 /* FaceCollectionReusableView.m */; };
 		38802F1C20B51580006274AE /* UnderLineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 38802F1A20B5157F006274AE /* UnderLineTextField.m */; };
 		388407831F2A0E48005911E5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388407821F2A0E48005911E5 /* MediaPlayer.framework */; };
 		388407851F2A1034005911E5 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388407841F2A1034005911E5 /* ImageIO.framework */; };
@@ -608,6 +610,10 @@
 		386FAFD620AFC1FE007655CF /* SHLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHLoginViewController.m; sourceTree = "<group>"; };
 		386FAFDB20B01693007655CF /* UserAccountPortraitNavVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserAccountPortraitNavVC.h; sourceTree = "<group>"; };
 		386FAFDC20B01693007655CF /* UserAccountPortraitNavVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserAccountPortraitNavVC.m; sourceTree = "<group>"; };
+		3875AC0221E6150100481AE9 /* FRDAddFaceCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRDAddFaceCollectionVC.h; sourceTree = "<group>"; };
+		3875AC0321E6150100481AE9 /* FRDAddFaceCollectionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRDAddFaceCollectionVC.m; sourceTree = "<group>"; };
+		3875AC0A21E743C500481AE9 /* FaceCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceCollectionReusableView.h; sourceTree = "<group>"; };
+		3875AC0B21E743C500481AE9 /* FaceCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceCollectionReusableView.m; sourceTree = "<group>"; };
 		387AF8041EA72F3F009377ED /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		38802F1A20B5157F006274AE /* UnderLineTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnderLineTextField.m; sourceTree = "<group>"; };
 		38802F1B20B5157F006274AE /* UnderLineTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderLineTextField.h; sourceTree = "<group>"; };
@@ -1515,6 +1521,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		3875AC0921E7439100481AE9 /* FaceReusableView */ = {
+			isa = PBXGroup;
+			children = (
+				3875AC0A21E743C500481AE9 /* FaceCollectionReusableView.h */,
+				3875AC0B21E743C500481AE9 /* FaceCollectionReusableView.m */,
+			);
+			path = FaceReusableView;
+			sourceTree = "<group>";
+		};
 		38802F1920B5157F006274AE /* UnderLineTextField */ = {
 			isa = PBXGroup;
 			children = (
@@ -1833,6 +1848,7 @@
 		38BB264421DF08EE00270CE1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3875AC0921E7439100481AE9 /* FaceReusableView */,
 				38BB266821DF408900270CE1 /* FaceCollectionCell */,
 				38BB264D21DF08EE00270CE1 /* FRDHomeViewController.h */,
 				38BB264721DF08EE00270CE1 /* FRDHomeViewController.m */,
@@ -1844,6 +1860,8 @@
 				38BB264621DF08EE00270CE1 /* FRDFaceDetectionVC.m */,
 				38BB264A21DF08EE00270CE1 /* FRDResultHandleVC.h */,
 				38BB264521DF08EE00270CE1 /* FRDResultHandleVC.m */,
+				3875AC0221E6150100481AE9 /* FRDAddFaceCollectionVC.h */,
+				3875AC0321E6150100481AE9 /* FRDAddFaceCollectionVC.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3394,6 +3412,7 @@
 				38E5C2EB20A3F7FA003004E0 /* SHGUIHandleTool.m in Sources */,
 				38E5C30B20A3F81F003004E0 /* SHMpbHeaderView.m in Sources */,
 				38E5C2ED20A3F7FA003004E0 /* SHTableViewSelectedCellTable.m in Sources */,
+				3875AC0C21E743C500481AE9 /* FaceCollectionReusableView.m in Sources */,
 				38E5C2E920A3F7FA003004E0 /* HWOptionButton.m in Sources */,
 				38E5C27F20A3F685003004E0 /* MsgFileInfo.m in Sources */,
 				38E5C37320A40FFC003004E0 /* UIImage+ICAddition.m in Sources */,
@@ -3548,6 +3567,7 @@
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
 				38E5C3D120A419E0003004E0 /* SHAccountSettingTVC.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
+				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,
 				38E5C1B620A3F5AF003004E0 /* SH_XJ_SettingDetailTVC.m in Sources */,
 				389C29F01F2EEA5D004C4806 /* AppDelegate.m in Sources */,
 				3897E0C62180743100E72417 /* XJSetupHomeVC.m in Sources */,

@@ -595,7 +595,7 @@
 "kConfigureDeviceDescription" = "绿灯闪烁表示正在连接家庭中的Wi-Fi，绿灯保持开启意味着已成功连接上Wi-Fi。";
 "kGetSDCardAlbumDataFailed" = "获取SD卡相册数据失败";
 "kShareDoorbellToYourFamilyOrFriends" = "分享门铃给您的家人或朋友";
-"kQRCodeDescription" = "二维码在2分钟内有效，相机可以使用7天。";
+"kQRCodeDescription" = "二维码在24小时内有效，相机可以使用7天。";
 
 "kNetworkRequestError_10001" = "无效或失效的接口请求";
 "kNetworkRequestError_10011" = "无效的文件类型请求";

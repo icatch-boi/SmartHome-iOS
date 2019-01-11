@@ -35,5 +35,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 
 + (BOOL)isValidDeviceName:(NSString *)deviceName;
 + (NSString *)localDBTimeStringFromServer:(NSString *)remoteTime;
++ (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font;
 
 @end

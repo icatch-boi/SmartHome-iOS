@@ -175,6 +175,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 //    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
     
     [super viewWillDisappear:animated];
+    [[NSUserDefaults standardUserDefaults] setObject:_notification forKey:kRecvNotification];
     
 //    if (_TalkBackRun) {
 //        [self talkBackAction:nil];

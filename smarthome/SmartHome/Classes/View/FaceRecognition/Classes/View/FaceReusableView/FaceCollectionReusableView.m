@@ -1,8 +1,8 @@
-// ShareCommonHeader.h
+// FaceCollectionReusableView.m
 
 /**************************************************************************
  *
- *       Copyright (c) 2014-2018年 by iCatch Technology, Inc.
+ *       Copyright (c) 2014-2019 by iCatch Technology, Inc.
  *
  *  This software is copyrighted by and is the property of iCatch
  *  Technology, Inc.. All rights are reserved by iCatch Technology, Inc..
@@ -22,12 +22,27 @@
  *
  **************************************************************************/
  
- // Created by zj on 2018/4/24 下午3:07.
+ // Created by zj on 2019/1/10 5:11 PM.
     
 
-#ifndef ShareCommonHeader_h
-#define ShareCommonHeader_h
+#import "FaceCollectionReusableView.h"
 
-static const NSTimeInterval kShareDuration = 24 * 60 * 60; //2 * 60; //1 * 86400;
+@interface FaceCollectionReusableView ()
 
-#endif /* ShareCommonHeader_h */
+@property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
+@property (weak, nonatomic) IBOutlet UILabel *facesRecDesLabel;
+
+@end
+
+@implementation FaceCollectionReusableView
+
+- (void)setOriginalImage:(UIImage *)originalImage {
+    _originalImage = originalImage;
+    self.faceImageView.image = originalImage;
+}
+
+- (void)setResultDescription:(NSString *)resultDescription {
+    _facesRecDesLabel.text = resultDescription;
+}
+
+@end

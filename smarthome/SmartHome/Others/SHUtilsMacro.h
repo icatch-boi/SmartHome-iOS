@@ -135,6 +135,7 @@ static NSString * const kUserAccounts = @"kUserAccounts";
 static NSString * const kRecvNotificationCount = @"kRecvNotificationCount";
 static const NSUInteger kDeviceNameMinLength = 1;
 static const NSUInteger kDeviceNameMaxLength = 12;
+static NSString * const kRecvNotification = @"RecvNotification";
 
 #define USE_ENCRYP 0
 
