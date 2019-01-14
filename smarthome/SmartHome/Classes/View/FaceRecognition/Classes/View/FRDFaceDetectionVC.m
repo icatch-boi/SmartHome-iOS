@@ -12,11 +12,12 @@
 #import <Masonry.h>
 #import "FRDResultHandleVC.h"
 #import "FRDFaceResult.h"
+#import <Photos/Photos.h>
 
 static CGFloat kFaceBoxWidth = 250;
 static CGFloat kFaceBoxTopHeight = 150;
 
-@interface FRDFaceDetectionVC () <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureMetadataOutputObjectsDelegate>
+@interface FRDFaceDetectionVC () <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureMetadataOutputObjectsDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) AVCaptureSession *captureSession;
 @property (nonatomic, strong) AVCaptureDevice *videoDevice;
@@ -76,8 +77,9 @@ static CGFloat kFaceBoxTopHeight = 150;
 }
 
 - (void)setupSwitchButton {
-    UIBarButtonItem *switchBtn = [[UIBarButtonItem alloc] initWithTitle:@"切换摄像头" style:UIBarButtonItemStylePlain target:self action:@selector(changeCameraAction)];
-    self.navigationItem.rightBarButtonItem = switchBtn;
+//    UIBarButtonItem *switchBtn = [[UIBarButtonItem alloc] initWithTitle:@"切换摄像头" style:UIBarButtonItemStylePlain target:self action:@selector(changeCameraAction)];
+    UIBarButtonItem *albumBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"CameraAlbum", nil) style:UIBarButtonItemStylePlain target:self action:@selector(enterAlbumClick)];
+    self.navigationItem.rightBarButtonItem = albumBtn;
 }
 
 - (void)setupInfoLabel {
@@ -210,9 +212,9 @@ static CGFloat kFaceBoxTopHeight = 150;
     
     trans.type = @"oglFlip";
     trans.subtype = @"fromLeft";
-    trans.duration = 0.35;
+    trans.duration = 0.25;
     
-    [self.view.layer addAnimation:trans forKey:nil];
+    [self.previewLayer addAnimation:trans forKey:nil];
 }
 
 - (void)setupVideoDevice {
@@ -808,6 +810,82 @@ verify_failed:
     }
     
     return _facesResultMDict;
+}
+
+- (void)enterAlbumClick {
+    SHLogTRACE();
+    [self readImageFromAlbum];
+}
+
+- (void)readImageFromAlbum {
+    
+    // 1、 获取摄像设备
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if (device) {
+        // 判断授权状态
+        PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+        if (status == PHAuthorizationStatusNotDetermined) { // 用户还没有做出选择
+            // 弹框请求用户授权
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized) { // 用户第一次同意了访问相册权限
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary; //（选择类型）表示仅仅从相册中选取照片
+                        imagePicker.delegate = self;
+                        [self presentViewController:imagePicker animated:YES completion:nil];
+                    });
+                } else { // 用户第一次拒绝了访问相机权限
+                    
+                }
+            }];
+            
+        } else if (status == PHAuthorizationStatusAuthorized) { // 用户允许当前应用访问相册
+            UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary; //（选择类型）表示仅仅从相册中选取照片
+            imagePicker.delegate = self;
+            [self presentViewController:imagePicker animated:YES completion:nil];
+            
+        } else if (status == PHAuthorizationStatusDenied) { // 用户拒绝当前应用访问相册
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"⚠️ 警告" message:@"请去-> [设置 - 隐私 - 照片 - SmartHome] 打开访问开关" preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+        } else if (status == PHAuthorizationStatusRestricted) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"由于系统原因, 无法访问相册" preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            
+            [alertC addAction:alertA];
+            [self presentViewController:alertC animated:YES completion:nil];
+        }
+    }
+}
+
+#pragma mark - - - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.facePicture = [self compressImage:image scale:image.size.width / image.size.height];
+        
+        [self performSegueWithIdentifier:@"resultHandleSugue" sender:nil];
+        
+        [self cleanLayer];
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)changeCameraClick:(id)sender {
+    [self changeCameraAction];
 }
 
 @end

@@ -278,7 +278,7 @@ static CGFloat kFaceCellHeight = 140;
     NSMutableArray *faceViewsMArray = [[NSMutableArray alloc] init];
     for (CIFaceFeature * faceFeature in detectResult) {
         UIView *faceView = [[UIView alloc] initWithFrame:faceFeature.bounds];
-        faceView.layer.borderColor = [UIColor redColor].CGColor;
+        faceView.layer.borderColor = [UIColor clearColor].CGColor;
         faceView.layer.borderWidth = 1;
         [resultView addSubview:faceView];
         faceView.layer.transform = CATransform3DMakeScale(1.3, 1.3, 1.3);
@@ -288,7 +288,7 @@ static CGFloat kFaceCellHeight = 140;
             UIView * leftEyeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 5)];
             [leftEyeView setCenter:faceFeature.leftEyePosition];
             leftEyeView.layer.borderWidth = 1;
-            leftEyeView.layer.borderColor = [UIColor redColor].CGColor;
+            leftEyeView.layer.borderColor = [UIColor clearColor].CGColor;
             [resultView addSubview:leftEyeView];
         }
         
@@ -296,7 +296,7 @@ static CGFloat kFaceCellHeight = 140;
             UIView * rightEyeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 5)];
             [rightEyeView setCenter:faceFeature.rightEyePosition];
             rightEyeView.layer.borderWidth = 1;
-            rightEyeView.layer.borderColor = [UIColor redColor].CGColor;
+            rightEyeView.layer.borderColor = [UIColor clearColor].CGColor;
             [resultView addSubview:rightEyeView];
         }
         
@@ -304,7 +304,7 @@ static CGFloat kFaceCellHeight = 140;
             UIView * mouthView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 5)];
             [mouthView setCenter:faceFeature.mouthPosition];
             mouthView.layer.borderWidth = 1;
-            mouthView.layer.borderColor = [UIColor redColor].CGColor;
+            mouthView.layer.borderColor = [UIColor clearColor].CGColor;
             [resultView addSubview:mouthView];
         }
     }

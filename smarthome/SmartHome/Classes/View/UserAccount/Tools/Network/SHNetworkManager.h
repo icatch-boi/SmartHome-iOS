@@ -24,7 +24,7 @@ static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";
 #if Use_OurServer
 
 #if Use_LocalServer
-static NSString * const ServerBaseUrl = @"http://172.28.28.17:80/";
+static NSString * const ServerBaseUrl = @"http://52.83.116.127:3006/"; //@"http://172.28.28.17:80/";
 #else
 static NSString * const ServerBaseUrl = @"http://www.smarthome.icatchtek.com/";
 #endif

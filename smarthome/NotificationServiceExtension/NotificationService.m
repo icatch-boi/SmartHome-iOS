@@ -47,10 +47,14 @@
             [self test];
             self.contentHandler(self.bestAttemptContent);
         } else {
-            NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
-            [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
+            if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"attachment"]) {
+                NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
+                [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
+                    self.contentHandler(self.bestAttemptContent);
+                }];
+            } else {
                 self.contentHandler(self.bestAttemptContent);
-            }];
+            }
         }
     } else {
         [self test];
@@ -196,6 +200,10 @@
     NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
     NSData *data  = [userDefault objectForKey:kShareCameraInfoKey];
     NSArray *camerasArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    if (userDefault == nil || data == nil || camerasArray == nil || camerasArray.count == 0) {
+        return nil;
+    }
     
     __block NSString *cameraName = nil;
 

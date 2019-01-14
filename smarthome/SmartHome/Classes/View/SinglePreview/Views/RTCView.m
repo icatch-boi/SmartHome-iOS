@@ -1056,7 +1056,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 {
     _nickName = nickName;
     self.nickNameLabel.text = _nickName;
-    [self.nickNameLabel sizeToFit];
+//    [self.nickNameLabel sizeToFit];
 }
 
 - (void)setConnectText:(NSString *)connectText
