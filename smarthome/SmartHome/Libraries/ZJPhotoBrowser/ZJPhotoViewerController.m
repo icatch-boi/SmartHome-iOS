@@ -11,6 +11,7 @@
 #import "Extensions/UIImage+ZJPhotoBrowser.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVKit/AVKit.h>
+#import "AppDelegate.h"
 
 @interface ZJPhotoViewerController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, AVPlayerViewControllerDelegate>
 
@@ -205,6 +206,8 @@
 }
 
 - (void)_playVideo:(NSURL *)videoURL {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.isVideoPB = YES;
     
     // Setup player
     _currentVideoPlayerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
@@ -229,6 +232,8 @@
 }
 
 - (void)videoFinishedCallback:(NSNotification*)notification {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.isVideoPB = NO;
     
     // Remove observer
     [[NSNotificationCenter defaultCenter] removeObserver:self

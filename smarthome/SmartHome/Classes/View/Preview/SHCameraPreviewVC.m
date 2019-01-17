@@ -2331,13 +2331,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         if (_connectAndPreviewTimeout) {
             [self connectFiledHandler:retValue];
         } else {
-            if (retValue == ICH_TUTK_DEVICE_OFFLINE) {
+            if (retValue == ICH_TUTK_DEVICE_OFFLINE || retValue == ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) {
                 [self connectFiledHandler:retValue];
             } else {
                 NSTimeInterval interval = kConnectAndPreviewCommonSleepTime;
-                if (retValue == ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) {
-                    interval = kConnectAndPreviewSpecialSleepTime;
-                }
+//                if (retValue == ICH_TUTK_IOTC_ER_DEVICE_EXCEED_MAX_SESSION) {
+//                    interval = kConnectAndPreviewSpecialSleepTime;
+//                }
                 
                 [self reConnectWithSleepForTimeInterval:interval];
             }
