@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+#define DataDisplayImmediately 0
+
 @interface SHStreamOperate : NSObject
 
 @property (nonatomic, weak) SHCameraObject *shCamObj;
@@ -33,6 +35,7 @@
 - (void)updatePreviewThumbnail;
 - (void)uploadPreviewThumbnailToServer;
 - (void)stopPreview;
+- (void)initDisplayImageView:(UIImageView *)displayImageView bufferingBlock:(void (^)(BOOL isBuffering, BOOL timeout))bufferingBlock;
 
 - (UIImage *)getLastFrameImage;
 

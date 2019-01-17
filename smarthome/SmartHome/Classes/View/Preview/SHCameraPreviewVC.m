@@ -237,6 +237,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)initPlayer {
     [self setupSampleBufferDisplayLayer];
     
+#if DataDisplayImmediately
     [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.previewImageView && isBuffering) {
@@ -244,6 +245,15 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         });
     }];
+#else
+    [_shCameraObj.streamOper initDisplayImageView:self.previewImageView bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.previewImageView && isBuffering) {
+                [self.bufferNotificationView showGCDNoteWithMessage:NSLocalizedString(@"PREVIEW_BUFFERING_INFO", nil) andTime:1.0 withAcvity:NO];
+            }
+        });
+    }];
+#endif
     [self setMuteButtonBackgroundImage];
 }
 

@@ -173,7 +173,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     // FIXME: 暂时修改
     //    [self setupCallView];
-    
+#if DataDisplayImmediately
     [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
         dispatch_async(dispatch_get_main_queue(), ^{
             //            if (self.view.window) {
@@ -195,6 +195,15 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             }
         });
     }];
+#else
+    [_shCameraObj.streamOper initDisplayImageView:self.preview bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.preview && isBuffering) {
+                [self.bufferNotificationView showGCDNoteWithMessage:NSLocalizedString(@"PREVIEW_BUFFERING_INFO", nil) andTime:1.0 withAcvity:NO];
+            }
+        });
+    }];
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated {

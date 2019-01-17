@@ -159,6 +159,97 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     }
 }
 
+- (void)decodeAndDisplayH264Frame:(NSData *)frame displayImageView:(UIImageView *)displayImageView {
+    CMBlockBufferRef blockBuffer = NULL;
+    CMSampleBufferRef sampleBuffer = NULL;
+    CVPixelBufferRef pixelBuffer = NULL;
+    
+    OSStatus status = CMBlockBufferCreateWithMemoryBlock(kCFAllocatorDefault,
+                                                         (void*)frame.bytes, frame.length,
+                                                         kCFAllocatorNull,
+                                                         NULL, 0, frame.length,
+                                                         0, &blockBuffer);
+    if (status == kCMBlockBufferNoErr) {
+        const size_t sampleSizeArray[] = {frame.length};
+        
+        status = CMSampleBufferCreateReady(kCFAllocatorDefault,
+                                           blockBuffer,
+                                           _decoderFormatDescription,
+                                           1, 0, NULL, 1, sampleSizeArray,
+                                           &sampleBuffer);
+        CFRelease(blockBuffer);
+        
+        if (status == noErr && sampleBuffer) {
+            VTDecodeFrameFlags flags = 0;
+            VTDecodeInfoFlags flagOut = 0;
+            OSStatus decodeStatus = VTDecompressionSessionDecodeFrame(_deocderSession,
+                                                                      sampleBuffer,
+                                                                      flags,
+                                                                      &pixelBuffer,
+                                                                      &flagOut);
+            
+            CFRelease(sampleBuffer);
+            
+            if (decodeStatus == kVTInvalidSessionErr) {
+                NSLog(@"IOS8VT: Invalid session, reset decoder session");
+            } else if(decodeStatus == kVTVideoDecoderBadDataErr) {
+                NSLog(@"IOS8VT: decode failed status=%d(Bad data)", (int)decodeStatus);
+            } else if(decodeStatus != noErr) {
+                NSLog(@"IOS8VT: decode failed status=%d", (int)decodeStatus);
+            }
+            
+            if (decodeStatus == noErr && pixelBuffer) {
+                UIImage *image = [self imageFromPixelBuffer:pixelBuffer];
+                
+                if (image != nil) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        displayImageView.image = image;
+                    });
+                }
+            }
+            
+            CVPixelBufferRelease(pixelBuffer);
+        }
+    }
+}
+
+- (CVPixelBufferRef)pixelBufferFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CVPixelBufferRef outputPixelBuffer = NULL;
+    
+    if (sampleBuffer) {
+        VTDecodeFrameFlags flags = 0;
+        VTDecodeInfoFlags flagOut = 0;
+        OSStatus decodeStatus = VTDecompressionSessionDecodeFrame(_deocderSession,
+                                                                  sampleBuffer,
+                                                                  flags,
+                                                                  &outputPixelBuffer,
+                                                                  &flagOut);
+        
+        if(decodeStatus == kVTInvalidSessionErr) {
+            NSLog(@"IOS8VT: Invalid session, reset decoder session");
+        } else if(decodeStatus == kVTVideoDecoderBadDataErr) {
+            NSLog(@"IOS8VT: decode failed status=%d(Bad data)", (int)decodeStatus);
+        } else if(decodeStatus != noErr) {
+            NSLog(@"IOS8VT: decode failed status=%d", (int)decodeStatus);
+        }
+    }
+    
+    return outputPixelBuffer;
+}
+
+- (UIImage *)imageFromPixelBuffer:(CVPixelBufferRef)pixelBuffer {
+    CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    
+    CGImageRef imageRef = [context createCGImage:ciImage fromRect:CGRectMake(0, 0, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer))];
+    
+    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
+    
+    return image;
+}
+
 - (CVPixelBufferRef)decodeToPixelBufferRef:(NSData*)vp {
     CVPixelBufferRef outputPixelBuffer = NULL;
     

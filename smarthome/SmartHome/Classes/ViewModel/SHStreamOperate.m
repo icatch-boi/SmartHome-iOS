@@ -45,6 +45,7 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
 
 @property (nonatomic, strong) NSMutableData *currentVideoData;
 @property (nonatomic, strong) UIImage *lastFrameImage;
+@property (nonatomic, weak) UIImageView *displayImageView;
 
 @end
 
@@ -145,11 +146,21 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
     }
 }
 
+- (void)initDisplayImageView:(UIImageView *)displayImageView bufferingBlock:(void (^)(BOOL isBuffering, BOOL timeout))bufferingBlock {
+    if (displayImageView == nil) {
+        self.enableDecoder = NO;
+    } else {
+        self.enableDecoder = YES;
+        self.displayImageView = displayImageView;
+        self.bufferingBlock = bufferingBlock;
+    }
+}
+
 - (void)startMediaStreamWithEnableAudio:(BOOL)enableAudio file:(ICatchFile *)file successBlock:(void (^)())successBlock failedBlock:(void (^)(NSInteger errorCode))failedBlock target:(id)aTarget streamCloseCallback:(SEL)streamCloseCallback {
     SHLogTRACE();
     _AudioRun = enableAudio;
     
-    if (!_avslayer) {
+    if (!_avslayer && _displayImageView == nil) {
         SHLogError(SHLogTagAPP, @"avslayer is nil");
         if (failedBlock) {
             failedBlock(ICH_NULL);
@@ -320,19 +331,27 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                         headFrame = [NSMutableData dataWithData:[shData.data subdataWithRange:iRange]];
                         [headFrame replaceBytesInRange:headerRange withBytes:lengthBytes];
                         
+#if DataDisplayImmediately
 //                        if (_enableDecoder) {
                             [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:self.avslayer];
 //                        }
                         [self recordCurrentVideoFrame:headFrame];
+#else
+                        [self.h264Decoder decodeAndDisplayH264Frame:headFrame displayImageView:self.displayImageView];
+#endif
                     } else {
                         nalSize = (uint32_t)(shData.data.length - 4);
                         const uint8_t lengthBytes[] = {(uint8_t)(nalSize>>24),
                             (uint8_t)(nalSize>>16), (uint8_t)(nalSize>>8), (uint8_t)nalSize};
                         [shData.data replaceBytesInRange:headerRange withBytes:lengthBytes];
-                        
+
+#if DataDisplayImmediately
 //                        if (_enableDecoder) {
                             [self.h264Decoder decodeAndDisplayH264Frame:shData.data andAVSLayer:self.avslayer];
 //                        }
+#else
+                        [self.h264Decoder decodeAndDisplayH264Frame:shData.data displayImageView:self.displayImageView];
+#endif
                     }
                     
                     [self resetCurrentDate];
@@ -422,7 +441,20 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     return lastImage;
 }
 
+- (void)getCurrentFrameImage:(void (^)(UIImage *image))currentImage {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIImage *image = self.displayImageView.image;
+        
+        _lastFrameImage = image ? image : _lastFrameImage;
+        
+        if (currentImage) {
+            currentImage(image);
+        }
+    });
+}
+
 - (void)updatePreviewThumbnail {
+#if DataDisplayImmediately
     UIImage *lastImage = [self getLastFrameImage];
 
     if (lastImage != nil) {
@@ -446,6 +478,31 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             }
         }
     }
+#else
+    [self getCurrentFrameImage:^(UIImage *image) {
+        if (image != nil) {
+            // compess original image
+            NSData *coverData = UIImageJPEGRepresentation(image, 0.5);
+            UIImage *thumbnail = [[UIImage alloc] initWithData:coverData];
+            
+            if (thumbnail != nil) {
+                self.shCamObj.camera.thumbnail = thumbnail;
+                
+                // Save data to sqlite
+                NSError *error = nil;
+                if (![self.shCamObj.camera.managedObjectContext save:&error]) {
+                    SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
+#ifdef DEBUG
+                    abort();
+#endif
+                } else {
+                    SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+                }
+            }
+        }
+    }];
+#endif
 }
 
 - (void)uploadPreviewThumbnailToServer {
@@ -810,6 +867,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 - (void)stillCaptureWithSuccessBlock:(void(^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#if 0
         if (self.currentVideoData.length > 0) {
             UIImage *currentImage = [self.h264Decoder imageFromPixelBufferRef:self.currentVideoData];
             
@@ -839,6 +897,31 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
                 failedBlock();
             }
         }
+#else
+        [self getCurrentFrameImage:^(UIImage *image) {
+            if (image != nil) {
+                NSString *imagePath = [self createImagePath];
+                
+                if ([UIImageJPEGRepresentation(image, 1.0) writeToFile:imagePath atomically:YES]) {
+                    if (successBlock) {
+                        successBlock();
+                    }
+                    
+                    NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
+                    [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_IMAGE forKey:_shCamObj.camera.cameraUid];
+                } else {
+                    if (failedBlock) {
+                        failedBlock();
+                    }
+                }
+                
+            } else {
+                if (failedBlock) {
+                    failedBlock();
+                }
+            }
+        }];
+#endif
     });
 }
 

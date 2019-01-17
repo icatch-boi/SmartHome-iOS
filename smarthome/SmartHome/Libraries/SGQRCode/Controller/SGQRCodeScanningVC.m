@@ -70,10 +70,8 @@
 
 - (void)removeScanningView {
     [self.scanningView removeTimer];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.scanningView removeFromSuperview];
-        self.scanningView = nil;
-    });
+    [self.scanningView removeFromSuperview];
+    self.scanningView = nil;
 }
 
 - (void)rightBarButtonItenAction {
@@ -82,7 +80,9 @@
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     // 栅栏函数
     dispatch_barrier_async(queue, ^{
-        [self removeScanningView];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeScanningView];
+        });
     });
 }
 
