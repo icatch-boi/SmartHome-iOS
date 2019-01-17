@@ -830,6 +830,7 @@ verify_failed:
                 if (status == PHAuthorizationStatusAuthorized) { // 用户第一次同意了访问相册权限
                     dispatch_async(dispatch_get_main_queue(), ^{
                         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+                        [SHTool configureAppThemeWithController:imagePicker];
                         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary; //（选择类型）表示仅仅从相册中选取照片
                         imagePicker.delegate = self;
                         [self presentViewController:imagePicker animated:YES completion:nil];
@@ -841,6 +842,7 @@ verify_failed:
             
         } else if (status == PHAuthorizationStatusAuthorized) { // 用户允许当前应用访问相册
             UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+            [SHTool configureAppThemeWithController:imagePicker];
             imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary; //（选择类型）表示仅仅从相册中选取照片
             imagePicker.delegate = self;
             [self presentViewController:imagePicker animated:YES completion:nil];

@@ -48,6 +48,7 @@ static CGFloat kFaceCellHeight = 140;
         infoString = @"Face Recognition";
         
 //        [self faceRecognitionHandler];
+        self.title = @"人脸识别";
     }
     
     [self recognitionClick:nil];
@@ -92,7 +93,7 @@ static CGFloat kFaceCellHeight = 140;
     NSData *data = UIImageJPEGRepresentation(self.picture, 1.0);
     
     WEAK_SELF(self)
-    [[SHNetworkManager sharedNetworkManager] faceRecognitionWithPicture:data deviceID:@"ZJDEVICE" finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+    [[SHNetworkManager sharedNetworkManager] faceRecognitionWithPicture:data deviceID:@"SHY3U1JCLNVBMUND111A" finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             

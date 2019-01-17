@@ -665,7 +665,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     avslayer.bounds = _preview.bounds;
     avslayer.position = CGPointMake(CGRectGetMidX(_preview.bounds), CGRectGetMidY(_preview.bounds));
     avslayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    avslayer.backgroundColor = [[UIColor blackColor] CGColor];
+    avslayer.backgroundColor = [[UIColor clearColor] CGColor];
 
     CMTimebaseRef controlTimebase;
     CMTimebaseCreateWithMasterClock(CFAllocatorGetDefault(), CMClockGetHostTimeClock(), &controlTimebase);

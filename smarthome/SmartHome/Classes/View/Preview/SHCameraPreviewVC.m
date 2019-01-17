@@ -527,7 +527,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     avslayer.bounds = avslayerFrame;
     avslayer.position = CGPointMake(CGRectGetMidX(avslayerFrame), CGRectGetMidY(avslayerFrame));
     avslayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    avslayer.backgroundColor = [[UIColor blackColor] CGColor];
+    avslayer.backgroundColor = [[UIColor clearColor] CGColor];
     
     CMTimebaseRef controlTimebase;
     CMTimebaseCreateWithMasterClock(CFAllocatorGetDefault(), CMClockGetHostTimeClock(), &controlTimebase);

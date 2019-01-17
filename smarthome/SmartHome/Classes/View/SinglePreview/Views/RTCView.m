@@ -93,6 +93,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 @property (strong, nonatomic)   CAShapeLayer            *shapeLayer;
 
 @property (nonatomic, weak) UIView *parentView;    // The parent view this 'dialog' is attached to
+@property (nonatomic, weak) UIView *loadingView;
 
 @end
 
@@ -322,6 +323,13 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     UIImage *loadingImg_Default = [UIImage imageNamed:@"caller ID display-loading_1"];
     UIImage *loadingImg_Highlighted = [UIImage imageNamed:@"caller ID display-loading_2"];
     
+    CGFloat loadingWidth = loadingImg_Default.size.width;
+    CGFloat loadingHeight = loadingImg_Default.size.height;
+    UIView *loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, loadingWidth * 3 + 2 * 20, loadingHeight)];
+    loadingView.center = CGPointMake(centerX, CGRectGetMaxY(self.nickNameLabel.frame) + 24);
+    [self addSubview:loadingView];
+    self.loadingView = loadingView;
+
     for (int i = 0; i < count; i++) {
         NSArray *images = nil;
         
@@ -334,8 +342,10 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
         }
         
         UIImageView *loadingImageView = [UIImageView imageViewWithImage:[UIImage animatedImageWithImages:images duration:duration]];
-        loadingImageView.center = CGPointMake(centerX + (i - 1) * 20, CGRectGetMaxY(self.nickNameLabel.frame) + 24);
-        [self addSubview:loadingImageView];
+//        loadingImageView.center = CGPointMake(centerX + (i - 1) * 20, CGRectGetMaxY(self.nickNameLabel.frame) + 24);
+//        [self addSubview:loadingImageView];
+        loadingImageView.frame = CGRectMake(i * (20 + loadingWidth), 0, loadingWidth, loadingHeight);
+        [loadingView addSubview:loadingImageView];
     }
 }
 
@@ -395,6 +405,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
             _connectLabel.transform = CGAffineTransformIdentity;
             _swichBtn.transform = CGAffineTransformIdentity;
             _btnContainerView.transform = CGAffineTransformIdentity;
+            [self updateLoadingViewFrame];
 
         }];
     }];
@@ -861,7 +872,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     if (!_nickNameLabel) {
         _nickNameLabel = [[UILabel alloc] init];
         _nickNameLabel.text = @"飞翔的昵称";
-        _nickNameLabel.font = [UIFont systemFontOfSize:20.0f];
+        _nickNameLabel.font = [UIFont systemFontOfSize:24.0f];
         _nickNameLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor]; //[UIColor darkGrayColor];
         _nickNameLabel.textAlignment = NSTextAlignmentCenter;
         _nickNameLabel.numberOfLines = 0;
@@ -1057,6 +1068,17 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
     _nickName = nickName;
     self.nickNameLabel.text = _nickName;
 //    [self.nickNameLabel sizeToFit];
+    [self updateNickNameLabelFrame];
+}
+
+- (void)updateNickNameLabelFrame {
+    CGFloat height = [self.nickNameLabel.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.nickNameLabel.frame), MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: self.nickNameLabel.font} context:nil].size.height;
+    
+    self.nickNameLabel.frame = CGRectMake(CGRectGetMinX(self.nickNameLabel.frame), CGRectGetMinY(self.nickNameLabel.frame), CGRectGetWidth(self.nickNameLabel.frame), height);
+}
+
+- (void)updateLoadingViewFrame {
+    self.loadingView.frame = CGRectMake(CGRectGetMinX(self.loadingView.frame), CGRectGetMaxY(self.nickNameLabel.frame) + 24, CGRectGetWidth(self.loadingView.frame), CGRectGetHeight(self.loadingView.frame));
 }
 
 - (void)setConnectText:(NSString *)connectText

@@ -84,6 +84,45 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     [self performSegueWithIdentifier:@"go2DisplayVCSegue" sender:indexPath];
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSString *faceName = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+        faceName != nil ? [self showDeleteFacePictureTipsWithFaceName:faceName] : void();
+    }
+}
+
+- (void)showDeleteFacePictureTipsWithFaceName:(NSString *)faceName {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Confirm to delete the face picture ?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        [self deleteHandlerWithFaceName:faceName];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)deleteHandlerWithFaceName:(NSString *)faceName {
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD show];
+    
+    [[SHNetworkManager sharedNetworkManager] deleteFacePictureWithName:faceName finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:error.error];
+                [SVProgressHUD dismissWithDelay:2.0];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadFacesInfoNotification object:nil];
+            }
+        });
+    }];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSIndexPath *indexPath = sender;
     

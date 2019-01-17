@@ -293,7 +293,7 @@
     self.avslayer.bounds = _previewThumb.bounds;
     self.avslayer.position = CGPointMake(CGRectGetMidX(_previewThumb.bounds), CGRectGetMidY(_previewThumb.bounds));
     self.avslayer.videoGravity = AVLayerVideoGravityResizeAspect;
-    self.avslayer.backgroundColor = [[UIColor blackColor] CGColor];
+    self.avslayer.backgroundColor = [[UIColor clearColor] CGColor];
     
     CMTimebaseRef controlTimebase;
     CMTimebaseCreateWithMasterClock(CFAllocatorGetDefault(), CMClockGetHostTimeClock(), &controlTimebase);
