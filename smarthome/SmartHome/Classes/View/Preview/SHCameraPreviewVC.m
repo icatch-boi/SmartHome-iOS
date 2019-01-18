@@ -2369,6 +2369,20 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self connectCameraHandler];
     } failedBlock:^{
         SHLogError(SHLogTagAPP, @"disconnect failed.");
+        
+        STRONG_SELF(self);
+        if (self.alreadyBack) {
+            SHLogInfo(SHLogTagAPP, @"Already exit preview, don't reconnect.");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUDPreview hideProgressHUD:YES];
+            });
+            
+            return;
+        }
+        
+        [NSThread sleepForTimeInterval:interval];
+        [self connectCameraHandler];
     }];
 }
 

@@ -368,10 +368,14 @@
     
     NSString *msg = nil;
     // 获取当前设备语言
+#if 0
     NSArray *appLanguages = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"];
     NSString *languageName = [appLanguages objectAtIndex:0];
+#else
+    NSString *languageName = [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode];
+#endif
     
-    if ([languageName isEqualToString:@"zh-Hans-CN"] || [languageName isEqualToString:@"zh-Hant-CN"]) {
+    if ([languageName isEqualToString:@"zh"]) {
         msg = [NSString stringWithFormat:/*@"%@ 中的文件 %s %@。"*/NSLocalizedString(@"kDownloadCompletionDescription", nil), cameraName, fileName, description];
     } else {
         msg = [NSString stringWithFormat:NSLocalizedString(@"kDownloadCompletionDescription", nil), fileName, description, cameraName];

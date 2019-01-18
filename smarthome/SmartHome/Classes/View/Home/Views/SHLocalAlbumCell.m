@@ -126,7 +126,7 @@
 //    [_thumnailImgView setImage:image];
     _mediaTypeLabel.text = [NSString stringWithFormat:@"%@", typeStr];
     _mediaCountLabel.text = [NSString stringWithFormat:@"%@", countStr];
-
+    self.userInteractionEnabled = photoAssets.count;
 }
 
 - (void)updatePhotoThumnailWithAsset:(PHAsset *)asset {

@@ -303,6 +303,17 @@
 		
 		dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
 		if ((dispatch_semaphore_wait(self.semaphore, time) != 0)) {
+            SHLogError(SHLogTagAPP, @"Disconnect timeout!");
+            
+            dispatch_semaphore_signal(self.semaphore);
+            
+            [self removeCameraPropertyObserver];
+            //delete download list before disconnect
+            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
+            [self.sdk destroySHSDK];
+
+            [self cleanCamera];
+            
 			if (failedBlock) {
 				failedBlock();
 			}

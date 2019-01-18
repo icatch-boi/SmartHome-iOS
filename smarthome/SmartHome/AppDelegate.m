@@ -97,6 +97,7 @@
     [dateformatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSLog(@"###### Run Date: %@", [dateformatter stringFromDate:date]);
     NSLog(@"###### Device info: %@", [SHTool deviceInfo]);
+    NSLog(@"###### Locale Language Code: %@（%@）", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode], [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"][0]);
     NSLog(@"===============================================================");
     
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
