@@ -636,19 +636,73 @@
             if ([photo respondsToSelector:@selector(getVideoURL:)]) {
                 // Get video
                 [photo getVideoURL:^(NSURL *url) {
-                    [self shareActionDetail:photo obj:url];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self shareActionDetail:photo obj:url];
+                    });
                 }];
             }
         } else {
-            [self shareActionDetail:photo obj:[photo underlyingImage]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self shareActionDetail:photo obj:[photo underlyingImage]];
+            });
         }
     }
+}
+
+- (BOOL)saveDataToLocal:(NSData *)data filePath:(NSString *)filePath {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        return YES;
+    } else {
+        if (![data writeToFile:filePath atomically:YES]) {
+            // failure
+            SHLogError(SHLogTagAPP, @"Data save failed to path: %@", filePath);
+            return NO;
+        } else {
+            // success.
+            SHLogInfo(SHLogTagAPP, @"Data save Successfully to path: %@", filePath);
+            return YES;
+        }
+    }
+}
+
+- (void)cleanLocalDataWithFileName:(NSString *)fileName {
+    NSString *filePath = [self getDestinationPathWithFileName:fileName];
+    NSError *error = nil;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+        if (error != nil) {
+            SHLogError(SHLogTagAPP, @"Remove file: %@ failed, error: %@", fileName, error);
+        }
+    }
+}
+
+- (NSString *)getDestinationPathWithFileName:(NSString *)name {
+    return [NSTemporaryDirectory() stringByAppendingString:name];
+}
+
+- (NSURL *)shareVideoHandler:(NSURL *)sourceURL {
+    NSString *destinationPath = [self getDestinationPathWithFileName:[sourceURL.absoluteString lastPathComponent]];
+    
+    NSFileHandle *fh = [NSFileHandle fileHandleForReadingFromURL:sourceURL error:nil];
+    NSData *data = [fh readDataToEndOfFile];
+    
+    [self saveDataToLocal:data filePath:destinationPath];
+    
+    NSURL *destinationURL = [[NSURL alloc] initFileURLWithPath:destinationPath];
+    SHLogInfo(SHLogTagAPP, @"Destination URL: %@", destinationURL);
+    
+    return destinationURL;
 }
 
 - (void)shareActionDetail:(id <ZJPhotoProtocol>)photo obj:(id)obj {
     // Show activity view controller
     NSMutableArray *items = [NSMutableArray array];
     if (obj) {
+        if (photo != nil && photo.isVideo) {
+            obj = [self shareVideoHandler:obj];
+        }
+        
         [items addObject:obj];
     }
     
@@ -669,9 +723,24 @@
     
     // Show
     typeof(self) __weak weakSelf = self;
-    [self.activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+    self.activityViewController.completionWithItemsHandler = ^(UIActivityType  _Nullable activityType, BOOL completed, NSArray * _Nullable returnedItems, NSError * _Nullable activityError) {
         weakSelf.activityViewController = nil;
-    }];
+
+        SHLogInfo(SHLogTagAPP, @"activityType: %@", activityType);
+        SHLogInfo(SHLogTagAPP, @"returnedItems: %@", returnedItems);
+        SHLogInfo(SHLogTagAPP, @"activityError: %@", activityError);
+
+        if (completed) {
+            SHLogInfo(SHLogTagAPP, @"completed.");
+        } else {
+            SHLogInfo(SHLogTagAPP, @"cancel.");
+        }
+        
+        if (photo != nil && obj != nil && photo.isVideo) {
+            NSURL *url = obj;
+            [weakSelf cleanLocalDataWithFileName:[url.absoluteString lastPathComponent]];
+        }
+    };
     
     // iOS 8 - Set the Anchor Point for the popover
     if ([[[UIDevice currentDevice] systemVersion] compare:@"8" options:NSNumericSearch] != NSOrderedAscending) {
