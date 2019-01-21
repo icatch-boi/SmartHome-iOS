@@ -454,7 +454,10 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" options:NSRegularExpressionSearch];
+            NSString *phoneRE = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9])\\d{8}$";
+            NSString *emailRE = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+            NSString *reString = [NSString stringWithFormat:@"%@|%@", phoneRE, emailRE];
+            emailRange = [_emailTextField.text rangeOfString:reString options:NSRegularExpressionSearch];
         });
         
         if (emailRange.location == NSNotFound ) {

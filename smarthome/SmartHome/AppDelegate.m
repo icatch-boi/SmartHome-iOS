@@ -40,6 +40,7 @@
 @property (nonatomic) BOOL loaded;
 @property (nonatomic, strong) NSMutableArray *messages;
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
+@property (nonatomic, weak) UIAlertController *networkAlertVC;
 
 @end
 
@@ -1261,12 +1262,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                 
             case AFNetworkReachabilityStatusReachableViaWWAN:
                 netStatus = @"ReachableViaWWAN";
-                
+                [self dismissNetworkAlertVC];
                 break;
                 
             case AFNetworkReachabilityStatusReachableViaWiFi:
                 netStatus = @"ReachableViaWiFi";
-                
+                [self dismissNetworkAlertVC];
                 break;
         }
         
@@ -1286,6 +1287,15 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
     UIViewController *vc = nav.visibleViewController;
     [vc presentViewController:alertVC animated:YES completion:nil];
+    self.networkAlertVC = alertVC;
+}
+
+- (void)dismissNetworkAlertVC {
+    if (self.networkAlertVC != nil) {
+        [self.networkAlertVC dismissViewControllerAnimated:YES completion:^{
+            self.networkAlertVC = nil;
+        }];
+    }
 }
 
 @end
