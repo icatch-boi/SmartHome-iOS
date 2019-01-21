@@ -25,6 +25,7 @@
 "DownloadConfirmMessage1" = "Total Files: %1\nDownload Time: %2 seconds\n\nConfirm download?";
 "DownloadConfirmMessage2" = "Total Files: %1\nDownload Time: %2 minutes %3 seconds \n\nConfirm download?";
 "DownloadConfirmMessage3" = "Total Files: %1\nDownload Time: %2 hours %3 mintues %4 seconds\n\nConfirm download?";
+"DownloadConfirmMessage4" = "Total Files: %1\nFile size: %2 \n\nAre you sure to download it?";
 "DownloadingTitle" = "Downloading...";
 "DownloadingMessage" = "Downloading %1/%2\n%3%";
 "DownloadDoneMessage" = "Totally downloaded %1 photos, %2 videos";

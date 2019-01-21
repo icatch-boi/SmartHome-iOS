@@ -24,6 +24,7 @@
 "DownloadConfirmMessage1" = "文件总数: %1\n下载时间: %2 秒钟\n\n确认下载吗?";
 "DownloadConfirmMessage2" = "文件总数: %1\n下载时间: %2 分钟 %3 秒钟\n\n确认下载吗?";
 "DownloadConfirmMessage3" = "文件总数: %1\n下载时间: %2 小时 %3 分钟 %4 秒钟\n\n确认下载吗?";
+"DownloadConfirmMessage4" = "文件总数: %1\n文件大小: %2 \n\n确认下载吗?";
 "DownloadingTitle" = "下载文件中...";
 "DownloadingMessage" = "下载 %1/%2\n%3%";
 "DownloadDoneMessage" = "已下载 %1 照片, %2 视频";

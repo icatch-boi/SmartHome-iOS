@@ -972,7 +972,7 @@ static int const kNewFileIconTag = 888;
     unsigned long long downloadTimeInSeconds = sizeInKB/1024 - downloadTimeInHours*3600 - downloadTimeInMinutes*60;
     SHLogInfo(SHLogTagAPP, @"downloadTimeInHours: %llu, downloadTimeInMinutes: %llu, downloadTimeInSeconds: %llu",
               downloadTimeInHours, downloadTimeInMinutes, downloadTimeInSeconds);
-    
+#if 0
     if (downloadTimeInHours > 0) {
         message = NSLocalizedString(@"DownloadConfirmMessage3", nil);
         message = [message stringByReplacingOccurrencesOfString:@"%1"
@@ -999,6 +999,13 @@ static int const kNewFileIconTag = 888;
                                                      withString:[NSString stringWithFormat:@"%llu", downloadTimeInSeconds]];
     }
     message = [message stringByAppendingString:[NSString stringWithFormat:@"\n%@", humanDownloadFileSize]];
+#else
+    message = NSLocalizedString(@"DownloadConfirmMessage4", nil);
+    message = [message stringByReplacingOccurrencesOfString:@"%1"
+                                                 withString:[NSString stringWithFormat:@"%ld", (long)num]];
+    message = [message stringByReplacingOccurrencesOfString:@"%2"
+                                                 withString:humanDownloadFileSize];
+#endif
     return message;
     
 }
