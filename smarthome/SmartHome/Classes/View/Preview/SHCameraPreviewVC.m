@@ -1555,7 +1555,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #pragma mark - CallView
 - (void)setupCallView {
     NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-    if (_managedObjectContext && [msgType isEqualToString:@"201"] && _presentView == nil) {
+    if (_managedObjectContext && ([msgType isEqualToString:@"201"] || [msgType isEqualToString:@"202"]) && _presentView == nil) {
         RTCView *presentView = [[RTCView alloc] initWithIsVideo:NO isCallee:YES inView:self.navigationController.view];
         self.presentView = presentView;
         

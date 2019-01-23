@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *modifyPWDLabel;
 
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
+@property (nonatomic, assign) BOOL enableFaceRecognition;
 
 @end
 
@@ -39,6 +40,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
+    _enableFaceRecognition = [SHCameraManager sharedCameraManger].smarthomeCams.count > 0;
 }
 
 - (void)setupGUI {
@@ -105,6 +107,43 @@
     return 2;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    switch (indexPath.row) {
+        case 1:
+            [self enableFaceRecognitionHandlerWithCell:cell];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)enableFaceRecognitionHandlerWithCell:(UITableViewCell *)cell {
+    uint32_t textC;
+    
+    if (self.enableFaceRecognition) {
+        textC = kTextColor;
+        
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    } else {
+        textC = 0x8E8E8E;
+        
+        cell.accessoryType = UITableViewCellAccessoryDetailButton;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    UILabel *titleLab = cell.contentView.subviews.firstObject;
+    titleLab.textColor = [UIColor ic_colorWithHex:textC];
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 1) {
+        [self showAlertWithTitle:NSLocalizedString(@"Tips", nil) message:@"使用 '生物识别' 功能务必确保账户下添加有相机，否则此功能不能被使用。"];
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {    
     return 50.0;
 }
@@ -126,7 +165,7 @@
             break;
             
         case 1:
-            [self enterFaceRecognition];
+            self.enableFaceRecognition ? [self enterFaceRecognition] : void();
             break;
             
         case 2:

@@ -42,19 +42,14 @@
 #endif
 //    [self updateBadgeNumber];
 #else
-    if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"handle"]) {
-        if ([self.bestAttemptContent.userInfo[@"handle"] intValue]) {
-            [self test];
-            self.contentHandler(self.bestAttemptContent);
-        } else {
-            if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"attachment"]) {
-                NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
-                [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
-                    self.contentHandler(self.bestAttemptContent);
-                }];
-            } else {
+    if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
+        if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"attachment"]) {
+            NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
+            [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
                 self.contentHandler(self.bestAttemptContent);
-            }
+            }];
+        } else {
+            self.contentHandler(self.bestAttemptContent);
         }
     } else {
         [self test];

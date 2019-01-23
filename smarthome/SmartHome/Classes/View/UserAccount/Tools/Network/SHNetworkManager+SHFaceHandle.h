@@ -30,7 +30,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const FACES_MANAGE_PATH = @"v1/users/facesmanage";
+static NSString * const FACES_MANAGE_PATH = @"v1/users/faces";
 static NSString * const TOKEN_PATH = @"oauth2/token";
 static NSString * const FACE_RECOGNITION_PATH = @"v1/devices/facerecognition";
 

@@ -148,7 +148,7 @@
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-        if ([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) {
+        if (([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             homeVC.notRequiredLogin = YES;
         }
     }
@@ -216,7 +216,7 @@
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-        if ([msgType isEqualToString:@"201"] /*&& ![self checkNotificationWhetherOverdue:aps]*/) {
+        if (([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
         
             vc.cameraUid = aps[@"devID"]; //@"CVL32D1VV9BJ4XLN111A";
@@ -915,16 +915,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         return nil;
     }
     
-    if ([userInfo.allKeys containsObject:@"handle"]) {
-        if ([userInfo[@"handle"] intValue]) {
-            NSDictionary *aps = userInfo[@"aps"];
-            NSString *alert = aps[@"alert"];
-            NSDictionary *alertDict = [NSJSONSerialization JSONObjectWithData:[alert dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
-            
-            return alertDict;
-        } else {
-            return userInfo;
-        }
+    if ([userInfo.allKeys containsObject:@"devID"]) {
+        return userInfo;
     } else {
         NSDictionary *aps = userInfo[@"aps"];
         NSString *alert = aps[@"alert"];
