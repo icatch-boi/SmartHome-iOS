@@ -222,6 +222,11 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     } else if (indexPath.section == SHDetailSettingSectionTypeSDCard) {
         if(indexPath.row == 2) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            SHSettingData *data = _shCamObj.cameraProperty.memorySizeData;
+            if (data != nil && data.detailLastItem == -1) {
+                cell.textLabel.textColor = cell.detailTextLabel.textColor;
+                cell.userInteractionEnabled = NO;
+            }
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
