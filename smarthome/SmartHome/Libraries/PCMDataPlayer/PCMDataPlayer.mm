@@ -265,7 +265,7 @@ static void AudioPlayerAQInputCallback(void* inUserData, AudioQueueRef outQ, Aud
     
     SHLogInfo(SHLogTagAPP, @"Current category: %@, options: %lu, mode: %@", session.category, (unsigned long)session.categoryOptions, session.mode);
 
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+    [session setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:&error];
     if (error != nil) {
         NSLog(@"AudioSession setCategory(AVAudioSessionCategoryPlayAndRecord) error:%@", error.localizedDescription);
     }

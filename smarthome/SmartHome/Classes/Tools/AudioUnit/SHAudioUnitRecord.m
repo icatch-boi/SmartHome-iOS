@@ -78,6 +78,23 @@
     [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     [audioSession setActive:YES error:nil];
 #endif
+    [self setAVAudioSessionCategory:AVAudioSessionCategoryPlayback options:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth];
+}
+
+- (void)setAVAudioSessionCategory:(NSString *)category options:(AVAudioSessionCategoryOptions)options {
+    NSError *error = nil;
+    BOOL success = [[AVAudioSession sharedInstance] setCategory:category withOptions:options error:&error];
+    
+    if (!success) {
+        NSLog(@"SetCategory error：%@ ",error.description);
+    }
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    BOOL ret = [audioSession setActive:YES error:&error];
+    
+    if (!ret) {
+        NSLog(@"%s - activate audio session failed with error %@", __func__,[error description]);
+    }
 }
 
 - (void)initAudioUnit {
@@ -85,7 +102,7 @@
     OSStatus status = noErr;
     
     // audio session
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:&error];
 //    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
 //    [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
     if (error) {

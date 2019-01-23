@@ -815,6 +815,8 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             if (successBlock) {
                 successBlock();
             }
+            
+            [self addAudioSessionRouteChangeObserver];
         } else {
             [self.audioUnitRecord stopAudioUnit];
 
@@ -851,6 +853,8 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             if (successBlock) {
                 successBlock();
             }
+            
+            [self removeAudioSessionRouteChangeObserver];
         } else {
             if (failedBlock) {
                 failedBlock();
@@ -966,6 +970,47 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     
     // Write out the contents of home directory to console
     SHLogInfo(SHLogTagAPP, @"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error]);
+}
+
+#pragma mark - AudioSession Observer
+- (void)addAudioSessionRouteChangeObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioRouteChangeListenerCallback:)
+                                                 name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+- (void)removeAudioSessionRouteChangeObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+- (void)audioRouteChangeListenerCallback:(NSNotification*)notification {
+    NSDictionary *interuptionDict = notification.userInfo;
+    NSInteger routeChangeReason = [[interuptionDict valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    
+    switch (routeChangeReason) {
+            // new device available
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:{
+            NSLog(@"headset input");
+            if (self.shCamObj.cameraProperty.isTalk) {
+                [self.audioUnitRecord stopAudioUnit];
+                [self.audioUnitRecord startAudioUnit];
+            }
+            break;
+        }
+            // device unavailable
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:{
+            NSLog(@"pause play when headset output");
+            if (self.shCamObj.cameraProperty.isTalk) {
+                [self.audioUnitRecord stopAudioUnit];
+                [self.audioUnitRecord startAudioUnit];
+            }
+            break;
+        }
+        case AVAudioSessionRouteChangeReasonCategoryChange:
+            // called at start - also when other audio wants to play
+            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+            break;
+    }
 }
 
 @end

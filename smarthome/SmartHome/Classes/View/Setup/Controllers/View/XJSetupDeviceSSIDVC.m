@@ -42,6 +42,9 @@ static const CGFloat kTipsViewDefaultHeight = 140;
 @end
 
 @implementation XJSetupDeviceSSIDVC
+- (void)dealloc {
+    SHLogInfo(SHLogTagAPP, @"%@ - dealloc", self.class);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
