@@ -657,3 +657,7 @@
 "kModifyDeviceNameSuccess" = "修改設備名稱成功!";
 "kModifyDeviceNameFailed" = "修改設備名稱失敗，請稍後再試!";
 "kDeviceNameInvalidDescription" = "無效的設備名稱，請確保輸入的內容為[%lu-%lu]字符長度的中文或英文。";
+"kUseAPModeSetupDevice" = "使用AP Mode方式配置設備";
+"kUseQRCodeSetupDevice" = "使用二維碼方式配置設備";
+"kUseQRCodeSetupDeviceTitle" = "請將設備調整為二維碼配置模式，然後使用攝像頭掃描下方二維碼";
+"kUseQRCodeSetupDeviceDescription" = "請在聽到 \"已連接服務器\" 後，點擊 \"下一步\" 按鈕。";

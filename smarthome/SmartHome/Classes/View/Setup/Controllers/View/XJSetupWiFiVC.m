@@ -31,6 +31,7 @@
 #import "XJSetupDeviceSSIDVC.h"
 #import "UnderLineTextField.h"
 #import "Reachability.h"
+#import "SHQRCodeSetupDeviceVC.h"
 
 @interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
 
@@ -41,6 +42,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *changePasswordBtn;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *exitButtonItem;
+@property (weak, nonatomic) IBOutlet UIButton *qrcodeButton;
+@property (nonatomic, assign) BOOL qrcodeSetup;
 
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, weak) UIView *coverView;
@@ -68,11 +71,14 @@
     _pwdTextField.placeholder = NSLocalizedString(@"kWifiPassword", nil);
     [_changePasswordBtn setTitle:NSLocalizedString(@"kChangeWiFiDescription", nil) forState:UIControlStateNormal];
     [_changePasswordBtn setTitle:NSLocalizedString(@"kChangeWiFiDescription", nil) forState:UIControlStateHighlighted];
-    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
-    [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
+    [_nextButton setTitle:NSLocalizedString(@"kUseAPModeSetupDevice", nil) forState:UIControlStateNormal];
+    [_nextButton setTitle:NSLocalizedString(@"kUseAPModeSetupDevice", nil) forState:UIControlStateHighlighted];
     [_exitButtonItem setTitle:NSLocalizedString(@"kExit", nil)];
     
     [_changePasswordBtn layoutIfNeeded];
+    
+    [_qrcodeButton setTitle:NSLocalizedString(@"kUseQRCodeSetupDevice", nil) forState:UIControlStateNormal];
+    [_qrcodeButton setTitle:NSLocalizedString(@"kUseQRCodeSetupDevice", nil) forState:UIControlStateHighlighted];
 }
 
 - (void)setupGUI {
@@ -94,6 +100,9 @@
     _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
     
     _ssidTextField.enabled = NO;
+    
+    [_pwdTextField addTarget:self action:@selector(updateButtonEnableState) forControlEvents:UIControlEventEditingChanged];
+    [self updateButtonEnableState];
 }
 
 - (void)addLineForChangePasswordBtn {
@@ -141,6 +150,12 @@
 }
 
 - (IBAction)nextClick:(id)sender {
+    self.qrcodeSetup = NO;
+    [self verifyWiFiSetup];
+}
+
+- (IBAction)qrcodeSetupClick:(id)sender {
+    self.qrcodeSetup = YES;
     [self verifyWiFiSetup];
 }
 
@@ -192,6 +207,11 @@
     if ([segue.identifier isEqualToString:@"go2SetupDeviceSSIDVCSegue"]) {
         XJSetupDeviceSSIDVC *vc = segue.destinationViewController;
 
+        vc.wifiSSID = _ssidTextField.text;
+        vc.wifiPWD = _pwdTextField.text;
+    } else if ([segue.identifier isEqualToString:@"go2QRCodeSetupDeviceVCSegue"]) {
+        SHQRCodeSetupDeviceVC *vc = segue.destinationViewController;
+        
         vc.wifiSSID = _ssidTextField.text;
         vc.wifiPWD = _pwdTextField.text;
     }
@@ -304,6 +324,10 @@
     } else if (netStatus == ReachableViaWWAN) {
         [self showNetworkNotReachableAlertView:/*@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"*/NSLocalizedString(@"kWiFiNotReachable", nil)];
     } else {
+        if (self.qrcodeSetup) {
+            [self performSegueWithIdentifier:@"go2QRCodeSetupDeviceVCSegue" sender:nil];
+            return;
+        }
         [self performSegueWithIdentifier:@"go2SetupDeviceSSIDVCSegue" sender:nil];
     }
 }
@@ -330,5 +354,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)updateButtonEnableState {
+    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+    _qrcodeButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+}
 
 @end

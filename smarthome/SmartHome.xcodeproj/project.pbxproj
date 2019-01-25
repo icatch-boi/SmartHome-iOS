@@ -76,6 +76,7 @@
 		384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3920C13A900047E152 /* ZJGridCell.m */; };
 		384BBE4920C13A900047E152 /* ZJPhotoBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3B20C13A900047E152 /* ZJPhotoBrowserController.m */; };
 		385584EB201EE94A009F0D7D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 389C29F81F2EEAF5004C4806 /* Localizable.strings */; };
+		38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */; };
 		386FAF6B20AD2BD9007655CF /* ZJSlidingDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAF6A20AD2BD9007655CF /* ZJSlidingDrawerViewController.m */; };
 		386FAF6E20AD4CB4007655CF /* UIBarButtonItem+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAF6D20AD4CB4007655CF /* UIBarButtonItem+Extensions.m */; };
 		386FAF7720AD7188007655CF /* SHCameraViewCellPre.xib in Resources */ = {isa = PBXBuildFile; fileRef = 386FAF7620AD7188007655CF /* SHCameraViewCellPre.xib */; };
@@ -598,6 +599,8 @@
 		384BBE3B20C13A900047E152 /* ZJPhotoBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPhotoBrowserController.m; sourceTree = "<group>"; };
 		384BBE3C20C13A900047E152 /* ZJGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGridViewController.h; sourceTree = "<group>"; };
 		384BBE3D20C13A900047E152 /* ZJPhotoViewerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPhotoViewerController.h; sourceTree = "<group>"; };
+		38656B3021F9904500C5A65B /* SHQRCodeSetupDeviceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHQRCodeSetupDeviceVC.h; sourceTree = "<group>"; };
+		38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHQRCodeSetupDeviceVC.m; sourceTree = "<group>"; };
 		386FAF6920AD2BD9007655CF /* ZJSlidingDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJSlidingDrawerViewController.h; sourceTree = "<group>"; };
 		386FAF6A20AD2BD9007655CF /* ZJSlidingDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJSlidingDrawerViewController.m; sourceTree = "<group>"; };
 		386FAF6C20AD4CB4007655CF /* UIBarButtonItem+Extensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Extensions.h"; sourceTree = "<group>"; };
@@ -1651,6 +1654,8 @@
 				3897E0B62180743000E72417 /* XJSetupDeviceSSIDVC.m */,
 				3897E0B42180743000E72417 /* XJSetupDeviceInfoVC.h */,
 				3897E0B82180743000E72417 /* XJSetupDeviceInfoVC.m */,
+				38656B3021F9904500C5A65B /* SHQRCodeSetupDeviceVC.h */,
+				38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3446,6 +3451,7 @@
 				3818D69421709BA100AF846C /* XYBarChart.m in Sources */,
 				38E5C3D520A419E0003004E0 /* SHAccountTableViewCell.m in Sources */,
 				38E5C3B420A4199F003004E0 /* SHShareHomeCell.m in Sources */,
+				38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
 				38E5C1C420A3F5AF003004E0 /* SH_XJ_SettingTVC.m in Sources */,
 				38E5C2D220A3F7DF003004E0 /* SHMsgCenterViewController.m in Sources */,

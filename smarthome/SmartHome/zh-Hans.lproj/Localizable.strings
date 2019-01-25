@@ -661,3 +661,7 @@
 "kModifyDeviceNameSuccess" = "修改设备名称成功!";
 "kModifyDeviceNameFailed" = "修改设备名称失败，请稍后再试!";
 "kDeviceNameInvalidDescription" = "无效的设备名称，请确保输入的内容为[%lu-%lu]字符长度的中文或英文。";
+"kUseAPModeSetupDevice" = "使用AP Mode方式配置设备";
+"kUseQRCodeSetupDevice" = "使用二维码方式配置设备";
+"kUseQRCodeSetupDeviceTitle" = "请将设备调整为二维码配置模式，然后使用摄像头扫描下方二维码";
+"kUseQRCodeSetupDeviceDescription" = "请在听到 \"已连接服务器\" 后，点击 \"下一步\" 按钮。";

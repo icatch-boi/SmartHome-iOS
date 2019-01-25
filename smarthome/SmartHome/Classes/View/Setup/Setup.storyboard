@@ -117,7 +117,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0rZ-Lw-u5C">
-                                <rect key="frame" x="24" y="369.5" width="272" height="56"/>
+                                <rect key="frame" x="24" y="349.5" width="272" height="56"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Next" backgroundImage="default-btn"/>
                                 <state key="highlighted" backgroundImage="default-btn-pre"/>
@@ -171,10 +171,19 @@
                                     <constraint firstAttribute="width" constant="24" id="WH5-90-9bx"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eVD-KZ-kiU">
+                                <rect key="frame" x="24" y="415.5" width="272" height="56"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="QR code setup device" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
+                                <connections>
+                                    <action selector="qrcodeSetupClick:" destination="CcK-TQ-3Lt" eventType="touchUpInside" id="cX5-vS-cHM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="0rZ-Lw-u5C" firstAttribute="top" secondItem="TSC-Qk-LIP" secondAttribute="bottom" constant="60" id="1wK-iJ-Tlz"/>
+                            <constraint firstItem="0rZ-Lw-u5C" firstAttribute="top" secondItem="TSC-Qk-LIP" secondAttribute="bottom" constant="40" id="1wK-iJ-Tlz"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="top" secondItem="1AO-uZ-M3q" secondAttribute="bottom" constant="40" id="2Pp-ZC-UAo"/>
                             <constraint firstItem="vuC-Pp-WfJ" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="5NX-9r-tOY"/>
                             <constraint firstItem="1AO-uZ-M3q" firstAttribute="centerY" secondItem="dK1-m5-iJq" secondAttribute="centerY" id="ADx-f5-JEB"/>
@@ -184,6 +193,8 @@
                             <constraint firstItem="dK1-m5-iJq" firstAttribute="top" secondItem="79N-4m-bXt" secondAttribute="bottom" constant="32" id="PNx-rr-B4O"/>
                             <constraint firstItem="0rZ-Lw-u5C" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="S0e-vF-9xV"/>
                             <constraint firstItem="TSC-Qk-LIP" firstAttribute="top" secondItem="PTB-pC-o5q" secondAttribute="bottom" constant="20" id="Tbx-23-0cu"/>
+                            <constraint firstItem="eVD-KZ-kiU" firstAttribute="top" secondItem="0rZ-Lw-u5C" secondAttribute="bottom" constant="10" id="Tgq-3j-nIm"/>
+                            <constraint firstItem="eVD-KZ-kiU" firstAttribute="centerX" secondItem="a7b-3V-bSj" secondAttribute="centerX" id="UCf-Xb-ghC"/>
                             <constraint firstItem="79N-4m-bXt" firstAttribute="top" secondItem="vuC-Pp-WfJ" secondAttribute="bottom" constant="12" id="W3q-H5-HyL"/>
                             <constraint firstItem="1AO-uZ-M3q" firstAttribute="leading" secondItem="dK1-m5-iJq" secondAttribute="trailing" constant="6" id="gTv-dd-IDf"/>
                             <constraint firstItem="PTB-pC-o5q" firstAttribute="leading" secondItem="5It-NQ-7d2" secondAttribute="trailing" constant="6" id="geg-xb-Dzq"/>
@@ -207,9 +218,11 @@
                         <outlet property="exitButtonItem" destination="8hc-xM-Uws" id="Vwu-8y-Qaa"/>
                         <outlet property="nextButton" destination="0rZ-Lw-u5C" id="sUf-1O-dRN"/>
                         <outlet property="pwdTextField" destination="PTB-pC-o5q" id="87v-V4-qQL"/>
+                        <outlet property="qrcodeButton" destination="eVD-KZ-kiU" id="TCZ-W2-LwD"/>
                         <outlet property="ssidTextField" destination="1AO-uZ-M3q" id="y3P-qg-gwc"/>
                         <outlet property="titleLabel" destination="79N-4m-bXt" id="cq3-vU-7R0"/>
                         <segue destination="plb-wp-voB" kind="show" identifier="go2SetupDeviceSSIDVCSegue" id="l8k-1K-OVk"/>
+                        <segue destination="aWI-Bj-dTp" kind="show" identifier="go2QRCodeSetupDeviceVCSegue" id="8xb-g7-fu4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b5h-VW-BKy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -599,6 +612,77 @@
             </objects>
             <point key="canvasLocation" x="2528" y="-380"/>
         </scene>
+        <!--Code Setup DeviceVC-->
+        <scene sceneID="AIJ-4r-i6g">
+            <objects>
+                <viewController id="aWI-Bj-dTp" customClass="SHQRCodeSetupDeviceVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hku-PA-Ujj">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_photo" translatesAutoresizingMaskIntoConstraints="NO" id="WB9-0b-fhL">
+                                <rect key="frame" x="40" y="120" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="WB9-0b-fhL" secondAttribute="height" id="3RN-rL-PdF"/>
+                                    <constraint firstAttribute="width" constant="240" id="o0b-Da-Hn5"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请将相机调整为二维码配置模式，然后用相机扫描下方二维码" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w1e-8l-zCP">
+                                <rect key="frame" x="30" y="61" width="260" height="43"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请在听到 &quot;已连接服务器&quot; 后，点击 &quot;下一步&quot;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SnM-Vw-fag">
+                                <rect key="frame" x="30" y="372" width="260" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.98039215690000003" green="0.20000000000000001" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GTt-Rw-3BG">
+                                <rect key="frame" x="24" y="423" width="272" height="56"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Next" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
+                                <connections>
+                                    <action selector="nextClick:" destination="aWI-Bj-dTp" eventType="touchUpInside" id="LFn-vl-4vt"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="SnM-Vw-fag" firstAttribute="top" secondItem="WB9-0b-fhL" secondAttribute="bottom" constant="12" id="7Mf-xS-vvO"/>
+                            <constraint firstItem="w1e-8l-zCP" firstAttribute="leading" secondItem="hb2-cC-yU8" secondAttribute="leading" constant="30" id="Hkv-55-G9H"/>
+                            <constraint firstItem="GTt-Rw-3BG" firstAttribute="top" secondItem="SnM-Vw-fag" secondAttribute="bottom" constant="10" id="QNd-7t-HSx"/>
+                            <constraint firstItem="GTt-Rw-3BG" firstAttribute="centerX" secondItem="Hku-PA-Ujj" secondAttribute="centerX" id="U7f-Fw-pLs"/>
+                            <constraint firstItem="hb2-cC-yU8" firstAttribute="trailing" secondItem="w1e-8l-zCP" secondAttribute="trailing" constant="30" id="b79-HU-kNr"/>
+                            <constraint firstAttribute="trailing" secondItem="SnM-Vw-fag" secondAttribute="trailing" constant="30" id="dDA-2y-A3v"/>
+                            <constraint firstItem="WB9-0b-fhL" firstAttribute="centerY" secondItem="Hku-PA-Ujj" secondAttribute="centerY" id="iOz-lL-Oxc"/>
+                            <constraint firstItem="WB9-0b-fhL" firstAttribute="top" secondItem="w1e-8l-zCP" secondAttribute="bottom" constant="16" id="kmk-Tf-LUA"/>
+                            <constraint firstItem="WB9-0b-fhL" firstAttribute="centerX" secondItem="Hku-PA-Ujj" secondAttribute="centerX" id="uqg-2Z-9dA"/>
+                            <constraint firstItem="SnM-Vw-fag" firstAttribute="leading" secondItem="hb2-cC-yU8" secondAttribute="leading" constant="30" id="wF1-nY-GXW"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hb2-cC-yU8"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ib6-pq-ifh">
+                        <barButtonItem key="rightBarButtonItem" title="Exit" id="PGp-98-0wi">
+                            <connections>
+                                <action selector="exitClick:" destination="aWI-Bj-dTp" id="TgL-0D-abB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="descriptionLabel" destination="SnM-Vw-fag" id="UJc-UV-uad"/>
+                        <outlet property="exitButtonItem" destination="PGp-98-0wi" id="jEC-fZ-Tba"/>
+                        <outlet property="nextButton" destination="GTt-Rw-3BG" id="NYn-T6-MiM"/>
+                        <outlet property="qrcodeImageView" destination="WB9-0b-fhL" id="H3t-OA-Hsa"/>
+                        <outlet property="titleLabel" destination="w1e-8l-zCP" id="GQ0-ml-2cW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qwl-Oy-Z6V" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3375" y="-380"/>
+        </scene>
     </scenes>
     <resources>
         <image name="add-app logo" width="40.5" height="40.5"/>
@@ -610,6 +694,7 @@
         <image name="change wifi" width="370" height="215.5"/>
         <image name="default-btn" width="272" height="56"/>
         <image name="default-btn-pre" width="272" height="56"/>
+        <image name="empty_photo" width="128" height="128"/>
         <image name="ic_visibility_off_18dp" width="72" height="72"/>
         <image name="shareQRCode" width="316" height="316"/>
         <image name="sign up -enter password again" width="50" height="50"/>

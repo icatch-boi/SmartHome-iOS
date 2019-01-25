@@ -110,6 +110,7 @@
 - (void)loadAccessTokenByEmail:(NSString *)email password:(NSString *)password completion:(RequestCompletionBlock)completion {
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceToken];
     SHLogInfo(SHLogTagAPP, @"This is device Token: %@", deviceToken);
+    deviceToken = deviceToken ? deviceToken : @"";
     
     [self.tokenOperate getTokenByEmail:email andPassword:password andDeviceIdentification:deviceToken /*@"smarthome-v1"*/ success:^(Token * _Nonnull token) {
         SHLogInfo(SHLogTagAPP, @"access token: %@", token.access_token);

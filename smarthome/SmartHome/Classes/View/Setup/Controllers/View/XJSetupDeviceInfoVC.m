@@ -128,7 +128,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     [self findTimer];
     _findInterval = 100.0 / totalFindTime;
-    [self setupLink];
+    self.useQRCodeSetup == NO ? [self setupLink] : [self qrcodeSetupHandler];
+}
+
+- (void)qrcodeSetupHandler {
+    [self netStatusTimer];
+    self.linkSuccess = YES;
 }
 
 - (void)setupGUI {

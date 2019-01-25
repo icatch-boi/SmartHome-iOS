@@ -644,3 +644,7 @@
 "kModifyDeviceNameSuccess" = "Modify the device name successfully!";
 "kModifyDeviceNameFailed" = "Failed to modify device name, please try again later!";
 "kDeviceNameInvalidDescription" = "Invalid device name, please make sure that the input content is [%lu-%lu] characters in Chinese or English.";
+"kUseAPModeSetupDevice" = "Setup the device using AP Mode";
+"kUseQRCodeSetupDevice" = "Setup the device using QR code";
+"kUseQRCodeSetupDeviceTitle" = "Please adjust the device to QR code setup mode, then use the camera to scan the QR code below";
+"kUseQRCodeSetupDeviceDescription" = "Please click the \"Next\" button after hearing \"Connected Server\".";
