@@ -31,6 +31,11 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     [self loadFacesInfo];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFacesInfoHandler:) name:kReloadFacesInfoNotification object:nil];
+    [self setupLocalizedString];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kFaceDatabase", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -93,11 +98,11 @@ static NSString * const ReuseIdentifier = @"faceCellID";
 }
 
 - (void)showDeleteFacePictureTipsWithFaceName:(NSString *)faceName {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Confirm to delete the face picture ?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kConfirmDeleteFacePictureDes", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         STRONG_SELF(self);
         [self deleteHandlerWithFaceName:faceName];
     }]];

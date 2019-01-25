@@ -1038,13 +1038,13 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)showAddFacesAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"系统识别到有陌生人在按门铃，是否要将其加入到人脸数据库中？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kAddStrangerFacePicture", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"不添加" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kNoAdded", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakself cleanFaceNotification];
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kAdd", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         STRONG_SELF(self);
         
         [self getFacesImages];

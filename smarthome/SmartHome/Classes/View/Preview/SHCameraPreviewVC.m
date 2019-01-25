@@ -146,7 +146,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #if 0
     [self connectAndPreview];
 #else
-    BOOL isRing = _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
+    BOOL isRing = _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
     if (!isRing) {
         [self connectAndPreview];
     }
@@ -1587,7 +1587,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     if (_notification && [_notification.allKeys containsObject:@"name"]) {
         NSString *name = _notification[@"name"];
         if (name != nil && ![name isEqualToString:@""]) {
-            nameString = [NSString stringWithFormat:@"%@ 在按门铃，是否要接听？", name];
+            nameString = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), name, self.shCameraObj.camera.cameraName];
         }
     }
     
@@ -1909,7 +1909,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (BOOL)isRing {
-    return _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
+    return _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
 }
 
 #pragma mark - Interface Rotate Handle

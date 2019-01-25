@@ -34,21 +34,26 @@ static CGFloat kFaceCellHeight = 140;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setupLocalizedString];
     [self setupGUI];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kAddFaces", nil);
 }
 
 - (void)setupGUI {
     self.pictureImageView.image = self.picture;
     
-    NSString *infoString = @"Setup face picture";
+    NSString *infoString = NSLocalizedString(@"kSetupFacePicture", nil);
     
     if (self.reset) {
-        infoString = [NSString stringWithFormat:@"Reset \"%@\" face picture", self.userName];
+        infoString = [NSString stringWithFormat:NSLocalizedString(@"kResetFacePicture", nil), self.userName];
     } else if (self.recognition) {
-        infoString = @"Face Recognition";
+        infoString = NSLocalizedString(@"kFacesRecognition", nil);
         
 //        [self faceRecognitionHandler];
-        self.title = @"人脸识别";
+        self.title = NSLocalizedString(@"kFacesRecognition", nil);
     }
     
     [self recognitionClick:nil];
@@ -62,7 +67,7 @@ static CGFloat kFaceCellHeight = 140;
 }
 
 - (void)setupRecognitionBtn {
-    UIBarButtonItem *recognitionBtn = [[UIBarButtonItem alloc] initWithTitle:@"Recognition" style:UIBarButtonItemStylePlain target:self action:@selector(recognitionClick:)];
+    UIBarButtonItem *recognitionBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"kRecognition", nil) style:UIBarButtonItemStylePlain target:self action:@selector(recognitionClick:)];
     
     self.navigationItem.rightBarButtonItem = recognitionBtn;
 }
@@ -87,7 +92,7 @@ static CGFloat kFaceCellHeight = 140;
 }
 
 - (void)faceRecognitionHandler {
-    [SVProgressHUD showWithStatus:@"正在识别..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kRecognizing", nil)];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
     NSData *data = UIImageJPEGRepresentation(self.picture, 1.0);
@@ -98,7 +103,7 @@ static CGFloat kFaceCellHeight = 140;
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             
-            NSString *infoString = @"识别出错, 请重试";
+            NSString *infoString = NSLocalizedString(@"kRecognitionFailed", nil);
             if (error != nil) {
                 NSLog(@"error: %@", error);
                 
@@ -110,7 +115,7 @@ static CGFloat kFaceCellHeight = 140;
                 }
             } else {
 //                NSLog(@"result: %@", result);
-                infoString = [NSString stringWithFormat:@"识别到: %@", result[@"name"]];
+//                infoString = [NSString stringWithFormat:@"识别到: %@", result[@"name"]];
             }
             
             weakself.infoLabel.text = infoString;
@@ -148,7 +153,7 @@ static CGFloat kFaceCellHeight = 140;
             [SVProgressHUD dismissWithDelay:2.0];
         } else {
 //            [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
-            [SVProgressHUD showSuccessWithStatus:self.reset ? [NSString stringWithFormat:@"Reset [%@] face image successful.", self.userName] : [NSString stringWithFormat:@"Add [%@] face image successful.", self.userName]];
+            [SVProgressHUD showSuccessWithStatus:self.reset ? [NSString stringWithFormat:NSLocalizedString(@"kResetFacePictureSuccess", nil), self.userName] : [NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), self.userName]];
             [SVProgressHUD dismissWithDelay:2.0];
             
             if (self.facesMarray.count == 1) {
@@ -172,9 +177,9 @@ static CGFloat kFaceCellHeight = 140;
         if (self.picture == obj.faceImage) {
             obj.alreadyAdd = YES;
             
-            NSString *title = @"Add success";
+            NSString *title = NSLocalizedString(@"kAddSuccess", nil);
             if (self.reset) {
-                title = @"Reset success";
+                title = NSLocalizedString(@"kResetSuccess", nil);
             }
             obj.title = title;
             
@@ -189,7 +194,7 @@ static CGFloat kFaceCellHeight = 140;
         return;
     }
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Please enter a name" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kSetupFaceName", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *nameTextField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -199,8 +204,8 @@ static CGFloat kFaceCellHeight = 140;
         nameTextField = textField;
     }];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Upload" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kUploadFacePicture", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *name = nameTextField.text;
         
         if (name == nil || [name isEqualToString:@""]) {
@@ -218,9 +223,9 @@ static CGFloat kFaceCellHeight = 140;
 }
 
 - (void)alreadyExistFaceInfoAlert:(NSString *)name {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Warning" message:[NSString stringWithFormat:@"Already exist \" %@ \" facial info, please change a name.", name] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kFaceAlreadyExist", nil), name] preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self sureClick:nil];
     }]];
     
@@ -244,9 +249,9 @@ static CGFloat kFaceCellHeight = 140;
 }
 
 - (void)inputEmptyAlert {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Warning" message:@"Input is empty, please enter a valid name" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"kFaceNameInvalid", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self sureClick:nil];
     }]];
     
@@ -334,9 +339,9 @@ static CGFloat kFaceCellHeight = 140;
         
         FRDFaceData *faceData = [[FRDFaceData alloc] init];
         faceData.faceImage = newImage;
-        NSString *title = @"Add";
+        NSString *title = NSLocalizedString(@"kAdd", nil);
         if (self.reset) {
-            title = @"Reset";
+            title = NSLocalizedString(@"kReset", nil);
         }
         faceData.title = title;
         
@@ -344,10 +349,10 @@ static CGFloat kFaceCellHeight = 140;
     }
 
     NSLog(@"%@", [NSString stringWithFormat:@"人脸数：%lu",(unsigned long)self.facesMarray.count]);
-    NSString *message = @"没有发现人脸，请重新拍摄。";
+    NSString *message = NSLocalizedString(@"kNoFaceFound", nil);
     
     if (detectResult.count> 0) {
-       message = [NSString stringWithFormat:@"图中人脸个数：%lu个，请选择要操作的人脸图像。",(unsigned long)self.facesMarray.count];
+       message = [NSString stringWithFormat:NSLocalizedString(@"kRecognitionResultDescription", nil), (unsigned long)self.facesMarray.count];
     }
     
     _recognitionNumLabel.text = message;
@@ -365,7 +370,7 @@ static CGFloat kFaceCellHeight = 140;
 - (UILabel *)createTipsLabel {
     UILabel *label = [[UILabel alloc] init];
     
-    label.text = @"Too small";
+    label.text = NSLocalizedString(@"kFaceTooSmall", nil);
     label.font = [UIFont systemFontOfSize:15.0];
     label.textColor = [UIColor yellowColor];
     [label sizeToFit];
@@ -377,7 +382,7 @@ static CGFloat kFaceCellHeight = 140;
 - (double)calulateImageFileSize:(UIImage *)image {
     NSData *data = UIImagePNGRepresentation(image);
     if (!data) {
-        data = UIImageJPEGRepresentation(image, 1.0);//需要改成0.5才接近原图片大小，原因请看下文
+        data = UIImageJPEGRepresentation(image, 1.0);
     }
     double dataLength = [data length] * 1.0;
     NSArray *typeArray = @[@"bytes",@"KB",@"MB",@"GB",@"TB",@"PB", @"EB",@"ZB",@"YB"];

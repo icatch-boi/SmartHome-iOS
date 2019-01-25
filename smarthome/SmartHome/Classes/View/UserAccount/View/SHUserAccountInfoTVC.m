@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *nickNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UILabel *modifyPWDLabel;
+@property (weak, nonatomic) IBOutlet UILabel *faceRecognitionLabel;
 
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, assign) BOOL enableFaceRecognition;
@@ -52,6 +53,7 @@
     [_logoutButton setTitle:NSLocalizedString(@"kLogout", nil) forState:UIControlStateNormal];
     [_logoutButton setTitle:NSLocalizedString(@"kLogout", nil) forState:UIControlStateHighlighted];
     _modifyPWDLabel.text = NSLocalizedString(@"kModifyPassword", nil);
+    _faceRecognitionLabel.text = NSLocalizedString(@"kBiometricsRecognition", nil);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -140,7 +142,7 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 1) {
-        [self showAlertWithTitle:NSLocalizedString(@"Tips", nil) message:@"使用 '生物识别' 功能务必确保账户下添加有相机，否则此功能不能被使用。"];
+        [self showAlertWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kBiometricsDescription", nil)];
     }
 }
 

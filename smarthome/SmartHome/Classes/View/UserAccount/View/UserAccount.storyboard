@@ -48,7 +48,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入邮箱" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="HDY-3q-Tr6">
-                                                    <rect key="frame" x="92" y="12.5" width="496" height="19"/>
+                                                    <rect key="frame" x="92" y="12.5" width="216" height="19"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done"/>
@@ -84,13 +84,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dtj-Lf-ugk">
-                                                    <rect key="frame" x="92" y="12.5" width="468" height="19"/>
+                                                    <rect key="frame" x="92" y="12.5" width="188" height="19"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xvp-Iv-meN">
-                                                    <rect key="frame" x="560" y="8" width="28" height="28"/>
+                                                    <rect key="frame" x="280" y="8" width="28" height="28"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="28" id="C9g-bR-rHM"/>
                                                         <constraint firstAttribute="width" constant="28" id="ze1-zP-lAy"/>
@@ -133,13 +133,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请再次输入密码" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9A0-91-1Xm">
-                                                    <rect key="frame" x="92" y="12.5" width="468" height="19"/>
+                                                    <rect key="frame" x="92" y="12.5" width="188" height="19"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" secureTextEntry="YES"/>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnS-gv-QLz">
-                                                    <rect key="frame" x="560" y="8" width="28" height="28"/>
+                                                    <rect key="frame" x="280" y="8" width="28" height="28"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="28" id="55z-Sp-Pjy"/>
                                                         <constraint firstAttribute="width" constant="28" id="XuD-W8-pSl"/>
@@ -341,7 +341,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fcP-0p-g8L">
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fcP-0p-g8L">
                             <rect key="frame" x="0.0" y="265" width="320" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -463,6 +463,7 @@
                     </tableView>
                     <connections>
                         <outlet property="avatorImgView" destination="oXq-0W-ngP" id="O5W-pF-hmM"/>
+                        <outlet property="faceRecognitionLabel" destination="PWC-9J-eOm" id="PAC-Iy-HGP"/>
                         <outlet property="logoutButton" destination="fcP-0p-g8L" id="7fS-e6-Tvb"/>
                         <outlet property="modifyPWDLabel" destination="IY5-z7-OoX" id="VTS-Tt-jEk"/>
                         <outlet property="nickNameLabel" destination="sCG-h8-xhY" id="GEq-sc-lzc"/>

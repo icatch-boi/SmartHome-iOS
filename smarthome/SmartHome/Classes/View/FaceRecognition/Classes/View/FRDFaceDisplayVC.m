@@ -19,6 +19,7 @@
 @interface FRDFaceDisplayVC ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *moreButtonItem;
 
 @end
 
@@ -30,6 +31,11 @@
     
     [self setupGUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFaceInfo:) name:kUpdateFacesInfoNotification object:nil];
+    [self setupLocalizedString];
+}
+
+- (void)setupLocalizedString {
+    self.moreButtonItem.title = NSLocalizedString(@"kMore", nil);
 }
 
 - (void)setupGUI {
@@ -71,10 +77,10 @@
 }
 
 - (void)getImageFailedHandler {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Get face image failed, please try again." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kGetFaceImgaeFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self displayPicture];
     }]];
     
@@ -127,15 +133,15 @@
 }
 
 - (IBAction)moreClick:(id)sender {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"There are more operation" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kMoreOperationDescription", nil) preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Reset" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kReset", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self resetHandler];
     }]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self sureDeleteFacePictureTips];
     }]];
 
@@ -152,11 +158,11 @@
 }
 
 - (void)sureDeleteFacePictureTips {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Confirm to delete the face picture ?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kConfirmDeleteFacePictureDes", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self deleteHandler];
     }]];
     

@@ -39,6 +39,7 @@ static CGFloat kFaceBoxTopHeight = 150;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, FRDFaceResult *> *facesResultMDict;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, FRDFaceResult *> *facesPreResultMDict;
 @property (nonatomic, strong) NSArray<UIImage *> *facePictures;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *switchCameraBtn;
 
 @end
 
@@ -50,6 +51,12 @@ static CGFloat kFaceBoxTopHeight = 150;
     
     [self setupGUI];
     [self getAuthorization];
+    [self setupLocalizedString];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kFaceCapture", nil);
+    self.switchCameraBtn.title = NSLocalizedString(@"kSwitchCamera", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -86,7 +93,7 @@ static CGFloat kFaceBoxTopHeight = 150;
     UILabel *label = [[UILabel alloc] init];
     
 //    label.hidden = YES;
-    label.text = @"请正对手机";
+    label.text = NSLocalizedString(@"kFaceRecognitionDescrition_5", nil);
     label.textColor = [UIColor redColor];
     
     [self.view addSubview:label];
@@ -126,7 +133,7 @@ static CGFloat kFaceBoxTopHeight = 150;
 - (void)showMsgWithTitle:(NSString *)title message:(NSString *)message {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title   message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleCancel handler:nil]];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:alertVC animated:YES completion:nil];
@@ -389,7 +396,7 @@ static CGFloat kFaceBoxTopHeight = 150;
     } else {
         [self cleanLayer];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.infoLabel.text = @"没有检测到人脸";
+            self.infoLabel.text = NSLocalizedString(@"kFaceRecognitionDescrition_4", nil);
         });
     }
     
@@ -576,7 +583,7 @@ static CGFloat kFaceBoxTopHeight = 150;
     NSString *info = nil;
     
     if (max / kFaceBoxWidth < 0.3) {
-        info = @"请将摄像头靠近点";
+        info = NSLocalizedString(@"kFaceRecognitionDescrition_1", nil);
         goto verify_failed;
     }
     
@@ -584,7 +591,7 @@ static CGFloat kFaceBoxTopHeight = 150;
         (CGRectGetMaxX(face.bounds) <= kFaceBoxWidth * 0.95)) {
         
     } else {
-        info = @"请将人脸正对圆框";
+        info = NSLocalizedString(@"kFaceRecognitionDescrition_2", nil);
         goto verify_failed;
     }
     
@@ -592,14 +599,14 @@ static CGFloat kFaceBoxTopHeight = 150;
         (CGRectGetMaxY(face.bounds) <= kFaceBoxWidth * 0.95)) {
         
     } else {
-        info = @"请将人脸正对圆框";
+        info = NSLocalizedString(@"kFaceRecognitionDescrition_2", nil);
         goto verify_failed;
     }
     
     if (fabs(face.yawAngle) == 0 && fabs(face.rollAngle) == 0) {
         
     } else {
-        info = @"请不要偏转或倾斜";
+        info = NSLocalizedString(@"kFaceRecognitionDescrition_3", nil);
         goto verify_failed;
     }
     
@@ -848,16 +855,16 @@ verify_failed:
             [self presentViewController:imagePicker animated:YES completion:nil];
             
         } else if (status == PHAuthorizationStatusDenied) { // 用户拒绝当前应用访问相册
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"⚠️ 警告" message:@"请去-> [设置 - 隐私 - 照片 - SmartHome] 打开访问开关" preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"⚠️ %@", NSLocalizedString(@"Warning", nil)] message:NSLocalizedString(@"kCameraAccessWarningInfo", nil) preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
             
             [alertC addAction:alertA];
             [self presentViewController:alertC animated:YES completion:nil];
         } else if (status == PHAuthorizationStatusRestricted) {
-            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"由于系统原因, 无法访问相册" preferredStyle:(UIAlertControllerStyleAlert)];
-            UIAlertAction *alertA = [UIAlertAction actionWithTitle:@"确定" style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kNotAccessSystemAlbum", nil) preferredStyle:(UIAlertControllerStyleAlert)];
+            UIAlertAction *alertA = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:(UIAlertActionStyleDefault) handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
             

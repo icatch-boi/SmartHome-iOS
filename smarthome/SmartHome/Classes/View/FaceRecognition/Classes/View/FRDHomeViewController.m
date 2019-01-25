@@ -11,6 +11,9 @@
 
 @interface FRDHomeViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *faceSetupLabel;
+@property (weak, nonatomic) IBOutlet UILabel *faceRecognitionLabel;
+
 @end
 
 @implementation FRDHomeViewController
@@ -24,6 +27,13 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
+    [self setupLocalizedString];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kBiometricsRecognition", nil);
+    self.faceSetupLabel.text = NSLocalizedString(@"kFaceSetup", nil);
+    self.faceRecognitionLabel.text = NSLocalizedString(@"kFacesRecognition", nil);
 }
 
 - (void)setupGUI {

@@ -67,6 +67,11 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
     // Do any additional setup after loading the view.
     [self setupGUI];
     [self fetchedFacesImage];
+    [self setupLocalizedString];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kAddFaces", nil);
 }
 
 - (void)setupGUI {
@@ -125,9 +130,9 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
 - (NSString *)recognitionResultDes {
     NSString *str = nil;
     if (self.facesRectArray.count <= 0) {
-        str = @"系统从图片中未识别到人脸。";
+        str = NSLocalizedString(@"kNotRecognizeFaceFromPicture", nil);
     } else {
-        str = [NSString stringWithFormat:@"系统从图片中识别到 %lu 张人脸，请选择要添加的人脸图片。", (unsigned long)self.facesRectArray.count];
+        str = [NSString stringWithFormat:NSLocalizedString(@"kRecognitionFaceFromPicture", nil), (unsigned long)self.facesRectArray.count];
     }
     
     SHLogInfo(SHLogTagAPP, @"Face recognition result: %@", str);
@@ -167,7 +172,7 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
             FRDFaceData *faceData = [[FRDFaceData alloc] init];
             
             faceData.faceImage = faceImgae;
-            faceData.title = @"Add";
+            faceData.title = NSLocalizedString(@"kAdd", nil);
             
             [self.facesMarray addObject:faceData];
         }
@@ -185,7 +190,7 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
 
 #pragma mark - Add Faces Handler
 - (void)showAddFacesAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Please enter a name" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kSetupFaceName", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *nameTextField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -196,8 +201,8 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
     }];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Upload" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kUploadFacePicture", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *name = nameTextField.text;
         
         STRONG_SELF(self);
@@ -239,7 +244,7 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
             [SVProgressHUD dismissWithDelay:2.0];
         } else {
             //            [[UIApplication sharedApplication].keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
-            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"Add [%@] face image successful.", self.userName]];
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), self.userName]];
             [SVProgressHUD dismissWithDelay:2.0];
             
             if (self.facesMarray.count == 1) {
@@ -257,7 +262,7 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
         if (self.currentFaceImage == obj.faceImage) {
             obj.alreadyAdd = YES;
             
-            obj.title = @"Add success";
+            obj.title = NSLocalizedString(@"kAddSuccess", nil);
             
             *stop = YES;
         }
@@ -265,9 +270,9 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
 }
 
 - (void)alreadyExistFaceInfoAlert:(NSString *)name {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Warning" message:[NSString stringWithFormat:@"Already exist \" %@ \" facial info, please change a name.", name] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kFaceAlreadyExist", nil), name] preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self showAddFacesAlertView];
     }]];
     
@@ -291,9 +296,9 @@ static NSString * const reuseIdentifierHeader = @"FaceCollectionViewCellHeaderID
 }
 
 - (void)inputEmptyAlert {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Warning" message:@"Input is empty, please enter a valid name" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"kFaceNameInvalid", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self showAddFacesAlertView];
     }]];
     

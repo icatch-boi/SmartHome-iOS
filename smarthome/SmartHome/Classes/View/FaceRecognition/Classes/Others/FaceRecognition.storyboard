@@ -74,6 +74,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="生物识别" id="JgK-mN-8bE"/>
                     <connections>
+                        <outlet property="faceRecognitionLabel" destination="gdV-SJ-riO" id="pWY-qe-gVt"/>
+                        <outlet property="faceSetupLabel" destination="cXS-Nf-qPF" id="4h2-oP-BnY"/>
                         <segue destination="zIg-xU-mAl" kind="push" identifier="faceRecognitionSegue" id="zaQ-a5-EFP"/>
                     </connections>
                 </tableViewController>
@@ -161,6 +163,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="faceImageView" destination="JNb-ha-Z0L" id="0un-c4-kN0"/>
+                        <outlet property="moreButtonItem" destination="fxa-I1-dB9" id="vw4-HT-mae"/>
                         <segue destination="zIg-xU-mAl" kind="push" identifier="resetFacePictureSegue" id="wk5-Qv-o9T"/>
                     </connections>
                 </viewController>
@@ -196,6 +199,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="人脸捕捉" id="3wQ-LS-fiu"/>
                     <connections>
+                        <outlet property="switchCameraBtn" destination="LF4-9Z-kwb" id="4d2-I8-MxR"/>
                         <segue destination="GH0-pz-2xo" kind="show" identifier="resultHandleSugue" id="eRy-Zp-Yx9"/>
                     </connections>
                 </viewController>
@@ -421,6 +425,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wk5-Qv-o9T"/>
+        <segue reference="zaQ-a5-EFP"/>
     </inferredMetricsTieBreakers>
 </document>
