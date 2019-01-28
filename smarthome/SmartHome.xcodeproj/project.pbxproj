@@ -403,13 +403,6 @@
 			remoteGlobalIDString = 4C6F96C414AF704100F8389A;
 			remoteInfo = MWPhotoBrowser;
 		};
-		38F525C11F2F040000F5A5A2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 38F525BB1F2F03F800F5A5A2 /* MWPhotoBrowser.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C6F96C314AF704100F8389A;
-			remoteInfo = MWPhotoBrowser;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -2987,7 +2980,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				38F525C21F2F040000F5A5A2 /* PBXTargetDependency */,
 				38F442501FAC079A00BDA6DF /* PBXTargetDependency */,
 			);
 			name = SmartHome;
@@ -3679,11 +3671,6 @@
 			isa = PBXTargetDependency;
 			target = 38F442481FAC079900BDA6DF /* NotificationServiceExtension */;
 			targetProxy = 38F4424F1FAC079A00BDA6DF /* PBXContainerItemProxy */;
-		};
-		38F525C21F2F040000F5A5A2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = MWPhotoBrowser;
-			targetProxy = 38F525C11F2F040000F5A5A2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

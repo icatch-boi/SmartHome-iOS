@@ -114,25 +114,20 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OAB-41-i5J" userLabel="View_header">
                                 <rect key="frame" x="0.0" y="70" width="320" height="50"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vedieo-buttery_2" translatesAutoresizingMaskIntoConstraints="NO" id="OMO-7q-ZwB">
-                                        <rect key="frame" x="260" y="0.0" width="50" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="OMO-7q-ZwB" secondAttribute="height" multiplier="1:1" id="JbP-UW-RQY"/>
-                                        </constraints>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vedieo-buttery_10" translatesAutoresizingMaskIntoConstraints="NO" id="OMO-7q-ZwB">
+                                        <rect key="frame" x="296" y="18" width="14" height="14"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="van-gw-yUM">
-                                        <rect key="frame" x="225.5" y="14.5" width="42.5" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="256" y="16" width="38" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="OMO-7q-ZwB" secondAttribute="bottom" id="Ce9-Qo-4zl"/>
-                                    <constraint firstItem="OMO-7q-ZwB" firstAttribute="top" secondItem="OAB-41-i5J" secondAttribute="top" id="JzF-7H-KHG"/>
                                     <constraint firstAttribute="trailing" secondItem="OMO-7q-ZwB" secondAttribute="trailing" constant="10" id="S2M-c4-tq9"/>
-                                    <constraint firstItem="OMO-7q-ZwB" firstAttribute="leading" secondItem="van-gw-yUM" secondAttribute="trailing" constant="-8" id="Sxr-6i-KfW"/>
+                                    <constraint firstItem="OMO-7q-ZwB" firstAttribute="leading" secondItem="van-gw-yUM" secondAttribute="trailing" constant="2" id="Sxr-6i-KfW"/>
                                     <constraint firstItem="OMO-7q-ZwB" firstAttribute="centerY" secondItem="van-gw-yUM" secondAttribute="centerY" id="baO-hF-M0k"/>
                                     <constraint firstItem="OMO-7q-ZwB" firstAttribute="centerY" secondItem="OAB-41-i5J" secondAttribute="centerY" id="qfZ-rO-9FW"/>
                                     <constraint firstAttribute="height" constant="50" id="vmP-dr-WqG"/>
@@ -244,7 +239,7 @@
             <objects>
                 <navigationController id="Xbz-ga-7y5" customClass="SHMainViewController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="675-om-UJH">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
@@ -652,15 +647,12 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vedieo-buttery_2" translatesAutoresizingMaskIntoConstraints="NO" id="43n-5H-8Eq">
-                                        <rect key="frame" x="252" y="0.0" width="44" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="43n-5H-8Eq" secondAttribute="height" multiplier="1:1" id="Kpf-h0-aby"/>
-                                        </constraints>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vedieo-buttery_10" translatesAutoresizingMaskIntoConstraints="NO" id="43n-5H-8Eq">
+                                        <rect key="frame" x="282" y="15" width="14" height="14"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PU5-zF-aeR">
-                                        <rect key="frame" x="217.5" y="11.5" width="42.5" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="242" y="13" width="38" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -668,14 +660,12 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="43n-5H-8Eq" secondAttribute="trailing" constant="24" id="3ap-oO-tnm"/>
                                     <constraint firstItem="yRq-2Q-LFg" firstAttribute="centerY" secondItem="PQp-Ad-d4v" secondAttribute="centerY" id="6yb-Ea-DlP"/>
-                                    <constraint firstItem="43n-5H-8Eq" firstAttribute="top" secondItem="PQp-Ad-d4v" secondAttribute="top" id="82f-gI-1b3"/>
                                     <constraint firstItem="yRq-2Q-LFg" firstAttribute="centerX" secondItem="PQp-Ad-d4v" secondAttribute="centerX" id="9ym-RK-9P0"/>
                                     <constraint firstItem="xHX-3c-aoR" firstAttribute="leading" secondItem="PQp-Ad-d4v" secondAttribute="leading" id="A6i-i8-2xu"/>
                                     <constraint firstItem="43n-5H-8Eq" firstAttribute="centerY" secondItem="PU5-zF-aeR" secondAttribute="centerY" id="DNp-9q-fvr"/>
                                     <constraint firstItem="43n-5H-8Eq" firstAttribute="centerY" secondItem="PQp-Ad-d4v" secondAttribute="centerY" id="RCz-mv-McI"/>
                                     <constraint firstAttribute="height" constant="44" id="Say-Zd-tYs"/>
-                                    <constraint firstAttribute="bottom" secondItem="43n-5H-8Eq" secondAttribute="bottom" id="g91-aj-U8j"/>
-                                    <constraint firstItem="43n-5H-8Eq" firstAttribute="leading" secondItem="PU5-zF-aeR" secondAttribute="trailing" constant="-8" id="tna-jI-n9W"/>
+                                    <constraint firstItem="43n-5H-8Eq" firstAttribute="leading" secondItem="PU5-zF-aeR" secondAttribute="trailing" constant="2" id="tna-jI-n9W"/>
                                     <constraint firstItem="xHX-3c-aoR" firstAttribute="centerY" secondItem="PQp-Ad-d4v" secondAttribute="centerY" id="wZW-Xi-LA0"/>
                                 </constraints>
                             </view>
@@ -976,7 +966,7 @@ AAAAAAAosQ
         <image name="nav-add" width="28" height="28"/>
         <image name="nav-bt-list" width="28" height="28"/>
         <image name="nav-btn-back" width="28" height="28"/>
-        <image name="vedieo-buttery_2" width="50" height="50"/>
+        <image name="vedieo-buttery_10" width="14.399999618530273" height="14.399999618530273"/>
         <image name="video-btn-full screen" width="50" height="50"/>
         <image name="video-btn-mute-pre_1" width="75" height="75"/>
         <image name="video-btn-mute_1" width="75" height="75"/>

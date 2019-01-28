@@ -85,7 +85,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="URt-33-PLx">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="URt-33-PLx">
                                                     <rect key="frame" x="0.0" y="0.0" width="144" height="117.5"/>
                                                     <connections>
                                                         <action selector="enterMediaStore:" destination="Vgd-dD-zZe" eventType="touchUpInside" id="XvY-tU-DIW"/>
@@ -108,15 +108,15 @@
                                                 <constraint firstItem="NVm-X8-Fjp" firstAttribute="centerY" secondItem="UTy-Ce-ptd" secondAttribute="centerY" constant="-12" id="sLL-Jf-cdq"/>
                                             </constraints>
                                         </view>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57I-6n-3Os">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="e2v-lb-F8Q">
+                                            <rect key="frame" x="0.0" y="0.0" width="176" height="117.5"/>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57I-6n-3Os">
                                             <rect key="frame" x="16" y="11" width="176" height="96"/>
                                             <connections>
                                                 <action selector="showLocalMediaBrowser:" destination="Vgd-dD-zZe" eventType="touchUpInside" id="bHK-lH-1SM"/>
                                             </connections>
                                         </button>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="e2v-lb-F8Q">
-                                            <rect key="frame" x="0.0" y="0.0" width="176" height="117.5"/>
-                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="e2v-lb-F8Q" firstAttribute="leading" secondItem="O5T-1h-DMW" secondAttribute="leading" id="1aJ-MN-GC0"/>
@@ -831,18 +831,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="3P6-pi-v0h">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="3P6-pi-v0h">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eY3-kp-Iap">
-                                    <rect key="frame" x="16" y="22" width="244" height="0.0"/>
+                                    <rect key="frame" x="16" y="0.0" width="244" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rlg-1W-ylu">
-                                    <rect key="frame" x="280" y="10" width="24" height="24"/>
+                                    <rect key="frame" x="280" y="-12" width="24" height="24"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="24" id="Lmc-iB-0qC"/>
                                         <constraint firstAttribute="width" constant="24" id="mcO-5S-yKk"/>

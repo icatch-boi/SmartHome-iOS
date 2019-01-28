@@ -134,24 +134,51 @@
 {
     NSString *retVal = nil;
     
-    if (value <= 10) {
+    if (value < 10) {
         retVal = @"vedieo-buttery";
-    } else if (value > 10 && value <= 25) {
+    } else if (value < 20) {
         retVal = @"vedieo-buttery_1";
-    } else if (value > 25 && value <= 50) {
-        retVal = @"vedieo-buttery_1";
-    } else if (value > 50 && value <= 75) {
+    } else if (value < 30) {
         retVal = @"vedieo-buttery_2";
-    } else if (value > 75) {
-        retVal = @"vedieo-buttery_2";
-    } else if (value == 0xff) {
-        SHLogInfo(SHLogTagAPP, @"battery raw value: %d", value);
-//        retVal = @"ic_battery_charging_green_24dp";
-        retVal = @"vedieo-buttery_2";
+    } else if (value < 40) {
+        retVal = @"vedieo-buttery_3";
+    } else if (value < 50) {
+        retVal = @"vedieo-buttery_4";
+    } else if (value < 60) {
+        retVal = @"vedieo-buttery_5";
+    } else if (value < 70) {
+        retVal = @"vedieo-buttery_6";
+    } else if (value < 80) {
+        retVal = @"vedieo-buttery_7";
+    } else if (value < 90) {
+        retVal = @"vedieo-buttery_8";
+    } else if (value < 100) {
+        retVal = @"vedieo-buttery_9";
+    } else if (value == 100) {
+        retVal = @"vedieo-buttery_10";
     }
     
     SHLogInfo(SHLogTagAPP, @"battery level: %d, string: %@", value, retVal);
     return retVal;
+}
+
+- (int)prepareDataForChargeStatusWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult
+{
+    __block int level = -1;
+    dispatch_sync([shCameraObj.sdk sdkQueue], ^{
+        if (!curResult) {
+            SHGettingProperty *pro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+            [pro addProperty:TRANS_PROP_CAMERA_CHARGE_STATUS];
+            SHPropertyQueryResult *result = [pro submit];
+            
+            level = [result praseInt:TRANS_PROP_CAMERA_CHARGE_STATUS];
+        } else {
+            level = [curResult praseInt:TRANS_PROP_CAMERA_CHARGE_STATUS];
+        }
+    });
+    
+    SHLogInfo(SHLogTagAPP, @"Charge status: %d", level);
+    return level;
 }
 
 - (NSString *)prepareDataForPirStatusWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult

@@ -20,6 +20,7 @@
 - (NSData *)requestThumbnail:(ICatchFile *)file andPropertyID:(int)propertyID andCamera:(SHCameraObject *)shCameraObj;
 
 - (uint)prepareDataForBatteryLevelWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult;
+- (int)prepareDataForChargeStatusWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult;
 - (NSString *)transBatteryLevel2NStr:(unsigned int)value;
 - (NSString *)prepareDataForPirStatusWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult;
 - (NSString *)transPirStatus2NStr:(unsigned int)value;

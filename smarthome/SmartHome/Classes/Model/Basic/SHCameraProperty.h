@@ -74,6 +74,7 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 
 @property (nonatomic) SHICatchEvent *curBatteryLevel;
 @property (nonatomic, assign) int SDUseableSize;
+@property (nonatomic, strong) SHICatchEvent *curChargeStatus;
 
 - (void)cleanCurrentCameraAllProperty;
 - (BOOL)checkSupportPropertyExist;

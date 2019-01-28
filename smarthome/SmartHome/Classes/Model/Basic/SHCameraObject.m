@@ -27,6 +27,7 @@
 @property (nonatomic) SHObserver *disconnectObserver;
 @property (nonatomic) SHObserver *powerOffObserver;
 @property (nonatomic, strong) SHObserver *bitRateObserver;
+@property (nonatomic, strong) SHObserver *chargeStatusObserver;
 
 @end
 
@@ -371,6 +372,10 @@
     [self.sdk addObserver:self.powerOffObserver];
     
     [self addVideoBitRateObserver];
+    
+    SHSDKEventListener *chargeStatusListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.chargeStatusObserver = [SHObserver cameraObserverWithListener:chargeStatusListener eventType:ICATCH_EVENT_CHARGE_STATUS_CHANGED isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.chargeStatusObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -504,6 +509,17 @@
         }
         
         self.powerOffObserver = nil;
+    }
+    
+    if (self.chargeStatusObserver) {
+        [self.sdk removeObserver:self.chargeStatusObserver];
+        
+        if (self.chargeStatusObserver.listener) {
+            delete self.chargeStatusObserver.listener;
+            self.chargeStatusObserver.listener = nullptr;
+        }
+        
+        self.chargeStatusObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

@@ -582,10 +582,15 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 #pragma mark - Property
 - (void)initCameraPropertyGUI {
-    [self initBatteryLevelIcon];
+//    [self initBatteryLevelIcon];
+    [self initBatteryHandler];
     
     SHICatchEvent *evt = _shCameraObj.cameraProperty.curBatteryLevel;
     evt ? [self updateBatteryLevelIcon:evt] : void();
+    
+    SHICatchEvent *statusEvt = _shCameraObj.cameraProperty.curChargeStatus;
+    statusEvt ? [self updateChargeStatus:statusEvt] : void();
+    
     [self updateCameraPropertyGUI];
 }
 
@@ -609,10 +614,56 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 [weakSelf updateBitRateLabel:evt.doubleValue1 + evt.doubleValue2];
                 break;
                 
+            case ICATCH_EVENT_CHARGE_STATUS_CHANGED: {
+                weakSelf.shCameraObj.cameraProperty.curChargeStatus = evt;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf updateChargeStatus:evt];
+                });
+            }
+                break;
+                
             default:
                 break;
         }
     }];
+}
+
+- (void)initBatteryHandler {
+    int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+    
+    self.batteryLabel.hidden = (batteryStatus == 1);
+    
+    if (batteryStatus == 1) {
+        [self setupChargeGUI];
+        SHLogInfo(SHLogTagAPP, @"Device chargeing.");
+    } else {
+        [self initBatteryLevelIcon];
+    }
+}
+
+- (void)setupChargeGUI {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.batteryImageView.image = [UIImage imageNamed:@"vedieo-buttery_c"];
+    });
+}
+
+- (void)updateChargeStatus:(SHICatchEvent *)evt {
+    int status = evt.intValue1;
+    
+    self.batteryLabel.hidden = (status == 1);
+    
+    if (status == 1) {
+        [self setupChargeGUI];
+    } else {
+        [self updateBatteryLevelIcon:_shCameraObj.cameraProperty.curBatteryLevel];
+    }
+}
+
+- (void)setupBatteryLevelDefaultIcon {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.batteryLabel.text = @"100%";
+        self.batteryImageView.image = [UIImage imageNamed:@"vedieo-buttery_10"];
+    });
 }
 
 - (void)initBatteryLevelIcon {
@@ -628,6 +679,18 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)updateBatteryLevelIcon:(SHICatchEvent *)evt {
+    if (evt == nil) {
+        SHLogWarn(SHLogTagAPP, @"evt is nil.");
+        [self setupBatteryLevelDefaultIcon];
+        return;
+    }
+    
+    SHICatchEvent *statusEvt = _shCameraObj.cameraProperty.curChargeStatus;
+    if (statusEvt && statusEvt.intValue1 == 1) {
+        SHLogInfo(SHLogTagAPP, @"Device chargeing.");
+        return;
+    }
+    
     int level = evt.intValue1;
     
     dispatch_async(dispatch_get_main_queue(), ^{
