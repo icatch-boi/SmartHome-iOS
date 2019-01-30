@@ -459,7 +459,7 @@
 "kLogin" = "登入";
 "kForgotPassword" = "忘記密碼";
 "kSignup" = "註冊";
-"kEmail" = "郵箱";
+"kEmail" = "郵箱 / 手機號";
 "kPassword" = "密碼";
 "kDonotHaveAccount" = "沒有帳號？";
 "kVerifycode" = "驗證碼";
@@ -468,7 +468,7 @@
 "kTerms" = "條款";
 "kAgreeTermsDes" = "通過創建一個帳戶，表示您將同意我們的";
 "kAlreadyHaveAnAccount" = "已有一個帳戶";
-"kSignupWithEmail" = "使用郵箱註冊";
+"kSignupWithEmail" = "註冊帳號";
 "kResetPassword" = "重置密碼";
 "kResetPasswording" = "正在重置密碼...";
 "kSignuping" = "正在註冊...";
@@ -479,7 +479,7 @@
 "kResetPasswordFailed" = "重置密碼失敗";
 "kSignupFailed" = "註冊失敗";
 "kInvalidEmail" = "輸入的郵箱無效，請重新輸入";
-"kVerifycodeAlreadySend" = "校驗碼已發送到郵箱";
+"kVerifycodeAlreadySend" = "校驗碼已發送至您的郵箱或手機";
 "kVerifycodeSendFailed" = "校驗碼發送失敗";
 "kUserAgreement" = "用戶協議";
 "kLoginInvalid" = "賬戶登入無效，請重新登入";

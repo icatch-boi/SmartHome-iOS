@@ -17,6 +17,7 @@ static const CGFloat kBottomDefaultValue = 70;
 static const CGFloat kVerifycodeExpirydate = 300;
 static const CGFloat kVerifycodeBtnDefaultFontSize = 12.0;
 static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
+static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
 @interface SHLogonViewController () <UITextFieldDelegate>
 
@@ -183,6 +184,12 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     });
 }
 
+- (NSString *)accountRegularExpression {
+    NSString *account = [NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression];
+    
+    return account;
+}
+
 - (void)accountHandleWithTipsTitle:(NSString *)tips {
     [_emailTextField resignFirstResponder];
     [_pwdTextField resignFirstResponder];
@@ -195,7 +202,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     [self.progressHUD showProgressHUDWithMessage:tips];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" options:NSRegularExpressionSearch];
+            emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
             passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
             surePWDRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
         });
@@ -296,6 +303,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
             });
+            
+            SHLogError(SHLogTagAPP, @"Signup failed: %@", error.error_description);
         }
     }];
 }
@@ -316,6 +325,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
             });
+            
+            SHLogError(SHLogTagAPP, @"Reset passwrod failed: %@", error.error_description);
         }
     }];
 }
@@ -454,10 +465,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
     [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSString *phoneRE = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9])\\d{8}$";
-            NSString *emailRE = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-            NSString *reString = [NSString stringWithFormat:@"%@|%@", phoneRE, emailRE];
-            emailRange = [_emailTextField.text rangeOfString:reString options:NSRegularExpressionSearch];
+            emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
         });
         
         if (emailRange.location == NSNotFound ) {
@@ -481,6 +489,11 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 }
 
 - (void)verifycodeHandle:(NSString *)email {
+    NSRange range = [email rangeOfString:kPhoneRegularExpression options:NSRegularExpressionSearch];
+    if (range.location != NSNotFound) {
+        _totalTime = kPhoneVerifycodeExpirydate;
+    }
+    
     _resetPWD ? [self resetPasswordGetVerifyCodeWithEmail:email] : [self getVerifyCodeWithEmail:email];
 }
 
@@ -504,7 +517,8 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
 
 - (void)getVerifycodeFailedTips:(id)result isSuccess:(BOOL)success {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *notice = NSLocalizedString(@"kVerifycodeAlreadySend", nil); //@"校验码已发送到邮箱";
+        NSString *notice = NSLocalizedString(@"Tips", nil); //NSLocalizedString(@"kVerifycodeAlreadySend", nil); //@"校验码已发送到邮箱";
+        self.progressHUD.detailsLabelText = NSLocalizedString(@"kVerifycodeAlreadySend", nil);
 
         if (success) {
             _getVerifycodeBtn.enabled = NO;
@@ -517,9 +531,10 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
             
             self.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
             notice = NSLocalizedString(@"kVerifycodeSendFailed", nil); //@"校验码发送失败";
+            SHLogError(SHLogTagAPP, @"Get Verifycode Failed: %@", error.error_description);
         }
         
-        [self.progressHUD showProgressHUDNotice:notice showTime:1.5];
+        [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
     });
 }
 
@@ -548,7 +563,7 @@ static const CGFloat kVerifycodeBtnDisableFontSize = 16.0;
         _getVerifycodeBtn.enabled = YES;
         _getVerifycodeBtn.titleLabel.font = [UIFont systemFontOfSize:kVerifycodeBtnDefaultFontSize];
 
-        [self updateVerifycodeBtnTitle:@"Get verify code"];
+        [self updateVerifycodeBtnTitle:NSLocalizedString(@"kGetVerifycode", nil)];
         
         [self releaseVerifycodeTimer];
         

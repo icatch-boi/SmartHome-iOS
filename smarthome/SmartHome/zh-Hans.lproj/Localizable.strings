@@ -463,7 +463,7 @@
 "kLogin" = "登录";
 "kForgotPassword" = "忘记密码";
 "kSignup" = "注册";
-"kEmail" = "邮箱";
+"kEmail" = "邮箱 / 手机号";
 "kPassword" = "密码";
 "kDonotHaveAccount" = "没有帐号？";
 "kVerifycode" = "验证码";
@@ -472,7 +472,7 @@
 "kTerms" = "条款";
 "kAgreeTermsDes" = "通过创建一个帐户，表示您将同意我们的";
 "kAlreadyHaveAnAccount" = "已经有一个帐户";
-"kSignupWithEmail" = "使用邮箱注册";
+"kSignupWithEmail" = "注册帐号";
 "kResetPassword" = "重置密码";
 "kResetPasswording" = "正在重置密码...";
 "kSignuping" = "正在注册...";
@@ -483,7 +483,7 @@
 "kResetPasswordFailed" = "重置密码失败";
 "kSignupFailed" = "注册失败";
 "kInvalidEmail" = "输入的邮箱无效，请重新输入";
-"kVerifycodeAlreadySend" = "校验码已发送到邮箱";
+"kVerifycodeAlreadySend" = "校验码已发送至您的邮箱或手机";
 "kVerifycodeSendFailed" = "校验码发送失败";
 "kUserAgreement" = "用户协议";
 "kLoginInvalid" = "账户登录无效，请重新登录";

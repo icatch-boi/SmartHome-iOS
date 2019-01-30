@@ -137,6 +137,9 @@ static const NSUInteger kDeviceNameMinLength = 1;
 static const NSUInteger kDeviceNameMaxLength = 12;
 static NSString * const kRecvNotification = @"RecvNotification";
 
+static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
+static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+
 #define USE_ENCRYP 0
 
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0

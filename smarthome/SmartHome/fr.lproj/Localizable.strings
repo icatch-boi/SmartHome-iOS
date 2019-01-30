@@ -446,7 +446,7 @@
 "kLogin" = "SIGN IN";
 "kForgotPassword" = "Forgot password";
 "kSignup" = "SIGN UP";
-"kEmail" = "E-mail";
+"kEmail" = "E-mail / Phone-number";
 "kPassword" = "Password";
 "kDonotHaveAccount" = "Don't have SmartHome account？";
 "kVerifycode" = "Enter verification code";
@@ -455,7 +455,7 @@
 "kTerms" = "Terms";
 "kAgreeTermsDes" = "By creating an account, you agree to our";
 "kAlreadyHaveAnAccount" = "Already have account?";
-"kSignupWithEmail" = "E-mail sign up";
+"kSignupWithEmail" = "Signup account";
 "kResetPassword" = "Reset Password";
 "kResetPasswording" = "Reseting...";
 "kSignuping" = "Sing up...";
@@ -466,7 +466,7 @@
 "kResetPasswordFailed" = "Reset password failed";
 "kSignupFailed" = "Sign up failed";
 "kInvalidEmail" = "Incorrect E-mail, try again.";
-"kVerifycodeAlreadySend" = "Verify code has send to your e-mail";
+"kVerifycodeAlreadySend" = "Verify code has send to your e-mail or mobile phone";
 "kVerifycodeSendFailed" = "Send verify code faild";
 "kUserAgreement" = "User agreement";
 "kLoginInvalid" = "Account login is invalid, please log in again";
