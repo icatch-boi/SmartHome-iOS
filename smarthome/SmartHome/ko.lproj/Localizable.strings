@@ -689,3 +689,4 @@
 "kNoAdded" = "No added";
 "kDoorbellAnsweringDescription" = "[%@] at the doorbell \"%@\", do you want to answer?";
 "kBiometricsDescription" = "Use the 'Biometric' feature to ensure that a camera is added under the account, otherwise this feature cannot be used.";
+"kTamperAlarm" = "Tamper alarm";

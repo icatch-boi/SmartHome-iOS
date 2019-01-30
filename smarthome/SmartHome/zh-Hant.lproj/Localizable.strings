@@ -703,3 +703,4 @@
 "kNoAdded" = "不添加";
 "kDoorbellAnsweringDescription" = "[%@] 在按門鈴 \"%@\"，是否要接聽？";
 "kBiometricsDescription" = "使用 '生物識別' 功能務必確保帳戶下添加有相機，否則此功能不能被使用。";
+"kTamperAlarm" = "防拆報警";

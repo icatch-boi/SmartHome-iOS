@@ -271,12 +271,12 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
  
         } else if (indexPath.section == SHSettingSectionTypeDetail) {
             
-            if(indexPath.row == 0) {
+            if(indexPath.row == 0 || indexPath.row == 1) {
                 cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_Basic forIndexPath:indexPath];
                 UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
                 
                 SHSettingData *data = self.mainMenuDetailTable[indexPath.row];
-                switchView.on = data.detailLastItem;
+                switchView.on = data.detailLastItem <= 0 ? NO : YES;
                 
                 [switchView addTarget:self action:@selector(updateSwitchStatus:) forControlEvents:UIControlEventValueChanged];
                 
@@ -360,7 +360,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     return title;
 }
 
-- (void)changeCameraPropertyValue:(int)propertyID newValue:(int)newValue preSwitch:(UISwitch *)sender {
+- (void)changeCameraPropertyValue:(int)propertyID newValue:(int)newValue preSwitch:(UISwitch *)sender finished:(void (^)(BOOL success))finished {
 #if 0
 //    [self.progressHUD showProgressHUDWithMessage:nil];
     
@@ -407,9 +407,45 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 
                 [self showOperationFailedAlertViewWithMessage:NSLocalizedString(@"STREAM_SET_ERROR", nil)];
             }
+            
+            if (finished) {
+                finished(retVal);
+            }
         });
     });
 #endif
+}
+
+- (void)changeCameraPropertyWithPropertyID:(list<int>)propertyIDs newValue:(int)newValue sender:(UISwitch *)sender finished:(void (^)(BOOL success))finished {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        __block BOOL retVal = NO;
+        
+        dispatch_sync([_shCamObj.sdk sdkQueue], ^{
+            SHSettingProperty *currentPro = [SHSettingProperty settingPropertyWithControl:_shCamObj.sdk.control];
+            
+            list<int>::const_iterator iter = propertyIDs.begin();
+            for (; iter != propertyIDs.end(); iter++) {
+                [currentPro addProperty:*iter withIntValue:newValue];
+            }
+            
+            retVal = [currentPro submit];
+        });
+        
+        SHLogInfo(SHLogTagAPP, @"Change Camera Property, ret: %d", retVal);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (retVal == NO) {
+                sender.on = !newValue;
+                sender.selected = YES;
+                
+                [self showOperationFailedAlertViewWithMessage:NSLocalizedString(@"STREAM_SET_ERROR", nil)];
+            }
+            
+            if (finished) {
+                finished(retVal);
+            }
+        });
+    });
 }
 
 - (void)showOperationFailedAlertViewWithMessage:(NSString *)message {
@@ -433,14 +469,9 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     switch (indexPath.section) {
         case SHSettingSectionTypeDetail:
             if (indexPath.row == 0) {
-                [self changeCameraPropertyValue:TRANS_PROP_DET_PUSH_MSG_STATUS newValue:value preSwitch:sender];
-                
-                _shCamObj.cameraProperty.pushMsgStatusData.detailLastItem = sender.isOn;
-                
-                _shCamObj.cameraProperty.recStatusData.detailLastItem = sender.isOn;
-                _shCamObj.cameraProperty.recStatusData.detailTextLabel = sender.isOn ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+                [self changePushMsgStatusHandler:sender value:value];
             } else if (indexPath.row == 1) {
-
+                [self changeTamperAlarmHandler:sender value:value];
             } else if (indexPath.row == 2) {
 
             }
@@ -449,6 +480,28 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         default:
             break;
     }
+}
+
+- (void)changePushMsgStatusHandler:(id)sender value:(BOOL)value {
+    [self changeCameraPropertyValue:TRANS_PROP_DET_PUSH_MSG_STATUS newValue:value preSwitch:sender finished:^(BOOL success) {
+        if (success) {
+            _shCamObj.cameraProperty.pushMsgStatusData.detailLastItem = value;
+            
+            _shCamObj.cameraProperty.recStatusData.detailLastItem = value;
+            _shCamObj.cameraProperty.recStatusData.detailTextLabel = value ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+        }
+    }];
+}
+
+- (void)changeTamperAlarmHandler:(id)sender value:(BOOL)value {
+    list<int> propertyIDs = list<int>();
+    propertyIDs.push_back(TRANS_PROP_TAMPER_ALARM);
+    
+    [self changeCameraPropertyWithPropertyID:propertyIDs newValue:value sender:sender finished:^(BOOL success) {
+        if (success) {
+            _shCamObj.cameraProperty.tamperalarmData.detailLastItem = value;
+        }
+    }];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -762,6 +815,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (void)fillDetailTable {
     [self.mainMenuDetailTable removeAllObjects];
     [self fillPushMsgStatusTable];
+    [self fillTamperAlarmTable];
     
     // [self fillWiFiSettingTable];
     [self fillDeviceInfoTable];
@@ -888,6 +942,30 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         if (!ret) {
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"STREAM_SET_ERROR", @"") showTime:2.0];
         }
+    }
+}
+
+- (void)fillTamperAlarmTable {
+    SHSettingData *tamperalarmData = nil;
+    
+    if (_shCamObj.cameraProperty.tamperalarmData) {
+        tamperalarmData = _shCamObj.cameraProperty.tamperalarmData;
+    } else {
+        SHRangeItemData *itemData = [SHRangeItemData rangeItemDataWithCamera:_shCamObj andPropertyID:TRANS_PROP_TAMPER_ALARM];
+        itemData.curResult = self.curResult;
+        itemData.rangeResult = self.supResult;
+        
+        int tamperalarm = [itemData retrieveRangeItemCurrentValueWithPropertyID:0];
+        
+        tamperalarmData = [[SHSettingData alloc] init];
+        tamperalarmData.textLabel = NSLocalizedString(@"kTamperAlarm", nil);
+        tamperalarmData.detailLastItem = tamperalarm;
+        
+        _shCamObj.cameraProperty.tamperalarmData = tamperalarmData;
+    }
+    
+    if (tamperalarmData) {
+        [self.mainMenuDetailTable addObject:tamperalarmData];
     }
 }
 

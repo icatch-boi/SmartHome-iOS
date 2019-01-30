@@ -26,6 +26,7 @@
     self.fasterConnectionData = nil;
     self.serverOpened = NO;
     self.curBatteryLevel = nil;
+    self.tamperalarmData = nil;
 }
 
 //- (NSMutableArray *)downloadArray {

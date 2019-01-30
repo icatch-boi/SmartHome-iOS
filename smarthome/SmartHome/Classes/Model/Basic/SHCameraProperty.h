@@ -50,6 +50,7 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic) SHSettingData *recStatusData;
 @property (nonatomic) SHSettingData *pushMsgStatusData;
 @property (nonatomic) SHSettingData *fasterConnectionData;
+@property (nonatomic) SHSettingData *tamperalarmData;
 
 @property (nonatomic) SHSettingData *aboutData;
 @property (nonatomic) SHSettingData *timeZoneData;

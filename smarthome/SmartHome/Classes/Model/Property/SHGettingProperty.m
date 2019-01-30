@@ -94,6 +94,7 @@
         case TRANS_PROP_DET_PUSH_MSG_STATUS:
         case TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE:
         case TRANS_PROP_CAMERA_CHARGE_STATUS:
+        case TRANS_PROP_TAMPER_ALARM:
             property = new ICatchTransProperty(propertyId,0x02);//get
             property->setDataType(0x00);//int
             break;

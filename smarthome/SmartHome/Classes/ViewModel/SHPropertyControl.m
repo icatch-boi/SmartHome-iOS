@@ -46,6 +46,8 @@
         
         [currentPro addProperty:TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE];
         
+        [currentPro addProperty:TRANS_PROP_TAMPER_ALARM];
+        
         result = [currentPro submit];
     });
     
