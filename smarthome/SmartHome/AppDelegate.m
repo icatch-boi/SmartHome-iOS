@@ -1188,7 +1188,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
     if (self.isVideoPB) {
-        return UIInterfaceOrientationMaskAll;
+        return UIInterfaceOrientationMaskAllButUpsideDown;
     } else if (self.isFullScreenPV) {
         return UIInterfaceOrientationMaskLandscape;
     }
