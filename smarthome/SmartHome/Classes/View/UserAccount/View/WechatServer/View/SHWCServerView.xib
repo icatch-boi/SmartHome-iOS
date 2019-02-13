@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="9fY-GZ-rBj" customClass="SHWCServerView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LRm-Jl-SHa">
+                    <rect key="frame" x="24" y="482" width="272" height="56"/>
+                    <state key="normal" title="解除绑定" backgroundImage="default-btn">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="default-btn-pre"/>
+                    <connections>
+                        <action selector="unlinkClick:" destination="9fY-GZ-rBj" eventType="touchUpInside" id="D6q-X1-EG7"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您已经成功开通SmartHome公众号服务，重要的侦测信息将通过公众号通知！" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22s-Af-XrP">
+                    <rect key="frame" x="30" y="50" width="260" height="57.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="—— 已绑定微信号 ——" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXG-Ro-B2X">
+                    <rect key="frame" x="65" y="201" width="190" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="caller ID display-logo" translatesAutoresizingMaskIntoConstraints="NO" id="8iB-Hi-QZY">
+                    <rect key="frame" x="110" y="234" width="100" height="100"/>
+                    <color key="backgroundColor" red="0.5568627451" green="0.5568627451" blue="0.5568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="8iB-Hi-QZY" secondAttribute="height" id="3xq-qt-8Qt"/>
+                        <constraint firstAttribute="height" constant="100" id="NWU-K3-6ok"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="微信号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ucz-aD-3ED">
+                    <rect key="frame" x="135.5" y="342" width="49" height="20"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Ucz-aD-3ED" firstAttribute="centerX" secondItem="9fY-GZ-rBj" secondAttribute="centerX" id="7Y3-aF-sN2"/>
+                <constraint firstItem="Ucz-aD-3ED" firstAttribute="top" secondItem="8iB-Hi-QZY" secondAttribute="bottom" constant="8" id="9Mc-jb-t54"/>
+                <constraint firstItem="8iB-Hi-QZY" firstAttribute="top" secondItem="iXG-Ro-B2X" secondAttribute="bottom" constant="12" id="JjQ-3K-UC6"/>
+                <constraint firstItem="wW6-vq-UIM" firstAttribute="bottom" secondItem="LRm-Jl-SHa" secondAttribute="bottom" constant="30" id="K2m-Vk-umv"/>
+                <constraint firstItem="22s-Af-XrP" firstAttribute="top" secondItem="wW6-vq-UIM" secondAttribute="top" constant="30" id="NBs-09-AKd"/>
+                <constraint firstItem="iXG-Ro-B2X" firstAttribute="centerX" secondItem="9fY-GZ-rBj" secondAttribute="centerX" id="TrK-Du-EED"/>
+                <constraint firstItem="22s-Af-XrP" firstAttribute="leading" secondItem="9fY-GZ-rBj" secondAttribute="leading" constant="30" id="UaP-sp-5Ib"/>
+                <constraint firstItem="22s-Af-XrP" firstAttribute="centerX" secondItem="9fY-GZ-rBj" secondAttribute="centerX" id="Vhj-Z0-UAS"/>
+                <constraint firstAttribute="trailing" secondItem="22s-Af-XrP" secondAttribute="trailing" constant="30" id="e3i-mq-Gy3"/>
+                <constraint firstItem="LRm-Jl-SHa" firstAttribute="centerX" secondItem="9fY-GZ-rBj" secondAttribute="centerX" id="e5H-Le-s6f"/>
+                <constraint firstItem="8iB-Hi-QZY" firstAttribute="centerX" secondItem="9fY-GZ-rBj" secondAttribute="centerX" id="nYP-iD-u8U"/>
+                <constraint firstItem="8iB-Hi-QZY" firstAttribute="centerY" secondItem="9fY-GZ-rBj" secondAttribute="centerY" id="ubx-YZ-vq6"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="wW6-vq-UIM"/>
+            <point key="canvasLocation" x="391" y="-107"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="caller ID display-logo" width="100" height="100"/>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
+    </resources>
+</document>

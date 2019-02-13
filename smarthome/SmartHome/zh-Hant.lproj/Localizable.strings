@@ -702,5 +702,5 @@
 "kAddStrangerFacePicture" = "系統識別到有陌生人在按門鈴，是否將其加入到人臉數據庫中？";
 "kNoAdded" = "不添加";
 "kDoorbellAnsweringDescription" = "[%@] 在按門鈴 \"%@\"，是否要接聽？";
-"kBiometricsDescription" = "使用 '生物識別' 功能務必確保帳戶下添加有相機，否則此功能不能被使用。";
+"kBiometricsDescription" = "使用 '生物識別' 功能務必確保帳戶下添加有自己的（非分享）相機設備，否則此功能不能被使用。";
 "kTamperAlarm" = "防拆報警";

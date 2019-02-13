@@ -43,6 +43,7 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 @property (weak, nonatomic) IBOutlet UILabel *lastPreviewTime;
 @property (weak, nonatomic) IBOutlet UILabel *cameraInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (nonatomic, strong) UILabel *sharedLabel;
 
 @end
 
@@ -131,6 +132,33 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
+    (viewModel.cameraObj.camera.operable == 1) ? void() : [self addShareDescriptionLabel];
+}
+
+- (UILabel *)sharedLabel {
+    if (_sharedLabel == nil) {
+        _sharedLabel = [[UILabel alloc] init];
+        _sharedLabel.text = @"Shared";
+        _sharedLabel.font = [UIFont systemFontOfSize:12.0];
+        _sharedLabel.textColor = [UIColor ic_colorWithHex:kThemeColor];
+    }
+    
+    return _sharedLabel;
+}
+
+- (void)layoutSharedLabel {
+    CGRect rect = [_footBarView convertRect:_shareBtn.frame toView:_shareBtn];
+    CGFloat w = [SHTool stringSizeWithString:self.sharedLabel.text font:self.sharedLabel.font].width;
+    CGFloat h = [SHTool stringSizeWithString:self.sharedLabel.text font:self.sharedLabel.font].height;
+    CGFloat x = (CGRectGetWidth(rect) - w) * 0.5;
+    CGFloat y = CGRectGetHeight(rect) - h;
+    
+    self.sharedLabel.frame = CGRectMake(x, y, w, h);
+}
+
+- (void)addShareDescriptionLabel {
+    [self.shareBtn addSubview:self.sharedLabel];
+    [self layoutSharedLabel];
 }
 
 - (UIImage *)createHighlightedImageWithImage:(UIImage *)image {

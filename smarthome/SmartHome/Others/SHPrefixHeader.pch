@@ -30,9 +30,6 @@
 #import "CoreDataHandlerHeader.h"
 #import "ZJSlidingDrawerViewController.h"
 
-// 代码混淆生成的头文件（方法名->随机字符串）
-//#import "codeObfuscation.h"
-
 #endif
 
 #endif /* SHPrefixHeader_pch */

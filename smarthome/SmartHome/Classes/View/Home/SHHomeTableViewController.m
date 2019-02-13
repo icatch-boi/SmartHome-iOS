@@ -1027,7 +1027,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     
     if (notification && [notification.allKeys containsObject:@"result"] && [notification.allKeys containsObject:@"attachment"]) {
         int result = [notification[@"result"] intValue];
-        if (result == 0) {
+        NSString *devID = notification[@"devID"];
+        if (result == 0 && [self deviceOperable:devID]) {
             [self showAddFacesAlertView];
         } else {
             [self cleanFaceNotification];
@@ -1035,6 +1036,19 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     } else {
         [self cleanFaceNotification];
     }
+}
+
+- (BOOL)deviceOperable:(NSString *)uid {
+    if (uid == nil || uid.length <= 0) {
+        return NO;
+    }
+    
+    SHCameraObject *obj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:uid];
+    if (obj.camera.operable == 1) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)showAddFacesAlertView {

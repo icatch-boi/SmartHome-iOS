@@ -11,6 +11,7 @@
 #import "SHMessagesListTVC.h"
 #import <Photos/Photos.h>
 #import "ZJSlidingDrawerViewController.h"
+#import "SHWechatServerVC.h"
 
 @interface SHUserAccountInfoTVC () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -19,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UILabel *modifyPWDLabel;
 @property (weak, nonatomic) IBOutlet UILabel *faceRecognitionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wechatServerLabel;
 
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, assign) BOOL enableFaceRecognition;
@@ -41,7 +43,20 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
-    _enableFaceRecognition = [SHCameraManager sharedCameraManger].smarthomeCams.count > 0;
+    _enableFaceRecognition = [SHCameraManager sharedCameraManger].smarthomeCams.count > 0 && [self checkAccountWhetherHaveDevice];
+}
+
+- (BOOL)checkAccountWhetherHaveDevice {
+    __block BOOL have = NO;
+    NSArray *devices = [SHCameraManager sharedCameraManger].smarthomeCams.copy;
+    [devices enumerateObjectsUsingBlock:^(SHCameraObject *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.camera.operable == 1) {
+            have = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return have;
 }
 
 - (void)setupGUI {
@@ -171,12 +186,20 @@
             break;
             
         case 2:
-            [self modifyPassword];
+            [self enterWeChatServer];
             break;
             
         default:
             break;
     }
+}
+
+- (void)enterWeChatServer {
+    SHWechatServerVC *vc = [SHWechatServerVC wechatServerVC];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [SHTool configureAppThemeWithController:nav];
+    
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)enterFaceRecognition {

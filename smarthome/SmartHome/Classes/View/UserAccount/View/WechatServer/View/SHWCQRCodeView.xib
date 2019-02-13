@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="5XZ-4O-9Uh" customClass="SHWCQRCodeView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shareQRCode" translatesAutoresizingMaskIntoConstraints="NO" id="0t7-Mx-DiO">
+                    <rect key="frame" x="60" y="184" width="200" height="200"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="0t7-Mx-DiO" secondAttribute="height" id="JaE-0K-JaI"/>
+                        <constraint firstAttribute="width" constant="200" id="zDo-4O-99t"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fTk-cB-VXw">
+                    <rect key="frame" x="24" y="482" width="272" height="56"/>
+                    <state key="normal" title="保存二维码到相册" backgroundImage="default-btn">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="default-btn-pre"/>
+                    <connections>
+                        <action selector="saveQRCodeClick:" destination="5XZ-4O-9Uh" eventType="touchUpInside" id="Fwe-tF-Yn0"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开通SmartHome公众号服务及时接收运动侦测等信息" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrs-94-UPM">
+                    <rect key="frame" x="40" y="394" width="240" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击下方按钮保存二维码" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zgs-Z1-erW">
+                    <rect key="frame" x="48" y="50" width="224.5" height="24"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="0t7-Mx-DiO" firstAttribute="centerX" secondItem="5XZ-4O-9Uh" secondAttribute="centerX" id="HL3-Uj-tJA"/>
+                <constraint firstItem="Zgs-Z1-erW" firstAttribute="centerX" secondItem="5XZ-4O-9Uh" secondAttribute="centerX" id="HzA-us-ZyJ"/>
+                <constraint firstItem="Jrs-94-UPM" firstAttribute="top" secondItem="0t7-Mx-DiO" secondAttribute="bottom" constant="10" id="PTN-nC-1rM"/>
+                <constraint firstItem="0t7-Mx-DiO" firstAttribute="centerY" secondItem="5XZ-4O-9Uh" secondAttribute="centerY" id="Yun-6g-JRN"/>
+                <constraint firstItem="Jrs-94-UPM" firstAttribute="leading" secondItem="ELS-0H-9rx" secondAttribute="leading" constant="40" id="dmL-sG-0vJ"/>
+                <constraint firstAttribute="trailing" secondItem="Jrs-94-UPM" secondAttribute="trailing" constant="40" id="eFq-3T-WN3"/>
+                <constraint firstItem="ELS-0H-9rx" firstAttribute="bottom" secondItem="fTk-cB-VXw" secondAttribute="bottom" constant="30" id="ewH-jY-VQb"/>
+                <constraint firstItem="fTk-cB-VXw" firstAttribute="centerX" secondItem="5XZ-4O-9Uh" secondAttribute="centerX" id="k1P-Hx-iQf"/>
+                <constraint firstItem="Zgs-Z1-erW" firstAttribute="top" secondItem="ELS-0H-9rx" secondAttribute="top" constant="30" id="yZt-fV-Lv4"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ELS-0H-9rx"/>
+            <connections>
+                <outlet property="qrcodeImgView" destination="0t7-Mx-DiO" id="fV0-rS-ana"/>
+                <outlet property="saveButton" destination="fTk-cB-VXw" id="Pl8-Ye-KZd"/>
+            </connections>
+            <point key="canvasLocation" x="393.75" y="5.28169014084507"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
+        <image name="shareQRCode" width="316" height="316"/>
+    </resources>
+</document>

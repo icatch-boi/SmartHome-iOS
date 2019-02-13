@@ -672,7 +672,7 @@
 "kRecognitionFailed" = "Recognition error, please try again";
 "kResetFacePictureSuccess" = "Reset [%@] The face image is successful.";
 "kAddFacePictureSuccess" = "Add [%@] face image successfully.";
-"kAddSuccess" = "Added success";
+"kAddSuccess" = "Add success";
 "kResetSuccess" = "Reset success";
 "kSetupFaceName" = "Please enter a face name";
 "kUploadFacePicture" = "Upload";
@@ -688,5 +688,5 @@
 "kAddStrangerFacePicture" = "The system recognizes that a stranger is ringing the doorbell. Do you want to add it to the face database?";
 "kNoAdded" = "No added";
 "kDoorbellAnsweringDescription" = "[%@] at the doorbell \"%@\", do you want to answer?";
-"kBiometricsDescription" = "Use the 'Biometric' feature to ensure that a camera is added under the account, otherwise this feature cannot be used.";
+"kBiometricsDescription" = "Use the 'Biometric' feature to ensure that your own (non-shared) camera device is added under your account, otherwise this feature will not be available.";
 "kTamperAlarm" = "Tamper alarm";

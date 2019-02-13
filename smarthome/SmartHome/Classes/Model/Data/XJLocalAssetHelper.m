@@ -191,6 +191,11 @@ static XJLocalAssetHelper *instance = nil;
 }
 
 - (void)addLocalIdentifier:(NSString *)localIdentifier forKey:(NSString *)key {
+    if (key == nil) {
+        SHLogWarn(SHLogTagAPP, @"LocalIdentifier key is nil.");
+        return;
+    }
+    
     NSMutableArray *array = [NSMutableArray arrayWithArray:[self readFromPlist]];
     
     if (array && array.count) {

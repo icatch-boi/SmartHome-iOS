@@ -706,5 +706,5 @@
 "kAddStrangerFacePicture" = "系统识别到有陌生人在按门铃，是否要将其加入到人脸数据库中？";
 "kNoAdded" = "不添加";
 "kDoorbellAnsweringDescription" = "[%@] 在按门铃 \"%@\"，是否要接听？";
-"kBiometricsDescription" = "使用 '生物识别' 功能务必确保账户下添加有相机，否则此功能不能被使用。";
+"kBiometricsDescription" = "使用 '生物识别' 功能务必确保账户下添加有自己的（非分享）相机设备，否则此功能不能被使用。";
 "kTamperAlarm" = "防拆报警";

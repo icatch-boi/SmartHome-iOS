@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="qlM-aB-Tgs" customClass="SHWCConcernView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ovQ-Lp-d3o">
+                    <rect key="frame" x="60" y="94" width="200" height="300"/>
+                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ovQ-Lp-d3o" secondAttribute="height" multiplier="1:1.5" id="2OZ-dw-r48"/>
+                        <constraint firstAttribute="width" constant="200" id="HjY-wS-05A"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PRy-zt-vqP">
+                    <rect key="frame" x="27" y="482" width="272" height="56"/>
+                    <state key="normal" title="打开微信进行关注" backgroundImage="default-btn">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="default-btn-pre"/>
+                    <connections>
+                        <action selector="openWeChatClick:" destination="qlM-aB-Tgs" eventType="touchUpInside" id="vkP-XD-aJh"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="微信扫一扫进行关注" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jOw-nK-A1d">
+                    <rect key="frame" x="30" y="50" width="260" height="24"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="打开微信，从相册中选择刚刚保存的二维码扫码关注" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-hJ-GWg">
+                    <rect key="frame" x="30" y="404" width="260" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="tjh-hJ-GWg" firstAttribute="top" secondItem="ovQ-Lp-d3o" secondAttribute="bottom" constant="10" id="9vV-PR-RAO"/>
+                <constraint firstItem="7qZ-Ju-VD1" firstAttribute="trailing" secondItem="tjh-hJ-GWg" secondAttribute="trailing" constant="30" id="Bhe-TI-ET8"/>
+                <constraint firstItem="jOw-nK-A1d" firstAttribute="top" secondItem="7qZ-Ju-VD1" secondAttribute="top" constant="30" id="HHV-if-TF2"/>
+                <constraint firstItem="jOw-nK-A1d" firstAttribute="leading" secondItem="qlM-aB-Tgs" secondAttribute="leading" constant="30" id="HOG-Nm-8qg"/>
+                <constraint firstItem="jOw-nK-A1d" firstAttribute="centerX" secondItem="qlM-aB-Tgs" secondAttribute="centerX" id="Q0w-at-2dP"/>
+                <constraint firstItem="tjh-hJ-GWg" firstAttribute="leading" secondItem="7qZ-Ju-VD1" secondAttribute="leading" constant="30" id="U6w-bf-H4j"/>
+                <constraint firstItem="ovQ-Lp-d3o" firstAttribute="top" secondItem="jOw-nK-A1d" secondAttribute="bottom" constant="20" id="WGZ-gH-MT1"/>
+                <constraint firstItem="PRy-zt-vqP" firstAttribute="centerX" secondItem="qlM-aB-Tgs" secondAttribute="centerX" constant="3" id="c6e-V9-XPj"/>
+                <constraint firstItem="ovQ-Lp-d3o" firstAttribute="centerX" secondItem="qlM-aB-Tgs" secondAttribute="centerX" id="lLi-2R-jpz"/>
+                <constraint firstItem="7qZ-Ju-VD1" firstAttribute="bottom" secondItem="PRy-zt-vqP" secondAttribute="bottom" constant="30" id="nKn-2c-oat"/>
+                <constraint firstAttribute="trailing" secondItem="jOw-nK-A1d" secondAttribute="trailing" constant="30" id="spO-2B-IUB"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="7qZ-Ju-VD1"/>
+            <connections>
+                <outlet property="openWCButton" destination="PRy-zt-vqP" id="Gbh-9g-cDw"/>
+                <outlet property="operationImgView" destination="ovQ-Lp-d3o" id="sSU-D5-r1K"/>
+            </connections>
+            <point key="canvasLocation" x="289" y="31"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
+    </resources>
+</document>
