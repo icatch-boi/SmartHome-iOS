@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)shareCameraWithCameraID:(NSString *)cameraId toUser:(NSString *)usreID permission:(char)permisssion duration:(long)duration completion:(RequestCompletionBlock)completion;
 
 //订阅、取消
-- (void)subscribeCameraWithCameraID:(NSString *)cameraId invitationCode:(NSString * _Nullable)code completion:(RequestCompletionBlock)completion;
+- (void)subscribeCameraWithCameraID:(NSString *)cameraId cameraName:(NSString *)cameraName invitationCode:(NSString * _Nullable)code completion:(RequestCompletionBlock)completion;
 - (void)unsubscribeCameraWithCameraID:(NSString *)cameraId completion:(RequestCompletionBlock)completion;
 - (void)getCameraSubscribersWithCameraID:(NSString *)cameraId status:(int)status completion:(RequestCompletionBlock)completion;
 - (void)removeCameraSubscriberWithCameraID:(NSString *)cameraId userID:(NSString *_Nonnull)userId completion:(RequestCompletionBlock)completion;

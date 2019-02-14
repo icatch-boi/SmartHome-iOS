@@ -477,7 +477,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
-            [weakself showDeviceNameInvalidAlertView];
+            [weakself showDeviceNameInvalidAlertView:^{
+                [weakself showAddDeviceTips];
+            }];
             return;
         }
         
@@ -491,14 +493,17 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [self presentViewController:alertVC animated:YES completion:nil];
 }
 
-- (void)showDeviceNameInvalidAlertView {
+- (void)showDeviceNameInvalidAlertView:(void (^)(void))finishedBlock {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kDeviceNameInvalidDescription", nil), (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength] preferredStyle:UIAlertControllerStyleAlert];
     
-    WEAK_SELF(self);
+//    WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        STRONG_SELF(self);
+//        STRONG_SELF(self);
         
-        [self showAddDeviceTips];
+//        [self showAddDeviceTips];
+        if (finishedBlock) {
+            finishedBlock();
+        }
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
@@ -646,6 +651,15 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     
+    __block UITextField *deviceNameField = nil;
+    [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        textField.returnKeyType = UIReturnKeyDone;
+        textField.placeholder = NSLocalizedString(@"kDeviceName", nil);
+        
+        deviceNameField = textField;
+    }];
+    
     WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -653,6 +667,18 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         });
     }]];
     [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Sure"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
+            [weakself showDeviceNameInvalidAlertView:^{
+                [self showSubscribeCameraAlertView:dict];
+            }];
+            return;
+        }
+        
+        if (![deviceNameField.text isEqualToString:@""]) {
+            NSString *cameraName = deviceNameField.text;
+            [[NSUserDefaults standardUserDefaults] setObject:cameraName forKey:kSubscribeCameraName];
+        }
+        
         [weakself subscribeCamera:dict];
     }]];
     
@@ -723,7 +749,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         WEAK_SELF(self);
-        [[SHNetworkManager sharedNetworkManager] subscribeCameraWithCameraID:cameraId invitationCode:invitationCode completion:^(BOOL isSuccess, id  _Nullable result) {
+        [[SHNetworkManager sharedNetworkManager] subscribeCameraWithCameraID:cameraId cameraName:[[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName] invitationCode:invitationCode completion:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"Subscribe camera is success: %d", isSuccess);
             
             if (isSuccess) {
@@ -809,13 +835,16 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         isExist = YES;
         
         SHCamera *camera = fetchedObjects.firstObject;
-        camera.cameraName = camera_server.name;
+        camera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName]; //camera_server.name;
         camera.cameraUid = camera_server.uid;
         camera.devicePassword = camera_server.devicepassword;
         camera.id = camera_server.id;
         camera.operable = operable;
         
-        camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+//        camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyyMMdd HHmmss"];
+        camera.createTime = [df stringFromDate:[NSDate date]];
 
         // Save data to sqlite
         NSError *error = nil;
@@ -838,7 +867,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     } else {
         SHLogInfo(SHLogTagAPP, @"Create a camera");
         SHCamera *savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
-        savedCamera.cameraName = camera_server.name;
+        savedCamera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName]; //camera_server.name;
         savedCamera.cameraUid = camera_server.uid;
         savedCamera.devicePassword = camera_server.devicepassword;
         savedCamera.id = camera_server.id;
@@ -853,7 +882,10 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         savedCamera.createTime = [df stringFromDate:currentDate];
         SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
 #else
-        savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+//        savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyyMMdd HHmmss"];
+        savedCamera.createTime = [df stringFromDate:[NSDate date]];
 #endif
         // Save data to sqlite
         NSError *error = nil;

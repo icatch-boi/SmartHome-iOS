@@ -564,8 +564,8 @@
 "kTryagain" = "再試一次";
 "kConfigureDeviceFailed" = "配置設備失敗";
 "kConfigureDeviceFailedDescription" = "請再試一次，務必確保輸入的Wi-Fi密碼是正確的。";
-"kSureSubscribeSomeoneDevice" = "確定要訂閱[%@]分享給您的設備嗎？";
-"kSureSubscribeNewDevice" = "確定要訂閱新設備嗎？";
+"kSureSubscribeSomeoneDevice" = "確定要訂閱[%@]分享給您的設備嗎？\n請在下方方框內輸入設備名稱：";
+"kSureSubscribeNewDevice" = "確定要訂閱新設備嗎？\n請在下方方框內輸入設備名稱：";
 "kSubscribeFailed" = "訂閱失敗";
 "kGetDeviceFailed" = "獲取設備失敗";
 "kConnectionAccountServerFailed" = "連接帳戶服務器失敗";

@@ -24,27 +24,27 @@
     dispatch_sync(shCameraObj.sdk.sdkQueue, ^{
         SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
         
-        [currentPro addProperty:TRANS_PROP_CAMERA_WHITE_BALANCE];
-        [currentPro addProperty:TRANS_PROP_CAMERA_LIGHT_FREQUENCY];
-        [currentPro addProperty:TRANS_PROP_CAMERA_VIDEO_SIZE];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_WHITE_BALANCE];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_LIGHT_FREQUENCY];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_VIDEO_SIZE];
         
-        [currentPro addProperty:TRANS_PROP_DET_PIR_SENSITIVITY];
-        [currentPro addProperty:TRANS_PROP_CAMERA_BRIGHTNESS];
+//        [currentPro addProperty:TRANS_PROP_DET_PIR_SENSITIVITY];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_BRIGHTNESS];
         [currentPro addProperty:TRANS_PROP_DET_VID_REC_DURATION];
-        [currentPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
-        [currentPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
         [currentPro addProperty:TRANS_PROP_CAMERA_SLEEP_TIME];
         
-//        [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
+        [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
         
         [currentPro addProperty:TRANS_PROP_DET_VID_REC_STATUS];
         [currentPro addProperty:TRANS_PROP_DET_PUSH_MSG_STATUS];
         [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
         
         [currentPro addProperty:TRANS_PROP_CAMERA_VERSION];
-        [currentPro addProperty:TRANS_PROP_CAMERA_TIME_ZONE];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_TIME_ZONE];
         
-        [currentPro addProperty:TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE];
+//        [currentPro addProperty:TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE];
         
         [currentPro addProperty:TRANS_PROP_TAMPER_ALARM];
         

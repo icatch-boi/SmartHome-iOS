@@ -486,11 +486,11 @@
     }
 }
 
-- (void)subscribeCameraWithCameraID:(NSString *)cameraId invitationCode:(NSString * _Nullable)code completion:(RequestCompletionBlock)completion {
+- (void)subscribeCameraWithCameraID:(NSString *)cameraId cameraName:(NSString *)cameraName invitationCode:(NSString * _Nullable)code completion:(RequestCompletionBlock)completion {
     if (self.userAccount.access_tokenHasEffective) {
         if (code != nil) {
             
-            [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withShareCode:code withDeviceMemoName:nil success:^{
+            [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withShareCode:code withDeviceMemoName:cameraName success:^{
                 if (completion) {
                     completion(YES, nil);
                 }
@@ -502,7 +502,7 @@
                 }
             }];
         } else {
-            [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withDeviceMemoName:nil success:^{
+            [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withDeviceMemoName:cameraName success:^{
                 if (completion) {
                     completion(YES, nil);
                 }
@@ -518,7 +518,7 @@
         [self refreshToken:^(BOOL isSuccess, id  _Nonnull result) {
             if (isSuccess) {
                 if (code != nil) {
-                    [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withShareCode:code withDeviceMemoName:@"devicexx" success:^{
+                    [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withShareCode:code withDeviceMemoName:cameraName success:^{
                         if (completion) {
                             completion(YES, nil);
                         }
@@ -530,7 +530,7 @@
                         }
                     }];
                 } else {
-                    [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withDeviceMemoName:@"device xx" success:^{
+                    [self.cameraOperate subscribeCamera:cameraId WithToken:[self createToken] withDeviceMemoName:cameraName success:^{
                         if (completion) {
                             completion(YES, nil);
                         }

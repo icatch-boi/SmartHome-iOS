@@ -132,7 +132,7 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
-    (viewModel.cameraObj.camera.operable == 1) ? void() : [self addShareDescriptionLabel];
+    (viewModel.cameraObj.camera.operable == 1) ? [self removeShareDescriptionLabel] : [self addShareDescriptionLabel];
 }
 
 - (UILabel *)sharedLabel {
@@ -159,6 +159,17 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 - (void)addShareDescriptionLabel {
     [self.shareBtn addSubview:self.sharedLabel];
     [self layoutSharedLabel];
+}
+
+- (void)removeShareDescriptionLabel {
+    for (UIView *v in self.shareBtn.subviews) {
+        if ([v isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)v;
+            if ([label.text isEqualToString:@"Shared"]) {
+                [v removeFromSuperview];
+            }
+        }
+    }
 }
 
 - (UIImage *)createHighlightedImageWithImage:(UIImage *)image {

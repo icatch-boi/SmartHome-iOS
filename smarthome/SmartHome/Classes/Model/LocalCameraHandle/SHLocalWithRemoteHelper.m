@@ -50,7 +50,12 @@
   //              [[CoreDataHandler sharedCoreDataHander] deleteAllCameras];
                 [[CoreDataHandler sharedCoreDataHander] updateLocalCamerasWithRemoteCameras:result];
                 
+#if 0
+                // use device list2 api
                 [weakself addCameras2LocalSqlite:result completion:completion];
+#else
+                [weakself getDeviceDetailInfoAndAdd2Local:result completion:completion];
+#endif
                 [self checkDevicesStatus:result];
             } else {
                 Error *error = result;
@@ -210,6 +215,72 @@
     } else {
         SHLogError(SHLogTagAPP, @"Get thumbnail failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
     }
+}
+
++ (void)getDeviceDetailInfoAndAdd2Local:(NSArray *)cameraList completion:(SyncRemoteDataCompletionBlock)completion {
+    if (cameraList == nil) {
+        SHLogError(SHLogTagSDK, @"cameraList is nil.");
+        
+        if (completion) {
+            completion(NO);
+        }
+        
+        return;
+    }
+    
+    if (cameraList.count == 0) {
+        if (completion) {
+            completion(YES);
+        }
+    } else {
+        __block BOOL success = YES;
+        [cameraList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Camera *info = obj;
+
+            [[SHNetworkManager sharedNetworkManager] getCameraByCameraID:info.id completion:^(BOOL isSuccess, id  _Nullable result) {
+                if (isSuccess == YES) {
+                    [self addDevice2LocalWithBaseInfo:info deviceInfo:result];
+                } else {
+                    success = isSuccess;
+                }
+                
+                if (idx == (cameraList.count - 1)) {
+                    if (completion) {
+                        completion(success);
+                    }
+                }
+            }];
+        }];
+    }
+}
+
++ (void)addDevice2LocalWithBaseInfo:(Camera *)baseInfo deviceInfo:(Camera *)deviceInfo {
+    if (baseInfo == nil || deviceInfo == nil) {
+        SHLogError(SHLogTagAPP, @"baseInfo or deviceInfo is nil, baseInfo: %@, deviceInfo: %@", baseInfo, deviceInfo);
+        return;
+    }
+    
+    int operable = 1;
+    
+    NSString *owner = [SHNetworkManager sharedNetworkManager].userAccount.id;
+    if (![deviceInfo.ownerId isEqualToString:owner]) {
+        operable = 0;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"Own camera: %@, camera uid: %@", operable == 1 ? @"YES" : @"NO", deviceInfo.uid);
+    
+    NSString *name = baseInfo.name;
+    if (name == nil || name.length <= 0 || [name isEqualToString:@"(null)"]) {
+        name = [deviceInfo.uid substringToIndex:5];
+    }
+    
+//    [self getThumbnailWithName:name permission:permission camera:camera_server];
+
+    SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:deviceInfo.uid devicePassword:deviceInfo.devicepassword id:deviceInfo.id thumbnail:nil operable:operable];
+    camera.addTime = [SHTool localDBTimeStringFromServer:baseInfo.time];
+    SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
+    
+    [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
 }
 
 @end

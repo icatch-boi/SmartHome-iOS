@@ -550,8 +550,8 @@
 "kTryagain" = "Try again";
 "kConfigureDeviceFailed" = "Add device failed";
 "kConfigureDeviceFailedDescription" = "Please make sure the Wi-Fi name and password are correct.";
-"kSureSubscribeSomeoneDevice" = "Are you sure want to subscribe this doorbell from [%@]";
-"kSureSubscribeNewDevice" = "Are you sure want to subsribe new device?";
+"kSureSubscribeSomeoneDevice" = "Are you sure want to subscribe this doorbell from [%@]? \nPlease enter the device name in the box below:";
+"kSureSubscribeNewDevice" = "Are you sure want to subsribe new device? \nPlease enter the device name in the box below:";
 "kSubscribeFailed" = "Subsribe failed";
 "kGetDeviceFailed" = "Loading failed";
 "kConnectionAccountServerFailed" = "Connecting to Account server failed";

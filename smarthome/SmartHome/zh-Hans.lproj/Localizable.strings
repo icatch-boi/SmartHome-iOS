@@ -568,8 +568,8 @@
 "kTryagain" = "再试一次";
 "kConfigureDeviceFailed" = "配置设备失败";
 "kConfigureDeviceFailedDescription" = "请再试一次，务必确保输入的Wi-Fi密码是正确的。";
-"kSureSubscribeSomeoneDevice" = "确定要订阅[%@]分享给您的设备吗？";
-"kSureSubscribeNewDevice" = "确定要订阅新设备吗？";
+"kSureSubscribeSomeoneDevice" = "确定要订阅[%@]分享给您的设备吗？\n请在下方方框内输入设备名称：";
+"kSureSubscribeNewDevice" = "确定要订阅新设备吗？\n请在下方方框内输入设备名称：";
 "kSubscribeFailed" = "订阅失败";
 "kGetDeviceFailed" = "获取设备失败";
 "kConnectionAccountServerFailed" = "连接帐户服务器失败";
