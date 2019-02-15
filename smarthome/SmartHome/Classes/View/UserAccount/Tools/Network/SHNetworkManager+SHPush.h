@@ -32,13 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString * const CLIENT_INFO = @"v1/users/clientinfo";
 
 typedef enum : NSUInteger {
-    SHRequestMethodGET,
-    SHRequestMethodPOST,
-    SHRequestMethodPUT,
-    SHRequestMethodDELETE,
-} SHRequestMethod;
-
-typedef enum : NSUInteger {
     SHPushTypeOur,
     SHPushTypeOther,
 } SHPushType;

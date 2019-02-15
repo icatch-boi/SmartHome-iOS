@@ -326,7 +326,7 @@
             [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
             [self.sdk destroySHSDK];
             // FIXME: - 暂时mark
-//            [self.streamOper uploadPreviewThumbnailToServer];
+            [self.streamOper uploadPreviewThumbnailToServer];
             [self cleanCamera];
 
             if (successBlock) {

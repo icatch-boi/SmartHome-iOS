@@ -14,6 +14,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^RequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
+typedef enum : NSUInteger {
+    SHRequestMethodGET,
+    SHRequestMethodPOST,
+    SHRequestMethodPUT,
+    SHRequestMethodDELETE,
+} SHRequestMethod;
+
+static NSTimeInterval TIME_OUT_INTERVAL = 10.0;
 
 //static NSString * const ServerBaseUrl = @"http://52.79.113.238:3006/";
 static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";

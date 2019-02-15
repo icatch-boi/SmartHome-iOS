@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString * const DEVICE_COVERS_PATH = @"v1/devices/covers";
+
 @interface SHNetworkManager (SHCamera)
 
 - (void)bindCameraWithCameraUid:(NSString *)cameraUid name:(NSString *)cameraName password:(NSString *)password completion:(RequestCompletionBlock)completion;
@@ -24,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)changeCameraPasswordByCameraID:(NSString * _Nonnull)cameraId andNewPassword:(NSString *_Nonnull)password completion:(RequestCompletionBlock)completion;
 
 - (void)updateCameraCoverByCameraID:(NSString *)cameraId andCoverData:(NSData *)data completion:(RequestCompletionBlock)completion;
+- (void)getCameraCoverByCameraID:(NSString *)cameraId completion:(RequestCompletionBlock)completion;
 
 - (void)checkDeviceHasExistsWithUID:(NSString *)uid completion:(RequestCompletionBlock)completion;
 

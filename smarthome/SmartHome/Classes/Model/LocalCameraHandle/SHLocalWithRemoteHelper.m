@@ -281,6 +281,59 @@
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
+    [self getThumbnailWithdeviceInfo:deviceInfo];
+}
+
++ (void)getThumbnailWithdeviceInfo:(Camera *)deviceInfo {
+    [[SHNetworkManager sharedNetworkManager] getCameraCoverByCameraID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            [self downloadThumbnailWithURLString:result[@"url"] finised:^(UIImage *thumbnail) {
+                SHCameraHelper *camera = [[SHCameraHelper alloc] init];
+                camera.cameraUid = deviceInfo.uid;
+                camera.thumnail = thumbnail;
+                
+                [[CoreDataHandler sharedCoreDataHander] updateCameraThumbnail:camera];
+            }];
+        } else {
+            SHLogError(SHLogTagAPP, @"Request failed, error: %@", result);
+        }
+    }];
+}
+
++ (void)downloadThumbnailWithURLString:(NSString *)urlString finised:(void (^)(UIImage *thumbnail))finised {
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:TIME_OUT_INTERVAL];
+    
+    if (urlString != nil && url != nil && request != nil) {
+        NSDate *start = [NSDate date];
+        
+        [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            NSDate *end = [NSDate date];
+            SHLogInfo(SHLogTagAPP, @"Get thumbnail interval: %f.", [end timeIntervalSinceDate:start]);
+            
+            if (error == nil) {
+                if (data != nil && data.length > 0) {
+                    UIImage *thumbnail = [[UIImage alloc] initWithData:data];
+                    
+                    if (thumbnail != nil) {
+                        SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %lu.", data.length);
+                        
+                        if (finised) {
+                            finised(thumbnail);
+                        }
+                    } else {
+                        SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                    }
+                } else {
+                    SHLogError(SHLogTagAPP, @"Get thumbnail failed, data length: %lu.", data.length);
+                }
+            } else {
+                SHLogError(SHLogTagAPP, @"Request failed, error: %@", error);
+            }
+        }] resume];
+    } else {
+        SHLogError(SHLogTagAPP, @"Get thumbnail failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+    }
 }
 
 @end
