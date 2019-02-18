@@ -32,5 +32,6 @@ typedef void(^SyncRemoteDataCompletionBlock)(BOOL isSuccess);
 @interface SHLocalWithRemoteHelper : NSObject
 
 + (void)syncCameraList:(SyncRemoteDataCompletionBlock)completion;
++ (void)getThumbnailWithdeviceInfo:(Camera *)deviceInfo;
 
 @end

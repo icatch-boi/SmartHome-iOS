@@ -34,6 +34,7 @@
 #import "ZJSlidingDrawerViewController.h"
 #import "SHQRCodeScanningVC.h"
 #import "SHSetupNavVC.h"
+#import "SHLocalWithRemoteHelper.h"
 
 static int const totalFindTime = 90;
 static int const apmodeTimeout = 30;
@@ -758,6 +759,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                     
                     if (isSuccess) {
                         [weakself addCamera2LocalSqlite:result];
+                        [SHLocalWithRemoteHelper getThumbnailWithdeviceInfo:result];
                     } else {
                         Error *error = result;
                         SHLogError(SHLogTagAPP, @"Get camera is failed, error: %@", error.error_description);

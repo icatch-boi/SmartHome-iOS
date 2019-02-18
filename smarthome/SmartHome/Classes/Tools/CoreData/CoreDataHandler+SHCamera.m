@@ -398,7 +398,8 @@
 #endif
         } else {
             SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+//            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateDeviceInfoNotification object:cameraInfo.cameraUid];
         }
     }
     

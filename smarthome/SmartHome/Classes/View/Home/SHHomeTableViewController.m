@@ -237,6 +237,41 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     }
 }
 
+- (void)updateDeviceInfoNotificationHandle:(NSNotification *)nc {
+    NSString *uid = nc.object;
+    
+    if (uid == nil || uid.length <= 0) {
+        SHLogWarn(SHLogTagAPP, @"Recv uid is nil.");
+        return;
+    }
+    
+    [self updateDeviceInfoWithUID:uid];
+}
+
+- (void)updateDeviceInfoWithUID:(NSString *)cameraUID {
+    WEAK_SELF(self);
+    [self.listViewModel loadCamerasWithCompletion:^{
+        STRONG_SELF(self);
+        
+        if (self == nil) {
+            SHLogWarn(SHLogTagAPP, @"self object become nil.");
+            return ;
+        }
+        
+        [self.listViewModel.cameraList enumerateObjectsUsingBlock:^(SHCameraViewModel *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.cameraObj.camera.cameraUid isEqualToString:cameraUID]) {
+                *stop = YES;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+                    
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                });
+            }
+        }];
+    }];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -246,6 +281,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 #else
     [self loadData];
 #endif
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDeviceInfoNotificationHandle:) name:kUpdateDeviceInfoNotification object:nil];
 }
 
 - (void)syncDataFromServer {
@@ -281,6 +317,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     [super viewDidDisappear:animated];
     
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:kLoginSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kUpdateDeviceInfoNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
