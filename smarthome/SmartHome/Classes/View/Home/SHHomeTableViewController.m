@@ -233,7 +233,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             }
         }];
     } else {
-        [self.tableView reloadData];
+//        [self.tableView reloadData];
     }
 }
 
@@ -265,7 +265,9 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
                     
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    [UIView performWithoutAnimation:^{
+                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }];
                 });
             }
         }];
@@ -434,6 +436,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     return viewModel.rowHeight;
 }
 #endif
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [SHCameraViewModel rowHeight];
+}
 
 - (void)connectCameraWithCameraObj:(SHCameraObject *)camObj {
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];

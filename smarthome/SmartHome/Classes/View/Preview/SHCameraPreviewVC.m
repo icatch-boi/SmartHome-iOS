@@ -197,6 +197,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     [self hideResolutionMenu];
+    
+    [_shCameraObj.streamOper updatePreviewThumbnail];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1488,7 +1490,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)goHome {
-    [_shCameraObj.streamOper updatePreviewThumbnail];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -498,7 +498,8 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 #endif
                 } else {
                     SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+//                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateDeviceInfoNotification object:self.shCamObj.camera.cameraUid];
                 }
             }
         }
