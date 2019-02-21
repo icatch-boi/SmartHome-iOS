@@ -9,10 +9,8 @@
 #ifndef SHUserAccountHeader_h
 #define SHUserAccountHeader_h
 
-#import "SHLoginView.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHLogonViewController.h"
-#import "SHShareHomeTVC.h"
 #import "SHUserAccountInfoTVC.h"
 
 #endif /* SHUserAccountHeader_h */

@@ -27,7 +27,6 @@
 
 #import "SH_XJ_SettingTVC.h"
 #import "SHDeleteCameraCell.h"
-#import "MessageCenter.h"
 #import "SH_XJ_SettingDetailTVC.h"
 #import "SHMpbTVC.h"
 #import "SHWiFiSettingVC.h"

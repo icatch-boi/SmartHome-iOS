@@ -28,7 +28,6 @@
 #import "XJSetupDeviceInfoVC.h"
 #import "SHFindIndicator.h"
 #import "SimpleLink.h"
-#import "SimpleLinkErrorID.h"
 #import "SHNetworkManagerHeader.h"
 #import "Reachability.h"
 #import "ZJSlidingDrawerViewController.h"
@@ -279,7 +278,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     NSString *cryptoKey = @"asdfghjklqwert++"; //@"1234567890Abcdef";
     retValue = _link->init(icatchtek::simplelink::LINKTYPE_APMODE, apmodeTimeout, 0, (char *)cryptoKey.UTF8String, 16, flag);
-    if (retValue != SIMPLELINK_ERR_OK) {
+    if (retValue != icatchtek::simplelink::SIMPLELINK_ERR_OK) {
         [self updateError:NSLocalizedString(@"kAPModeConnectFiled", @"") error:retValue];
         return;
     }
@@ -287,7 +286,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     NSString *cameraUID = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID];
     SHLogInfo(SHLogTagAPP, @"camera uid is : %@", cameraUID);
     retValue = _link->setContent(ssid.UTF8String, pwd.UTF8String, kDeviceDefaultPassword.UTF8String, "0.0.0.0", "0.0.0.0", "00:00:00:00:00:00", cameraUID.UTF8String);
-    if (retValue != SIMPLELINK_ERR_OK) {
+    if (retValue != icatchtek::simplelink::SIMPLELINK_ERR_OK) {
         [self updateError:NSLocalizedString(@"kAPModeConnectFiled", @"") error:retValue];
         return;
     }

@@ -8,8 +8,6 @@
 
 #import "SHSDK.h"
 #include "SHH264StreamParameter.hpp"
-#import "SHVideoFormat.h"
-#import "SHAudioFormat.h"
 #import <Photos/Photos.h>
 #import "XJLocalAssetHelper.h"
 

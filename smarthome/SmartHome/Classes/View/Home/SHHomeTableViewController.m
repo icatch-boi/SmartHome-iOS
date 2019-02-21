@@ -30,17 +30,11 @@
 #import "SHCameraViewCell.h"
 #import "SHSetupNavVC.h"
 #import "SHCameraPreviewVC.h"
-#import "SHShareCameraViewController.h"
-#import "SHMsgCenterViewController.h"
 #import "SHLocalAlbumTVC.h"
 #import "SHUserAccountHeader.h"
 #import "SHLocalWithRemoteHelper.h"
-#import "UIViewController+CWLateralSlide.h"
 #import "SHUserAccountInfoVC.h"
-#import "SHMessagesListTVC.h"
 #import "SHQRCodeShareVC.h"
-#import "XJMessageCenterViewController.h"
-#import "MessageCenter.h"
 #import "SHQRCodeScanningVC.h"
 #import "SHPushTestNavController.h"
 //#import "XJLocalAssetHelper.h"
@@ -55,12 +49,11 @@ static NSString * const kCameraViewCellID = @"CameraViewCellID";
 //static const CGFloat kCameraTitleHeight = 30;
 static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
-@interface SHHomeTableViewController () <SHCameraViewCellDelegate, SHLoginViewDelegate>
+@interface SHHomeTableViewController () <SHCameraViewCellDelegate>
 
 @property (nonatomic, strong) SHCameraListViewModel *listViewModel;
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 
-@property (nonatomic, strong) SHLoginView *loginView;
 @property (nonatomic, assign) BOOL hasLoad;
 
 @property (nonatomic, weak) SHUserAccountInfoVC *userAccountInfoVC;
@@ -496,18 +489,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterMessageCenterWithCell:(SHCameraViewCell *)cell {
-#if 0
-    UIStoryboard *mainBoard = [UIStoryboard storyboardWithName:kMessageCenterStoryboardName bundle:nil];
-    SHMsgCenterViewController *vc = [mainBoard instantiateViewControllerWithIdentifier:@"msgInfo"];
-    vc.uuid = cell.viewModel.cameraObj.camera.cameraUid;
-    [self.navigationController pushViewController:vc animated:YES];
-#else
-    UIStoryboard *mainBoard = [UIStoryboard storyboardWithName:kMessageCenterStoryboardName bundle:nil];
-    XJMessageCenterViewController *vc = [mainBoard instantiateViewControllerWithIdentifier:@"MessageCenter"];
-    vc.camUid = cell.viewModel.cameraObj.camera.cameraUid;
-    vc.title = @"Message Center";
-    [self.navigationController pushViewController:vc animated:YES];
-#endif
+
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
@@ -589,88 +571,6 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     }
     
     return _listViewModel;
-}
-
-#pragma mark - loginView
-- (SHLoginView *)loginView {
-    if (_loginView == nil) {
-        _loginView = [SHLoginView loginView];
-        _loginView.delegate = self;
-        _loginView.yConstraint.constant = -30;
-    }
-    
-    return _loginView;
-}
-
-- (void)logonAccount:(SHLoginView *)loginView {
-    SHLogonViewController *vc = [SHLogonViewController logonViewController];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.navigationController pushViewController:vc animated:YES];
-        [self.loginView removeFromSuperview];
-    });
-}
-
-- (void)loginAccount:(SHLoginView *)loginView {
-    [self.loginView.emailTextField resignFirstResponder];
-    [self.loginView.pwdTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    
-    self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:@"正在登录..."];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [self.loginView.emailTextField.text rangeOfString:@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" options:NSRegularExpressionSearch];
-            passwordRange = [self.loginView.pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-        });
-        
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"输入的邮箱或密码无效，请重新输入" preferredStyle:UIAlertControllerStyleAlert];
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alertC animated:YES completion:nil];
-            });
-        } else {
-            __block NSString *email = nil;
-            __block NSString *password = nil;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                email = self.loginView.emailTextField.text;
-                password = self.loginView.pwdTextField.text;
-            });
-            
-            WEAK_SELF(self);
-            [[SHNetworkManager sharedNetworkManager] loadAccessTokenByEmail:email password:password completion:^(BOOL isSuccess, id result) {
-                SHLogInfo(SHLogTagAPP, @"load accessToken is success: %d", isSuccess);
-                
-                if (isSuccess) {
-                    [weakself getCameraList:^{
-                        [weakself loadData];
-                    }];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (isSuccess) {
-                        [weakself.progressHUD hideProgressHUD:YES];
-
-                        [weakself closeLoginView];
-                    } else {
-                        Error *error = result;
-                        
-                        weakself.progressHUD.detailsLabelText = error.error_description;
-                        NSString *notice = @"登录失败";
-                        [weakself.progressHUD showProgressHUDNotice:notice showTime:1.5];
-                    }
-                });
-            }];
-        }
-    });
-}
-
-- (void)closeLoginView {
-    [self.loginView removeFromSuperview];
-    _loginView = nil;
 }
 
 - (void)getCameraList:(void (^)())completion {
@@ -806,7 +706,6 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     SHUserAccountInfoVC *vc = [[SHUserAccountInfoVC alloc] init];
     vc.managedObjectContext = _managedObjectContext;
     
-    [self cw_showDefaultDrawerViewController:vc];
 //    [self.navigationController pushViewController:vc animated:YES];
     self.userAccountInfoVC = vc;
 }
@@ -824,15 +723,6 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 #pragma mark - LaterSlide
-- (void)addSlideGesture {
-    WEAK_SELF(self);
-    [self cw_registerShowIntractiveWithEdgeGesture:NO transitionDirectionAutoBlock:^(CWDrawerTransitionDirection direction) {
-        if (direction == CWDrawerTransitionFromLeft) {
-            [weakself enterUserAccountInfoView];
-        }
-    }];
-}
-
 - (void)longPressDeleteCamera:(SHCameraViewCell *)cell {
     SHCameraObject *camObj = cell.viewModel.cameraObj;
     

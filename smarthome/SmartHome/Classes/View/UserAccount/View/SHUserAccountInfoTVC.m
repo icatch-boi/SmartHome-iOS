@@ -8,7 +8,6 @@
 
 #import "SHUserAccountInfoTVC.h"
 #import "SHNetworkManagerHeader.h"
-#import "SHMessagesListTVC.h"
 #import <Photos/Photos.h>
 #import "ZJSlidingDrawerViewController.h"
 #import "SHWechatServerVC.h"
@@ -167,8 +166,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"go2MessagesListTVCID"]) {
-        SHMessagesListTVC *vc = segue.destinationViewController;
-        vc.managedObjectContext = _managedObjectContext;
+
     }
 }
 

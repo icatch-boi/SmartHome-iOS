@@ -12,9 +12,7 @@
 #import "H264Decoder.h"
 #import "HYOpenALHelper.h"
 #import "PCMDataPlayer.h"
-#import "SHAudioUnit.h"
 #import "SHAudioUnitRecord.h"
-#import "SHVideoFormat.h"
 #import "XJLocalAssetHelper.h"
 #import "SHNetworkManager+SHCamera.h"
 
@@ -37,7 +35,6 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
 @property (nonatomic, strong) HYOpenALHelper *audioHelper;
 @property (nonatomic, strong) SHObserver *streamObserver;
 @property (nonatomic, strong) PCMDataPlayer *pcmPl;
-@property (nonatomic) SHAudioUnit *audioUnit;
 @property (nonatomic) SHAudioUnitRecord *audioUnitRecord;
 
 @property (nonatomic) void (^bufferingBlock)(BOOL isBuffering, BOOL timeout);
@@ -108,15 +105,6 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
     }
     
     return _audioHelper;
-}
-
-- (SHAudioUnit *)audioUnit {
-    if (_audioUnit == nil) {
-        _audioUnit = [[SHAudioUnit alloc] init];
-        _audioUnit.shCameraObj = _shCamObj;
-    }
-    
-    return _audioUnit;
 }
 
 - (SHAudioUnitRecord *)audioUnitRecord {

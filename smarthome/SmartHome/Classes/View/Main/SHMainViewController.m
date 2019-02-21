@@ -26,15 +26,13 @@
     
 
 #import "SHMainViewController.h"
-#import "SHLoginView.h"
 #import "SHLogonViewController.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHLoginFirstView.h"
 #import "SHLoginViewController.h"
 
-@interface SHMainViewController () <SHLoginViewDelegate, SHLoginFirstViewDelegate>
+@interface SHMainViewController () <SHLoginFirstViewDelegate>
 
-@property (nonatomic, strong) SHLoginView *loginView;
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, strong) SHLoginFirstView *loginFirstView;
 
@@ -99,85 +97,6 @@
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
-}
-
-#pragma mark - loginView
-- (SHLoginView *)loginView {
-    if (_loginView == nil) {
-        _loginView = [SHLoginView loginView];
-        _loginView.delegate = self;
-        _loginView.yConstraint.constant = -30;
-    }
-    
-    return _loginView;
-}
-
-- (void)closeLoginView {
-    [_loginView removeFromSuperview];
-    _loginView = nil;
-}
-
-- (void)logonAccount:(SHLoginView *)loginView {
-    SHLogonViewController *vc = [SHLogonViewController logonViewController];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self pushViewController:vc animated:YES];
-        [self presentViewController:nav animated:YES completion:^{
-            [self.loginView removeFromSuperview];
-        }];
-    });
-}
-
-- (void)loginAccount:(SHLoginView *)loginView {
-    [self.loginView.emailTextField resignFirstResponder];
-    [self.loginView.pwdTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    
-    self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:@"正在登录..."];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [self.loginView.emailTextField.text rangeOfString:@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" options:NSRegularExpressionSearch];
-            passwordRange = [self.loginView.pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-        });
-        
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"输入的邮箱或密码无效，请重新输入" preferredStyle:UIAlertControllerStyleAlert];
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alertC animated:YES completion:nil];
-            });
-        } else {
-            __block NSString *email = nil;
-            __block NSString *password = nil;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                email = self.loginView.emailTextField.text;
-                password = self.loginView.pwdTextField.text;
-            });
-            
-            WEAK_SELF(self);
-            [[SHNetworkManager sharedNetworkManager] loadAccessTokenByEmail:email password:password completion:^(BOOL isSuccess, id result) {
-                SHLogInfo(SHLogTagAPP, @"load accessToken is success: %d", isSuccess);
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (isSuccess) {
-                        [weakself.progressHUD hideProgressHUD:YES];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccessNotification object:nil];
-                        [weakself closeLoginView];
-                    } else {
-                        Error *error = result;
-                        
-                        weakself.progressHUD.detailsLabelText = error.error_description;
-                        NSString *notice = @"登录失败";
-                        [weakself.progressHUD showProgressHUDNotice:notice showTime:1.5];
-                    }
-                });
-            }];
-        }
-    });
 }
 
 #pragma mark - Action Progress

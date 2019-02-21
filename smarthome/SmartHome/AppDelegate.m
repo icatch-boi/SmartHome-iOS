@@ -21,8 +21,6 @@
 #import "SHSinglePreviewVC.h"
 
 #import <Bugly/Bugly.h>
-#import "MessageCenter.h"
-#import "MessageInfo.h"
 #import "SHCameraPreviewVC.h"
 #import "SHHomeTableViewController.h"
 #import "SHUserAccountInfoVC.h"

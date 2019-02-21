@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "HttpRequest.h"
 #import "AppDelegate.h"
-#import "LRKeychain.h"
 
 static NSString * const pushServer = @"http://push.iotcplatform.com/tpns?"; //@"http://push.kalay.net.cn/tpns?"
 static NSString * const registerUrl = [pushServer stringByAppendingString:@"cmd=client"];
