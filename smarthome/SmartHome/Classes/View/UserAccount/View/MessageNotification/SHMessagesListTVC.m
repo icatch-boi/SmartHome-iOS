@@ -102,7 +102,7 @@
     WEAK_SELF(self);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[SHNetworkManager sharedNetworkManager] subscribeCameraWithCameraID:message.deviceId invitationCode:nil completion:^(BOOL isSuccess, id  _Nullable result) {
+        [[SHNetworkManager sharedNetworkManager] subscribeCameraWithCameraID:message.deviceId cameraName:[[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName] invitationCode:nil completion:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"subscribe camera is success: %d", isSuccess);
             
             if (isSuccess) {

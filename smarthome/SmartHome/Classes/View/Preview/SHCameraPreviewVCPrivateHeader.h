@@ -78,5 +78,8 @@
 @property (nonatomic) SHCameraObject *shCameraObj;
 
 @property (nonatomic, strong) CustomIOS7AlertView *videoSizeView;
+@property (nonatomic, strong) UIScrollView *zoomScrollView;
+@property (nonatomic, strong) UIImageView *zoomImageView;
+@property (nonatomic, strong) UIButton *zoomButton;
 
 @end

@@ -222,6 +222,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     } @finally {
         
     }
+    
+    [self.zoomScrollView setZoomScale:kMinZoomScale animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -248,9 +250,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         });
     }];
 #else
-    [_shCameraObj.streamOper initDisplayImageView:self.previewImageView bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
+    [_shCameraObj.streamOper initDisplayImageView:self.zoomImageView bufferingBlock:^(BOOL isBuffering, BOOL timeout) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.previewImageView && isBuffering) {
+            if (self.zoomImageView && isBuffering) {
                 [self.bufferNotificationView showGCDNoteWithMessage:NSLocalizedString(@"PREVIEW_BUFFERING_INFO", nil) andTime:1.0 withAcvity:NO];
             }
         });
@@ -519,6 +521,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
     [self addGestureRecognizers];
+    [self setupZoomScrollView];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -1967,6 +1970,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             self.avslayer.bounds = _previewImageView.bounds;
             self.avslayer.position = CGPointMake(CGRectGetMidX(_previewImageView.bounds), CGRectGetMidY(_previewImageView.bounds));
             
+            [self updateZoomViewLayout];
+            
             [CATransaction commit];
         });
     }
@@ -2656,6 +2661,174 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     return YES;
+}
+
+#pragma mark - Setup Zoom GUI
+- (void)setupZoomScrollView {
+    [self setupZoomScrollViewFrame];
+    [self.view addSubview:self.zoomScrollView];
+    
+    [self setupZooImageView];
+    [self setupZoomButton];
+}
+
+- (void)setupZoomScrollViewFrame {
+    CGRect rect = CGRectMake(0, CGRectGetHeight(self.headerView.bounds) + 50, CGRectGetWidth(_previewImageView.frame), CGRectGetHeight(_previewImageView.frame));
+    self.zoomScrollView.frame = rect;
+    
+    self.zoomScrollView.contentSize = rect.size;
+}
+
+- (void)setupZooImageView {
+    [self setupZoomImageViewFrame];
+    
+    [self setupImgae];
+    
+    [self.zoomScrollView addSubview:self.zoomImageView];
+    
+    [self zoomViewAddGestureRecognizer];
+}
+
+- (void)setupImgae {
+    UIImage *image = self.shCameraObj.camera.thumbnail;
+    
+    self.zoomImageView.image = image;
+}
+
+- (void)setupZoomImageViewFrame {
+    CGRect rect = CGRectMake(0, 0, CGRectGetWidth(_zoomScrollView.frame), CGRectGetHeight(_zoomScrollView.frame));
+    self.zoomImageView.frame = rect;
+}
+
+- (void)zoomViewAddGestureRecognizer {
+    // 双击缩放手势
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapHandle:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self.zoomImageView addGestureRecognizer:doubleTap];
+}
+
+- (void)updateZoomViewLayout {
+    self.zoomScrollView.frame = self.previewImageView.frame;
+    [self setupZoomImageViewFrame];
+    
+    self.zoomScrollView.contentSize = self.zoomScrollView.frame.size;
+}
+
+- (void)setupZoomButton {
+    [self setupZoomButtonFrame];
+    [self.zoomButton setCornerWithRadius:CGRectGetWidth(self.zoomButton.bounds) * 0.5];
+
+    [self.view addSubview:self.zoomButton];
+    [self updateZoomButtonTitle];
+}
+
+- (void)setupZoomButtonFrame {
+    CGFloat w = 40;
+    CGFloat h = w;
+    CGFloat x = CGRectGetWidth(self.view.bounds) - w - 4;
+    CGFloat y = (CGRectGetHeight(self.zoomScrollView.bounds) - h ) * 0.5;
+    CGRect rect = CGRectMake(x, y, w, h);
+    rect = [self.zoomScrollView convertRect:rect toView:self.view];
+    
+    self.zoomButton.frame = rect;
+}
+
+- (void)updateZoomButtonTitle {
+    NSString *title = [NSString stringWithFormat:@"%.1fX", self.zoomScrollView.zoomScale];
+    
+    [self.zoomButton setTitle:title forState:UIControlStateNormal];
+    [self.zoomButton setTitle:title forState:UIControlStateHighlighted];
+}
+
+#pragma mark - Zoom Handle
+- (void)zoomButtonClick:(UIButton *)sender {
+    [self tapZoomHandleWithCenter:self.previewImageView.center];
+}
+
+- (void)doubleTapHandle:(UITapGestureRecognizer *)recognizer {
+    CGPoint touchPoint = [recognizer locationInView:self.zoomImageView];
+    
+    [self tapZoomHandleWithCenter:touchPoint];
+}
+
+- (void)tapZoomHandleWithCenter:(CGPoint)point {
+    if (self.zoomScrollView.zoomScale >= kMaxZoomScale) {
+        [self.zoomScrollView setZoomScale:kMinZoomScale animated:YES];
+        return;
+    }
+    
+    CGFloat middleZoomScale = kMaxZoomScale * 0.5;
+    CGFloat currentScale = self.zoomScrollView.zoomScale;
+    CGFloat scale = self.zoomScrollView.maximumZoomScale;
+    
+    if (currentScale >= kMinZoomScale && currentScale < middleZoomScale) {
+        scale = middleZoomScale;
+    }
+    
+    CGRect newRect = [self getRectWithScale:scale andCenter:point];
+    [self.zoomScrollView zoomToRect:newRect animated:YES];
+}
+
+/** 计算点击点所在区域frame */
+- (CGRect)getRectWithScale:(CGFloat)scale andCenter:(CGPoint)center {
+    CGRect newRect = CGRectZero;
+    newRect.size.width =  self.zoomScrollView.frame.size.width/scale;
+    newRect.size.height = self.zoomScrollView.frame.size.height/scale;
+    newRect.origin.x = center.x - newRect.size.width * 0.5;
+    newRect.origin.y = center.y - newRect.size.height * 0.5;
+    
+    return newRect;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.zoomImageView;
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    [self updateZoomButtonTitle];
+}
+
+#pragma mark - Zoom View Init
+- (UIButton *)zoomButton {
+    if (_zoomButton == nil) {
+        _zoomButton = [[UIButton alloc] init];
+        
+        _zoomButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25];
+        _zoomButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+        [_zoomButton addTarget:self action:@selector(zoomButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    return _zoomButton;
+}
+
+- (UIScrollView *)zoomScrollView {
+    if (_zoomScrollView == nil) {
+        _zoomScrollView = [[UIScrollView alloc] init];
+        
+        _zoomScrollView.showsHorizontalScrollIndicator = NO;
+        _zoomScrollView.showsVerticalScrollIndicator = NO;
+        _zoomScrollView.bounces = NO;
+        _zoomScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+        
+        _zoomScrollView.minimumZoomScale = kMinZoomScale;
+        _zoomScrollView.maximumZoomScale = kMaxZoomScale;
+        _zoomScrollView.bouncesZoom = NO;
+        
+        _zoomScrollView.delegate = self;
+    }
+    
+    return _zoomScrollView;
+}
+
+- (UIImageView *)zoomImageView {
+    if (_zoomImageView == nil) {
+        _zoomImageView = [[UIImageView alloc] init];
+        
+        _zoomImageView.userInteractionEnabled = YES;
+    }
+    
+    return _zoomImageView;
 }
 
 @end

@@ -728,7 +728,7 @@
     if (cameraId == nil) {
         if (completion) {
             NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"This parameter must not be `nil`.",
+                                   @"error_description": @"This parameter must not be `nil`.",
                                    };
             completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
         }
@@ -748,7 +748,7 @@
     if (data == nil || data.length == 0 || cameraId == nil) {
         if (completion) {
             NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"These parameter must not be `nil`.",
+                                   @"error_description": @"These parameter must not be `nil`.",
                                    };
             completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
         }
@@ -789,7 +789,7 @@
     if (request == nil) {
         if (completion) {
             NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"This parameter must not be `nil`.",
+                                   @"error_description": @"This parameter must not be `nil`.",
                                    };
             completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
         }

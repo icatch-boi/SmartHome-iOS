@@ -142,6 +142,9 @@ static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7
 static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 
+static const float kMinZoomScale = 1.0;
+static const float kMaxZoomScale = 5.0;
+
 #define USE_ENCRYP 0
 
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
