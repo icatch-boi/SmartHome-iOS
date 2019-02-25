@@ -59,7 +59,6 @@
 }
 
 - (void)setupGUI {
-//    [_logoutButton setCornerWithRadius:_logoutButton.bounds.size.height * 0.5 masksToBounds:NO];
     UIImage *placeholderImage = [UIImage imageNamed:@"portrait-1"];
     _avatorImgView.image = [placeholderImage ic_avatarImageWithSize:placeholderImage.size backColor:[UIColor whiteColor] lineColor:[UIColor lightGrayColor] lineWidth:1.0];
     _nickNameLabel.text = SHNetworkManager.sharedNetworkManager.userAccount.screen_name;
@@ -76,10 +75,6 @@
 }
 
 - (IBAction)logoutClick:(id)sender {
-#if 0
-    [[SHNetworkManager sharedNetworkManager] logout];
-    [self.navigationController popViewControllerAnimated:YES];
-#endif
     UIAlertController *alertC = [UIAlertController alertControllerWithTitle:/*@"Alert"*/NSLocalizedString(@"Tips", nil) message:/*@"Here is a message where we an put absolutely anything we want."*/NSLocalizedString(@"kLogoutAlertInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
@@ -92,7 +87,6 @@
 }
 
 - (void)logout {
-//    [self.navigationController popViewControllerAnimated:YES];
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:nil];
     

@@ -92,8 +92,6 @@
         }
     };
     
-//    message = [message stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-//    NSString *urlString = [NSString stringWithFormat:@"http://www.smarthome.icatchtek.com/messages/topic4?cmd=event&uid=%@&img=1&msg=%@", uid, message];
     NSString *baseURL = @"http://www.smarthome.icatchtek.com/messages/topic4?";
     if (pushType == SHPushTypeOther) {
         baseURL = @"http://push.iotcplatform.com/tpns?";

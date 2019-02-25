@@ -27,21 +27,7 @@
     
     // Modify the notification content here...
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
-#if 0
-    [self test];
-    
-#if 0
-    NSString *attachmentPath = [self parseNotification:self.bestAttemptContent.userInfo][@"attachment"];
-    [self loadAttachmentForUrlString:attachmentPath completionHandle:^{
-//        [self apnsDeliverWith:request];
-        self.contentHandler(self.bestAttemptContent);
-    }];
-#else
-    // fix SH-912
-    self.contentHandler(self.bestAttemptContent);
-#endif
-//    [self updateBadgeNumber];
-#else
+
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
         if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"attachment"]) {
             NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
@@ -55,17 +41,13 @@
         [self test];
         self.contentHandler(self.bestAttemptContent);
     }
-#endif
 }
 
 - (void)serviceExtensionTimeWillExpire {
     // Called just before the extension will be terminated by the system.
     // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-#if 0
-    [self test];
-#else
+
     self.bestAttemptContent.title = NSLocalizedString(@"kNotificationInfoTitle", nil);
-#endif
     self.contentHandler(self.bestAttemptContent);
 }
 
@@ -102,21 +84,9 @@
     [task resume];
 }
 
-- (void)apnsDeliverWith:(UNNotificationRequest *)request {
-    //service extension sdk
-    //upload to calculate delivery rate
-    //please set the same AppKey as your JPush
-//    [JPushNotificationExtensionService jpushSetAppkey:@"757252cf30f8e05598e91b58"];
-//    [JPushNotificationExtensionService jpushReceiveNotificationRequest:request with:^ {
-//        NSLog(@"apns upload success");
-//        self.contentHandler(self.bestAttemptContent);
-//    }];
-}
-
 - (void)test {
     self.bestAttemptContent.title = NSLocalizedString(@"kNotificationInfoTitle", nil);
     
-//    NSDictionary *aps = self.bestAttemptContent.userInfo[@"aps"];
     NSDictionary *aps = [self parseNotification:self.bestAttemptContent.userInfo];
     
     NSString *devID = [NSString stringWithFormat:@"%@", aps[@"devID"]];
@@ -125,7 +95,7 @@
 
     NSString *tempDevID = devID;
     devID = [self getCameraName:devID];
-    devID = devID ? devID : [tempDevID substringToIndex:5]; //@"";
+    devID = devID ? devID : [tempDevID substringToIndex:5];
     
     NSString *str = nil;
     if ([msgType isEqualToString:@"100"]) {
@@ -138,9 +108,9 @@
         self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
         
         if ([self checkNotificationWhetherOverdue:aps]) {
-            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellOverdueTips", nil)]; //NSLocalizedString(@"kDoorbellOverdueTips", nil);
+            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellOverdueTips", nil)];
         } else {
-            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellTips", nil)]; //NSLocalizedString(@"kDoorbellTips", nil);
+            self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellTips", nil)];
         }
     } else if ([msgType isEqualToString:@"202"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDetectSome", nil)];

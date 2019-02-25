@@ -39,7 +39,6 @@
 
 + (instancetype)cameraObjectWithCamera:(SHCamera *)camera;
 
-//- (void)connectWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock;
 - (void)disConnectWithSuccessBlock:(void(^)())successBlock failedBlock:(void(^)())failedBlock;
 - (int)connectCamera;
 - (void)updatePreviewThumbnailWithPvTime: (NSString *)tempPVTime;

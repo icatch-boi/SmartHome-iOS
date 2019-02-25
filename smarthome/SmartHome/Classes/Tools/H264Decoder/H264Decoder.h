@@ -11,7 +11,6 @@
 
 @interface H264Decoder : NSObject
 
-//- (BOOL)initH264Env:(ICatchVideoFormat)format;
 - (BOOL)initH264EnvWithSPSSize:(int)spsSize sps:(const unsigned char *)sps ppsSize:(int)ppsSize pps:(const unsigned char *)pps;
 - (void)clearH264Env;
 - (void)decodeAndDisplayH264Frame:(NSData *)frame andAVSLayer:(AVSampleBufferDisplayLayer *)avslayer;

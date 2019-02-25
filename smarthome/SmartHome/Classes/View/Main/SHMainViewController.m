@@ -31,10 +31,7 @@
 #import "SHLoginFirstView.h"
 #import "SHLoginViewController.h"
 
-@interface SHMainViewController () <SHLoginFirstViewDelegate>
-
-@property (nonatomic, weak) MBProgressHUD *progressHUD;
-@property (nonatomic, strong) SHLoginFirstView *loginFirstView;
+@interface SHMainViewController ()
 
 @end
 
@@ -45,8 +42,6 @@
     // Do any additional setup after loading the view.
     
     [self setupGUI];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogin) name:kUserShouldLoginNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLogin) name:reloginNotifyName object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,11 +50,6 @@
 }
 
 - (void)setupGUI {
-#if 0
-    // set toolbar
-    [self setToolbarHidden:NO];
-    self.toolbar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
-#endif
     [SHTool configureAppThemeWithController:self];
 }
 
@@ -73,90 +63,6 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskAll;
-}
-
-- (void)userLogin {
-#if 0
-    SHLoginView *view = self.loginView;
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.view addSubview:view];
-    }];
-#endif
-    SHLoginFirstView *view = self.loginFirstView;
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.view addSubview:view];
-    }];
-}
-
-- (void)reLogin {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Tips" message:@"Account login is invalid, please login again." preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self userLogin];
-    }]];
-    
-    [self presentViewController:alertVC animated:YES completion:nil];
-}
-
-#pragma mark - Action Progress
-- (MBProgressHUD *)progressHUD {
-    if (!_progressHUD) {
-        _progressHUD = [MBProgressHUD progressHUDWithView:self.view.window];
-    }
-    
-    return _progressHUD;
-}
-
-#pragma mark - LoginFirstView
-- (SHLoginFirstView *)loginFirstView {
-    if (_loginFirstView == nil) {
-        _loginFirstView = [SHLoginFirstView loginFirstView];
-        _loginFirstView.delegate = self;
-    }
-    
-    return _loginFirstView;
-}
-
-- (void)closeLoginFirstView {
-    [self.loginFirstView removeFromSuperview];
-    _loginFirstView = nil;
-}
-
-- (void)signupAccount:(SHLoginFirstView *)view {
-    SHLogTRACE();
-
-    [self signupAccountHandleWithEmail:nil isResetPWD:NO];
-}
-
-- (void)signinAccount:(SHLoginFirstView *)view {
-    SHLogTRACE();
- 
-    [self signinAccountHandle];
-}
-
-#pragma mark -
-- (void)signupAccountHandleWithEmail:(NSString *)email isResetPWD:(BOOL)reset {
-    UINavigationController *nav = (UINavigationController *)[SHLogonViewController logonViewController];
-    SHLogonViewController *vc = (SHLogonViewController *)nav.topViewController;
-    vc.email = email;
-    vc.resetPWD = reset;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self presentViewController:nav animated:YES completion:^{
-            [self closeLoginFirstView];
-        }];
-    });
-}
-
-- (void)signinAccountHandle {
-    SHLoginViewController *vc = [SHLoginViewController loginViewController];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self presentViewController:vc animated:YES completion:^{
-            [self closeLoginFirstView];
-        }];
-    });
 }
 
 /*

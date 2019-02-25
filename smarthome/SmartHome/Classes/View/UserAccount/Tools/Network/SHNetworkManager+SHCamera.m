@@ -709,19 +709,6 @@
         }];
     }
 }
-//- (void)getImgCoverWithFullURL:(NSString *)url completion:(RequestCompletionBlock)completion
-//{
-//    [self.cameraOperate getImgDataWithUrl:url success:^(NSURL * _Nonnull path) {
-//        if(completion) {
-//            completion(YES, path);
-//        }
-//    } failure:^(Error * _Nonnull error) {
-//        if(completion) {
-//            completion(NO, nil);
-//        }
-//    }];
-//    
-//}
 
 #pragma mark - Device Cover Handle
 - (void)getDeviceCoverWithCameraID:(NSString *)cameraId completion:(RequestCompletionBlock)completion {

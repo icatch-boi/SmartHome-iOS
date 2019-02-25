@@ -111,11 +111,7 @@
                                               inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-#if USE_ENCRYP
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cameraUidToken = %@", camera.cameraUidToken];
-#else
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cameraUid = %@", camera.cameraUid];
-#endif
     [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
@@ -141,42 +137,13 @@
 
 - (BOOL)deleteCamera:(SHCamera *)camera {
     BOOL isSuccess = YES;
-#if 0
-    NSArray *fetchedObjects = [self getManagedObjectByCamera:camera];
-    
-    if (fetchedObjects && fetchedObjects.count > 0) {
-        [self.managedObjectContext deleteObject:fetchedObjects[0]];
-        
-        NSError *error = nil;
-        if (![self.managedObjectContext save:&error]) {
-            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-            
-            isSuccess = NO;
-#ifdef DEBUG
-            abort();
-#endif
-        } else {
-            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
-        }
-    } else {
-        SHLogError(SHLogTagAPP, @"fetch failed.");
-        isSuccess = NO;
-    }
-#else
+
     if (camera == nil) {
         SHLogError(SHLogTagAPP, @"camera is nil.");
         return NO;
     }
     
-#if 0
-    // clean cache device before remove local db.
-    [self cleanMemoryCacheWithUid:camera.cameraUid];
-    [self removeCacheThumbnailWithUid:camera.cameraUid];
-#else
     NSString *cameraUid = camera.cameraUid;
-#endif
-//    NSString *path = camera.cameraUid.md5;
     [self.managedObjectContext deleteObject:camera];
     
     NSError *error = nil;
@@ -189,13 +156,10 @@
 #endif
     } else {
         SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-        // FIXME: - modify
-//        [SHTool removeMediaDirectoryWithPath:path];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
         
         [self cleanDeviceDataWithUid:cameraUid];
     }
-#endif
     
     return isSuccess;
 }
@@ -242,13 +206,8 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:kEntityName inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-#if USE_ENCRYP
-    NSPredicate *predicate = [NSPredicate
-                              predicateWithFormat:@"cameraUidToken = %@", cameraInfo.cameraUidToken];
-#else
     NSPredicate *predicate = [NSPredicate
                               predicateWithFormat:@"cameraUid = %@", cameraInfo.cameraUid];
-#endif
     [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
@@ -258,25 +217,13 @@
         
         SHCamera *camera = (SHCamera *)fetchedObjects.firstObject;
         camera.cameraName = cameraInfo.cameraName ? cameraInfo.cameraName : camera.cameraName;
-#if USE_ENCRYP
-        camera.cameraToken = cameraInfo.cameraToken;
-        camera.cameraUidToken = cameraInfo.cameraUidToken;
-#else
         camera.cameraUid = cameraInfo.cameraUid ? cameraInfo.cameraUid : camera.cameraUid;
-#endif
         camera.devicePassword = cameraInfo.devicePassword ? cameraInfo.devicePassword : camera.devicePassword;
         camera.id = cameraInfo.id ? cameraInfo.id : camera.id;
         camera.thumbnail = cameraInfo.thumnail ? cameraInfo.thumnail : camera.thumbnail;
         camera.operable = cameraInfo.operable;
-#if 0
-        NSDate *currentDate = [NSDate date];
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyyMMdd HHmmss"];
-        camera.createTime = [df stringFromDate:currentDate];
-        SHLogInfo(SHLogTagAPP, @"Create time is %@", camera.createTime);
-#else
+
         camera.createTime = cameraInfo.addTime;
-#endif
         // Save data to sqlite
         NSError *error = nil;
         if (![camera.managedObjectContext save:&error]) {
@@ -291,21 +238,14 @@
             
 //            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
             [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateDeviceInfoNotification object:cameraInfo.cameraUid];
-//            if (!camera.mapToTutk) {
-                [SHTutkHttp registerDevice:camera];
-//            }
+            [SHTutkHttp registerDevice:camera];
         }
     } else {
         SHLogInfo(SHLogTagAPP, @"Create a camera");
         SHCamera *savedCamera = (SHCamera *)[NSEntityDescription insertNewObjectForEntityForName:kEntityName inManagedObjectContext:self.managedObjectContext];
 
         savedCamera.cameraName = cameraInfo.cameraName;
-#if USE_ENCRYP
-        savedCamera.cameraToken = cameraInfo.cameraToken;
-        savedCamera.cameraUidToken = cameraInfo.cameraUidToken;
-#else
         savedCamera.cameraUid = cameraInfo.cameraUid;
-#endif
         savedCamera.devicePassword = cameraInfo.devicePassword;
         savedCamera.id = cameraInfo.id;
         savedCamera.thumbnail = cameraInfo.thumnail;
@@ -410,62 +350,16 @@
 - (void)deleteAllCameras {
     SHLogTRACE();
     
-#if 0
-    NSError *error = nil;
-    if (![[self fetchedResultsController] performFetch:&error]) {
-        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
-        abort();
-#endif
-    }
-    
-    if (self.fetchedResultsController.sections.count > 0) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController.sections objectAtIndex:0];
-        SHLogDebug(SHLogTagAPP, @"SHCamera num : %lu",(unsigned long)[sectionInfo numberOfObjects]);
-        
-        if ([sectionInfo numberOfObjects] > 0) {
-            for (int i=0; i < [sectionInfo numberOfObjects]; ++i) {
-                //行数据
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-                SHCamera *camera = (SHCamera *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-                SHLogDebug(SHLogTagAPP, @"uid: %@ - name: %@ create time is %@", camera.cameraUid, camera.cameraName,camera.createTime);
-                
-                NSError *error = nil;
-                if (![SHTutkHttp unregisterDevice:camera.cameraUid]) {
-                    SHLogError(SHLogTagAPP, @"unregisterDevice failed.");
-//                    [self showFailedTipsWithInfo:NSLocalizedString(@"kUnregisterDeviceFailed", nil)];
-                    return;
-                }
-                
-                [[SHCameraManager sharedCameraManger] removeAllCameraObjects];
-                [SHTool removeMediaDirectoryWithPath:camera.cameraUid.md5];
-                [self.managedObjectContext deleteObject:camera];
-                
-                if (![self.managedObjectContext save:&error]) {
-                    SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
-                    abort();
-#endif
-                } else {
-                    SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-                }
-            }
-        }
-    }
-#else
     NSArray *cameras = [self fetchedCamera];
     WEAK_SELF(self);
     [cameras enumerateObjectsUsingBlock:^(SHCamera *camera, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![SHTutkHttp unregisterDevice:camera.cameraUid]) {
             SHLogError(SHLogTagAPP, @"unregisterDevice failed.");
-//            [self showFailedTipsWithInfo:NSLocalizedString(@"kUnregisterDeviceFailed", nil)];
-//            return;
         }
         
         [weakself cleanMemoryCacheWithUid:camera.cameraUid];
         [weakself deleteCamera:camera];
     }];
-#endif
 }
 
 - (void)cleanMemoryCacheWithUid:(NSString *)uid {
@@ -498,17 +392,12 @@
             SHLogError(SHLogTagAPP, @"unregisterDevice failed.");
         }
         
-#if 0
-        [self cleanMemoryCacheWithUid:localCamera.cameraUid];
-        [self deleteCamera:localCamera];
-#else
         if ([self rightAwayUpdateLocalCamera]) {
             [self cleanMemoryCacheWithUid:localCamera.cameraUid];
             [self deleteCamera:localCamera];
         } else {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
         }
-#endif
     }
 }
 

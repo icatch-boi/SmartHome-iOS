@@ -52,14 +52,6 @@
 
 @implementation HWCalendar
 
-//- (NSMutableDictionary *)storageInfoDit {
-//    if (!_storageInfoDit) {
-//        _storageInfoDit = [NSMutableDictionary dictionary];
-//    }
-//    
-//    return _storageInfoDit;
-//}
-
 - (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj
 {
     if (self = [super initWithFrame:frame]) {
@@ -96,7 +88,7 @@
         [yearArray addObject:[NSString stringWithFormat:@"%zd", firstYear + i]];
     }
     _yearArray = yearArray;
-    _monthArray = @[NSLocalizedString(@"kJanuary", nil), NSLocalizedString(@"kFebruary", nil), NSLocalizedString(@"kMarch", nil), NSLocalizedString(@"kApril", nil), NSLocalizedString(@"kMay", nil), NSLocalizedString(@"kJune", nil), NSLocalizedString(@"kJuly", nil), NSLocalizedString(@"kAugust", nil), NSLocalizedString(@"kSeptember", nil), NSLocalizedString(@"kOctober", nil), NSLocalizedString(@"kNovember", nil), NSLocalizedString(@"kDecember", nil)];//@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12"];
+    _monthArray = @[NSLocalizedString(@"kJanuary", nil), NSLocalizedString(@"kFebruary", nil), NSLocalizedString(@"kMarch", nil), NSLocalizedString(@"kApril", nil), NSLocalizedString(@"kMay", nil), NSLocalizedString(@"kJune", nil), NSLocalizedString(@"kJuly", nil), NSLocalizedString(@"kAugust", nil), NSLocalizedString(@"kSeptember", nil), NSLocalizedString(@"kOctober", nil), NSLocalizedString(@"kNovember", nil), NSLocalizedString(@"kDecember", nil)];
 }
 
 - (void)setDefaultInfo
@@ -111,43 +103,6 @@
 
 - (void)creatControl
 {
-//    //左侧显示视图
-//    UIView *tipsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KTipsW, KBtnH * 8)];
-//    tipsView.backgroundColor = KMainColor;
-//    [self addSubview:tipsView];
-//    
-//    //星期标签
-//    UILabel *weekLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, KTipsW, KBtnH)];
-//    weekLabel.backgroundColor = [UIColor colorWithRed:0.0f green:130/255.0f blue:116/255.0f alpha:1.0f];
-//    weekLabel.textColor = [UIColor whiteColor];
-//    weekLabel.textAlignment = NSTextAlignmentCenter;
-//    [tipsView addSubview:weekLabel];
-//    self.weekLabel = weekLabel;
-//    
-//    //年份标签
-//    UILabel *yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(weekLabel.frame) + 20, KTipsW, KBtnH)];
-//    yearLabel.textColor = KbackColor;
-//    yearLabel.textAlignment = NSTextAlignmentCenter;
-//    yearLabel.font = [UIFont systemFontOfSize:26.0f];
-//    [tipsView addSubview:yearLabel];
-//    self.yearLabel = yearLabel;
-//    
-//    //月份标签
-//    UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(yearLabel.frame), KTipsW, 26)];
-//    monthLabel.textColor = [UIColor whiteColor];
-//    monthLabel.textAlignment = NSTextAlignmentCenter;
-//    monthLabel.font = [UIFont systemFontOfSize:26.0f];
-//    [tipsView addSubview:monthLabel];
-//    self.monthLabel = monthLabel;
-//    
-//    //日期标签
-//    UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(monthLabel.frame) + 30, KTipsW, 120)];
-//    dayLabel.textColor = [UIColor whiteColor];
-//    dayLabel.textAlignment = NSTextAlignmentCenter;
-//    dayLabel.font = [UIFont systemFontOfSize:76.0f];
-//    [tipsView addSubview:dayLabel];
-//    self.dayLabel = dayLabel;
-    
     CGSize titleSize = [NSLocalizedString(@"kReturnToday", nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]} context:nil].size;
     CGFloat yearBtnW = 70.0f;
     CGFloat monthbtnW = 60.0f;
@@ -248,14 +203,6 @@
     [cancelBtn setTitleColor:KMainColor forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(cancelBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:cancelBtn];
-    
-//    //时间选择器
-//    _timePicker = [[UIPickerView alloc] init];
-//    _timePicker.backgroundColor = KMainColor;
-//    _timePicker.hidden = YES;
-//    _timePicker.delegate = self;
-//    _timePicker.dataSource = self;
-//    [self addSubview:_timePicker];
 }
 
 //set方法

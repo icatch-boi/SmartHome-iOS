@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import <SHAccountManagementKit/CameraOperate.h>
-//#import <SHAccountManagementKit/AccountOperate.h>
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
 
 NS_ASSUME_NONNULL_BEGIN

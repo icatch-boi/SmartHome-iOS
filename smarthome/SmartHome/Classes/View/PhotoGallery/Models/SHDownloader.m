@@ -21,9 +21,6 @@
 @property(nonatomic) dispatch_queue_t downloadQueue;
 @property(nonatomic) dispatch_queue_t downloadPercentQueue;
 
-//@property (nonatomic, copy) void (^progressBlock)(NSInteger progress);
-//@property (nonatomic, copy) void (^downloadInfoBlock)(int downloadInfo);
-
 @property (nonatomic, strong) SHFile *file;
 @property (nonatomic, strong) SHObserver *startDownloadObserver;
 @property (nonatomic, strong) SHObserver *endDownloadObserver;
@@ -102,29 +99,17 @@
 			[self.delegate onDownloadComplete:file retvalue:false];
 			self.shCamObj.cameraProperty.downloadFailedNum ++;
 		    [self removeDownloadObserver];
-			
-//			if (_shCamObj.isEnterBackground) {
-//				if ([SHDownloadManager shareDownloadManger].downloadArray.count) {
-////					[self downloadFile:[SHDownloadManager shareDownloadManger].downloadArray.firstObject];
-//				} else {
-//					[[NSNotificationCenter defaultCenter] postNotificationName:kDownloadCompleteNotification object:nil];
-//				}
-//			}
-//			
+				
 			dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
-				[self removeObserver:self forKeyPath:@"downloadedPercent"];
-#else
                 @try {
                     [self removeObserver:self forKeyPath:@"downloadedPercent"];
                 } @catch(NSException *exception) {
                     SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
                 }
-#endif
 			});
 		}else{
-			//[self.delegate onCancelDownloadComplete:self.file retvalue:NO];
-		}
+
+        }
 		
 		self.downloadFileProcessing = NO;
 	});
@@ -133,31 +118,12 @@
 
 - (void)requestDownloadPercent:(ICatchFile)file
 {
-//    SHLogTRACE();
-#if 1
-#else
-    if (!file) {
-        SHLogError(SHLogTagAPP, @"file is null");
-        return;
-    }
-#endif
-	
     ICatchFile f = file;
     NSString *locatePath = nil;
     NSString *fileName = [NSString stringWithUTF8String:f.getFileName().c_str()];
     unsigned long long fileSize = f.getFileSize();
     
-#if 0
-    NSString *fileDirectory = nil;
-    if (f.getFileType() == ICH_FILE_TYPE_VIDEO /*[fileName hasSuffix:@".MP4"] || [fileName hasSuffix:@".MOV"]*/) {
-        fileDirectory = [SHTool createMediaDirectoryWithPath:_shCamObj.camera.cameraUid.md5][2];
-    } else {
-        fileDirectory = [SHTool createMediaDirectoryWithPath:_shCamObj.camera.cameraUid.md5][1];
-    }
-    locatePath = [fileDirectory stringByAppendingPathComponent:fileName];
-#else
     locatePath = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), fileName];
-#endif
     
     SHLogInfo(SHLogTagAPP, @"locatePath: %@, %llu", locatePath, fileSize);
     
@@ -186,11 +152,8 @@
                         downloadTask = UIBackgroundTaskInvalid;
                     }];
                 } else {
-//                    self.downloadedPercent = [_ctrl.fileCtrl requestDownloadedPercent2:locatePath
-//                                                                              fileSize:fileSize];
                     float progress = [self.shCamObj.sdk getDownloadedFileSize:locatePath] * 1.0 / fileSize;
                     self.downloadedPercent = progress * 100;
-                    //SHLogInfo(SHLogTagAPP, @"percent: %lu", (unsigned long)self.downloadedPercent);
                     
                     [NSThread sleepForTimeInterval:0.25];
                 }
@@ -247,7 +210,6 @@
     SHLogTRACE();
     
     int value = sender.intValue1;
-//    NSString *downloadInfo = nil;
     NSString *description = NSLocalizedString(@"kFileDownloadSuccess", nil);
 
     switch (value) {
@@ -260,20 +222,15 @@
             if ([self.delegate respondsToSelector:@selector(onProgressUpdate:progress:)]) {
                 [self.delegate onProgressUpdate:self.file progress:100];
             }
-//            downloadInfo = @"下载成功";
-//            if (self.progressBlock) {
-//                self.progressBlock(100);
-//            }
+
             self.shCamObj.cameraProperty.downloadSuccessedNum ++;
             
-//            [self.shCamObj.sdk addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
             [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetToLocalAlbum:self.file.f forKey:self.shCamObj.camera.cameraUid];
             description = NSLocalizedString(@"kFileDownloadSuccess", nil);
             break;
          
         case -1:
             SHLogError(SHLogTagAPP, @"下载失败 - fw出错");
-//            downloadInfo = @"下载失败 - fw出错";
             if ([self.delegate respondsToSelector:@selector(onDownloadComplete:retvalue:)]) {
                 SHLogInfo(SHLogTagAPP, @"notify onDownloadComplete, fw happen error.");
                 [self.delegate onDownloadComplete:self.file retvalue:NO];
@@ -283,8 +240,6 @@
             
         case -2:
             SHLogWarn(SHLogTagAPP, @"下载失败 - 用户cancel");
-//            downloadInfo = @"下载失败 - 用户cancel";
-//            self.shCamObj.cameraProperty.cancelDownloadNum ++;
             if ([self.delegate respondsToSelector:@selector(onCancelDownloadComplete:retvalue:)]) {
                 [self.delegate onCancelDownloadComplete:self.file retvalue:YES];
             }
@@ -308,28 +263,12 @@
     self.downloadFileProcessing = NO;
     [self removeDownloadObserver];
     
-//    if (self.downloadInfoBlock && !_shCamObj.isEnterBackground) {
-//        self.downloadInfoBlock(value);
-//    }
-	
-//    if (_shCamObj.isEnterBackground) {
-//        if ([SHDownloadManager shareDownloadManger].downloadArray.count) {
-////            [self downloadFile:[SHDownloadManager shareDownloadManger].downloadArray.firstObject downloadInfoBlock:nil progressBlock:nil isDownloading:NO];
-//        } else {
-//            [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadCompleteNotification object:nil];
-//        }
-//    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
-        [self removeObserver:self forKeyPath:@"downloadedPercent"];
-#else
         @try {
             [self removeObserver:self forKeyPath:@"downloadedPercent"];
         } @catch (NSException *exception) {
             SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
         }
-#endif
     });
 }
 
@@ -339,16 +278,10 @@
         change                :(NSDictionary *)change
         context               :(void *)context
 {
-    //SHLogTRACE();
     if ([keyPath isEqualToString:@"downloadedPercent"]) {
-//        SHLogInfo(SHLogTagAPP, "download progress is %lu",(unsigned long)self.downloadedPercent);
         if ([self.delegate respondsToSelector:@selector(onProgressUpdate:progress:)]) {
             [self.delegate onProgressUpdate:self.file progress:(int)self.downloadedPercent];
         }
-
-//        if (self.progressBlock && !_shCamObj.isEnterBackground) {
-//            self.progressBlock(self.downloadedPercent);
-//        }
     }
 }
 

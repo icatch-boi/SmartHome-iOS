@@ -12,16 +12,6 @@
 @class SHFileTable;
 @class SHICatchEvent;
 
-//typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
-//    SHPreviewModeCameraOff = 1<<0,
-//    SHPreviewModeCameraOn = 1<<1,
-//    SHPreviewModeVideoOff = 1<<2,
-//    SHPreviewModeVideoOn = 1<<3,
-//    SHPreviewModeTalkBackOff = 1<<4,
-//    SHPreviewModeTalkBackOn = 1<<5,
-//};
-
-
 typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 	SHPreviewModeCaptureOnFlag = 1,
 	SHPreviewModeVideoOnFlag = 1<<1,
@@ -31,19 +21,8 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @interface SHCameraProperty : NSObject
 
 @property (nonatomic) SHPreviewMode previewMode;
-//@property (nonatomic, assign) int curWhiteBalance;
-//@property (nonatomic, assign) int curLightFrequency;
-//@property (nonatomic, copy) NSString *curVideoSize;
 
-@property (nonatomic) SHSettingData *whiteBalanceData;
-@property (nonatomic) SHSettingData *lightFrequencyData;
-@property (nonatomic) SHSettingData *videoSizeData;
-
-@property (nonatomic) SHSettingData *pirData;
-@property (nonatomic) SHSettingData *cameraBrightnessData;
 @property (nonatomic) SHSettingData *vidRecDurationData;
-@property (nonatomic) SHSettingData *micVolumeData;
-@property (nonatomic) SHSettingData *speakerVolumeData;
 @property (nonatomic) SHSettingData *sleepTimeData;
 
 @property (nonatomic) SHSettingData *memorySizeData;
@@ -53,13 +32,11 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic) SHSettingData *tamperalarmData;
 
 @property (nonatomic) SHSettingData *aboutData;
-@property (nonatomic) SHSettingData *timeZoneData;
 
 @property (nonatomic, getter=isMute) BOOL mute;
 @property (nonatomic, assign) int downloadSuccessedNum;
 @property (nonatomic, assign) int downloadFailedNum;
 @property (nonatomic, assign) int cancelDownloadNum;
-//@property (nonatomic, strong) NSMutableArray *downloadArray;
 
 @property (nonatomic) BOOL fwUpdate;
 @property (nonatomic) BOOL serverOpened;
@@ -78,7 +55,6 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic, strong) SHICatchEvent *curChargeStatus;
 
 - (void)cleanCurrentCameraAllProperty;
-- (BOOL)checkSupportPropertyExist;
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj;
 - (void)cleanCacheFormat;
 - (void)cleanCacheData;

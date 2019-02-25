@@ -41,9 +41,7 @@
                 }];
                 
                 weakself.facesInfoArray = faceInfoModelMArray.copy;
-                
-//                [weakself.tableView reloadData];
-                
+                                
                 [weakself saveFacesInfoToLocal:result];
                 
                 if (completion) {

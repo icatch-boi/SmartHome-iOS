@@ -12,7 +12,6 @@
 @class FRDFaceInfoViewModel;
 @interface FRDFaceDisplayVC : UIViewController
 
-//@property (nonatomic, copy) NSString *userName;
 @property (nonatomic, strong) FRDFaceInfo *faceInfo;
 @property (nonatomic, strong) FRDFaceInfoViewModel *faceInfoViewModel;
 

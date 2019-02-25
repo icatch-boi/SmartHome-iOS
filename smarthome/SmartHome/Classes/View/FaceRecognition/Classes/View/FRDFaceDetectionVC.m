@@ -84,7 +84,6 @@ static CGFloat kFaceBoxTopHeight = 150;
 }
 
 - (void)setupSwitchButton {
-//    UIBarButtonItem *switchBtn = [[UIBarButtonItem alloc] initWithTitle:@"切换摄像头" style:UIBarButtonItemStylePlain target:self action:@selector(changeCameraAction)];
     UIBarButtonItem *albumBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"CameraAlbum", nil) style:UIBarButtonItemStylePlain target:self action:@selector(enterAlbumClick)];
     self.navigationItem.rightBarButtonItem = albumBtn;
 }
@@ -92,7 +91,6 @@ static CGFloat kFaceBoxTopHeight = 150;
 - (void)setupInfoLabel {
     UILabel *label = [[UILabel alloc] init];
     
-//    label.hidden = YES;
     label.text = NSLocalizedString(@"kFaceRecognitionDescrition_5", nil);
     label.textColor = [UIColor redColor];
     
@@ -721,22 +719,13 @@ verify_failed:
         faceLayer.transform = CATransform3DIdentity;
         faceLayer.frame = face.bounds;
         
-        //        NSLog(@"face bouds: %@", NSStringFromCGRect(face.bounds));
-        //        NSLog(@"face bouds minX: %f, maxX: %f", CGRectGetMinX(face.bounds), CGRectGetMaxX(face.bounds));
-        //        NSLog(@"face bouds minY: %f, maxY: %f", CGRectGetMinY(face.bounds), CGRectGetMaxY(face.bounds));
-        
         faceLayer.transform = CATransform3DMakeScale(1.3, 1.3, 1.0);
         
         BOOL success = [self verifyRecognitionResult:face];
         
         if (success && CGRectEqualToRect(_preRect, faceLayer.frame)) {
             _isCapture = true;
-            
-            //            NSLog(@"face bouds: %@", NSStringFromCGRect(face.bounds));
-            //            NSLog(@"face bouds minX: %f, maxX: %f", CGRectGetMinX(face.bounds), CGRectGetMaxX(face.bounds));
-            //            NSLog(@"face bouds minY: %f, maxY: %f", CGRectGetMinY(face.bounds), CGRectGetMaxY(face.bounds));
         } else {
-            //            self.captureImgView.image = nil;
         }
         
         _preRect = faceLayer.frame;

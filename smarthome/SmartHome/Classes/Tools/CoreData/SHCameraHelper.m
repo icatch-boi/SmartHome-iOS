@@ -30,20 +30,11 @@
 
 @implementation SHCameraHelper
 
-#if USE_ENCRYP
-+ (instancetype)cameraWithName:(NSString *)cameraName cameraToken:(NSString *)cameraToken cameraUidToken:(NSString *)cameraUidToken devicePassword:(NSString *)devicePassword thumbnail:(UIImage *)thumnail id:(NSString *)cameraId operable:(int)operable {
-#else
 + (instancetype)cameraWithName:(NSString *)cameraName cameraUid:(NSString *)cameraUid devicePassword:(NSString *)devicePassword id:(NSString *)cameraId thumbnail:(UIImage *)thumnail operable:(int)operable {
-#endif
     SHCameraHelper *camera = [[SHCameraHelper alloc] init];
     
     camera.cameraName = cameraName;
-#if USE_ENCRYP
-    camera.cameraToken = cameraToken;
-    camera.cameraUidToken = cameraUidToken;
-#else
     camera.cameraUid = cameraUid;
-#endif
     camera.devicePassword = devicePassword;
     camera.id = cameraId;
     camera.thumnail = thumnail;
@@ -53,9 +44,6 @@
 }
 
 - (NSString *)description {
-    //NSArray *properties = [self propertiesWithClass:self.class];
-    
-    //return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, [self dictionaryWithValuesForKeys:properties].description];
     return  [NSString stringWithFormat:@"SHCameraHelper -\n name : %@ \n, uuid : %@ \n, password : %@ operate : %d\n, addTime: %@\n", _cameraName, _cameraUid, _devicePassword, _operable, _addTime];
 }
 

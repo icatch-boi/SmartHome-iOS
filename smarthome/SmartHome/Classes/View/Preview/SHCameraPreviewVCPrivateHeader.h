@@ -26,18 +26,15 @@
     
 
 #import "SHCameraPreviewVC.h"
-#import "CustomIOS7AlertView.h"
 
 @interface SHCameraPreviewVC ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *previewImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *batteryImageView;
 @property (weak, nonatomic) IBOutlet UIButton *funScreenButton;
-@property (weak, nonatomic) IBOutlet UIButton *videoSizeButton;
 @property (weak, nonatomic) IBOutlet UIButton *audioButton;
 @property (weak, nonatomic) IBOutlet UIButton *speakerButton;
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
-@property (weak, nonatomic) IBOutlet UILabel *curDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pvFailedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bitRateLabel;
 
@@ -77,7 +74,6 @@
 @property (nonatomic) SHControlCenter *ctrl;
 @property (nonatomic) SHCameraObject *shCameraObj;
 
-@property (nonatomic, strong) CustomIOS7AlertView *videoSizeView;
 @property (nonatomic, strong) UIScrollView *zoomScrollView;
 @property (nonatomic, strong) UIImageView *zoomImageView;
 @property (nonatomic, strong) UIButton *zoomButton;

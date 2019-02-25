@@ -29,7 +29,4 @@
 
 @interface SHMainViewController : UINavigationController
 
-- (void)signupAccountHandleWithEmail:(NSString *)email isResetPWD:(BOOL)reset;
-- (void)signinAccountHandle;
-
 @end

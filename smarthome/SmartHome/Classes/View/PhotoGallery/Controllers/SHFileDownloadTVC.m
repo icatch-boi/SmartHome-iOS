@@ -34,13 +34,9 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    SHCameraManager *app = [SHCameraManager sharedCameraManger];
-//    self.shCamObj = [app.smarthomeCams objectAtIndex:0];
-//    self.shCamObj = [app getSHCameraObjectWithCameraUid:_cameraUid];
-//    self.ctrl = _shCamObj.controler;
 	
  	self.downloadArray = [SHDownloadManager shareDownloadManger].downloadArray;
-	SHLogInfo(SHLogTagAPP, "viewDidLoad cout is : %d",self.downloadArray.count);
+    SHLogInfo(SHLogTagAPP, "viewDidLoad cout is : %lu",(unsigned long)self.downloadArray.count);
 	[SHDownloadManager shareDownloadManger].downloadInfoDelegate = self;
     [self updateDownloadInfo];
 
@@ -90,9 +86,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	NSLog(@"downloadArray count is %d ",self.downloadArray.count);
-	//NSLog(@"tableView count is %d ",[tableView numberOfRowsInSection:(0)]);
-	SHLogInfo(SHLogTagAPP, "tableView cout is : %d",self.downloadArray.count);
+    SHLogInfo(SHLogTagAPP, "tableView cout is : %lu",(unsigned long)self.downloadArray.count);
     return self.downloadArray.count;
 }
 
@@ -100,136 +94,8 @@
     SHDownloadTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DownloadCellID" forIndexPath:indexPath];
 	cell.file = self.downloadArray[indexPath.row];
     cell.delegate = self;
-//	cell.shCamObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:cell.file.uid];
-//	
-//	[cell setDownloadCompleteBlock:^ (SHDownloadTableViewCell *dcell) {
-//		NSIndexPath *curIndexPath = [tableView indexPathForCell:dcell];
-//		
-//		switch (dcell.downloadInfo) {
-//			case 0:
-//				break;
-//				
-//			default:
-//				break;
-//		}
-//		
-//		dispatch_async(dispatch_get_main_queue(), ^{
-//			NSLog(@"........downloadArray count is %d ",self.downloadArray.count);
-//			if (curIndexPath) {
-//				//[self.downloadArray removeObjectAtIndex:curIndexPath.row];
-//				if (!self.downloadArray.count) {
-//					if (self.downloadCompleteBlock) {
-//						self.downloadCompleteBlock();
-//					}
-//				}
-//				
-//				[tableView deleteRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//			}
-//			
-//			if (self.downloadArray.count > 0) {
-//				NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//				[tableView reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//			}
-//			self.downloadSuccessedNum++;
-//			[self updateDownloadInfo];
-//		});
-//	}];
-//	
-//	[cell setCancelDownloadSuccessBlock:^ (SHDownloadTableViewCell *dcell){
-//		SHLogInfo(SHLogTagAPP, @"cancel success.");
-//		//need delete file from download array
-//		[self.downloadArray removeObject:dcell.file];
-//		//[dcell download
-//		dispatch_async(dispatch_get_main_queue(), ^{
-//			[self.progressHUD hideProgressHUD:YES];
-//			[self.tableView reloadData];
-//			self.cancelDownloadNum++;
-//			[self updateDownloadInfo];
-//			
-//		});
-//	}];
-//	
-//	[cell setCancelDownloadFailedBlock:^{
-//		SHLogError(SHLogTagAPP, @"cancel failed.");
-//		dispatch_async(dispatch_get_main_queue(), ^{
-//			[self.progressHUD showProgressHUDNotice:@"cancel failed." showTime:1.5];
-//			self.downloadFailedNum++;
-//			[self updateDownloadInfo];
-//		});
-//	}];
-//	
-//	[cell setCancelDownloadPrepareBlock:^{
-//		[self.progressHUD showProgressHUDWithMessage:@"正在取消下载..."];
-//	}];
-//	SHLogInfo(SHLogTagAPP, @"cell: %@", cell);
+
 	return cell;
-
-
-    // Configure the cell...
-//    cell.file = self.downloadArray[indexPath.row];
-//    cell.shCamObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:cell.file.uid];
-//	
-//    [cell setDownloadCompleteBlock:^ (SHDownloadTableViewCell *dcell) {
-//        NSIndexPath *curIndexPath = [tableView indexPathForCell:dcell];
-//        
-//        switch (dcell.downloadInfo) {
-//            case 0:
-//                break;
-//                
-//            default:
-//                break;
-//        }
-//        
-//		dispatch_async(dispatch_get_main_queue(), ^{
-//			NSLog(@"........downloadArray count is %d ",self.downloadArray.count);
-//			if (curIndexPath) {
-//				//[self.downloadArray removeObjectAtIndex:curIndexPath.row];
-//				if (!self.downloadArray.count) {
-//					if (self.downloadCompleteBlock) {
-//						self.downloadCompleteBlock();
-//					}
-//				}
-//				
-//				[tableView deleteRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//			}
-//			
-//			if (self.downloadArray.count > 0) {
-//				NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//				[tableView reloadRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//			}
-//			self.downloadSuccessedNum++;
-//			[self updateDownloadInfo];
-//		});
-//	}];
-//	
-//    [cell setCancelDownloadSuccessBlock:^ (SHDownloadTableViewCell *dcell){
-//        SHLogInfo(SHLogTagAPP, @"cancel success.");
-//		//need delete file from download array
-//		[self.downloadArray removeObject:dcell.file];
-//		//[dcell download
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.progressHUD hideProgressHUD:YES];
-//			[self.tableView reloadData];
-//			self.cancelDownloadNum++;
-//			[self updateDownloadInfo];
-//
-//        });
-//    }];
-//    
-//    [cell setCancelDownloadFailedBlock:^{
-//        SHLogError(SHLogTagAPP, @"cancel failed.");
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.progressHUD showProgressHUDNotice:@"cancel failed." showTime:1.5];
-//			self.downloadFailedNum++;
-//			[self updateDownloadInfo];
-//        });
-//    }];
-//    
-//    [cell setCancelDownloadPrepareBlock:^{
-//        [self.progressHUD showProgressHUDWithMessage:@"正在取消下载..."];
-//    }];
-//    SHLogInfo(SHLogTagAPP, @"cell: %@", cell);
-//    return cell;
 }
 
 #pragma mark - Action Progress

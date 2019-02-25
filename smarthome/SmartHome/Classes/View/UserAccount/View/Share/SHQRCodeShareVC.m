@@ -48,7 +48,6 @@ static NSString * const kSaveQRImageName = @"shareQR";
 }
 
 - (void)setupGUI {
-//    _describeLabel.text = @"1、首先请对方打开XJ doorbell APP，点击Home页下方\"Add Camera\"按钮进入添加相机主页；\n2、点击\"使用二维码方式配置\"选项，对方即可扫描下方二维码与您共享该相机设备。";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareQRClick:)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(close) isBack:NO];
     
@@ -107,7 +106,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
                                     Error *error = result;
                                     
                                     self.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-                                    [self.progressHUD showProgressHUDNotice:/*@"生成分享二维码失败"*/NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
+                                    [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
                                     self.navigationItem.rightBarButtonItem.enabled = NO;
                                 }
                             });
@@ -119,7 +118,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD showProgressHUDNotice:/*@"生成分享二维码失败"*/NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
+            [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kGenerateQRCodeFailed", nil) showTime:2.0];
             _qrCodeImageView.image = [UIImage imageNamed:@"empty_photo"];
         });
     });

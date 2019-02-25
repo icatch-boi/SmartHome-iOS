@@ -103,12 +103,7 @@
 		3897E0C52180743100E72417 /* XJSetupWiFiVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3897E0B12180743000E72417 /* XJSetupWiFiVC.m */; };
 		3897E0C72180743100E72417 /* XJSetupDeviceSSIDVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3897E0B62180743000E72417 /* XJSetupDeviceSSIDVC.m */; };
 		3897E0C82180743100E72417 /* XJSetupDeviceInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3897E0B82180743000E72417 /* XJSetupDeviceInfoVC.m */; };
-		389C29E71F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 389C29DF1F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV */; };
 		389C29E81F2EEA0D004C4806 /* Capture_Shutter.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 389C29E01F2EEA0D004C4806 /* Capture_Shutter.WAV */; };
-		389C29E91F2EEA0D004C4806 /* ChangeMode.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 389C29E11F2EEA0D004C4806 /* ChangeMode.WAV */; };
-		389C29EA1F2EEA0D004C4806 /* DelayCapture_BEEP.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 389C29E21F2EEA0D004C4806 /* DelayCapture_BEEP.WAV */; };
-		389C29EB1F2EEA0D004C4806 /* StartStopVideoRec.WAV in Resources */ = {isa = PBXBuildFile; fileRef = 389C29E31F2EEA0D004C4806 /* StartStopVideoRec.WAV */; };
-		389C29EC1F2EEA0D004C4806 /* TimeZone.json in Resources */ = {isa = PBXBuildFile; fileRef = 389C29E61F2EEA0D004C4806 /* TimeZone.json */; };
 		389C29F01F2EEA5D004C4806 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 389C29EF1F2EEA5D004C4806 /* AppDelegate.m */; };
 		389C29F21F2EEABF004C4806 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 389C29F11F2EEABF004C4806 /* main.m */; };
 		389C29F71F2EEADC004C4806 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 389C29F61F2EEADC004C4806 /* Settings.bundle */; };
@@ -565,14 +560,9 @@
 		3897E0B62180743000E72417 /* XJSetupDeviceSSIDVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XJSetupDeviceSSIDVC.m; sourceTree = "<group>"; };
 		3897E0B82180743000E72417 /* XJSetupDeviceInfoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XJSetupDeviceInfoVC.m; sourceTree = "<group>"; };
 		3897E0B92180743000E72417 /* SHSetupNavVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSetupNavVC.h; sourceTree = "<group>"; };
-		389C29DF1F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "BurstCapture&TimelapseCapture.WAV"; sourceTree = "<group>"; };
 		389C29E01F2EEA0D004C4806 /* Capture_Shutter.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Capture_Shutter.WAV; sourceTree = "<group>"; };
-		389C29E11F2EEA0D004C4806 /* ChangeMode.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ChangeMode.WAV; sourceTree = "<group>"; };
-		389C29E21F2EEA0D004C4806 /* DelayCapture_BEEP.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = DelayCapture_BEEP.WAV; sourceTree = "<group>"; };
-		389C29E31F2EEA0D004C4806 /* StartStopVideoRec.WAV */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = StartStopVideoRec.WAV; sourceTree = "<group>"; };
 		389C29E41F2EEA0D004C4806 /* SHPrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPrefixHeader.pch; sourceTree = "<group>"; };
 		389C29E51F2EEA0D004C4806 /* SHUtilsMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHUtilsMacro.h; sourceTree = "<group>"; };
-		389C29E61F2EEA0D004C4806 /* TimeZone.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TimeZone.json; sourceTree = "<group>"; };
 		389C29EE1F2EEA5D004C4806 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		389C29EF1F2EEA5D004C4806 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		389C29F11F2EEABF004C4806 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1428,7 +1418,6 @@
 				389C29DE1F2EEA0D004C4806 /* Res_Audio */,
 				389C29E41F2EEA0D004C4806 /* SHPrefixHeader.pch */,
 				389C29E51F2EEA0D004C4806 /* SHUtilsMacro.h */,
-				389C29E61F2EEA0D004C4806 /* TimeZone.json */,
 				1209ABB320D0F3880014F684 /* icatchtek.cer */,
 			);
 			path = Others;
@@ -1439,11 +1428,7 @@
 			children = (
 				382B9991217594D200318BB8 /* test1.caf */,
 				380770381FD66C3B006E7B92 /* test.caf */,
-				389C29DF1F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV */,
 				389C29E01F2EEA0D004C4806 /* Capture_Shutter.WAV */,
-				389C29E11F2EEA0D004C4806 /* ChangeMode.WAV */,
-				389C29E21F2EEA0D004C4806 /* DelayCapture_BEEP.WAV */,
-				389C29E31F2EEA0D004C4806 /* StartStopVideoRec.WAV */,
 			);
 			path = Res_Audio;
 			sourceTree = "<group>";
@@ -2324,10 +2309,10 @@
 		38E5C2D920A3F7F9003004E0 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
-				38E5C2DA20A3F7F9003004E0 /* HWCalendar.m */,
-				38E5C2DB20A3F7F9003004E0 /* HWOptionButton.m */,
 				38E5C2DC20A3F7F9003004E0 /* HWCalendar.h */,
+				38E5C2DA20A3F7F9003004E0 /* HWCalendar.m */,
 				38E5C2DD20A3F7F9003004E0 /* HWOptionButton.h */,
+				38E5C2DB20A3F7F9003004E0 /* HWOptionButton.m */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -2698,7 +2683,6 @@
 				38E5C38020A41190003004E0 /* Setting.storyboard in Resources */,
 				386FAFD420AFB712007655CF /* SHLoginFirstView.xib in Resources */,
 				38BB265F21DF110000270CE1 /* FaceRecognition.storyboard in Resources */,
-				389C29E91F2EEA0D004C4806 /* ChangeMode.WAV in Resources */,
 				1209ABB420D0F3890014F684 /* icatchtek.cer in Resources */,
 				38E5C3DC20A419E0003004E0 /* SHAccountInfoHeaderView.xib in Resources */,
 				38F525811F2F020400F5A5A2 /* LICENSE.txt in Resources */,
@@ -2712,7 +2696,6 @@
 				38E5C30C20A3F81F003004E0 /* MpbPopover.xib in Resources */,
 				3814BECA2178276700A13148 /* Resource.bundle in Resources */,
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
-				389C29EC1F2EEA0D004C4806 /* TimeZone.json in Resources */,
 				3897E0BF2180743100E72417 /* Setup.storyboard in Resources */,
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
@@ -2720,13 +2703,10 @@
 				38E5C2E720A3F7FA003004E0 /* SHFileFilter.plist in Resources */,
 				3840ED432212F44200C9370C /* .cp in Resources */,
 				384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */,
-				389C29E71F2EEA0D004C4806 /* BurstCapture&TimelapseCapture.WAV in Resources */,
 				389C29F71F2EEADC004C4806 /* Settings.bundle in Resources */,
 				38E5C3D320A419E0003004E0 /* userAccountItem.json in Resources */,
 				389C29FA1F2EEAF5004C4806 /* Localizable.strings in Resources */,
-				389C29EA1F2EEA0D004C4806 /* DelayCapture_BEEP.WAV in Resources */,
 				38E5C3D420A419E0003004E0 /* AccountTableViewCell.xib in Resources */,
-				389C29EB1F2EEA0D004C4806 /* StartStopVideoRec.WAV in Resources */,
 				3897E0C42180743100E72417 /* XJSetupScanTipsView.xib in Resources */,
 				38E5C38220A417AD003004E0 /* Album.storyboard in Resources */,
 				38E5C1C620A3F5AF003004E0 /* DeleteCameraCell.xib in Resources */,

@@ -57,13 +57,6 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 }
 
 - (void)setupGUI {
-//    _footBarView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.71];
-//    [_footBarView setCornerWithRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight radius:kImageCornerRadius];
-//    [_cameraThumbnail setCornerWithRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight radius:kImageCornerRadius];
-    
-//    _messageBtn.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.15];
-//    _albumBtn.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.15];
-//    _shareBtn.backgroundColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.15];
     _cameraNameLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     _lastPreviewTime.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     [_cameraNameLabel setCornerWithRadius:5.0 masksToBounds:YES];
@@ -71,7 +64,6 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     
     [self addGestureEvent];
     
-//    _cameraThumbnail.contentMode = UIViewContentModeScaleAspectFill;
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
 }
 
@@ -119,16 +111,9 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     _lastPreviewTime.text = viewModel.cameraObj.camera.pvTime ? [[@" " stringByAppendingString:viewModel.cameraObj.camera.pvTime] stringByAppendingString:@" "] : viewModel.cameraObj.camera.pvTime;
     
     UIImage *img = viewModel.cameraObj.camera.thumbnail;
-//    _playButton.hidden = !img;
-//    img = img ? img : [UIImage imageNamed:@"home-loading" /*@"default_thumb"*/];
+
     _cameraThumbnail.image = [img ic_imageWithSize:_cameraThumbnail.bounds.size backColor:self.backgroundColor];
     _cameraThumbnail.highlightedImage = [self createHighlightedImageWithImage:_cameraThumbnail.image];
-    
-//    if(viewModel.cameraObj.camera.operable == -1) {
-//        _shareBtn.hidden = false;
-//    } else {
-//        _shareBtn.hidden = true;
-//    }
     
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;

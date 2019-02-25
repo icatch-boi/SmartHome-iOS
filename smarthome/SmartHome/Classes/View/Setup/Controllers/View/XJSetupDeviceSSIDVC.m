@@ -115,13 +115,13 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     NSString *currentSSID = array.firstObject;
     SHLogInfo(SHLogTagAPP, @"currentSSID: %@", currentSSID);
     if ([currentSSID hasPrefix:kCameraSSIDPrefix] || [currentSSID hasPrefix:@"X-Sense-"]) {
-        [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
-        [_nextButton setTitle:/*@"Next"*/NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
+        [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateNormal];
+        [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
         _nextButton.tag = 1;
         [self nextClick:nil];
     } else {
-        [_nextButton setTitle:/*@"Go to wifi setting"*/NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateNormal];
-        [_nextButton setTitle:/*@"Go to wifi setting"*/NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateHighlighted];
+        [_nextButton setTitle:NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateNormal];
+        [_nextButton setTitle:NSLocalizedString(@"kGotoWiFiSetting", nil) forState:UIControlStateHighlighted];
         _nextButton.tag = 0;
     }
 }
@@ -163,7 +163,6 @@ static const CGFloat kTipsViewDefaultHeight = 140;
         WEAK_SELF(self);
         
         [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            //            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
         }]];
         [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [weakself setupDeviceWiFi];

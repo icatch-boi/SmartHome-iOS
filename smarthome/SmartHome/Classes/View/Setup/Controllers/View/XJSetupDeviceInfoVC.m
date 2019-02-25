@@ -186,11 +186,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     if (temp >= 100) {
         [self releaseTimer];
-#if 0
-        [self showConnectFailedTips];
-#else
+
         [self configureCameraTimeoutHandler];
-#endif
         return;
     }
 }
@@ -239,16 +236,15 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     NSString *title = nil;
     switch (temp) {
         case 0:
-            title = NSLocalizedString(@"kConfiguring1", nil); //;@"Loading .";
+            title = NSLocalizedString(@"kConfiguring1", nil);
             break;
             
         case 1:
-            title = NSLocalizedString(@"kConfiguring2", nil); //@"Loading ..";
+            title = NSLocalizedString(@"kConfiguring2", nil);
             break;
             
         default:
-            title = NSLocalizedString(@"kConfiguring3", nil); //@"Loading ...";
-            break;
+            title = NSLocalizedString(@"kConfiguring3", nil);
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -258,8 +254,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 #pragma mark - Link
 - (void)setupLink {
-    NSString *ssid = _wifiSSID; //self.ssidTextField.text;
-    NSString *pwd = _wifiPWD; //self.pwdTextField.text;
+    NSString *ssid = _wifiSSID;
+    NSString *pwd = _wifiPWD;
     SHLogInfo(SHLogTagAPP, @"set wifi ssid: %@, pwd: %@", ssid, pwd);
     
     if ([ssid isEqualToString:@""] || [pwd isEqualToString:@""]) {
@@ -276,7 +272,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         return;
     }
     
-    NSString *cryptoKey = @"asdfghjklqwert++"; //@"1234567890Abcdef";
+    NSString *cryptoKey = @"asdfghjklqwert++";
     retValue = _link->init(icatchtek::simplelink::LINKTYPE_APMODE, apmodeTimeout, 0, (char *)cryptoKey.UTF8String, 16, flag);
     if (retValue != icatchtek::simplelink::SIMPLELINK_ERR_OK) {
         [self updateError:NSLocalizedString(@"kAPModeConnectFiled", @"") error:retValue];
@@ -305,12 +301,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             [self.progressHUD hideProgressHUD:YES];
             
             if (!retVal) {
-//                _cameraUid = [NSString stringWithFormat:@"%s", content.c_str()];
-                
                 [self netStatusTimer];
                 self.linkSuccess = YES;
             } else {
-//                [self showConnectFailedTips];
                 [self showConfigureDeviceFailedAlertView];
                 self.linkSuccess = NO;
             }
@@ -412,12 +405,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             break;
         } else {
             self.tryConnectTimes -= 1;
-#if 0
-            [NSThread sleepForTimeInterval:20.0];
-#else
+
             [NSThread sleepForTimeInterval:sleepTime];
             (sleepTime > 1.0) ? sleepTime -- : sleepTime;
-#endif
         }
     }
     
@@ -435,22 +425,19 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     BOOL connectSuccess = NO;
     
     SHSDK *sdk = [[SHSDK alloc] init];
-#if 0
-    int retVal = [sdk initializeSHSDK:_cameraUid devicePassword:kDeviceDefaultPassword];
-#else
+
+    
     int retVal = [sdk tryConnectCamera:_cameraUid devicePassword:kDeviceDefaultPassword];
-#endif
+
     if (retVal == ICH_SUCCEED) {
         connectSuccess = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showAddDeviceTips];
         });
-#if 0
-        [sdk destroySHSDK];
-#else
+
         [sdk destroyTryConnectResource];
-#endif
+
         [self releaseTimer];
     } else {
         SHLogError(SHLogTagAPP, @"checkDeviceConnectState is failed, retVal: %d, tryConnectTimes: %ld", retVal, (long)self.tryConnectTimes);
@@ -460,10 +447,10 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showAddDeviceTips {
-    _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil); //@"Success";
+    _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil);
     __block NSString *cameraName = [_cameraUid substringToIndex:5];
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConfigureSuccess", nil)/*@"Success"*/ message:/*@"Please set doorbell name"*/NSLocalizedString(@"kSetDeviceName", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConfigureSuccess", nil) message:NSLocalizedString(@"kSetDeviceName", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *deviceNameField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -475,7 +462,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
             [weakself showDeviceNameInvalidAlertView:^{
                 [weakself showAddDeviceTips];
@@ -496,11 +483,8 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 - (void)showDeviceNameInvalidAlertView:(void (^)(void))finishedBlock {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kDeviceNameInvalidDescription", nil), (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength] preferredStyle:UIAlertControllerStyleAlert];
     
-//    WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        STRONG_SELF(self);
         
-//        [self showAddDeviceTips];
         if (finishedBlock) {
             finishedBlock();
         }
@@ -510,42 +494,15 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showConnectFailedTips {
-#if 0
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Failed" message:@"Please try again. Make sure password you entered is right." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kTryToConnectDeviceFailed", nil) message:NSLocalizedString(@"kTryToConnectDeviceFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
         });
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"Try again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-#if 0
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:kSetupStoryboardName bundle:nil];
-        UINavigationController *nav = [sb instantiateInitialViewController];
-        
-        [weakself.navigationController dismissViewControllerAnimated:YES completion:^{
-            [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:nav animated:YES completion:nil];
-        }];
-#else
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakself scanQRCode];
-            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
-        });
-#endif
-    }]];
-    
-    [self presentViewController:alertVC animated:YES completion:nil];
-#else
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Try to connect camera failed"*/NSLocalizedString(@"kTryToConnectDeviceFailed", nil) message:/*@"Please try again. Make sure the device and phone network are connected properly."*/NSLocalizedString(@"kTryToConnectDeviceFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
-    
-    WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
-        });
-    }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Try again"*/NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself releaseTimer];
         
         [weakself.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"action_waiting", nil)];
@@ -555,19 +512,18 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
-#endif
 }
 
 - (void)showConfigureDeviceFailedAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Configure Camera Failed"*/NSLocalizedString(@"kConfigureDeviceFailed", nil) message:/*@"Please try again. Make sure Wi-Fi password you entered is right."*/NSLocalizedString(@"kConfigureDeviceFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConfigureDeviceFailed", nil) message:NSLocalizedString(@"kConfigureDeviceFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
         });
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Try again"*/NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself releaseTimer];
             
@@ -647,9 +603,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 - (void)showSubscribeCameraAlertView:(NSDictionary *)dict {
     NSString *accountName = dict[@"accountName"];
-    NSString *message = accountName ? [NSString stringWithFormat:/*@"Sure you want to subscribe [%@] to share with your camera?"*/NSLocalizedString(@"kSureSubscribeSomeoneDevice", nil), accountName] : /*@"Sure you want to subscribe to the new camera?"*/NSLocalizedString(@"kSureSubscribeNewDevice", nil);
+    NSString *message = accountName ? [NSString stringWithFormat:NSLocalizedString(@"kSureSubscribeSomeoneDevice", nil), accountName] : NSLocalizedString(@"kSureSubscribeNewDevice", nil);
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     
     __block UITextField *deviceNameField = nil;
     [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -661,12 +617,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
         });
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Sure"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
             [weakself showDeviceNameInvalidAlertView:^{
                 [self showSubscribeCameraAlertView:dict];
@@ -686,58 +642,15 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)subscribeCamera:(NSDictionary *)dict {
-#if 0
-    NSString *cameraId = dict[@"cameraId"];
-    NSString *invitationCode = dict[@"invitationCode"];
-    
-    self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:nil];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[SHNetworkManager sharedNetworkManager] subscribeCameraWithCameraID:cameraId invitationCode:invitationCode completion:^(BOOL isSuccess, id  _Nullable result) {
-            if (isSuccess) {
-                [[SHNetworkManager sharedNetworkManager] getCameraByCameraID:cameraId completion:^(BOOL isSuccess, id  _Nonnull result) {
-                    if (isSuccess) {
-                        [self addCamera2LocalSqlite:result];
-                    } else {
-                        Error *error = result;
-#if 0
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            self.progressHUD.detailsLabelText = error.error_description;
-                            [self.progressHUD showProgressHUDNotice:@"Failed to get the camera" showTime:2.0];
-                            [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
-                        });
-#else
-                        [self showFailedAlertViewWithTitle:@"Failed to get the camera" message:error.error_description];
-#endif
-                    }
-                }];
-            } else {
-                Error *error = result;
-#if 0
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.progressHUD.detailsLabelText = error.error_description;
-                    [self.progressHUD showProgressHUDNotice:@"Subscribe to the failure" showTime:2.0];
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
-                    });
-                });
-#else
-                [self showFailedAlertViewWithTitle:@"Subscribe to the failure" message:error.error_description];
-#endif
-            }
-        }];
-    });
-#else
     if (dict == nil || dict[@"cameraId"] == nil || dict[@"invitationCode"] == nil) {
         SHLogError(SHLogTagAPP, @"dict may is nil, dict: %@", dict);
         
-        [self showFailedAlertViewWithTitle:/*@"Subscribe to the failure"*/NSLocalizedString(@"kSubscribeFailed", nil) message:nil];
+        [self showFailedAlertViewWithTitle:NSLocalizedString(@"kSubscribeFailed", nil) message:nil];
         
         return;
     }
     
     [self subscribeCameraHandler:dict];
-#endif
 }
 
 - (void)subscribeCameraHandler:(NSDictionary *)dict {
@@ -767,7 +680,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [weakself.progressHUD hideProgressHUD:YES];
                             
-                            [weakself showFailedAlertViewWithTitle:/*@"Failed to get the camera"*/NSLocalizedString(@"kGetDeviceFailed", nil) message:/*error.error_description*/[SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]];
+                            [weakself showFailedAlertViewWithTitle:NSLocalizedString(@"kGetDeviceFailed", nil) message:[SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]];
                         });
                     }
                 }];
@@ -786,13 +699,13 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showSubscribeCameraFailedAlertView:(NSDictionary *)dict {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Connection account server failed"*/NSLocalizedString(@"kConnectionAccountServerFailed", nil) message:/*@"Please try again. Make sure the phone network are connected properly."*/NSLocalizedString(@"kConnectionAccountServerFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConnectionAccountServerFailed", nil) message:NSLocalizedString(@"kConnectionAccountServerFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakself dismissSetupView];
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Try again"*/NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself subscribeCameraHandler:dict];
         });
@@ -804,12 +717,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showQRCodeExpireAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:/*@"Share the qr code has expired."*/NSLocalizedString(@"kShareQRCodeExpired", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kShareQRCodeExpired", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
-            //            [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
             [self.navigationController popViewControllerAnimated:YES];
         });
     }]];
@@ -836,13 +748,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         isExist = YES;
         
         SHCamera *camera = fetchedObjects.firstObject;
-        camera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName]; //camera_server.name;
+        camera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName];
         camera.cameraUid = camera_server.uid;
         camera.devicePassword = camera_server.devicepassword;
         camera.id = camera_server.id;
         camera.operable = operable;
         
-//        camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         camera.createTime = [df stringFromDate:[NSDate date]];
@@ -868,7 +779,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     } else {
         SHLogInfo(SHLogTagAPP, @"Create a camera");
         SHCamera *savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
-        savedCamera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName]; //camera_server.name;
+        savedCamera.cameraName = [[NSUserDefaults standardUserDefaults] objectForKey:kSubscribeCameraName];
         savedCamera.cameraUid = camera_server.uid;
         savedCamera.devicePassword = camera_server.devicepassword;
         savedCamera.id = camera_server.id;
@@ -883,7 +794,6 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         savedCamera.createTime = [df stringFromDate:currentDate];
         SHLogInfo(SHLogTagAPP, @"Create time is %@", savedCamera.createTime);
 #else
-//        savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMdd HHmmss"];
         savedCamera.createTime = [df stringFromDate:[NSDate date]];
@@ -899,12 +809,6 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
             [SHTutkHttp registerDevice:savedCamera];
-#if 0
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD showProgressHUDNotice:@"订阅成功" showTime:2.0];
-                [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
-            });
-#endif
         }
     }
     
@@ -915,125 +819,6 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)addCameraWithName:(NSString *)cameraName {
-#if 0
-    NSString *cameraUid = _cameraUid;
-    
-    self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:@"Setup camera's Info..."];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
-        [fetchRequest setEntity:entity];
-
-        [[SHNetworkManager sharedNetworkManager] bindCameraWithCameraUid:cameraUid name:cameraName password:kDeviceDefaultPassword completion:^(BOOL isSuccess, id result) {
-            SHLogInfo(SHLogTagAPP, @"bindCmaera is success: %d", isSuccess);
-            
-            if (isSuccess) {
-                Camera *camera_server = result;
-                int operable = [self isOperableWithOwnerID:camera_server.ownerId];
-                
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cameraUid = %@", cameraUid];
-                [fetchRequest setPredicate:predicate];
-                
-                BOOL isExist = NO;
-                NSError *error = nil;
-                NSArray *fetchedObjects = [[CoreDataHandler sharedCoreDataHander].managedObjectContext executeFetchRequest:fetchRequest error:&error];
-                if (!error && fetchedObjects && fetchedObjects.count > 0) {
-                    SHLogWarn(SHLogTagAPP, @"Already have one camera: %@", cameraUid);
-                    isExist = YES;
-                    
-                    SHCamera *camera = fetchedObjects.firstObject;
-                    camera.cameraName = cameraName;
-                    camera.cameraUid = camera_server.uid;
-                    camera.devicePassword = kDeviceDefaultPassword;
-                    camera.id = camera_server.id;
-                    camera.operable = operable;
-                    
-                    // Save data to sqlite
-                    NSError *error = nil;
-                    if (![camera.managedObjectContext save:&error]) {
-                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
-                        abort();
-#endif
-                    } else {
-                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
-                        [SHTutkHttp registerDevice:camera];
-                    }
-                } else {
-                    SHLogInfo(SHLogTagAPP, @"Create a camera");
-                    self.savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
-                    self.savedCamera.cameraUid = cameraUid; //@"3AW1YKX6HWYG2M8X111A";
-                    self.savedCamera.cameraName = cameraName;
-                    self.savedCamera.devicePassword = kDeviceDefaultPassword;
-                    self.savedCamera.id = camera_server.id;
-                    self.savedCamera.operable = operable;
-                    
-                    NSDate *date = [NSDate date];
-                    NSTimeInterval sec = [date timeIntervalSinceNow];
-                    NSDate *currentDate = [[NSDate alloc] initWithTimeIntervalSinceNow:sec];
-
-                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                    [df setDateFormat:@"yyyyMMdd HHmmss"];
-                    self.savedCamera.createTime = [df stringFromDate:currentDate];
-                    SHLogInfo(SHLogTagAPP, @"Create time is %@",self.savedCamera.createTime);
-                    
-                    // Save data to sqlite
-                    NSError *error = nil;
-                    if (![self.savedCamera.managedObjectContext save:&error]) {
-                        /*
-                         Replace this implementation with code to handle the error appropriately.
-                         
-                         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-                         */
-                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
-                        abort();
-#endif
-                    } else {
-                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
-                        [SHTutkHttp registerDevice:self.savedCamera];
-                    }
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.progressHUD hideProgressHUD:YES];
-                    [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:^{
-                        if (isExist) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:kCameraAlreadyExistNotification object:cameraName];
-                        }
-                    }];
-                });
-            } else {
-#if 0
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
-                });
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    Error *error = result;
-                    SHLogError(SHLogTagAPP, @"bindCmaera is failed, error: %@", error.error_description);
-                    
-                    if (error.error_code == 50034) {
-                        self.progressHUD.detailsLabelText = @"Device have been bind by other accounts.";
-                        [self.progressHUD showProgressHUDNotice:@"Bind device failed" showTime:2.0];
-                    } else {
-                        [self.progressHUD showProgressHUDNotice:error.error_description showTime:2.0];
-                    }
-                });
-#else
-                Error *error = result;
-                SHLogError(SHLogTagAPP, @"bindCmaera is failed, error: %@", error.error_description);
-                
-                [self bindDeviceFailedHandler:error];
-#endif
-            }
-        }];
-    });
-#else
     if (self.cameraUid == nil) {
         SHLogError(SHLogTagAPP, @"camera uid is nil.");
         [self showConfigureDeviceFailedAlertView];
@@ -1045,12 +830,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }
     
     [self bindDeviceToServerWithUid:self.cameraUid name:cameraName];
-#endif
 }
 
 - (void)bindDeviceToServerWithUid:(NSString *)cameraUid name:(NSString *)cameraName {
     self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:/*@"Setup camera's Info..."*/NSLocalizedString(@"kConfigureDeviceInfo", nil)];
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConfigureDeviceInfo", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -1100,7 +884,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
                 } else {
                     SHLogInfo(SHLogTagAPP, @"Create a camera");
                     weakself.savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
-                    weakself.savedCamera.cameraUid = cameraUid; //@"3AW1YKX6HWYG2M8X111A";
+                    weakself.savedCamera.cameraUid = cameraUid;
                     weakself.savedCamera.cameraName = cameraName;
                     weakself.savedCamera.devicePassword = kDeviceDefaultPassword;
                     weakself.savedCamera.id = camera_server.id;
@@ -1171,13 +955,13 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showBindDeviceFailedAlertViewWithName:(NSString *)cameraName {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Connection account server failed"*/NSLocalizedString(@"kConnectionAccountServerFailed", nil) message:/*@"Please try again. Make sure the phone network are connected properly."*/NSLocalizedString(@"kConnectionAccountServerFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConnectionAccountServerFailed", nil) message:NSLocalizedString(@"kConnectionAccountServerFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Cancel"*/NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakself dismissSetupView];
     }]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"Try again"*/NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself bindDeviceToServerWithUid:weakself.cameraUid name:cameraName];
         });
@@ -1189,11 +973,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)bindDeviceFailedHandler:(Error *)error {
-    NSString *title = NSLocalizedString(@"kBindDeviceFailed", nil); //@"Bind device failed";
-    NSString *message = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
+    NSString *title = NSLocalizedString(@"kBindDeviceFailed", nil);
+    NSString *message = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code];
 
     if (error.error_code == 50034) {
-        message = NSLocalizedString(@"kDeviceBindByOtherAccounts", nil); //@"Device have been bind by other accounts.";
+        message = NSLocalizedString(@"kDeviceBindByOtherAccounts", nil);
     }
     
     [self showFailedAlertViewWithTitle:title message:message];
@@ -1203,7 +987,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself dismissSetupView];
     }]];
     
@@ -1229,7 +1013,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 #pragma mark - Check Network Reachable
 - (void)showNetworkNotReachableAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kNetworkNotReachable", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

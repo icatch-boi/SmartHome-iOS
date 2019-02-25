@@ -21,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UILabel *fileNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fileSizeLabel;
-//@property (nonatomic ,weak) SHDownloadProgressView *progressView;
+
 @property (nonatomic ,assign) CGFloat progressViewY;
 
 @end
@@ -34,8 +34,7 @@
     
     self.progressViewY = self.center.y - kProcessViewWidth * 0.5;
     SHDownloadProgressView *view= [[SHDownloadProgressView alloc] initWithFrame:CGRectMake(kLeftEdge, self.progressViewY, kScreenWidth - kLeftEdge - kRightEdge, kProcessViewWidth)];
-//    view.layer.cornerRadius = kProcessViewWidth * 0.5;
-//    view.layer.masksToBounds = YES;
+
     [view setCornerWithRadius:kProcessViewWidth * 0.5];
     
     view.layer.borderColor=[UIColor orangeColor].CGColor;
@@ -62,8 +61,6 @@
     
     //time Interval (Unit：Seconds)    计时间隔 （单位：秒）
     view.timeInterval=0.05;
-    
-    //    view.delegate=self;
     
     [self addSubview:view];
     self.progressView = view;
@@ -101,25 +98,13 @@
     
     _fileNameLabel.text = [NSString stringWithFormat:@"%s", file.f.getFileName().c_str()];
     _fileSizeLabel.text = [DiskSpaceTool humanReadableStringFromBytes:file.f.getFileSize()];
-//    _progressView.timeCountLab.text = @"0.0%";
+    
 	[self updateProgress:0];
-
-	
 }
 
 - (void)setShCamObj:(SHCameraObject *)shCamObj {
     _shCamObj = shCamObj;
 	[self updateProgress:0];
-//    [[SHDownloadManager shareDownloadManger] downloadWithCameraObject:shCamObj file:self.file downloadInfoBlock:^(int downloadInfo) {
-//        SHLogInfo(SHLogTagAPP, @"downloadInfo: %d", downloadInfo);
-//        self.downloadInfo = downloadInfo;
-//
-//        if (self.downloadCompleteBlock) {
-//            self.downloadCompleteBlock(self);
-//        }
-//    } progressBlock:^(NSInteger progress) {
-//        [self updateProgress:progress];
-//    }];
 }
 
 - (void)updateProgress:(NSInteger)progress {
@@ -130,14 +115,9 @@
 }
 
 - (IBAction)cancelClick:(id)sender {
-//    [self.progressView ZWProgramTimerStart];
-#if 0
-    [[SHDownloadManager shareDownloadManger] cancelDownloadFile:self.file];
-#else
     if ([self.delegate respondsToSelector:@selector(cancelDownloadHandler:)]) {
         [self.delegate cancelDownloadHandler:self];
     }
-#endif
 }
 
 

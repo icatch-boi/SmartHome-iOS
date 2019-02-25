@@ -24,15 +24,8 @@
     dispatch_sync(shCameraObj.sdk.sdkQueue, ^{
         SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
         
-//        [currentPro addProperty:TRANS_PROP_CAMERA_WHITE_BALANCE];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_LIGHT_FREQUENCY];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_VIDEO_SIZE];
-        
-//        [currentPro addProperty:TRANS_PROP_DET_PIR_SENSITIVITY];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_BRIGHTNESS];
         [currentPro addProperty:TRANS_PROP_DET_VID_REC_DURATION];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
+
         [currentPro addProperty:TRANS_PROP_CAMERA_SLEEP_TIME];
         
         [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
@@ -42,9 +35,6 @@
         [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
         
         [currentPro addProperty:TRANS_PROP_CAMERA_VERSION];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_TIME_ZONE];
-        
-//        [currentPro addProperty:TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE];
         
         [currentPro addProperty:TRANS_PROP_TAMPER_ALARM];
         
@@ -57,20 +47,17 @@
 - (SHPropertyQueryResult *)retrievePVCurPropertyWithCamera:(SHCameraObject *)shCameraObj {
     __block SHPropertyQueryResult *result = nil;
     
-//    dispatch_sync(shCamera.sdk.sdkQueue, ^{
-        SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
-        
-        [currentPro addProperty:TRANS_PROP_CAMERA_BATTERY_LEVEL];
-        [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
-//        [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
-        [currentPro addProperty:TRANS_PROP_CAMERA_WIFI_SIGNAL];
-        
-        [currentPro addProperty:TRANS_PROP_CAMERA_LAST_PREVIEW_TIME];
-        [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL_SIZE];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL];
-        
-        result = [currentPro submit];
-//    });
+    SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+    
+    [currentPro addProperty:TRANS_PROP_CAMERA_BATTERY_LEVEL];
+    [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
+
+    [currentPro addProperty:TRANS_PROP_CAMERA_WIFI_SIGNAL];
+    
+    [currentPro addProperty:TRANS_PROP_CAMERA_LAST_PREVIEW_TIME];
+    [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL_SIZE];
+
+    result = [currentPro submit];
     
     return result;
 }
@@ -92,11 +79,6 @@
             [supportedPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
             [supportedPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
             [supportedPro addProperty:TRANS_PROP_CAMERA_SLEEP_TIME];
-            
-            //    [supportedPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
-            //
-            //    [supportedPro addProperty:TRANS_PROP_DET_VID_REC_STATUS];
-            //    [supportedPro addProperty:TRANS_PROP_DET_PUSH_MSG_STATUS];
             
             result = [supportedPro submit];
         });
@@ -127,7 +109,7 @@
             level = [curResult praseInt:TRANS_PROP_CAMERA_BATTERY_LEVEL];
         }
     });
-//    return [self transBatteryLevel2NStr:level];
+
     SHLogInfo(SHLogTagAPP, @"battery level: %d", level);
     return level;
 }

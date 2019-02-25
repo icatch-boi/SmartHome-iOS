@@ -40,17 +40,6 @@ static const CGFloat kLogoBottomCons_Default = 30;
 }
 
 - (void)setupGUI {
-//    NSString *appVersion = NSLocalizedString(@"SETTING_APP_VERSION", nil);
-//    appVersion = [appVersion stringByReplacingOccurrencesOfString:@"%@" withString:APP_VERSION];
-//    _appVersionLab.text = appVersion;
-//    _buildNumberLab.text = [NSString stringWithFormat:NSLocalizedString(@"kBuildNumber", nil), APP_BUILDNUMBER];
-//    _copyrightLab.text = @"Copyright © 2018 All rights reserved."; // @"Copyright © 2017-2018 iCatch Technology Inc. All rights reserved.";
-//    _appNameLab.text = APP_NAME;
-////    self.title = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"SETTING_ABOUT", nil), APP_NAME];
-//    SDKInfo *sdkInfo = SDKInfo::getInstance();
-//    string sdkVString = sdkInfo->getSDKVersion();
-//    _sdkVersionLab.text = [NSString stringWithFormat:@"%@：%s", NSLocalizedString(@"kSDKVersionInfo", nil), sdkVString.c_str()];
-    
     NSString *appVersion = [NSString stringWithFormat:@"APP Version %@(%@)", APP_VERSION, APP_BUILDNUMBER];
     
     SDKInfo *sdkInfo = SDKInfo::getInstance();

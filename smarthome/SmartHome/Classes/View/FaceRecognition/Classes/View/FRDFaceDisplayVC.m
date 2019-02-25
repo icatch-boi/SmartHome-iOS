@@ -92,28 +92,6 @@
 }
 
 - (void)updateFaceInfoHandler {
-#if 0
-    [SVProgressHUD show];
-    
-    WEAKSELF(self);
-    [[ZJNetworkManager sharedNetworkManager] getFacesInfoWithName:self.faceInfo.name finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            
-            if (error != nil) {
-                [SVProgressHUD showErrorWithStatus:error.error_description];
-                [SVProgressHUD dismissWithDelay:2.0];
-            } else {
-//                weakself.faceInfo = [FRDFaceInfo faceInfoWithDict:result];
-                NSLog(@"result: %@", result);
-
-                [weakself displayPicture];
-            }
-        });
-    }];
-    
-#else
-    
     WEAK_SELF(self);
     [self.faceInfoViewModel loadFacesInfoWithCompletion:^{
         [weakself.faceInfoViewModel.facesInfoArray enumerateObjectsUsingBlock:^(FRDFaceInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -129,7 +107,6 @@
         [NSThread sleepForTimeInterval:1.0];
         [weakself displayPicture];
     }];
-#endif
 }
 
 - (IBAction)moreClick:(id)sender {

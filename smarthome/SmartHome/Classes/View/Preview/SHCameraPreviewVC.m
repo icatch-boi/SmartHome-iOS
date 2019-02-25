@@ -53,16 +53,13 @@ static const CGFloat kAudioBtnDefaultWidth = 60;
 static const CGFloat kSpeakerBtnDefaultWidth = 80;
 static const NSTimeInterval kRingTimeout = 50.0;
 static const NSTimeInterval kConnectAndPreviewTimeout = 120.0;
-static const NSTimeInterval kConnectAndPreviewSpecialSleepTime = 5.0;
 static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
-@interface SHCameraPreviewVC () <UITableViewDelegate, UITableViewDataSource, SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate, XDSDropDownMenuDelegate, UIGestureRecognizerDelegate>
+@interface SHCameraPreviewVC () <SH_XJ_SettingTVCDelegate, SHSinglePreviewVCDelegate, XDSDropDownMenuDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
 
-@property (nonatomic, strong) SHSettingData *videoSizeData;
 @property (nonatomic, assign) BOOL disconnectHandling;
 @property (nonatomic, assign) BOOL poweroffHandling;
 @property (nonatomic, getter = isBatteryLowAlertShowed) BOOL batteryLowAlertShowed;
-@property (nonatomic, strong) NSTimer *currentDateTimer;
 
 @property (nonatomic, weak) RTCView *presentView;
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -101,61 +98,23 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     // Do any additional setup after loading the view.
     
     [self initParameter];
-//    [self clickNotificationHandle];
     [self setupGUI];
     [self constructPreviewData];
-//    [self prepareVideoSizeData];
-//    [self prepareCameraPropertyData];
-//    [self addTapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [SHTool setupCurrentFullScreen:NO];
     [super viewWillAppear:animated];
     [self updateTitle];
-//    [self prepareVideoSizeData];
+
     [self setupCallView];
     [self updateResolutionButton:_shCameraObj.streamQuality];
-#if 0
-    if (!_shCameraObj.isConnect) {
-        [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConnecting", @"")];
-        dispatch_async(self.previewQueue, ^{
-            [self connectCamera];
-            
-            if (_shCameraObj.isConnect) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initPlayer];
-                    [self startPreview];
-                });
-            }
-        });
-    } else {
-        [self initPlayer];
-        
-        if (_managedObjectContext) {
-            NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-            if (![msgType isEqualToString:@"201"]) {
-                [self startPreview];
-            }
-        } else {
-            [self startPreview];
-        }
-    }
-#endif
-#if 0
-    [self connectAndPreview];
-#else
+
     BOOL isRing = _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
     if (!isRing) {
         [self connectAndPreview];
     }
-#endif
-#if 0
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDisconnectHandle:) name:kCameraDisconnectNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
-#endif
     
-//    [self currentDateTimer];
     self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
     [self updateTalkState];
@@ -164,21 +123,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-//    [self initCameraPropertyGUI];
-//    [self checkLoginStatus];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-//    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
-//    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
-    
     [super viewWillDisappear:animated];
     [[NSUserDefaults standardUserDefaults] setObject:_notification forKey:kRecvNotification];
-    
-//    if (_TalkBackRun) {
-//        [self talkBackAction:nil];
-//    }
+
     [self releaseTalkAnimTimer];
     [self releaseConectAndPreview];
     [self releaseRingTimer];
@@ -202,11 +152,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-//    [self removeVideoBitRateObserver];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self releaseCurrentDateTimer];
-//    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
-//    [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
+
     @try {
         [self.previewImageView  removeObserver:self forKeyPath:@"bounds"];
     } @catch (NSException *exception) {
@@ -268,7 +216,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         NSString *errorMessage = [[[SHCamStaticData instance] tutkErrorDict] objectForKey:@(retValue)];
         NSString *errorInfo = @"";
         errorInfo = [errorInfo stringByAppendingFormat:@"[%@] %@",name,errorMessage];
-        errorInfo = [errorInfo stringByAppendingString:/*@"确定要退出Preview吗 ?"*/NSLocalizedString(@"kExitPreview", nil)];
+        errorInfo = [errorInfo stringByAppendingString:NSLocalizedString(@"kExitPreview", nil)];
 
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:errorInfo preferredStyle:UIAlertControllerStyleAlert];
         
@@ -282,7 +230,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
-//                [weakself.navigationController popViewControllerAnimated:YES];
                 [weakself goHome];
             });
         }]];
@@ -291,7 +238,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self presentViewController:alertC animated:YES completion:nil];
         });
     } else {
-//        [_shCameraObj initCamera];
     }
 }
 
@@ -300,47 +246,19 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
-            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : [self.progressHUD hideProgressHUD:YES];
-#endif
+
             [self.progressHUDPreview hideProgressHUD:YES];
-//            [self isRing] ? (_shCameraObj.cameraProperty.serverOpened ? [self talkBackAction:_speakerButton] : void()) : void();
             [self isRing] ? [self talkBackAction:_speakerButton] : void();
-            //            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
+
             [self enableUserInteraction:YES];
-//            [self prepareCameraPropertyData];
         });
-        
-        //        NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-        //        if ([msgType isEqualToString:@"201"]) {
-        //            if (_shCameraObj.controler.actCtrl.isRecord == NO) {
-        //                [self startVideoRec];
-        //            }
-        //        }
-        
-//        [_shCameraObj initCamera];
         
         [_shCameraObj initCamera];
         [self releaseConectAndPreview];
-//        [self addVideoBitRateObserver];
+
         [self addDeviceObserver];
     } failedBlock:^(NSInteger errorCode) {
-#if 0
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
-            if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
-                notice = NSLocalizedString(@"kPreviewingByOthers", nil); //@"Previewing by others";
-            } else if (errorCode == ICH_PLAYING_VIDEO_BY_OTHERS) {
-                notice = NSLocalizedString(@"kPlayingVideoByOthers", nil); //@"Playing video by others";
-            }
-            [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
-            [self enableUserInteraction:NO];
-        });
-#else
         [self reConnectWithSleepForTimeInterval:kConnectAndPreviewCommonSleepTime];
-#endif
-        
-//        [_shCameraObj initCamera];
     } target:nil streamCloseCallback:nil];
 }
 
@@ -350,7 +268,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     if (!_shCameraObj.streamOper.PVRun) {
         [self startMediaStream];
     } else {
-//        [self addVideoBitRateObserver];
         [self addDeviceObserver];
     }
 }
@@ -358,7 +275,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)prepareCameraPropertyData {
     if (_shCameraObj.isConnect) {
         [self initCameraPropertyGUI];
-//        [self prepareVideoSizeData];
     }
 }
 
@@ -374,19 +290,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self initPlayer];
                         [self updateTitle];
-//                        [self prepareCameraPropertyData];
                         
                         [self startPreview];
                     });
-//                    [self startPreview];
-//                    NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-//                    if (![msgType isEqualToString:@"201"]) {
-//                        [self startPreview];
-//                    } else {
-//                        dispatch_async(dispatch_get_main_queue(), ^{
-//                            [self.progressHUD hideProgressHUD:YES];
-//                        });
-//                    }
                 }
             });
         }
@@ -394,19 +300,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)checkLoginStatus {
-#if 0
-    if ([SHNetworkManager sharedNetworkManager].userLogin) {
-        if ([SHCameraManager sharedCameraManger].smarthomeCams.count) {
-            [self clickNotificationHandle];
-        } else {
-            [self syncData];
-        }
-    } else {
-        [self loginPrompt];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:kLoginSuccessNotification object:nil];
-    }
-#endif
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] refreshToken:^(BOOL isSuccess, id  _Nonnull result) {
         if (!isSuccess) {
@@ -417,12 +310,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)loginPrompt {
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"用户登录已过期，请重新登录."*/NSLocalizedString(@"kAccountLoginExpired", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kAccountLoginExpired", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertC addAction:[UIAlertAction actionWithTitle:/*@"登录"*/NSLocalizedString(@"kLogin", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kLogin", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself stopPlayRing];
-        //        [weakself closeCallView];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
     }]];
@@ -431,46 +323,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)loginSuccess {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kLoginSuccessNotification object:nil];
-
-//    [self syncData];
-}
-
-- (void)syncData {
-    if (_managedObjectContext == nil) {
-        return;
-    }
-    
-    [self.progressHUD showProgressHUDWithMessage:nil];
-    [SHLocalWithRemoteHelper syncCameraList:^(BOOL isSuccess) {
-        [self loadData];
-    }];
-}
-
-- (void)loadData {
-    [[[SHLocalCamerasHelper alloc] init] prepareCamerasData];
-    
-    [self initParameter];
-    if (_shCameraObj == nil) {
-        [self deviceHasRemovedPrompt];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD hideProgressHUD:YES];
-        });
-    } else {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self setupCallView];
-//        });
-//        [self startPlayRing];
-        [self clickNotificationHandle];
-    }
-}
-
-- (void)deviceHasRemovedPrompt {
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"此设备已被移除." preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self goHome];
-    }]];
-    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 #pragma mark - Init Preview GUI
@@ -489,16 +341,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)setupGUI {
-//    [_audioButton setCornerWithRadius:_audioButton.bounds.size.width * 0.5];
-//    [_captureButton setCornerWithRadius:_captureButton.bounds.size.width * 0.5];
-//    [_speakerButton setCornerWithRadius:_speakerButton.bounds.size.width * 0.5];
-//    [_videoSizeButton setCornerWithRadius:_videoSizeButton.bounds.size.width * 0.15];
-    
-//    self.speakerButton.backgroundColor = [UIColor lightGrayColor];
-//    self.captureButton.backgroundColor = [UIColor lightGrayColor];
-//    self.audioButton.backgroundColor = [UIColor lightGrayColor];
-//    self.videoSizeButton.backgroundColor = [UIColor lightGrayColor];
-    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBack)];
     self.navigationItem.rightBarButtonItem = _notification ? nil : [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-setting"] style:UIBarButtonItemStyleDone target:self action:@selector(enterSettingAction)];
     
@@ -510,13 +352,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     _captureBtnWidthCons.constant = kAudioBtnDefaultWidth * kScreenWidthScale;
     
     UIImage *img = _shCameraObj.camera.thumbnail;
-//    img = img ? img : [UIImage imageNamed:@"default_thumb"];
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
-#if 0
-    [self setupTopToolView];
-    [self setupBottomToolView];
-#endif
+
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
     [self addGestureRecognizers];
@@ -573,15 +411,10 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     NSString *stillCaptureSoundUri = [[NSBundle mainBundle] pathForResource:@"Capture_Shutter" ofType:@"WAV"];
     id url = [NSURL fileURLWithPath:stillCaptureSoundUri];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)url, &_stillCaptureSound);
-    
-//    NSString *videoCaptureSoundUri = [[NSBundle mainBundle] pathForResource:@"StartStopVideoRec" ofType:@"WAV"];
-//    url = [NSURL fileURLWithPath:videoCaptureSoundUri];
-//    AudioServicesCreateSystemSoundID((__bridge CFURLRef)url, &_videoCaptureSound);
 }
 
 - (void)deconstructPreviewData {
     AudioServicesDisposeSystemSoundID(_stillCaptureSound);
-//    AudioServicesDisposeSystemSoundID(_videoCaptureSound);
 }
 
 #pragma mark - Property
@@ -606,12 +439,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             case ICATCH_EVENT_BATTERY_LEVEL_CHANGED:
                 weakSelf.shCameraObj.cameraProperty.curBatteryLevel = evt;
                 [weakSelf updateBatteryLevelIcon:evt];
-                break;
-
-            case ICATCH_EVENT_PV_THUMBNAIL_CHANGED:
-                SHLogInfo(SHLogTagAPP, @"receive ICATCH_EVENT_PV_THUMBNAIL_CHANGED");
-                //do get thumbnail
-//                [weakSelf updatePvThumbnail:evt];
                 break;
                 
             case ICATCH_EVENT_VIDEO_BITRATE:
@@ -730,24 +557,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     });
 }
 
-- (void)updateSizeItemTitle {
-    if (_shCameraObj.cameraProperty.videoSizeData == nil) {
-        return;
-    }
-    
-    NSString *title = nil;
-    NSArray *tempArray = [_shCameraObj.cameraProperty.videoSizeData.detailTextLabel componentsSeparatedByString:@" "];
-    if (tempArray.count >= 3) {
-        title = tempArray[2];
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (title) {
-            [self.videoSizeButton setTitle:title forState:UIControlStateNormal];
-        }
-    });
-}
-
 #pragma mark - Action
 - (void)checkAudioStatus:(void (^)(void))handler failedHandler:(void (^)(void))failedHander {
     // 1、 获取麦克风设备
@@ -800,13 +609,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             _noHidden = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-//                self.speakerButton.backgroundColor = [UIColor lightGrayColor];
                 [self setMuteButtonBackgroundImage];
             });
         }
-        
-//        [self voiceDidCancelRecording];
-//        [self setNeedsUpdateTalkIcon:NO];
     } else {
         [self checkAudioStatus:^{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -821,7 +626,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 _TalkBackRun = NO;
                 
                 [self stopTalkBack];
-                //                [self voiceDidCancelRecording];
                 [self releaseTalkAnimTimer];
             }
         } failedHandler:^{
@@ -841,11 +645,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [_shCameraObj.streamOper startTalkBackWithSuccessBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             _shCameraObj.cameraProperty.previewMode |= SHPreviewModeTalkBackOnFlag;
-//            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             
             if (![[NSUserDefaults standardUserDefaults] boolForKey:@"PreferenceSpecifier:PushToTalk"]) {
                 [self.progressHUD hideProgressHUD:YES];
-                //                [self voiceDidStartRecording];
                 [self talkAnimTimer];
             }
             
@@ -855,9 +657,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kStartTalkBackFailed", @"") showTime:2.0];
-//            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             
-            //            [self voiceDidCancelRecording];
             [self releaseTalkAnimTimer];
             
             _shCameraObj.cameraProperty.talk = NO;
@@ -877,7 +677,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             SHLogInfo(SHLogTagAPP, @"success to stop talkBack");
             _shCameraObj.cameraProperty.previewMode &= ~SHPreviewModeTalkBackOnFlag;
-//            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self.progressHUD hideProgressHUD:YES];
             
             _speakerButton.enabled = YES;
@@ -886,7 +685,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             SHLogInfo(SHLogTagAPP, @"Failed to stop talkBack");
-//            [self updatePreviewSceneByMode:_shCameraObj.cameraProperty.previewMode];
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kStopTalkBackFailed", @"") showTime:2.0];
             
             _speakerButton.enabled = YES;
@@ -901,21 +699,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     AudioServicesPlaySystemSound(_stillCaptureSound);
     [self.progressHUD showProgressHUDWithMessage:nil];
     
-#if 0
-    [_shCameraObj.controler.actCtrl stillCaptureWithSuccessBlock:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
-            [self.progressHUD hideProgressHUD:YES];
-#else
-            [self.progressHUD showProgressHUDNotice:@"Capture success" showTime:1.0];
-#endif
-        });
-    } failedBlock:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"STREAM_CAPTURE_FAILED", nil) showTime:2.0];
-        });
-    }];
-#else
     [_shCameraObj.streamOper stillCaptureWithSuccessBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD showProgressHUDNotice:/*@"Capture success"*/NSLocalizedString(@"kCaptureSuccess", nil) showTime:1.0];
@@ -925,13 +708,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"STREAM_CAPTURE_FAILED", nil) showTime:1.5];
         });
     }];
-#endif
 }
 
 - (IBAction)toggleAudioAction:(UIButton *)sender {
     SHLogTRACE();
 
-//    [self.progressHUD showProgressHUDWithMessage:nil];
     [_shCameraObj.streamOper isMute:sender.tag successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             if (sender.tag == 0) {
@@ -946,45 +727,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 [sender setImage:[UIImage imageNamed:@"video-btn-mute-pre_1"]
                         forState:UIControlStateHighlighted];
             }
-            
-//            [self.progressHUD hideProgressHUD:YES];
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kAudioControl", @"") showTime:2.0];
         });
     }];
-}
-
-- (IBAction)changeVideoSizeAction:(id)sender {
-#if 0
-    [self.progressHUD showProgressHUDWithMessage:nil];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self prepareVideoSizeData];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressHUD hideProgressHUD:YES];
-            
-            [self createVideoSizeTipsView];
-        });
-    });
-#endif
-}
-
-- (void)createVideoSizeTipsView {
-    self.videoSizeView =[[CustomIOS7AlertView alloc] initWithTitle:NSLocalizedString(@"ALERT_TITLE_SET_VIDEO_RESOLUTION", nil) inView:self.view];
-    UIView      *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 150)];
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 10, 275, 130)
-                                                          style:UITableViewStylePlain];
-    [containerView addSubview:tableView];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    _videoSizeView.containerView = containerView;
-    [_videoSizeView setUseMotionEffects:TRUE];
-    [_videoSizeView setButtonTitles:[NSArray arrayWithObjects:NSLocalizedString(@"ALERT_CLOSE", @""), nil]];
-    [_videoSizeView show];
 }
 
 - (void)enterSettingAction {
@@ -1004,7 +752,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.progressHUD hideProgressHUD:YES];
-//                    [self presentSettingViewController];
                     [self presentViewController:vc animated:YES completion:nil];
                 });
             }];
@@ -1026,7 +773,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
 
-//            [self presentSettingViewController];
             [self presentViewController:vc animated:YES completion:nil];
         });
     }
@@ -1040,7 +786,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     vc.delegate = self;
     [SHTool configureAppThemeWithController:navController];
     
-//    [self presentViewController:navController animated:YES completion:nil];
     return navController;
 }
 
@@ -1064,75 +809,16 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)returnBack {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kCameraDisconnectNotification object:nil];
     _alreadyBack = YES;
-#if 0
-    if (!_shCameraObj.isConnect) {
-        [self goHome];
-        return;
-    }
-#endif
     
     UINavigationController *nav = self.navigationController;
     SHLogInfo(SHLogTagAPP, @"==> nav : %@", nav);
     BOOL doNotDisconnect = /*_managedObjectContext &&*/ ![NSStringFromClass(nav.class) isEqualToString:@"SHMainViewController"];
-#if 0
-    NSString *message = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDisconnect", @"")];
-    if (doNotDisconnect) {
-        message = nil;
-    }
-    [self.progressHUD showProgressHUDWithMessage:message];
-    dispatch_async(self.previewQueue, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.navigationController popViewControllerAnimated:YES];
-            [self goHome];
-        });
-        
-        [self stopCurrentTalkBack];
-        /*
-        if (_shCameraObj.controler.actCtrl.isRecord) {
-            [_shCameraObj.controler.actCtrl stopVideoRecWithSuccessBlock:nil failedBlock:nil];
-        }*/
-        
-        if (doNotDisconnect) {
-            if (_shCameraObj.streamOper.PVRun) {
-                [_shCameraObj.streamOper stopMediaStreamWithComplete:^{
-                    SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
-                }];
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                _progressHUD = nil;
-                
-//                [self.navigationController popViewControllerAnimated:YES];
-            });
-            return;
-        }
-        
-        [_shCameraObj.streamOper stopPreview];
-//        sleep(2);
-        [_shCameraObj.sdk disableTutk];
-        [_shCameraObj disConnectWithSuccessBlock:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                _progressHUD = nil;
-                
-//                [self.navigationController popViewControllerAnimated:YES];
-            });
-        } failedBlock:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kDisconnectTimeout", @"") showTime:2.0];
-                
-//                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }];
-    });
-#else
+
     if (doNotDisconnect == NO && [self isDownloading]) {
         [self showDownloadingAlertView:doNotDisconnect];
     } else {
         [self returnBackHandle:doNotDisconnect];
     }
-#endif
 }
 
 - (void)showDownloadingAlertView:(BOOL)doNotDisconnect {
@@ -1166,21 +852,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self.progressHUD showProgressHUDWithMessage:message];
     dispatch_async(self.previewQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            //            [self.navigationController popViewControllerAnimated:YES];
-#if 0
-            [self goHome];
-#else
+
             if (doNotDisconnect == NO) {
                 [self goHome];
             }
-#endif
         });
         
         [self stopCurrentTalkBack];
-        /*
-         if (_shCameraObj.controler.actCtrl.isRecord) {
-         [_shCameraObj.controler.actCtrl stopVideoRecWithSuccessBlock:nil failedBlock:nil];
-         }*/
         
         if (doNotDisconnect) {
             if (_shCameraObj.streamOper.PVRun) {
@@ -1193,27 +871,21 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 [self.progressHUD hideProgressHUD:YES];
                 _progressHUD = nil;
                 
-                //                [self.navigationController popViewControllerAnimated:YES];
                 [self goHome];
             });
             return;
         }
         
         [_shCameraObj.streamOper stopPreview];
-        //        sleep(2);
         [_shCameraObj.sdk disableTutk];
         [_shCameraObj disConnectWithSuccessBlock:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
                 _progressHUD = nil;
-                
-                //                [self.navigationController popViewControllerAnimated:YES];
             });
         } failedBlock:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"kDisconnectTimeout", @"") showTime:2.0];
-                
-                //                [self.navigationController popViewControllerAnimated:YES];
             });
         }];
     });
@@ -1231,7 +903,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (IBAction)enterFullScreenAction:(id)sender {
-#if 1
     dispatch_async(self.previewQueue, ^{
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"XJMain" bundle:nil];
         SHSinglePreviewVC *vc = [sb instantiateViewControllerWithIdentifier:@"SinglePreviewID"];
@@ -1245,25 +916,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self presentViewController:vc animated:YES completion:nil];
         });
     });
-#else
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-        [self fullScreenHandler];
-    } else {
-        dispatch_async(self.previewQueue, ^{
-            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"XJMain" bundle:nil];
-            SHSinglePreviewVC *vc = [sb instantiateViewControllerWithIdentifier:@"SinglePreviewID"];
-            vc.cameraUid = _shCameraObj.camera.cameraUid;
-            vc.delegate = self;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                app.isFullScreenPV = YES;
-                
-                [self presentViewController:vc animated:YES completion:nil];
-            });
-        });
-    }
-#endif
 }
 
 #pragma mark - DisconnectHandle
@@ -1356,7 +1008,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             _disconnectHandling = NO;
             
-            //            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
             [self returnBack];
         });
     }]];
@@ -1373,7 +1024,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         int retValue = [shCamObj connectCamera];
         if (retValue == ICH_SUCCEED) {
-//            [shCamObj initCamera];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUDPreview hideProgressHUD:YES];
@@ -1401,7 +1051,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             _disconnectHandling = NO;
             
-            //            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
             [self returnBack];
         });
     }]];
@@ -1504,36 +1153,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     return _progressHUDPreview;
 }
 
-#pragma mark - CurrentDate
-- (NSTimer *)currentDateTimer {
-    if (_currentDateTimer == nil) {
-        _currentDateTimer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateCurrentDate) userInfo:nil repeats:YES];
-    }
-    
-    [self updateCurrentDate];
-    
-    return _currentDateTimer;
-}
-
-- (void)releaseCurrentDateTimer {
-    if (_currentDateTimer.isValid) {
-        [_currentDateTimer invalidate];
-        _currentDateTimer = nil;
-    }
-}
-
-- (void)updateCurrentDate {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc ] init];
-    [formatter setDateFormat:@"yyyy/MM/dd HH:mm"];
-    
-    NSString *timeNow = [formatter stringFromDate:[NSDate date]];
-    
-    WEAK_SELF(self);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        weakself.curDateLabel.text = timeNow;
-    });
-}
-
 #pragma mark - SHSinglePreviewVCDelegate
 - (void)disconnectHandle {
     [self goHome];
@@ -1605,22 +1224,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (UIImage *)reDrawOrangeImage:(UIImage *)image rangeRect:(CGRect)rect {
     NSLog(@"image size: %@", NSStringFromCGSize(image.size));
     
-//    CGFloat scale = image.size.width / image.size.height;
-//
-//    image = [self compressImage:image scale:scale];
-    
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-//    CGRect rect = CGRectMake(_preRect.origin.x , _preRect.origin.y , _preRect.size.width / scale, _preRect.size.height);
     
     CGContextAddRect(ctx, rect);
     
     CGContextClip(ctx);
     
-//    size = CGSizeMake(kFaceBoxWidth * scale, kFaceBoxWidth);
-//    rect = CGRectMake(_preRect.origin.x, 0, size.width, size.height);
     [image drawInRect:rect];
     
     UIImage *drawImage =  UIGraphicsGetImageFromCurrentImageContext();
@@ -1634,11 +1245,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)startPlayRing
 {
     NSString *ringPath = [[NSBundle mainBundle] pathForResource:@"test.caf" ofType:nil];
-#if 0
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    NSError *err = nil;  // 加上这两句，否则声音会很小
-    [audioSession setCategory :AVAudioSessionCategoryPlayback error:&err];
-#endif
+
     self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:ringPath] error:nil];
     self.player.numberOfLoops = -1;
     [self.player prepareToPlay];
@@ -1658,24 +1265,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)hangupClick {
     [self stopPlayRing];
     
-//    if (_shCameraObj.isConnect && !self.isConnected) {
-//        [self.progressHUD showProgressHUDWithMessage:nil];
-//        [_shCameraObj disConnectWithSuccessBlock:^{
-//            [self goHome:nil];
-//
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.progressHUD hideProgressHUD:YES];
-//            });
-//        } failedBlock:^{
-//            [self goHome:nil];
-//
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.progressHUD hideProgressHUD:YES];
-//            });
-//        }];
-//    } else {
-//        [self goHome:nil];
-//    }
     [self returnBack];
 }
 
@@ -1683,15 +1272,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self stopPlayRing];
     
     [self closeCallView];
-#if 0
-    if (_shCameraObj.isConnect) {
-        [self startPreview];
-    } else {
-        [self connectAndPreview];
-    }
-#else
+
     [self connectAndPreview];
-#endif
     
     [self checkLoginStatus];
 }
@@ -1710,75 +1292,15 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)enableUserInteraction:(BOOL)enable {
     _funScreenButton.enabled = enable;
-    _videoSizeButton.enabled = enable;
     _audioButton.enabled = enable;
     _speakerButton.enabled = enable;
     _captureButton.enabled = enable;
-//    _pvFailedLabel.hidden = enable;
-//    _pvFailedLabel.text = enable ? nil : NSLocalizedString(@"StartPVFailed", nil);
     self.navigationItem.rightBarButtonItem.enabled = enable;
     self.resolutionButton.enabled = enable;
 }
 
 - (void)connectAndPreview {
-#if 0
-    if (!_shCameraObj.isConnect) {
-        NSString *message = _managedObjectContext ? nil : NSLocalizedString(@"kConnecting", @"");
-        [self.progressHUD showProgressHUDWithMessage:message];
-        
-        dispatch_async(self.previewQueue, ^{
-            [self connectCamera];
-            
-            if (_shCameraObj.isConnect) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initPlayer];
-                    [self updateTitle];
-//                    [self prepareCameraPropertyData];
-                    
-#if 0
-                    if (_managedObjectContext) {
-                        NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-                        if ([msgType isEqualToString:@"201"]) {
-                            [self.progressHUD hideProgressHUD:YES];
-                        } else {
-                            [self startPreview];
-                        }
-                    } else {
-                        [self startPreview];
-                    }
-#endif
-                    [self startPreview];
-                });
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.progressHUD hideProgressHUD:YES];
-                    
-                    if (_shCameraObj == nil ||
-                        _shCameraObj.camera == nil ||
-                        _shCameraObj.camera.cameraUid == nil) {
-                        [self showConnectFailedAlertView];
-                    }
-                });
-            }
-        });
-    } else {
-        [self initPlayer];
-        
-#if 0
-        if (_managedObjectContext) {
-            NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-            if (![msgType isEqualToString:@"201"]) {
-                [self startPreview];
-            }
-        } else {
-            [self startPreview];
-        }
-#endif
-        [self startPreview];
-    }
-#else
     [self connectAndPreviewHandler];
-#endif
 }
 
 - (void)showConnectFailedAlertView {
@@ -1841,32 +1363,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
-#if 0
-        _bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
-        
-        self.bitRateInfoLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
-#else
-        NSString *bitRate = [SHTool bitRateStringFromBits:value]; //[self humanReadableStringFromBit:value];
+        NSString *bitRate = [SHTool bitRateStringFromBits:value];
         
         self.bitRateLabel.text = bitRate;
         self.bitRateInfoLabel.text = bitRate;
-#endif
     });
-}
-
-- (NSString *)humanReadableStringFromBit:(CGFloat)bitCount
-{
-    CGFloat numberOfBit = bitCount;
-    int multiplyFactor = 0;
-    
-    NSArray *tokens = [NSArray arrayWithObjects:@"kb", @"Mb", @"Gb", @"Tb", @"Pb", @"Eb", @"Zb", @"Yb", nil];
-    
-    while (numberOfBit > 1024) {
-        numberOfBit /= 1024;
-        multiplyFactor++;
-    }
-    
-    return [NSString stringWithFormat:@"%.1f%@/s", numberOfBit, [tokens objectAtIndex:multiplyFactor]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -1875,13 +1376,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
         });
-        
-#if 0
-//        if (_shCameraObj.cameraProperty.serverOpened) {
-            BOOL isRing = _managedObjectContext && [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"];
-            isRing ? [self talkBackAction:_speakerButton] : void();
-//        }
-#endif
     } else if ([keyPath isEqualToString:@"bounds"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [CATransaction begin];
@@ -1899,46 +1393,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (BOOL)isRing {
     return _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
-}
-
-#pragma mark - Update Subviews
-- (void)setTitle:(NSString *)title {
-    [super setTitle:title];
-    self.topTitleLabel.text = title;
-}
-
-- (void)addTapGesture {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(controlManagement)];
-    [self.view addGestureRecognizer:tap];
-}
-
-- (void)controlManagement {
-    AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    if (app.isFullScreenPV == NO) {
-        return;
-    }
-    
-    if (_noHidden) {
-        self.topToolView.hidden = NO;
-        self.speakerButton.hidden = NO;
-        self.captureButton.hidden = NO;
-        self.audioButton.hidden = NO;
-        self.bottomToolView.hidden = NO;
-    } else {
-        if (self.topToolView.isHidden) {
-            self.topToolView.hidden = NO;
-            self.speakerButton.hidden = NO;
-            self.captureButton.hidden = NO;
-            self.audioButton.hidden = NO;
-            self.bottomToolView.hidden = NO;
-        } else {
-            self.topToolView.hidden = YES;
-            self.speakerButton.hidden = YES;
-            self.captureButton.hidden = YES;
-            self.audioButton.hidden = YES;
-            self.bottomToolView.hidden = YES;
-        }
-    }
 }
 
 #pragma mark - Ring Timer

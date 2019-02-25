@@ -145,8 +145,6 @@ static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 static const float kMinZoomScale = 1.0;
 static const float kMaxZoomScale = 5.0;
 
-#define USE_ENCRYP 0
-
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
 #define kScreenHeightScale MAX([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width) / 480.0
 

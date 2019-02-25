@@ -27,8 +27,6 @@
 
 @property (nonatomic) NSMutableData *videoData;
 @property (nonatomic) NSMutableData *audioData;
-//@property (nonatomic) NSMutableData *videoPlaybackData;
-//@property (nonatomic) NSMutableData *audioPlaybackData;
 
 @property (nonatomic) NSRange videoRange;
 @property (nonatomic) NSRange audioRange;
@@ -75,22 +73,6 @@
     
     return _audioData;
 }
-
-//- (NSMutableData *)videoPlaybackData {
-//    if (!_videoPlaybackData) {
-//        _videoPlaybackData = [[NSMutableData alloc] initWithCapacity:VIDEOBUFFERSIZE];
-//    }
-//    
-//    return _videoPlaybackData;
-//}
-//
-//- (NSMutableData *)audioPlaybackData {
-//    if (!_audioPlaybackData) {
-//        _audioPlaybackData = [[NSMutableData alloc] initWithCapacity:AUDIOBUFFERSIZE];
-//    }
-//    
-//    return _audioPlaybackData;
-//}
 
 - (smarthome::Resampler *)resampler {
     if (_resampler == nil) {
@@ -151,12 +133,6 @@
 }
 
 - (int)initializeSHSDK:(NSString *)cameraUid devicePassword:(NSString *)devicePassword {
-#if USE_ENCRYP
-    if (![[SHQRManager sharedQRManager] permissionsCamera:camera.cameraToken]) {
-        return ICH_QR_USEABORT;
-    }
-#endif
-    
 	//convert to uppercase
 	NSString *upperUid = [cameraUid uppercaseStringWithLocale:[NSLocale currentLocale]];
     int retVal = ICH_SUCCEED;
@@ -176,12 +152,10 @@
             break;
         }
         
-//        self.session->loadTutkLibrary();
         SHLogInfo(SHLogTagSDK, @"start enableTutk.");
         string password = devicePassword ? devicePassword.UTF8String : "1234";
         if ((retVal = self.session->enableTutk(upperUid.UTF8String, password)) != ICH_SUCCEED) {
             SHLogInfo(SHLogTagSDK, @"enableTutk failed.");
-//            self.session->unloadTutkLibrary();
             break;
         }
         
@@ -190,7 +164,6 @@
         if (self.session->prepareSession() != ICH_SUCCEED) {
             SHLogInfo(SHLogTagSDK, @"prepareSession failed.");
             self.session->disableTutk();
-//            self.session->unloadTutkLibrary();
             retVal = ICH_NULL;
             break;
         }
@@ -255,7 +228,6 @@
         SHLogInfo(SHLogTagAPP, @"start destroy session.");
         self.session->destroySession();
         self.session->disableTutk();
-//        self.session->unloadTutkLibrary();
         delete self.session;
         self.session = NULL;
         SHLogInfo(SHLogTagAPP, @"destroy session done.");
@@ -304,7 +276,6 @@
 
     if (retVal != ICH_SUCCEED) {
         SHLogInfo(SHLogTagSDK, @"enableTutk failed, retVal: %d", retVal);
-//        _session->unloadTutkLibrary();
         _session->destroySession();
         _session = NULL;
         
@@ -321,7 +292,6 @@
 
     if (_session != NULL) {
         _session->disableTutk();
-//        _session->unloadTutkLibrary();
         _session->destroySession();
         _session = NULL;
     }
@@ -378,26 +348,6 @@
     Config::getInstance()->setPreviewCacheParam(1000, 200);
     SHH264StreamParameter param(1280, 720, 2000000, 30);
 
-#if 0
-    SHVideoFormat *videoFormat = camera.videoFormat;
-    SHAudioFormat *audioFormat = camera.audioFormat;
-    
-    if (videoFormat == nil || (enableAudio && audioFormat == nil)) {
-        startRetVal = _preview->start(param, disableAudio);
-        
-        if (startRetVal == ICH_SUCCEED) {
-            [self saveFormat2Database:camera];
-        }
-    } else {
-        ICatchVideoFormat *videoFormat_ICatch = [SHVideoFormat ICatchVideoFormatFromVideoFormatWith:videoFormat];
-        ICatchAudioFormat *audioFormat_Icatch = [SHAudioFormat ICatchAudioFormatFromAudioFormatWith:audioFormat];
-        
-        startRetVal = _preview->start(param, disableAudio, videoFormat_ICatch, audioFormat_Icatch);
-        
-        delete videoFormat_ICatch; videoFormat_ICatch = NULL;
-        delete audioFormat_Icatch; audioFormat_Icatch = NULL;
-    }
-#else
     ICatchVideoFormat *videoFormat = cameraObj.cameraProperty.videoFormat;
     ICatchAudioFormat *audioFormat = cameraObj.cameraProperty.audioFormat;
     
@@ -412,7 +362,6 @@
         SHLogInfo(SHLogTagAPP, @"Video format & audio format isn't nil, needn't get stream info.");
         startRetVal = _preview->start(param, disableAudio, videoFormat, audioFormat);
     }
-#endif
     
     SHLogInfo(SHLogTagSDK, @"startMediaStream done, retVal : %d.", startRetVal);
     
@@ -530,34 +479,6 @@
 }
 
 - (void)saveFormat2Database:(SHCameraObject *)cameraObj {
-#if 0
-    ICatchVideoFormat *videoFormat = [self cacheVideoFormat];
-    ICatchAudioFormat *audioFormat = [self cacheAudioFormat];
-
-    if (videoFormat && audioFormat) {
-        camera.videoFormat = [SHVideoFormat videoFormatWithICatchVideoFormat:*videoFormat];
-        camera.audioFormat = [SHAudioFormat audioFormatWithICatchAudioFormat:*audioFormat];
-        
-        // Save data to sqlite
-        NSError *error = nil;
-        if (![camera.managedObjectContext save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-             */
-            SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        } else {
-            SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-            
-            delete videoFormat;
-            videoFormat = NULL;
-            delete audioFormat;
-            audioFormat = NULL;
-        }
-    }
-#else
     ICatchVideoFormat *videoFormat = [self cacheVideoFormat];
     ICatchAudioFormat *audioFormat = [self cacheAudioFormat];
     
@@ -566,7 +487,6 @@
         cameraObj.cameraProperty.audioFormat = audioFormat;
         
     }
-#endif
 }
 
 - (ICatchVideoFormat *)cacheVideoFormat {
@@ -891,13 +811,6 @@
 - (void)addObserver:(SHObserver *)observer {
     if (observer.listener) {
         if (observer.isGlobal) {
-//            int ret = ICH_NULL;
-//            ret = Session::addEventListener(observer.eventType, observer.listener, true);
-//            if (ret == ICH_SUCCEED) {
-//                SHLogInfo(SHLogTagSDK, @"Add global event(0x%x,%p) listener succeed.", observer.eventType, observer);
-//            } else {
-//                SHLogInfo(SHLogTagSDK, @"Add global event(0x%x,%p) listener failed.", observer.eventType, observer);
-//            }
             return;
         } else {
             if (_control) {
@@ -920,13 +833,6 @@
 - (void)removeObserver:(SHObserver *)observer {
     if (observer.listener) {
         if (observer.isGlobal) {
-//            int ret = ICH_NULL;
-//            ret = Session::delEventListener(observer.eventType, observer.listener, true);
-//            if (ret == ICH_SUCCEED) {
-//                SHLogInfo(SHLogTagSDK, @"Remove global event(0x%x,%p) listener succeed.", observer.eventType, observer);
-//            } else {
-//                SHLogInfo(SHLogTagSDK, @"Remove global event(0x%x,%p) listener failed.", observer.eventType, observer);
-//            }
             return;
         } else {
             if (_control) {

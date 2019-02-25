@@ -30,7 +30,6 @@
 + (instancetype)shareDownloadManger;
 - (instancetype)init __attribute__((unavailable("Disabled. Please use the shareDownloadManger methods instead.")));
 
-//- (void)downloadWithCameraObject:(SHCameraObject *)camObj file:(SHFile *)file downloadInfoBlock:(void (^)(int downloadInfo))downloadInfoBlock progressBlock:(void (^)(NSInteger progress))progressBlock;
 - (void)downloadWithfile:(SHFile *)file;
 - (Boolean)cancelDownloadFile:(SHFile *)file;
 - (void)clearDownloadingByUid:(NSString*) uid;

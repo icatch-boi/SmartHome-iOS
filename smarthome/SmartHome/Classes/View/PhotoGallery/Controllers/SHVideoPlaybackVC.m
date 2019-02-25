@@ -14,30 +14,17 @@
 #import "HYOpenALHelper.h"
 #import "AppDelegate.h"
 #include "MpbSDKEventListener.h"
-//#import "GCDiscreetNotificationView.h"
-#ifdef DEBUG1
-#include "ICatchWificamConfig.h"
-#endif
-//#include "WifiCamSDKEventListener.h"
 #include "SHSDKEventListener.hpp"
 #include "PCMDataPlayer.h"
 
 #import "SHFileTable.h"
 #import "H264Decoder.h"
 #import "SHDownloadManager.h"
-//#import "VideoFrameExtractor.h"
 
 @interface SHVideoPlaybackVC () {
     UIPopoverController *_popController;
-    /**
-     *  20160503 zijie.feng
-     *  Deprecated !
-     */
-#if USE_SYSTEM_IOS7_IMPLEMENTATION
-    UIActionSheet *_actionsSheet;
-#else
+
     UIAlertController *_actionsSheet;
-#endif
     
     VideoPbProgressListener *videoPbProgressListener;
     VideoPbProgressStateListener *videoPbProgressStateListener;
@@ -82,7 +69,6 @@
 @property(nonatomic) float totalElapse;
 @property(nonatomic) float totalElapse1;
 @property(nonatomic) float totalDuration;
-//@property(nonatomic) WifiCamObserver *streamObserver;
 
 @property (nonatomic) H264Decoder *h264Decoder;
 @property (nonatomic) AVSampleBufferDisplayLayer *avslayer;
@@ -110,7 +96,7 @@
     [super viewDidLoad];
     
     SHCameraManager *app = [SHCameraManager sharedCameraManger];
-//    self.shCamObj = [app.smarthomeCams objectAtIndex:0];
+
     self.shCamObj = [app getSHCameraObjectWithCameraUid:_cameraUid];
     self.gallery = _shCamObj.gallery;
     self.ctrl = _shCamObj.controler;
@@ -123,7 +109,6 @@
     _previewThumb.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _previewThumb.backgroundColor = [UIColor blackColor];
     [self.view addSubview:_previewThumb];
-    //    [self.view sendSubviewToBack:_previewThumb];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapToHideControl:)];
     [self.view addGestureRecognizer:tapGesture];
@@ -138,12 +123,6 @@
     self.videoPlaybackQ = dispatch_queue_create("WifiCam.GCD.Queue.Playback.Q", 0);
     self.audioQueue = dispatch_queue_create("WifiCam.GCD.Queue.Playback.Audio", 0);
     self.videoQueue = dispatch_queue_create("WifiCam.GCD.Queue.Playback.Video", 0);
-    
-#ifdef DEBUG1
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    ICatchWificamConfig::getInstance()->enableDumpMediaStream(false, documentsDirectory.UTF8String);
-#endif
     
     // Panel
     self.pbCtrlPanel = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 52, self.view.frame.size.width, 52)];
@@ -230,20 +209,6 @@
     
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     delegate.delegate = self;
-    
-    /*
-     UIProgressView *progress = [[UIProgressView alloc] initWithFrame:CGRectMake(_pbCtrlPanel.frame.origin.x, 100, _pbCtrlPanel.frame.size.width, 11)];
-     progress.progress = 0.5;
-     progress.progressTintColor = [UIColor lightGrayColor];
-     progress.trackTintColor = [UIColor darkGrayColor];
-     [self.view addSubview:progress];
-     
-     VideoPlaybackProgressView *slider = [[VideoPlaybackProgressView alloc] initWithFrame:CGRectMake(_pbCtrlPanel.frame.origin.x-5, 99, _pbCtrlPanel.frame.size.width+10, 13)];
-     slider.value = 0.2;
-     slider.maximumTrackTintColor = [UIColor clearColor];
-     slider.minimumTrackTintColor = [UIColor redColor];
-     [self.view addSubview:slider];
-     */
     
     [self setupSampleBufferDisplayLayer];
 }
@@ -335,9 +300,7 @@
                                                  name:kCameraDisconnectNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraPowerOffHandle:) name:kCameraPowerOffNotification object:nil];
-    //    WifiCamSDKEventListener *listener = new WifiCamSDKEventListener(self, @selector(streamCloseCallback));
-    //    self.streamObserver = [[WifiCamObserver alloc] initWithListener:listener eventType:ICATCH_EVENT_MEDIA_STREAM_CLOSED isCustomized:NO isGlobal:NO];
-    //    [[SDK instance] addObserver:_streamObserver];
+
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     app.isVideoPB = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
@@ -387,11 +350,9 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 dispatch_semaphore_signal(self.semaphore);
                 [_popController dismissPopoverAnimated:YES];
-#if USE_SYSTEM_IOS7_IMPLEMENTATION
-                [_actionsSheet dismissWithClickedButtonIndex:0 animated:NO];
-#else
+
                 [_actionsSheet dismissViewControllerAnimated:NO completion:nil];
-#endif
+
                 [self hideProgressHUD:NO];
                 [self.navigationController setToolbarHidden:YES];
                 [self.notificationView hideGCDiscreetNoteView:YES];
@@ -407,11 +368,7 @@
 {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    //    [[SDK instance] removeObserver:_streamObserver];
-    //    delete _streamObserver.listener;
-    //    _streamObserver.listener = NULL;
-    //    self.streamObserver = nil;
+
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     app.isVideoPB = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
@@ -432,8 +389,7 @@
     switch (toInterfaceOrientation) {
         case UIInterfaceOrientationLandscapeLeft:
         case UIInterfaceOrientationLandscapeRight:
-            //            [self.navigationController setNavigationBarHidden:YES];
-            //            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+
             [self landscapeControlPanel];
             break;
         default:
@@ -483,11 +439,6 @@
     }
     
     [self showDisconnectAlert:shCamObj];
-    //    if (_played) {
-    //        [self removePlaybackObserver];
-    //        self.PlaybackRun = NO;
-    //        self.played = [_ctrl.pbCtrl stop];
-    //    }
 }
 
 - (void)cameraPowerOffHandle:(NSNotification *)nc {
@@ -740,32 +691,6 @@
 #pragma mark - VideoPB
 - (IBAction)sliderValueChanged:(VideoPlaybackSlideController *)slider {
     SHLogTRACE();
-    /*
-     if (_played) {
-     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-     self.seeking = YES;
-     BOOL retVal = [_ctrl.pbCtrl seek:slider.value];
-     
-     dispatch_async(dispatch_get_main_queue(), ^{
-     if (retVal) {
-     AppLog(@"Seek succeed.");
-     self.playedSecs = slider.value;
-     self.curVideoPTS = _playedSecs;
-     _videoPbElapsedTime.text = [Tool translateSecsToString:_playedSecs];
-     } else {
-     AppLog(@"Seek failed.");
-     [self showProgressHUDNotice:@"Seek failed" showTime:2.0];
-     }
-     self.pbTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
-     target  :self
-     selector:@selector(updateTimeInfo:)
-     userInfo:nil
-     repeats :YES];
-     });
-     self.seeking = NO;
-     });
-     }
-     */
     
     _videoPbElapsedTime.text = [NSString translateSecsToString:slider.value];
     
@@ -814,7 +739,7 @@
         float sliderPercent = _playedSecs/_totalSecs; // slider value
         dispatch_async(dispatch_get_main_queue(), ^{
             _videoPbElapsedTime.text = [NSString translateSecsToString:_playedSecs];
-            //            AppLog(@"_playedSecs: %f", _playedSecs);
+
             _slideController.value = [@(_playedSecs) floatValue];
             
             if (sliderPercent > _bufferingView.value) {
@@ -825,17 +750,6 @@
     } else {
         SHLogInfo(SHLogTagAPP, @"seeking");
     }
-#if RUN_DEBUG
-    if (++_times == 200) {
-        AppLog(@"Time Interval: %fs, getDataTime: %fms, \nstotalElapse: %fms, totalDuration: %fms, D-value: %fms, times: %d", _times * 0.1, _totalElapse1/_times1, _totalElapse/_times1, _totalDuration/_times1, _totalElapse/_times1 - _totalElapse1/_times1, _times1/*_totalDuration - _totalElapse*/);
-        _times = 0;
-        _times1 = 0;
-        _totalDuration = 0.0;
-        _totalElapse = 0.0;
-        _totalElapse1 = 0.0;
-    }
-#else
-#endif
 }
 
 - (IBAction)playbackButtonPressed:(UIButton *)pbButton {
@@ -965,7 +879,6 @@
 
 - (void)playbackVideo {
     ICatchVideoFormat format = [_ctrl.pbCtrl retrievePlaybackVideoFormatWithCamera:_shCamObj];
-//    [_shCamObj.sdk openSaveVideo];
     
     if (format.getCodec() == ICATCH_CODEC_JPEG) {
         SHLogInfo(SHLogTagAPP, @"playbackVideoMJPEG");
@@ -981,15 +894,12 @@
     }
     
     SHLogInfo(SHLogTagAPP, @"Break video");
-//    [_shCamObj.sdk closeSaveVideo];
 }
 
 - (void)playbackVideoH264:(ICatchVideoFormat)format {
     NSRange headerRange = NSMakeRange(0, 4);
     NSMutableData *headFrame = nil;
     uint32_t nalSize = 0;
-    
-    //    [_ctrl.actCtrl previewPlay];
     
     while (_PlaybackRun) {
         //flush avslayer when active from background
@@ -1008,11 +918,7 @@
                 // 1st frame contains sps & pps data.
                 
                 SHAVData *shData = [_ctrl.pbCtrl prepareDataForPlaybackVideoFrameWithCamera:_shCamObj];
-                //SHLogDebug(SHLogTagAPP, @"shData length: %zd", shData.data.length);
-                
-//                if (!shData.isIFrame) {
-//                    continue;
-//                }
+ 
                 if (shData.data.length > 0 || !_PlaybackRun) {
                     self.curVideoPTS = shData.time;
                     NSUInteger loc = format.getCsd_0_size() + format.getCsd_1_size();
@@ -1023,7 +929,6 @@
                     headFrame = [NSMutableData dataWithData:[shData.data subdataWithRange:iRange]];
                     [headFrame replaceBytesInRange:headerRange withBytes:lengthBytes];
                     [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:_avslayer];
-//                    [self displayImage:headFrame];
                     break;
                 }
             }
@@ -1032,7 +937,7 @@
         while (_PlaybackRun) {
             @autoreleasepool {
                 SHAVData *shData = [_ctrl.pbCtrl prepareDataForPlaybackVideoFrameWithCamera:_shCamObj];
-                //SHLogDebug(SHLogTagAPP, @"shData length: %zd", shData.data.length);
+
                 if (shData.data.length > 0) {
                     self.curVideoPTS = shData.time;
 
@@ -1045,14 +950,12 @@
                         headFrame = [NSMutableData dataWithData:[shData.data subdataWithRange:iRange]];
                         [headFrame replaceBytesInRange:headerRange withBytes:lengthBytes];
                         [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:_avslayer];
-//                        [self displayImage:headFrame];
                     } else {
                         nalSize = (uint32_t)(shData.data.length - 4);
                         const uint8_t lengthBytes[] = {(uint8_t)(nalSize>>24),
                             (uint8_t)(nalSize>>16), (uint8_t)(nalSize>>8), (uint8_t)nalSize};
                         [shData.data replaceBytesInRange:headerRange withBytes:lengthBytes];
                         [self.h264Decoder decodeAndDisplayH264Frame:shData.data andAVSLayer:_avslayer];
-//                        [self displayImage:shData.data];
                     }
                 } else {
                     [NSThread sleepForTimeInterval:0.005];
@@ -1078,61 +981,13 @@
     receivedImage = nil;
 }
 
-/************************************ for test ***************************************/
-/*
-- (void)playbackVideoH2641:(ICatchVideoFormat)format {
-    // Decode using FFmpeg
-    VideoFrameExtractor *ff_h264_decoder = [[VideoFrameExtractor alloc] initWithSize:format.getVideoW() andHeight:format.getVideoH()];
-    
-    while (_PlaybackRun) {
-        @autoreleasepool {
-            // Decode using FFmpeg
-            SHAVData *shData = [_ctrl.pbCtrl prepareDataForPlaybackVideoFrameWithCamera:_shCamObj];
-            if (shData.data.length > 0) {
-                self.curVideoPTS = shData.time;
-                
-                [ff_h264_decoder fillData:(uint8_t *)shData.data.bytes
-                                     size:(int)shData.data.length];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIImage *receivedImage = ff_h264_decoder.currentImage;
-                    if (_PlaybackRun && receivedImage) {
-                        _previewThumb.image = receivedImage;
-                    }
-                });
-            }
-        }
-    }
-    
-    SHLogInfo(SHLogTagAPP, @"Break video");
-}
- */
-
 - (void)playbackVideoMJPEG
 {
     UIImage *receivedImage = nil;
     
     while (_PlaybackRun/* && _played && !_paused*/) {
         @autoreleasepool {
-#if RUN_DEBUG
-            NSDate *begin = [NSDate date];
-            WifiCamAVData *wifiCamData = [_ctrl.propCtrl prepareDataForPlaybackVideoFrame];
-            
-            if (wifiCamData.data.length > 0) {
-                self.curVideoPTS = wifiCamData.time;
-                receivedImage = [[UIImage alloc] initWithData:wifiCamData.data];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (receivedImage) {
-                        _previewThumb.image = receivedImage;
-                    }
-                });
-                receivedImage = nil;
-                //            ++frameCount;
-            }
-            NSDate *end = [NSDate date];
-            NSTimeInterval elapse = [end timeIntervalSinceDate:begin];
-            AppLog(@"[V]Get %lu, elapse: %f", (unsigned long)wifiCamData.data.length, elapse * 1000);
-#else
+
             SHAVData *wifiCamData = [_ctrl.pbCtrl prepareDataForPlaybackVideoFrameWithCamera:_shCamObj];
             
             if (wifiCamData.data.length > 0) {
@@ -1145,7 +1000,6 @@
                 });
                 receivedImage = nil;
             }
-#endif
         }
     }
     SHLogInfo(SHLogTagAPP, @"quit video");
@@ -1236,9 +1090,6 @@
                 }
             }
             
-#if APP_DEBUG
-            NSDate *end1 = [NSDate date];
-#endif
             SHLogDebug(SHLogTagAPP, @"getNextAudioFrame time: %fms", [end1 timeIntervalSinceDate:begin] * 1000);
             
             if (audioDataBuffer.length > 0) {
@@ -1287,16 +1138,6 @@
                                permittedArrowDirections:UIPopoverArrowDirectionAny
                                                animated:YES];
     } else {
-        
-#if USE_SYSTEM_IOS7_IMPLEMENTATION
-        _actionsSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                    delegate:self
-                                           cancelButtonTitle:NSLocalizedString(@"Cancel", @"")
-                                      destructiveButtonTitle:NSLocalizedString(@"SureDelete", @"")
-                                           otherButtonTitles:nil, nil];
-        _actionsSheet.tag = ACTION_SHEET_DELETE_ACTIONS;
-        [_actionsSheet showFromBarButtonItem:sender animated:YES];
-#else
         _actionsSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         
         [_actionsSheet addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:nil]];
@@ -1305,8 +1146,6 @@
         }]];
         
         [self presentViewController:_actionsSheet animated:YES completion:nil];
-#endif
-        
     }
 }
 
@@ -1330,7 +1169,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (deleteResult) {
                 [self hideProgressHUD:YES];
-                //                [self.navigationController popToRootViewControllerAnimated:YES];
+
                 [self dismissViewControllerAnimated:YES completion:nil];
             } else {
                 [self showProgressHUDNotice:NSLocalizedString(@"DeleteError", nil) showTime:2.0];
@@ -1391,25 +1230,12 @@
     } else {
         NSString *msg = message;
         
-#if USE_SYSTEM_IOS7_IMPLEMENTATION
-        _actionsSheet = [[UIActionSheet alloc] initWithTitle:msg
-                                                    delegate:self
-                                           cancelButtonTitle:NSLocalizedString(@"Cancel", @"")
-                                      destructiveButtonTitle:confrimButtonTitle
-                                           otherButtonTitles:nil, nil];
-        _actionsSheet.tag = ACTION_SHEET_DOWNLOAD_ACTIONS;
-        //[self.sheet showInView:self.view];
-        //[self.sheet showInView:[UIApplication sharedApplication].keyWindow];
-        [_actionsSheet showFromBarButtonItem:_actionButton animated:YES];
-#else
         _actionsSheet = [UIAlertController alertControllerWithTitle:msg message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         [_actionsSheet addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleCancel handler:nil]];
         [_actionsSheet addAction:[UIAlertAction actionWithTitle:confrimButtonTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self downloadDetail:self];
         }]];
         [self presentViewController:_actionsSheet animated:YES completion:nil];
-#endif
-        
     }
 }
 
@@ -1418,7 +1244,6 @@
 	SHFile *file = [SHFile fileWithUid:_cameraUid file:_curFileTable.fileList.at(index)];
 	[[SHDownloadManager shareDownloadManger] addDownloadFile:file];
 	 [[SHDownloadManager shareDownloadManger] startDownloadFile];
-    //dispatch_queue_t downloadQueue = dispatch_queue_create("WifiCam.GCD.Queue.Playback.Donwload", 0);
     
     if ([sender isKindOfClass:[UIButton self]]) {
         [_popController dismissPopoverAnimated:YES];
@@ -1427,69 +1252,6 @@
 	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"file download added",nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
 	[alertView show];
 	[alertView performSelector:@selector(dismissWithClickedButtonIndex:animated:) withObject:@[@0,@1] afterDelay:2];
-	
-//    [self addObserver:self
-//           forKeyPath:@"downloadedPercent"
-//              options:NSKeyValueObservingOptionNew
-//              context:nil];
-//    [self showProgressHUDWithMessage:NSLocalizedString(@"DownloadingTitle", @"")
-//                      detailsMessage:nil
-//                                mode:MBProgressHUDModeAnnularDeterminate];
-//    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [_ctrl.fileCtrl resetBusyToggle:YES];
-//        
-//        UIApplication  *app = [UIApplication sharedApplication];
-//        UIBackgroundTaskIdentifier downloadTask = [app beginBackgroundTaskWithExpirationHandler:^{
-//            SHLogInfo(SHLogTagAPP, @"-->Expirationed.");
-//            NSArray *oldNotifications = [app scheduledLocalNotifications];
-//            // Clear out the old notification before scheduling a new one
-//            if ([oldNotifications count] > 5) {
-//                [app cancelAllLocalNotifications];
-//            }
-//            
-//            UILocalNotification *alarm = [[UILocalNotification alloc] init];
-//            if (alarm) {
-//                alarm.fireDate = [NSDate date];
-//                alarm.timeZone = [NSTimeZone defaultTimeZone];
-//                alarm.repeatInterval = 0;
-//                NSString *str = [[NSString alloc] initWithFormat:@"App is about to exit .Please bring it to foreground to continue dowloading."];
-//                alarm.alertBody = str;
-//                alarm.soundName = UILocalNotificationDefaultSoundName;
-//                
-//                [app scheduleLocalNotification:alarm];
-//            }
-//        }];
-//        
-//        BOOL downloadResult = YES;
-//        // Download percent!
-//        ICatchFile file = _curFileTable.fileList.at(index);
-//        ICatchFile *pFile = &file;
-//        dispatch_async(downloadQueue, ^{
-//            while (_downloadedPercent < 100) {
-//                @autoreleasepool {
-//                    self.downloadedPercent = [_ctrl.fileCtrl requestDownloadedPercent:pFile];
-//                }
-//            }
-//        });
-//        // Downloading...
-//        downloadResult = [_ctrl.fileCtrl downloadFile:pFile];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self removeObserver:self forKeyPath:@"downloadedPercent"];
-//            NSString *message = nil;
-//            if (downloadResult) {
-//                message = NSLocalizedString(@"Download complete", nil);
-//            } else {
-//                //SaveError
-//                message = NSLocalizedString(@"SaveError", nil);
-//            }
-//            [self showProgressHUDCompleteMessage:message];
-//        });
-//        
-//        [_ctrl.fileCtrl resetBusyToggle:NO];
-//        [[UIApplication sharedApplication] endBackgroundTask:downloadTask];
-        //downloadTask = UIBackgroundTaskInvalid;
-//    });
 }
 
 #pragma mark - GCDiscreetNotificationView
@@ -1506,13 +1268,12 @@
 #pragma mark - Gesture
 - (IBAction)tapToHideControl:(UITapGestureRecognizer *)sender {
     SHLogTRACE();
-    //    if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) {
+
     if (self.view.frame.size.width < self.view.frame.size.height) {
         return;
     }
     if (_controlHidden) {
         [self.navigationController setNavigationBarHidden:NO];
-        //        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         _pbCtrlPanel.hidden = NO;
         _bufferingBgView.hidden = NO;
         _bufferingView.hidden = NO;
@@ -1520,7 +1281,6 @@
         [self landscapeControlPanel];
     } else {
         [self.navigationController setNavigationBarHidden:YES];
-        //        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         _pbCtrlPanel.hidden = YES;
         _bufferingBgView.hidden = YES;
         _bufferingView.hidden = YES;
@@ -1532,41 +1292,6 @@
 - (IBAction)panToFastMove:(UIPanGestureRecognizer *)sender {
     SHLogTRACE();
 }
-
-//-(BOOL)prefersStatusBarHidden {
-//    if (_controlHidden) {
-//        return NO;
-//    } else {
-//        return YES;
-//    }
-//}
-
-#if USE_SYSTEM_IOS7_IMPLEMENTATION
-
-#pragma mark - UIActionSheetDelegate
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    _actionsSheet = nil;
-    
-    switch (actionSheet.tag) {
-        case ACTION_SHEET_DOWNLOAD_ACTIONS:
-            if (buttonIndex == actionSheet.destructiveButtonIndex) {
-                [self downloadDetail:self];
-            }
-            break;
-            
-        case ACTION_SHEET_DELETE_ACTIONS:
-            if (buttonIndex == actionSheet.destructiveButtonIndex) {
-                [self deleteDetail:self];
-            }
-            break;
-            
-        default:
-            break;
-    }
-    
-}
-#else
-#endif
 
 #pragma mark - UIPopoverControllerDelegate
 -(void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
@@ -1587,26 +1312,15 @@
                 self.played = ![_ctrl.pbCtrl stopWithCamera:_shCamObj];
                 [self removePlaybackObserver];
                 [_pbTimer invalidate];
-//                [_shCamera.sdk destroySHSDK];
                 [_shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
             }
         });
     }
 }
 
-
-#pragma mark -
-/*-(void)streamCloseCallback {
- self.PlaybackRun = NO;
- 
- dispatch_async(dispatch_get_main_queue(), ^{
- [self showProgressHUDNotice:@"Streaming is stopped unexpected." showTime:2.0];
- });
- }*/
-
 #pragma mark - Disconnect & Reconnect
 - (void)showDisconnectAlert:(SHCameraObject *)shCamObj {
-    UIAlertController *alertVc = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ %@", shCamObj.camera.cameraName, NSLocalizedString(@"kDisconnect", nil)] message:/*@"相机连接断开,请保证网络的正确性及相机的正常连接."*/NSLocalizedString(@"kDisconnectTipsInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVc = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ %@", shCamObj.camera.cameraName, NSLocalizedString(@"kDisconnect", nil)] message:NSLocalizedString(@"kDisconnectTipsInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     __weak typeof(self) weakSelf = self;
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Exit", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {

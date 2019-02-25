@@ -26,9 +26,6 @@
     AudioUnit audioUnit;
     AudioBufferList *buffList;
     
-    //    NSInputStream *inputSteam;
-    //    Byte *buffer;
-    
     UInt32 audioDataLength;
     UInt32 audioDataCurLength;
     Byte audioByte[kFrameSize];
@@ -53,7 +50,6 @@
 
 - (void)startAudioUnit {
     [ self initAudioUnit];
-//    AudioOutputUnitStart(audioUnit);
 }
 
 - (void)stopAudioUnit {
@@ -66,18 +62,6 @@
         audioUnit = nil;
     }
     
-//    free(buffList->mBuffers);
-//    buffList = NULL;
-//    free(audioByte);
-//    audioDataLength = 0;
-//    audioDataCurLength = 0;
-//    audioPts = 0.0;
-#if 0
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    //默认情况下扬声器播放
-    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [audioSession setActive:YES error:nil];
-#endif
     [self setAVAudioSessionCategory:AVAudioSessionCategoryPlayback options:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth];
 }
 
@@ -103,8 +87,6 @@
     
     // audio session
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:&error];
-//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
-//    [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
     if (error) {
         NSLog(@"setCategory error:%@", error);
     }
