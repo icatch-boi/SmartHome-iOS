@@ -53,9 +53,6 @@
 @property (nonatomic) SHObserver *videoCacheObserver;
 @property (nonatomic) SHObserver *audioCacheObserver;
 
-@property(nonatomic) UIImage *startOnImage;
-@property(nonatomic) UIImage *startOffImage;
-
 @property (nonatomic, strong) UIScrollView *zoomScrollView;
 @property (nonatomic, strong) UIImageView *zoomImageView;
 @property (nonatomic, strong) UIButton *zoomButton;

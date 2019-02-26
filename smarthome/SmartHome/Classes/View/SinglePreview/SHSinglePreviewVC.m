@@ -1131,22 +1131,6 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     }];
 }
 
-- (UIImage *)startOnImage {
-    if (_startOnImage == nil) {
-        _startOnImage = [UIImage imageNamed:@"stop_on"];
-    }
-    
-    return _startOnImage;
-}
-
-- (UIImage *)startOffImage {
-    if (_startOffImage == nil) {
-        _startOffImage = [UIImage imageNamed:@"stop_off"];
-    }
-    
-    return _startOffImage;
-}
-
 //处理双指事件
 - (void)handleDoubleFingerEvent:(UITapGestureRecognizer *)sender
 {

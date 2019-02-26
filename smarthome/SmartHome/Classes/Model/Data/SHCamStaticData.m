@@ -46,21 +46,6 @@
 
 
 #pragma mark - Global static table
--(NSDictionary *)whiteBalanceDict
-{
-  return @{@(WB_AUTO):NSLocalizedString(@"SETTING_AWB_AUTO", @""),
-           @(WB_CLOUDY):NSLocalizedString(@"SETTING_AWB_CLOUDY", @""),
-           @(WB_DAYLIGHT):NSLocalizedString(@"SETTING_AWB_DAYLIGHT", @""),
-           @(WB_FLUORESCENT):NSLocalizedString(@"SETTING_AWB_FLUORESECENT", @""),
-           @(WB_TUNGSTEN):NSLocalizedString(@"SETTING_AWB_INCANDESCENT", @"")};
-}
-
--(NSDictionary *)powerFrequencyDict
-{
-  return @{@(LIGHT_FREQUENCY_50HZ):NSLocalizedString(@"SETTING_POWER_SUPPLY_50", nil),
-           @(LIGHT_FREQUENCY_60HZ):NSLocalizedString(@"SETTING_POWER_SUPPLY_60", nil)};
-}
-
 - (NSDictionary *)tutkModeDict {
     return @{ @(0x01) : @"non",
               @(0x02) : @"p2p",

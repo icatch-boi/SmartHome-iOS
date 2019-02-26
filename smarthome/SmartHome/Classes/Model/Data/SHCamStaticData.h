@@ -14,9 +14,6 @@
 + (SHCamStaticData *)instance;
 
 #pragma mark - Gloabl static table
-@property(nonatomic, readonly) NSDictionary *whiteBalanceDict;
-@property(nonatomic, readonly) NSDictionary *powerFrequencyDict;
-
 @property(nonatomic, readonly) NSDictionary *tutkModeDict;
 @property(nonatomic, readonly) NSDictionary *tutkErrorDict;
 @property (nonatomic, readonly) NSDictionary *monthStringDict;

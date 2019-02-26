@@ -1249,7 +1249,7 @@
         [_popController dismissPopoverAnimated:YES];
     }
 	
-	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"file download added",nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+	UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kAddDownloadDescription",nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
 	[alertView show];
 	[alertView performSelector:@selector(dismissWithClickedButtonIndex:animated:) withObject:@[@0,@1] afterDelay:2];
 }

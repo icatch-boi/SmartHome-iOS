@@ -546,7 +546,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 
 #pragma mark - DeleteCamera
 - (void)showDeleteCameraAlertWithIndexPath:(NSIndexPath *)indexPath {
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"Are you sure you want to remove this record", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"kDeleteDeviceDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
     [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];

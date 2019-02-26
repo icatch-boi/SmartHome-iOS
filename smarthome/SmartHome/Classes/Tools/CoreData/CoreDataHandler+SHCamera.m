@@ -409,7 +409,7 @@
     SHLogInfo(SHLogTagAPP, @"current visibleViewController: %@", visibleVC);
     if ([NSStringFromClass([visibleVC class]) isEqualToString:@"UIAlertController"]) {
         UIAlertController *vc = (UIAlertController *)visibleVC;
-        if ([vc.message isEqualToString:NSLocalizedString(@"Are you sure you want to remove this record", nil)]) {
+        if ([vc.message isEqualToString:NSLocalizedString(@"kDeleteDeviceDescription", nil)]) {
             return YES;
         }
     }
