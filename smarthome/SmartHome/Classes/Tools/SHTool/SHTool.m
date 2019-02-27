@@ -414,6 +414,18 @@
     [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav"] forBarMetrics:UIBarMetricsDefault];
 }
 
++ (void)resetNavigationBarAttributes:(UINavigationController *)nav {
+    if (![nav isKindOfClass:[UINavigationController class]]) {
+        SHLogError(SHLogTagAPP, @"Controller is not NavigationController.");
+        return;
+    }
+    
+    nav.navigationBar.translucent = NO;
+    nav.navigationBar.tintColor = nil;
+    nav.navigationBar.titleTextAttributes = nil;
+    [nav.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+}
+
 #pragma mark - Device info
 + (NSString *)deviceInfo {
     NSString *userPhoneNameStr = [[UIDevice currentDevice] name];

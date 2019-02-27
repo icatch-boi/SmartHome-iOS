@@ -304,6 +304,7 @@
     AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     app.isVideoPB = YES;
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    [SHTool resetNavigationBarAttributes:self.navigationController];
     
     SHLogInfo(SHLogTagAPP, @"Current device is connect: %d", _shCamObj.isConnect);
     if (self.view.frame.size.width < self.view.frame.size.height) {

@@ -18,6 +18,7 @@
 #endif
 
 #import "SHSinglePreviewVC.h"
+#import "SHVideoPlaybackVC.h"
 
 #import <Bugly/Bugly.h>
 #import "SHCameraPreviewVC.h"
@@ -610,6 +611,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
     }
     
+    if ([className isEqualToString:@"SHVideoPlaybackVC"]) {
+        SHVideoPlaybackVC *pbVC = (SHVideoPlaybackVC *)vc;
+        [pbVC stopVideoPb];
+        
+        [SHTool configureAppThemeWithController:vc.navigationController];
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [self stopAllPreview];
         
@@ -628,7 +636,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                 [camera.streamOper stopMediaStreamWithComplete:nil];
             }
             
-            [camera.controler.pbCtrl stopWithCamera:camera];
+//            [camera.controler.pbCtrl stopWithCamera:camera];
         }
     }
 }

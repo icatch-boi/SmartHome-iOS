@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict;
 + (NSString *)bitRateStringFromBits:(CGFloat)bitCount;
 + (void)configureAppThemeWithController:(UINavigationController *)nav;
++ (void)resetNavigationBarAttributes:(UINavigationController *)nav;
 + (NSString *)deviceInfo;
 + (void)setupCurrentFullScreen:(BOOL)fullscreen;
 

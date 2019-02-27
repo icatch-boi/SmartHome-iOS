@@ -453,8 +453,12 @@
 
 #pragma mark -
 - (Token *)createToken {
-    return [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token,
-                                         @"refresh_token" : self.userAccount.refresh_token,
+    if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
+    return [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token ? self.userAccount.access_token : @"",
+                                         @"refresh_token" : self.userAccount.refresh_token ? self.userAccount.refresh_token : @"",
                                          }];
 }
 
