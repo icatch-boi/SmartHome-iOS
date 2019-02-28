@@ -9,6 +9,8 @@
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
 #import "SHNetworkManager+SHPush.h"
+#import "ZJRequestError.h"
+#import <AFNetworking/AFNetworking.h>
 
 @interface SHNetworkManager ()
 
@@ -182,6 +184,7 @@
 //    self.userAccount.access_token = nil;
 //    self.userAccount.refresh_token = nil;
     
+#if 0
     [self.tokenOperate deleteToken:[self createToken] andDeviceIdentification:@"smarthome-v1" success:^{
         [self.userAccount deleteUserAccount];
 
@@ -197,6 +200,26 @@
             completion(NO, error);
         }
     }];
+#else
+    [self revokeTokenWithCompation:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            [self.userAccount deleteUserAccount];
+            
+            _userAccount = nil;
+            [[SHCameraManager sharedCameraManger] unmappingAllCamera];
+            
+            if (completion) {
+                completion(YES, nil);
+            }
+        } else {
+            ZJRequestError *error = result;
+            SHLogError(SHLogTagSDK, @"deleteToken failed, error: %@" , error.error_description);
+            if (completion) {
+                completion(NO, error);
+            }
+        }
+    }];
+#endif
 }
 
 - (void)refreshToken:(RequestCompletionBlock)completion {
@@ -206,6 +229,8 @@
             completion(NO, error);
         }
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+
         return;
     }
     
@@ -223,9 +248,11 @@
             completion(YES, newToken);
         }
 
-        Token *token = [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token,
-                                                     @"refresh_token" : self.userAccount.refresh_token,
-                                                     }];
+//        Token *token = [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token,
+//                                                     @"refresh_token" : self.userAccount.refresh_token,
+//                                                     }];
+        Token *token = [self createToken];
+        
         [self.accountOperate acquireAccountInfoWithToken:token andUserId:self.userAccount.id success:^(Account * _Nonnull account) {
             self.userAccount.screen_name = account.name;
             self.userAccount.avatar_large = account.portrait;
@@ -451,6 +478,18 @@
     }
 }
 
+- (void)revokeTokenWithCompation:(RequestCompletionBlock)completion {
+    NSString *urlString = [self requestURLString:REVOKE_TOKEN_PATH];
+    
+    Token *temp = [self createToken];
+    NSDictionary *dict = @{
+                           @"token_type_hint": temp.refresh_token,
+                           @"token": temp.access_token
+                           };
+
+    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:urlString parametes:dict finished:completion];
+}
+
 #pragma mark -
 - (Token *)createToken {
     if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
@@ -466,17 +505,6 @@
 - (SHUserAccount *)userAccount {
     if (_userAccount == nil) {
         _userAccount = [[SHUserAccount alloc] init];
-        
-//        if (_userAccount.access_token && _userAccount.refresh_token) {
-//            [self refreshToken:^(BOOL isSuccess, id  _Nonnull result) {
-//                NSLog(@"refreshToken is success: %d", isSuccess);
-//
-//                if (!isSuccess) {
-//                    Error *error = result;
-//                    NSLog(@"refreshToken is failed: %@", error.error_description);
-//                }
-//            }];
-//        }
     }
     
     return _userAccount;
@@ -508,6 +536,168 @@
     }
     
     return _cameraOperate;
+}
+
+#pragma mark - Network Handle
+- (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion {
+    if (request == nil) {
+        if (completion) {
+            NSDictionary *dict = @{
+                                   @"error_description": @"This parameter must not be `nil`.",
+                                   };
+            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    [[manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (error != nil) {
+            ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];
+            SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
+            
+            if (completion) {
+                completion(NO, err);
+            }
+            
+            return;
+        }
+        
+        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)response;
+        
+        if (respose.statusCode == 200 || respose.statusCode == 304) {
+            if (completion) {
+                completion(YES, responseObject);
+            }
+        } else {
+            if (respose.statusCode == 403) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+            }
+            
+            ZJRequestError *err = [ZJRequestError requestErrorWithDict:@{@"error_description": @"Server internal error."}];
+            SHLogError(SHLogTagAPP, @"服务器内部错误!");
+            
+            if (completion) {
+                completion(NO, err);
+            }
+        }
+    }] resume];
+}
+
+#pragma mark - Request method
+- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parametes:(id _Nullable)parametes finished:(RequestCompletionBlock)finished {
+    id success = ^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+        if (finished) {
+            finished(YES, responseObject);
+        }
+    };
+    
+    id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
+        
+        if (respose.statusCode == 403) {
+            SHLogError(SHLogTagAPP, @"Token invalid.");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+        }
+        
+        ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
+        
+        if (finished) {
+            finished(NO, err);
+        }
+    };
+    
+    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
+        urlString = [self requestURLString:urlString];
+    }
+    
+    if ([urlString hasPrefix:@"https:"] || [manager.baseURL.absoluteString hasPrefix:@"https:"]) {
+        //设置 https 请求证书
+        [self setCertificatesWithManager:manager];
+    }
+    
+    if (manager == nil) {
+        manager = [self defaultRequestSessionManager];
+    }
+    
+    switch (method) {
+        case SHRequestMethodGET:
+            [manager GET:urlString parameters:parametes progress:nil success:success failure:failure];
+            break;
+            
+        case SHRequestMethodPOST:
+            [manager POST:urlString parameters:parametes progress:nil success:success failure:failure];
+            break;
+            
+        case SHRequestMethodPUT:
+            [manager PUT:urlString parameters:parametes success:success failure:failure];
+            break;
+            
+        case SHRequestMethodDELETE:
+            [manager DELETE:urlString parameters:parametes success:success failure:failure];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (NSString *)requestURLString:(NSString *)urlString {
+    return [ServerBaseUrl stringByAppendingString:urlString];
+}
+
+- (AFHTTPSessionManager *)defaultRequestSessionManager {
+    if (self.userAccount.access_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [manager.requestSerializer setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    return manager;
+}
+
+#pragma mark - Error Handle
+- (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
+    return [ZJRequestError requestErrorWithDict:dict];
+}
+
+#pragma mark - Certificate Handle
+- (BOOL)setCertificatesWithManager:(AFURLSessionManager *)manager {
+    if ([ServerUrl sharedServerUrl].useSSL) { //使用自制证书
+        // /先导入证书
+        NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"icatchtek" ofType:@"cer"];//证书的路径
+        NSData *certData = [NSData dataWithContentsOfFile:cerPath];
+        
+        // AFSSLPinningModeCertificate 使用证书验证模式
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+        
+        // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
+        // 如果是需要验证自建证书，需要设置为YES
+        securityPolicy.allowInvalidCertificates = YES;
+        
+        //validatesDomainName 是否需要验证域名，默认为YES；
+        //假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。
+        //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
+        //如置为NO，建议自己添加对应域名的校验逻辑。
+        securityPolicy.validatesDomainName = NO;
+        NSSet <NSData *>* pinnedCertificates = [NSSet setWithObject:certData];
+        
+        //securityPolicy.pinnedCertificates = @[certData];
+        securityPolicy.pinnedCertificates = pinnedCertificates;
+        [manager setSecurityPolicy:securityPolicy];
+    }
+    
+    return YES;
 }
 
 @end

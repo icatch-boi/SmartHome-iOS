@@ -23,6 +23,7 @@ static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 
 //static NSString * const ServerBaseUrl = @"http://52.79.113.238:3006/";
 static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";
+static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 
 #define Use_OurServer 1
 #define Use_LocalServer 1
@@ -40,6 +41,8 @@ static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
 #endif
 
 @class SHUserAccount;
+@class AFHTTPSessionManager;
+@class ZJRequestError;
 @interface SHNetworkManager : NSObject
 
 @property (nonatomic, assign, readonly) BOOL userLogin;
@@ -70,6 +73,9 @@ static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
 - (void)getMessages:(RequestCompletionBlock)completion;
 - (void)getMessageWithMessageId:(NSString *)msgId completion:(RequestCompletionBlock)completion;
 - (void)clearMessageWithMessageIds:(NSArray *)msgIds completion:(RequestCompletionBlock)completion;
+
+- (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion;
+- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parametes:(id _Nullable)parametes finished:(RequestCompletionBlock)finished;
 
 @end
 

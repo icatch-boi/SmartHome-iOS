@@ -762,6 +762,10 @@
 }
 
 - (NSMutableURLRequest *)deviceCoverRequestWithMethod:(NSString *)method {
+    if (self.userAccount.access_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
     method = method ? method : @"POST";
     NSString *urlString = [self requestURLString:DEVICE_COVERS_PATH];
 
@@ -770,156 +774,19 @@
     
     [request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
     
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     [request setValue:token forHTTPHeaderField:@"Authorization"];
 
     return request;
-}
-
-- (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion {
-    if (request == nil) {
-        if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"This parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
-        }
-        
-        return;
-    }
-    
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-
-    [[manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        if (error == nil) {
-            if (completion) {
-                completion(YES, responseObject);
-            }
-        } else {
-            NSHTTPURLResponse *respose = (NSHTTPURLResponse *)response;
-            
-            if (respose.statusCode == 403) {
-                SHLogError(SHLogTagAPP, @"Token invalid.");
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
-            }
-            
-            ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];
-            SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
-            
-            if (completion) {
-                completion(NO, err);
-            }
-        }
-    }] resume];
-}
-
-#pragma mark - Request method
-- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager *)manager urlString:(NSString *)urlString parametes:(id)parametes finished:(RequestCompletionBlock)finished {
-    id success = ^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-        if (finished) {
-            finished(YES, responseObject);
-        }
-    };
-    
-    id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
-        
-        if (respose.statusCode == 403) {
-            SHLogError(SHLogTagAPP, @"Token invalid.");
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
-        }
-        
-        ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];
-        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
-        
-        if (finished) {
-            finished(NO, err);
-        }
-    };
-    
-    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
-        urlString = [self requestURLString:urlString];
-    }
-    
-    if ([urlString hasPrefix:@"https:"] || [manager.baseURL.absoluteString hasPrefix:@"https:"]) {
-        //设置 https 请求证书
-        [self setCertificatesWithManager:manager];
-    }
-    
-    if (manager == nil) {
-        manager = [self defaultRequestSessionManager];
-    }
-    
-    switch (method) {
-        case SHRequestMethodGET:
-            [manager GET:urlString parameters:parametes progress:nil success:success failure:failure];
-            break;
-            
-        case SHRequestMethodPOST:
-            [manager POST:urlString parameters:parametes progress:nil success:success failure:failure];
-            break;
-            
-        case SHRequestMethodPUT:
-            [manager PUT:urlString parameters:parametes success:success failure:failure];
-            break;
-            
-        case SHRequestMethodDELETE:
-            [manager DELETE:urlString parameters:parametes success:success failure:failure];
-            break;
-            
-        default:
-            break;
-    }
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
     return [ServerBaseUrl stringByAppendingString:urlString];
 }
 
-- (AFHTTPSessionManager *)defaultRequestSessionManager {
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    [manager.requestSerializer setValue:token forHTTPHeaderField:@"Authorization"];
-    
-    return manager;
-}
-
 #pragma mark - Error Handle
 - (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
     return [ZJRequestError requestErrorWithDict:dict];
-}
-
-#pragma mark - Certificate Handle
-- (BOOL)setCertificatesWithManager:(AFURLSessionManager *)manager {
-    if ([ServerUrl sharedServerUrl].useSSL) { //使用自制证书
-        // /先导入证书
-        NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"icatchtek" ofType:@"cer"];//证书的路径
-        NSData *certData = [NSData dataWithContentsOfFile:cerPath];
-        
-        // AFSSLPinningModeCertificate 使用证书验证模式
-        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
-        
-        // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
-        // 如果是需要验证自建证书，需要设置为YES
-        securityPolicy.allowInvalidCertificates = YES;
-        
-        //validatesDomainName 是否需要验证域名，默认为YES；
-        //假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。
-        //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
-        //如置为NO，建议自己添加对应域名的校验逻辑。
-        securityPolicy.validatesDomainName = NO;
-        NSSet <NSData *>* pinnedCertificates = [NSSet setWithObject:certData];
-        
-        //securityPolicy.pinnedCertificates = @[certData];
-        securityPolicy.pinnedCertificates = pinnedCertificates;
-        [manager setSecurityPolicy:securityPolicy];
-    }
-    
-    return YES;
 }
 
 @end

@@ -636,7 +636,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                 [camera.streamOper stopMediaStreamWithComplete:nil];
             }
             
-//            [camera.controler.pbCtrl stopWithCamera:camera];
+            [camera.controler.pbCtrl stopWithCamera:camera];
         }
     }
 }

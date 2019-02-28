@@ -150,7 +150,11 @@
 }
 
 - (void)uploadDataWithURLString:(NSString *)urlString parameters:(id)parameters finished:(ZJRequestCallBack)finished {
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    if (self.userAccount.access_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -168,7 +172,11 @@
 }
 
 - (AFHTTPSessionManager *)facesRequestSessionManager {
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    if (self.userAccount.access_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -227,7 +235,7 @@
         if (respose.statusCode == 403) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME: 发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误： %@", error);
@@ -276,7 +284,7 @@
         if (respose.statusCode == 403) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME:发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);

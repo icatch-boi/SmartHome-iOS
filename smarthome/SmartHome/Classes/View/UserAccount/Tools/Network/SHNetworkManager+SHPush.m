@@ -81,11 +81,11 @@
         if (respose.statusCode == 403) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME: 发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
         
         if (finished) {
             finished(NO, err);
@@ -120,11 +120,11 @@
         if (respose.statusCode == 403) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME:发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
         
         if (finished) {
             finished(NO, err);
@@ -164,12 +164,16 @@
 }
 
 - (AFHTTPSessionManager *)pushRequestSessionManager {
+    if (self.userAccount.access_token == nil) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+    }
+    
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // https request must set baseURL
     NSURL *url = [NSURL URLWithString:ServerBaseUrl];
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
     
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     [manager.requestSerializer setValue:token forHTTPHeaderField:@"Authorization"];
 

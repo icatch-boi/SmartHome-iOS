@@ -129,7 +129,7 @@
 }
 
 + (void)checkDeviceStatusWithUID:(NSString *)uid {
-    Session::checkDeviceStatus(uid.UTF8String);
+    Session::checkDeviceStatus(uid.UTF8String, true);
 }
 
 - (int)initializeSHSDK:(NSString *)cameraUid devicePassword:(NSString *)devicePassword {
