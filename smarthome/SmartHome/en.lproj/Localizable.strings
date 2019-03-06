@@ -107,6 +107,7 @@
 
 "kDeviceName"     ="Device Name";
 "kGenerateQRCodeFailed"     ="Generated QRCode Failed";
+"kNetworkBad"     ="Current network quality is poor, may be App will not work properly.";
 "kNotShareCamera"     ="You are not manager, cannot share.";
 
 "kDisconnectTipsInfo"     ="Disconnect, make sure the network is work properly";
@@ -316,7 +317,7 @@
 "kConfigureDeviceDescription" = "Green light flash is connecting to Home's Wi-Fi Green light keep on and off mean it's connect successfuly.";
 "kGetSDCardAlbumDataFailed" = "Failed to get SD card album data";
 "kShareDoorbellToYourFamilyOrFriends" = "Share the doorbell to your family or friends";
-"kQRCodeDescription" = "The QR code is valid for 24 hours and doorbell can be used for 7 days.";
+"kQRCodeDescription" = "The QR code is valid for %zd hours and doorbell can be used for %zd days.";
 
 "kNetworkRequestError_10001" = "Invalid or invalid request";
 "kNetworkRequestError_10011" = "Invalid file type request";

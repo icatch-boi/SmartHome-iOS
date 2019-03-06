@@ -117,6 +117,7 @@
 
 "kDeviceName"     ="設備名稱";
 "kGenerateQRCodeFailed"     ="生成二維碼失敗";
+"kNetworkBad"     ="⚠️ 網路不給力，請檢查網路設置。";
 "kNotShareCamera"     ="您不是本台相機的管理員，不能分享相機。";
 "kDisconnectTipsInfo"     ="相機連接斷開，請保證網路的正確性及相機的正常連接。";
 "kReconnecting"     ="正在重連";
@@ -323,7 +324,7 @@
 "kConfigureDeviceDescription" = "綠燈閃爍表示正在連接家庭中的Wi-Fi，綠燈保持開啓意味著已成功連接上Wi-Fi。";
 "kGetSDCardAlbumDataFailed" = "獲取SD卡相冊數據失敗";
 "kShareDoorbellToYourFamilyOrFriends" = "分享門鈴給您的家人或朋友";
-"kQRCodeDescription" = "二維碼在24小時內有效，相機可以使用7天。";
+"kQRCodeDescription" = "二維碼在 %zd 小時內有效，相機可以使用 %zd 天。";
 
 "kNetworkRequestError_10001" = "無效或失效的接口請求";
 "kNetworkRequestError_10011" = "無效的文件類型請求";

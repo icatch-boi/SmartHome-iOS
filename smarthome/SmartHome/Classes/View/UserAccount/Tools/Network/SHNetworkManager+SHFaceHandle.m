@@ -150,10 +150,6 @@
 }
 
 - (void)uploadDataWithURLString:(NSString *)urlString parameters:(id)parameters finished:(ZJRequestCallBack)finished {
-    if (self.userAccount.access_token == nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
-    }
-    
     NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
@@ -172,10 +168,6 @@
 }
 
 - (AFHTTPSessionManager *)facesRequestSessionManager {
-    if (self.userAccount.access_token == nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
-    }
-    
     NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     

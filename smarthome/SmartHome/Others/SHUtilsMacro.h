@@ -144,6 +144,8 @@ static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 
 static const float kMinZoomScale = 1.0;
 static const float kMaxZoomScale = 5.0;
+static const NSInteger kQRCodeValidDuration = 24; //hours
+static const NSInteger kDeviceValidUsedDuration = 7; //days
 
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
 #define kScreenHeightScale MAX([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width) / 480.0

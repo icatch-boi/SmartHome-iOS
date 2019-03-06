@@ -653,10 +653,6 @@
 }
 
 - (AFHTTPSessionManager *)defaultRequestSessionManager {
-    if (self.userAccount.access_token == nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
-    }
-    
     NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     

@@ -29,6 +29,11 @@
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
 
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
+        NSDictionary *userInfo = self.bestAttemptContent.userInfo;
+        if ([userInfo.allKeys containsObject:@"msgType"] && [userInfo[@"msgType"] isEqualToString:@"202"]) {
+            self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
+        }
+        
         if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"attachment"]) {
             NSString *attachmentPath = self.bestAttemptContent.userInfo[@"attachment"];
             [self loadAttachmentForUrlString:attachmentPath completionHandle:^{

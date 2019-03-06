@@ -835,7 +835,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)showNetworkNotReachableAlertView {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kNetworkBad", nil) preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        
+        [self dismissNetworkAlertVC];
+    }]];
     
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
     UIViewController *vc = nav.visibleViewController;

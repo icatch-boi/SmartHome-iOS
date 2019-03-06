@@ -164,10 +164,6 @@
 }
 
 - (AFHTTPSessionManager *)pushRequestSessionManager {
-    if (self.userAccount.access_token == nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
-    }
-    
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // https request must set baseURL
     NSURL *url = [NSURL URLWithString:ServerBaseUrl];

@@ -119,6 +119,7 @@
 
 "kDeviceName" = "设备名称";
 "kGenerateQRCodeFailed" = "生成二维码失败";
+"kNetworkBad" = "⚠️ 网络不给力，请检查网络设置。";
 "kNotShareCamera" = "您不是本台相机的管理员，不能分享相机。";
 "kDisconnectTipsInfo" = "相机连接断开，请保证网络的正确性及相机的正常连接。";
 "kReconnecting" = "正在重连";
@@ -325,7 +326,7 @@
 "kConfigureDeviceDescription" = "绿灯闪烁表示正在连接家庭中的Wi-Fi，绿灯保持开启意味着已成功连接上Wi-Fi。";
 "kGetSDCardAlbumDataFailed" = "获取SD卡相册数据失败";
 "kShareDoorbellToYourFamilyOrFriends" = "分享门铃给您的家人或朋友";
-"kQRCodeDescription" = "二维码在24小时内有效，相机可以使用7天。";
+"kQRCodeDescription" = "二维码在 %zd 小时内有效，相机可以使用 %zd 天。";
 
 "kNetworkRequestError_10001" = "无效或失效的接口请求";
 "kNetworkRequestError_10011" = "无效的文件类型请求";

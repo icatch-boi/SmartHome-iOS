@@ -42,7 +42,7 @@ static NSString * const kSaveQRImageName = @"shareQR";
 
 - (void)setupLocalizedString {
     _describeLabel.text = NSLocalizedString(@"kShareDoorbellToYourFamilyOrFriends", nil);
-    _qrCodeDescriptionLabel.text = NSLocalizedString(@"kQRCodeDescription", nil);
+    _qrCodeDescriptionLabel.text = [NSString stringWithFormat:NSLocalizedString(@"kQRCodeDescription", nil), kQRCodeValidDuration, kDeviceValidUsedDuration];
     [_qrCodeUpdateBtn setTitle:NSLocalizedString(@"kRedrawShareQRCode", nil) forState:UIControlStateNormal];
     [_qrCodeUpdateBtn setTitle:NSLocalizedString(@"kRedrawShareQRCode", nil) forState:UIControlStateHighlighted];
 }

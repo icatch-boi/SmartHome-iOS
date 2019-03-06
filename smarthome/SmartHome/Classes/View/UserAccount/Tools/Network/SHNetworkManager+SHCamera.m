@@ -762,10 +762,6 @@
 }
 
 - (NSMutableURLRequest *)deviceCoverRequestWithMethod:(NSString *)method {
-    if (self.userAccount.access_token == nil) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
-    }
-    
     method = method ? method : @"POST";
     NSString *urlString = [self requestURLString:DEVICE_COVERS_PATH];
 
