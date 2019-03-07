@@ -1623,7 +1623,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         width = MAX(width, w);
     }
     
-    CGFloat resolutionBtnWidth = width * 1.6;
+    CGFloat resolutionBtnWidth = width + 32;
     resolutionBtnWidth = resolutionBtnWidth > 85.0 ? resolutionBtnWidth : 85.0;
     SHLogInfo(SHLogTagAPP, @"String MAX width: %f, Resolution button width: %f", width, resolutionBtnWidth);
     

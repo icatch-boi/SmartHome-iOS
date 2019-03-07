@@ -94,9 +94,11 @@
 - (void)changePasswordWithOldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword completion:(RequestCompletionBlock)completion {
     [self.accountOperate changeAccountPasswrodWithToken:[self createToken] andOldPassword:oldPassword andNewPasswrod:newPassword customerid:kServerCustomerid success:^(Account * _Nonnull account) {
         
-        [self loadAccessTokenByEmail:account.email password:newPassword completion:^(BOOL isSuccess, id  _Nonnull result) {
+        NSString *accountId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserAccounts];
+        accountId = accountId ? accountId : account.email;
+        [self loadAccessTokenByEmail:accountId password:newPassword completion:^(BOOL isSuccess, id  _Nonnull result) {
             if (completion) {
-                completion(isSuccess, result);
+                completion(YES, account);
             }
         }];
     } failure:^(Error * _Nonnull error) {
@@ -136,7 +138,7 @@
         } failure:^(Error * _Nonnull error) {
             SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kUserAccounts];
+//            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kUserAccounts];
             if (completion) {
                 completion(NO, error);
             }
@@ -148,7 +150,7 @@
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kUserAccounts];
+//        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kUserAccounts];
         if (completion) {
             completion(NO, error);
         }
@@ -572,10 +574,10 @@
                 completion(YES, responseObject);
             }
         } else {
-            if (respose.statusCode == 403) {
+            if (respose.statusCode == 401) {
                 SHLogError(SHLogTagAPP, @"Token invalid.");
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
             }
             
             ZJRequestError *err = [ZJRequestError requestErrorWithDict:@{@"error_description": @"Server internal error."}];
@@ -599,10 +601,10 @@
     id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];

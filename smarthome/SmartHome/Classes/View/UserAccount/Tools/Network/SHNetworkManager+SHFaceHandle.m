@@ -224,10 +224,10 @@
         
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误： %@", error);
@@ -273,10 +273,10 @@
     id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:error];
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);

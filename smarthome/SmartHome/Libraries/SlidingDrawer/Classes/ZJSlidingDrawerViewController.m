@@ -209,6 +209,10 @@
 }
 
 - (void)userLogin {
+    if (_showingVC != nil) {
+        [self popViewController];
+    }
+    
     SHLoginFirstView *view = self.loginFirstView;
     [UIView animateWithDuration:0.25 animations:^{
         [self.view addSubview:view];

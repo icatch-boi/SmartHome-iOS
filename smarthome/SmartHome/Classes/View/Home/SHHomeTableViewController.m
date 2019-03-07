@@ -227,19 +227,22 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             return ;
         }
         
-        [self.listViewModel.cameraList enumerateObjectsUsingBlock:^(SHCameraViewModel *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj.cameraObj.camera.cameraUid isEqualToString:cameraUID]) {
-                *stop = YES;
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
-                    
-                    [UIView performWithoutAnimation:^{
-                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                    }];
-                });
-            }
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+//        [self.listViewModel.cameraList enumerateObjectsUsingBlock:^(SHCameraViewModel *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            if ([obj.cameraObj.camera.cameraUid isEqualToString:cameraUID]) {
+//                *stop = YES;
+//                
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+//                    
+//                    [UIView performWithoutAnimation:^{
+//                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//                    }];
+//                });
+//            }
+//        }];
     }];
 }
 
