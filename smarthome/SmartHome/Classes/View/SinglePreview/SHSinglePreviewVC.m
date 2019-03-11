@@ -27,7 +27,7 @@ typedef enum : NSUInteger {
 static const CGFloat kMuteBtnDefaultWidth = 60;
 static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
-@interface SHSinglePreviewVC () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, XDSDropDownMenuDelegate>
+@interface SHSinglePreviewVC () <UIScrollViewDelegate, UIGestureRecognizerDelegate, XDSDropDownMenuDelegate>
 
 @property(nonatomic, retain) GCDiscreetNotificationView *notificationView;
 @property(nonatomic, retain) GCDiscreetNotificationView *bufferNotificationView;

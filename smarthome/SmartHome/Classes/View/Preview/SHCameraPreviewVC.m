@@ -1788,6 +1788,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self setupZoomImageViewFrame];
     
     self.zoomScrollView.contentSize = self.zoomScrollView.frame.size;
+    
+    [self setupZoomButtonFrame];
 }
 
 - (void)setupZoomButton {
