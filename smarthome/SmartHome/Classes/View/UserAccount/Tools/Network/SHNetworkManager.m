@@ -591,7 +591,7 @@
 }
 
 #pragma mark - Request method
-- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parametes:(id _Nullable)parametes finished:(RequestCompletionBlock)finished {
+- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parameters:(id _Nullable)parameters finished:(RequestCompletionBlock)finished {
     id success = ^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
         if (finished) {
             finished(YES, responseObject);
@@ -630,19 +630,19 @@
     
     switch (method) {
         case SHRequestMethodGET:
-            [manager GET:urlString parameters:parametes progress:nil success:success failure:failure];
+            [manager GET:urlString parameters:parameters progress:nil success:success failure:failure];
             break;
             
         case SHRequestMethodPOST:
-            [manager POST:urlString parameters:parametes progress:nil success:success failure:failure];
+            [manager POST:urlString parameters:parameters progress:nil success:success failure:failure];
             break;
             
         case SHRequestMethodPUT:
-            [manager PUT:urlString parameters:parametes success:success failure:failure];
+            [manager PUT:urlString parameters:parameters success:success failure:failure];
             break;
             
         case SHRequestMethodDELETE:
-            [manager DELETE:urlString parameters:parametes success:success failure:failure];
+            [manager DELETE:urlString parameters:parameters success:success failure:failure];
             break;
             
         default:

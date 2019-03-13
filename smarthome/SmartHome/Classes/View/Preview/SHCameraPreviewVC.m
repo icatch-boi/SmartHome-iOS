@@ -42,6 +42,7 @@
 #import "SHDownloadManager.h"
 #import "XDSDropDownMenu.h"
 #import "SDWebImageManager.h"
+#import "SHUpgradesInfo.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -74,6 +75,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 @property (nonatomic, strong) MBProgressHUD *progressHUDPreview;
 @property (nonatomic, assign) BOOL alreadyBack;
 @property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, weak) UIAlertController *upgradesAlertView;
 
 @end
 
@@ -148,6 +150,10 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self hideResolutionMenu];
     
     [_shCameraObj.streamOper updatePreviewThumbnail];
+    
+    if (self.upgradesAlertView != nil) {
+        [self.upgradesAlertView dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -421,6 +427,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)initCameraPropertyGUI {
 //    [self initBatteryLevelIcon];
     [self initBatteryHandler];
+    [self checkDeviceUpgrades];
     
     SHICatchEvent *evt = _shCameraObj.cameraProperty.curBatteryLevel;
     evt ? [self updateBatteryLevelIcon:evt] : void();
@@ -1907,6 +1914,34 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     return _zoomImageView;
+}
+
+- (void)checkDeviceUpgrades {
+    [SHUpgradesInfo checkUpgradesWithCameraObj:_shCameraObj completion:^(BOOL upgrades, SHUpgradesInfo * _Nullable info) {
+        // FIXME: upgrades == YES
+        if (upgrades == NO) {
+            [self showUpgradesAlertViewWithVersionInfo:info];
+        }
+    }];
+}
+
+
+- (void)showUpgradesAlertViewWithVersionInfo:(SHUpgradesInfo *)info {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC setValue:[SHUpgradesInfo upgradesAlertViewTitle] forKey:@"attributedTitle"];
+    [alertVC setValue:[SHUpgradesInfo upgradesAlertViewMessageWithInfo:info] forKey:@"attributedMessage"];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"下次再说" style:UIAlertActionStyleDefault handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }]];
+    
+    self.upgradesAlertView = alertVC;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertVC animated:YES completion:nil];
+    });
 }
 
 @end

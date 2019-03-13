@@ -75,7 +75,7 @@ static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
 - (void)clearMessageWithMessageIds:(NSArray *)msgIds completion:(RequestCompletionBlock)completion;
 
 - (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion;
-- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parametes:(id _Nullable)parametes finished:(RequestCompletionBlock)finished;
+- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parameters:(id _Nullable)parameters finished:(RequestCompletionBlock)finished;
 
 @end
 

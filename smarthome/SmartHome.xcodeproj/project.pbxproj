@@ -67,6 +67,7 @@
 		386FAFD420AFB712007655CF /* SHLoginFirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 386FAFD320AFB712007655CF /* SHLoginFirstView.xib */; };
 		386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAFD620AFC1FE007655CF /* SHLoginViewController.m */; };
 		386FAFDD20B01693007655CF /* UserAccountPortraitNavVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAFDC20B01693007655CF /* UserAccountPortraitNavVC.m */; };
+		387577DD2238B1DE006A4052 /* SHUpgradesInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 387577DC2238B1DE006A4052 /* SHUpgradesInfo.m */; };
 		3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3875AC0321E6150100481AE9 /* FRDAddFaceCollectionVC.m */; };
 		3875AC0C21E743C500481AE9 /* FaceCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3875AC0B21E743C500481AE9 /* FaceCollectionReusableView.m */; };
 		38802F1C20B51580006274AE /* UnderLineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 38802F1A20B5157F006274AE /* UnderLineTextField.m */; };
@@ -465,6 +466,8 @@
 		386FAFD620AFC1FE007655CF /* SHLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHLoginViewController.m; sourceTree = "<group>"; };
 		386FAFDB20B01693007655CF /* UserAccountPortraitNavVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserAccountPortraitNavVC.h; sourceTree = "<group>"; };
 		386FAFDC20B01693007655CF /* UserAccountPortraitNavVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserAccountPortraitNavVC.m; sourceTree = "<group>"; };
+		387577DB2238B1DE006A4052 /* SHUpgradesInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHUpgradesInfo.h; sourceTree = "<group>"; };
+		387577DC2238B1DE006A4052 /* SHUpgradesInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHUpgradesInfo.m; sourceTree = "<group>"; };
 		3875AC0221E6150100481AE9 /* FRDAddFaceCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRDAddFaceCollectionVC.h; sourceTree = "<group>"; };
 		3875AC0321E6150100481AE9 /* FRDAddFaceCollectionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FRDAddFaceCollectionVC.m; sourceTree = "<group>"; };
 		3875AC0A21E743C500481AE9 /* FaceCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceCollectionReusableView.h; sourceTree = "<group>"; };
@@ -1659,6 +1662,8 @@
 				38E5C25120A3F66B003004E0 /* SHPhotoGallery.m */,
 				38E5C25820A3F66C003004E0 /* SHSDKEventListener.cpp */,
 				38E5C24520A3F669003004E0 /* SHSDKEventListener.hpp */,
+				387577DB2238B1DE006A4052 /* SHUpgradesInfo.h */,
+				387577DC2238B1DE006A4052 /* SHUpgradesInfo.m */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -2941,6 +2946,7 @@
 				38F5257F1F2F020400F5A5A2 /* CustomIOS7AlertView.m in Sources */,
 				38F525AF1F2F020400F5A5A2 /* SGQRCodeScanningVC.m in Sources */,
 				38E5C1A320A3F5AF003004E0 /* SHLogonViewController.m in Sources */,
+				387577DD2238B1DE006A4052 /* SHUpgradesInfo.m in Sources */,
 				38E5C35020A40F8A003004E0 /* SHStreamOperate.m in Sources */,
 				38E5C22320A3F610003004E0 /* SHCheckIndicator.m in Sources */,
 				38F525821F2F020400F5A5A2 /* HYOpenALHelper.m in Sources */,

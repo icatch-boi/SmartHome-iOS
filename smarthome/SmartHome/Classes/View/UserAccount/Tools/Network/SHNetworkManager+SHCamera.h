@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const DEVICE_COVERS_PATH = @"v1/devices/covers";
+static NSString * const DEVICE_UPGRADESINFO_PATH = @"v1/devices/upgrades/info";
 
 @interface SHNetworkManager (SHCamera)
 
@@ -41,6 +42,7 @@ static NSString * const DEVICE_COVERS_PATH = @"v1/devices/covers";
 - (void)removeCameraSubscriberWithCameraID:(NSString *)cameraId userID:(NSString *_Nonnull)userId completion:(RequestCompletionBlock)completion;
 
 //- (void)getImgCoverWithFullURL:(NSString *)url completion:(RequestCompletionBlock)completion;
+- (void)getDeviceUpgradesInfoWithCameraID:(NSString *)cameraID completion:(RequestCompletionBlock)completion;
 
 @end
 

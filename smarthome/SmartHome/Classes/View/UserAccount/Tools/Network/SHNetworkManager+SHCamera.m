@@ -729,10 +729,10 @@
     
     NSString *urlString = [self requestURLString:DEVICE_COVERS_PATH];
     
-    NSDictionary *parametes = @{
+    NSDictionary *parameters = @{
                                 @"id": cameraId,
                                 };
-    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:urlString parametes:parametes finished:completion];
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:urlString parameters:parameters finished:completion];
 }
 
 - (void)uploadDeviceCoverWithCameraID:(NSString *)cameraId data:(NSData *)data completion:(RequestCompletionBlock)completion {
@@ -783,6 +783,27 @@
 #pragma mark - Error Handle
 - (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
     return [ZJRequestError requestErrorWithDict:dict];
+}
+
+#pragma mark - CameraVersion Handle
+- (void)getDeviceUpgradesInfoWithCameraID:(NSString *)cameraID completion:(RequestCompletionBlock)completion {
+    if (cameraID == nil || cameraID.length <= 0) {
+        if (completion) {
+            NSDictionary *dict = @{
+                                   @"error_description": @"These parameter must not be `nil`.",
+                                   };
+            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"id": cameraID,
+                                 };
+    
+    NSString *urlString = [self requestURLString:DEVICE_UPGRADESINFO_PATH];
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:urlString parameters:parameters finished:completion];
 }
 
 @end
