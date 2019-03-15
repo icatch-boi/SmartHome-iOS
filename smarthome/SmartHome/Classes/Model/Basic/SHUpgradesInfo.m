@@ -37,6 +37,7 @@
 @property (nonatomic, copy) NSNumber *size;
 @property (nonatomic, strong) NSArray<NSString *> *url;
 @property (nonatomic, strong) NSArray<NSString *> *name;
+@property (nonatomic, copy) NSString *localVersion;
 
 @end
 
@@ -66,7 +67,14 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
-+ (void)checkUpgradesWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL upgrades, SHUpgradesInfo * _Nullable info))completion {
++ (void)checkUpgradesWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL hint, SHUpgradesInfo * _Nullable info))completion {
+    if (shCameraObj.cameraProperty.upgradesInfo != nil) {
+        if (completion) {
+            completion(NO, nil);
+        }
+        return;
+    }
+    
     [[NSOperationQueue new] addOperationWithBlock:^{
         shared_ptr<ICatchCameraVersion> version = [shCameraObj.controler.propCtrl retrieveCameraVersionWithCamera:shCameraObj];
 
@@ -89,14 +97,18 @@
                 }
                 
                 SHUpgradesInfo *upInfo = [self upgradesInfoWithDict:info];
+                upInfo.localVersion = [NSString stringWithFormat:@"%s", version->getFirmwareVer().c_str()];
 
-                BOOL need = [self checkWhetherNeedUpgrades:[NSString stringWithFormat:@"%s", version->getFirmwareVer().c_str()] remoteVersion:upInfo.versionid];
+                BOOL need = [self checkWhetherNeedUpgrades:upInfo.localVersion remoteVersion:upInfo.versionid];
                 
                 if (completion) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         completion(need, upInfo);
                     }];
                 }
+                
+                upInfo.needUpgrade = need;
+                shCameraObj.cameraProperty.upgradesInfo = upInfo;
             } else {
                 if (completion) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -112,6 +124,9 @@
     if (currentVersion == nil || currentVersion.length <= 0 || remoteVersion == nil || remoteVersion.length <= 0) {
         return NO;
     }
+    
+    // FIXME: --
+    currentVersion = @"31368.23224.2245";
     
     NSArray *currentVers = [currentVersion componentsSeparatedByString:@"."];
     NSArray *remoteVers = [remoteVersion componentsSeparatedByString:@"."];

@@ -519,9 +519,33 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             SHLogInfo(SHLogTagAPP, @"iOS10 前台收到本地通知:{\nbody:%@，\ntitle:%@,\nsubtitle:%@,\nbadge：%@，\nsound：%@，\nuserInfo：%@\n}",body,title,subtitle,badge,sound,userInfo);
         }
         
-        completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+        [self notificationHandleWithInfo:userInfo withCompletionHandler:completionHandler];
+//        completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     } else {
         [self notificationHandler:notification withCompletionHandler:completionHandler];
+    }
+}
+
+- (void)notificationHandleWithInfo:(NSDictionary *)userInfo withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+    NSDictionary *aps = [self parseNotification:userInfo];
+    
+    int msgType = [aps[@"msgType"] intValue];
+    switch (msgType) {
+        case 107:
+        case 109:
+            [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeFailedNotification object:nil];
+            break;
+            
+        case 108:
+            [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeSuccessNotification object:nil];
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (msgType != 106) {
+        completionHandler(UNNotificationPresentationOptionAlert/*|UNNotificationPresentationOptionBadge*/); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     }
 }
 
@@ -536,7 +560,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"kQuiesce"]) {
-        completionHandler(UNNotificationPresentationOptionAlert|UNNotificationPresentationOptionBadge); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
+        completionHandler(UNNotificationPresentationOptionAlert/*|UNNotificationPresentationOptionBadge*/); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     }
 }
 

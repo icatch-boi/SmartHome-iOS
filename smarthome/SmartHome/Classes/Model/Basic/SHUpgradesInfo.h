@@ -39,10 +39,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSArray<NSString *> *url;
 @property (nonatomic, strong, readonly) NSArray<NSString *> *name;
 
+@property (nonatomic, copy, readonly) NSString *localVersion;
+@property (nonatomic, assign) BOOL needUpgrade;
+
 + (instancetype)upgradesInfoWithDict:(NSDictionary *)dict;
 - (instancetype)initWithDict:(NSDictionary *)dict;
 
-+ (void)checkUpgradesWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL upgrades, SHUpgradesInfo * _Nullable info))completion;
++ (void)checkUpgradesWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL hint, SHUpgradesInfo * _Nullable info))completion;
 
 + (NSAttributedString *)upgradesAlertViewMessageWithInfo:(SHUpgradesInfo *)info;
 + (NSAttributedString *)upgradesAlertViewTitle;

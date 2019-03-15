@@ -11,6 +11,7 @@
 
 @class SHFileTable;
 @class SHICatchEvent;
+@class SHUpgradesInfo;
 
 typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 	SHPreviewModeCaptureOnFlag = 1,
@@ -53,6 +54,8 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic) SHICatchEvent *curBatteryLevel;
 @property (nonatomic, assign) int SDUseableSize;
 @property (nonatomic, strong) SHICatchEvent *curChargeStatus;
+
+@property (nonatomic, strong) SHUpgradesInfo *upgradesInfo;
 
 - (void)cleanCurrentCameraAllProperty;
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj;

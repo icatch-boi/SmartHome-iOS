@@ -489,7 +489,7 @@
                            @"token": temp.access_token
                            };
 
-    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:urlString parametes:dict finished:completion];
+    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:urlString parameters:dict finished:completion];
 }
 
 #pragma mark -

@@ -86,4 +86,25 @@
     }
 }
 
+- (void)destroyAllDeviceResoure {
+    [self.smarthomeCams enumerateObjectsUsingBlock:^(SHCameraObject * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self destroyDeviceResoure:obj];
+    }];
+}
+
+- (void)destroyDeviceResoure:(SHCameraObject *)camera {
+    if (camera.isConnect) {
+        camera.isConnect = NO;
+        [camera.sdk disableTutk];
+        
+        if (camera.streamOper.PVRun) {
+            [camera.streamOper stopMediaStreamWithComplete:nil];
+        }
+        
+        [camera.controler.pbCtrl stopWithCamera:camera];
+        
+        [camera disConnectWithSuccessBlock:nil failedBlock:nil];
+    }
+}
+
 @end

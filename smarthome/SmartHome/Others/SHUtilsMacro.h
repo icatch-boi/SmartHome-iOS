@@ -113,6 +113,8 @@ static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kUserShouldLoginNotification = @"kUserShouldLoginNotification";
 static NSString * const kLoginSuccessNotification = @"kLoginSuccessNotification";
 static NSString * const kUpdateDeviceInfoNotification = @"UpdateDeviceInfoNotification";
+static NSString * const kDeviceUpgradeFailedNotification = @"DeviceUpgradeFailedNotification";
+static NSString * const kDeviceUpgradeSuccessNotification = @"DeviceUpgradeSuccessNotification";
 
 static int const kNetworkDetectionInterval = 2.0; //5.0;
 static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;

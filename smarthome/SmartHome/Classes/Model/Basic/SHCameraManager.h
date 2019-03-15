@@ -22,4 +22,6 @@
 - (void)removeAllCameraObjects;
 - (void)unmappingAllCamera;
 
+- (void)destroyAllDeviceResoure;
+
 @end

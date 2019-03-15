@@ -33,6 +33,8 @@
 #import "SHNetworkManagerHeader.h"
 #import "SHPushTestNavController.h"
 #import "AppDelegate.h"
+#import "SHDeviceUpgradeHomeVC.h"
+#import "SHUpgradesInfo.h"
 
 typedef NS_OPTIONS(NSUInteger, SHSettingSectionType) {
     SHSettingSectionTypeBasic,
@@ -224,7 +226,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *reuseIdentifier_Basic = @"settingCellBasicID";
     static NSString *reuseIdentifier_Detail = @"settingCellDetailID";
-    
+    static NSString *reuseIdentifier_DetailInfo = @"settingCellDetailInfoID";
+
     UITableViewCell *cell = nil;
     
     if (_shCamObj.isConnect) {
@@ -260,6 +263,10 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             } else {
                 cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_Detail forIndexPath:indexPath];
+                
+                if (indexPath.row == self.mainMenuDetailTable.count - 1) {
+                    cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier_DetailInfo forIndexPath:indexPath];
+                }
             }
         } else if (indexPath.section == SHSettingSectionTypeDeleteCamera) {
             if (indexPath.row == 0) {
@@ -280,6 +287,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
             SHSettingData *data = self.mainMenuTable[indexPath.section][indexPath.row];
             cell.textLabel.text = data.textLabel;
             cell.detailTextLabel.text = data.detailTextLabel;
+            
+            [self setUpgradesItemAccessoryViewWithCell:cell indexPath:indexPath];
         }
     } else {
         if (indexPath.row == 0) {
@@ -296,6 +305,20 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     }
     
     return cell;
+}
+
+- (void)setUpgradesItemAccessoryViewWithCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath {
+    if (self.shCamObj.cameraProperty.upgradesInfo == nil || self.shCamObj.cameraProperty.upgradesInfo.needUpgrade == NO) {
+        return;
+    }
+    
+    if (indexPath.section == SHSettingSectionTypeDetail && indexPath.row == self.mainMenuDetailTable.count - 1) {
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"New"];
+        
+        [str setAttributes:@{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont boldSystemFontOfSize:16.0], NSObliquenessAttributeName: @(0.25), } range:NSMakeRange(0, str.length)];
+        
+        cell.detailTextLabel.attributedText = str;
+    }
 }
 
 - (BOOL)validityCheckOfIndexPath:(NSIndexPath *)indexPath {
@@ -544,6 +567,14 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     });
 }
 
+- (void)enterUpgradesHandle:(NSString *)title {
+    SHDeviceUpgradeHomeVC *vc = [SHDeviceUpgradeHomeVC deviceUpgradeHomeVCWithCameraObj:self.shCamObj];
+
+    vc.title = title;
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - DeleteCamera
 - (void)showDeleteCameraAlertWithIndexPath:(NSIndexPath *)indexPath {
     UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"kDeleteDeviceDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
@@ -689,6 +720,18 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     
     // [self fillWiFiSettingTable];
     [self fillDeviceInfoTable];
+    [self fillUpgradesTable];
+}
+
+- (void)fillUpgradesTable {
+    SHSettingData *upgradesData = [[SHSettingData alloc] init];
+    
+    upgradesData.textLabel = @"固件升级";
+    upgradesData.methodName = @"enterUpgradesHandle:";
+    
+    if (upgradesData != nil) {
+        [self.mainMenuDetailTable addObject:upgradesData];
+    }
 }
 
 - (void)fillDeviceInfoTable {

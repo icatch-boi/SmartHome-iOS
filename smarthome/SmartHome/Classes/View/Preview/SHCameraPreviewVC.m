@@ -43,6 +43,7 @@
 #import "XDSDropDownMenu.h"
 #import "SDWebImageManager.h"
 #import "SHUpgradesInfo.h"
+#import "SHDeviceUpgradeVC.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -1917,9 +1918,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)checkDeviceUpgrades {
-    [SHUpgradesInfo checkUpgradesWithCameraObj:_shCameraObj completion:^(BOOL upgrades, SHUpgradesInfo * _Nullable info) {
-        // FIXME: upgrades == YES
-        if (upgrades == NO) {
+    [SHUpgradesInfo checkUpgradesWithCameraObj:_shCameraObj completion:^(BOOL hint, SHUpgradesInfo * _Nullable info) {
+        if (hint == YES) {
             [self showUpgradesAlertViewWithVersionInfo:info];
         }
     }];
@@ -1934,13 +1934,29 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     
     [alertVC addAction:[UIAlertAction actionWithTitle:@"下次再说" style:UIAlertActionStyleDefault handler:nil]];
     [alertVC addAction:[UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
+        [self upgradeHandle];
     }]];
     
     self.upgradesAlertView = alertVC;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:alertVC animated:YES completion:nil];
+    });
+}
+
+- (void)upgradeHandle {
+    SHDeviceUpgradeVC *vc = [SHDeviceUpgradeVC deviceUpgradeVCWithCameraObj:self.shCameraObj];
+    
+    dispatch_async(self.previewQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController pushViewController:vc animated:YES];
+        });
+        
+        [self stopCurrentTalkBack];
+        
+        [_shCameraObj.streamOper stopMediaStreamWithComplete:^{
+            SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
+        }];
     });
 }
 
