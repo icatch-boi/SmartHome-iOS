@@ -179,7 +179,7 @@
 "kSDKVersionInfo" = "SDK Version";
 
 "kLogining" = "Loging...";
-"kInvalidEmailOrPassword" = "Incorrect E-mail or password, try again.(Make sure your password at least %zd~%zd characters.)";
+"kInvalidEmailOrPassword" = "Incorrect E-mail or phone-number, try again.";
 "kLoginFailed" = "Sign in failed";
 "kLogin" = "SIGN IN";
 "kForgotPassword" = "Forgot password";

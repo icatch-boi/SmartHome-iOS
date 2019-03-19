@@ -188,7 +188,7 @@
 "kSDKVersionInfo" = "SDK版本号";
 
 "kLogining" = "正在登录...";
-"kInvalidEmailOrPassword" = "输入的邮箱或密码无效，请重新输入（请确保密码长度在[%zd-%zd]位之间）";
+"kInvalidEmailOrPassword" = "输入的邮箱或手机号无效，请重新输入";
 "kLoginFailed" = "登录失败";
 "kLogin" = "登录";
 "kForgotPassword" = "忘记密码";

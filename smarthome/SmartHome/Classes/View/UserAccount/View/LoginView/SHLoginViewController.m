@@ -62,6 +62,7 @@ static const CGFloat kBottomDefaultValue = 80;
     // Do any additional setup after loading the view.
     
     [self setupGUI];
+    [self addGestureOperation];
 }
 
 - (void)setupGUI {
@@ -150,36 +151,13 @@ static const CGFloat kBottomDefaultValue = 80;
 - (IBAction)loginClick {
     [_emailTextField resignFirstResponder];
     [_pwdTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    __block BOOL invalid = NO;
 
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLogining", nil)];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:[NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
-            
-            if (![SHTool isValidPassword:_pwdTextField.text]) {
-                [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
-                invalid = YES;
-                return;
-            }
-        });
-        
-        if (invalid) {
-            SHLogWarn(SHLogTagAPP, @"Enter content invalid.");
-            return;
-        }
-        
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength] preferredStyle:UIAlertControllerStyleAlert];
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alertC animated:YES completion:nil];
-            });
+
+        if (![self isValidInput]) {
+            SHLogWarn(SHLogTagAPP, @"Input content invalid.");
         } else {
             __block NSString *email = nil;
             __block NSString *password = nil;
@@ -213,6 +191,32 @@ static const CGFloat kBottomDefaultValue = 80;
     });
 }
 
+- (BOOL)isValidInput {
+    __block BOOL valid = YES;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        NSRange emailRange = [_emailTextField.text rangeOfString:[NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression] options:NSRegularExpressionSearch];
+        
+        if (emailRange.location == NSNotFound) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input email invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_pwdTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input password invalid.");
+            return;
+        }
+    });
+    
+    return valid;
+}
+
 - (void)showTipsWithInfo:(NSString *)info {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.progressHUD hideProgressHUD:YES];
@@ -243,6 +247,12 @@ static const CGFloat kBottomDefaultValue = 80;
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.pwdTextField becomeFirstResponder];
+    } else if (textField == self.pwdTextField) {
+        [self loginClick];
+    }
+    
     [textField resignFirstResponder];
 
     [self setSigninButtonColor];
@@ -259,14 +269,14 @@ static const CGFloat kBottomDefaultValue = 80;
     return _progressHUD;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)addGestureOperation  {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHandle)];
+    
+    [self.view addGestureRecognizer:tap];
 }
-*/
+
+- (void)tapGestureHandle {
+    [self.view endEditing:YES];
+}
 
 @end

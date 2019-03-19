@@ -56,6 +56,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
     [self initParameter];
     [self setupGUI];
+    [self addGestureOperation];
 }
 
 - (void)initParameter {
@@ -175,6 +176,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 - (void)showTipsWithInfo:(NSString *)info {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.progressHUD hideProgressHUD:YES];
+        
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:info preferredStyle:UIAlertControllerStyleAlert];
         [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alertC animated:YES completion:nil];
@@ -191,44 +193,14 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     [_emailTextField resignFirstResponder];
     [_pwdTextField resignFirstResponder];
     [_surePWDTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    __block NSRange surePWDRange;
-    __block BOOL invalid = NO;
+    [_verifycodeTextField resignFirstResponder];
     
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:tips];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
-            surePWDRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
-        });
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            if(_verifycodeTextField.text.length != 6) {
-                NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil);
-                if(_verifycodeTextField.text.length == 0) {
-                    errInfo = NSLocalizedString(@"kEnterVerifycode", nil);
-                }
-                [self showTipsWithInfo:errInfo];
-                invalid = YES;
-                return;
-            }
-            if(_pwdTextField.text.length < kPasswordMinLength || _pwdTextField.text.length > kPasswordMaxLength) {
-                [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
-                invalid = YES;
-                return;
-            }
-        });
-        
-        if (invalid) {
-            SHLogWarn(SHLogTagAPP, @"Enter content invalid.");
-            return;
-        }
-        
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound || surePWDRange.location == NSNotFound) {
-            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
+        if (![self isValidInput]) {
+            SHLogWarn(SHLogTagAPP, @"Input content invalid.");
         } else {
             __block NSString *email = nil;
             __block NSString *password = nil;
@@ -253,6 +225,55 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
             }
         }
     });
+}
+
+- (BOOL)isValidInput {
+    __block BOOL valid = YES;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        NSRange emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
+        
+        if (emailRange.location == NSNotFound) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input email or phone-number invalid.");
+            return;
+        }
+        
+        NSInteger verifyLength = _verifycodeTextField.text.length;
+        if (verifyLength != 6) {
+            NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil);
+            
+            if (verifyLength == 0) {
+                errInfo = NSLocalizedString(@"kEnterVerifycode", nil);
+            }
+            
+            [self showTipsWithInfo:errInfo];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input verify code invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_pwdTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input password invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_surePWDTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input sure password invalid.");
+            return;
+        }
+    });
+    
+    return valid;
 }
 
 - (void)signupWithEmail:(NSString *)email password:(NSString *)password checkCode:(NSString *)checkCode failedNotice:(NSString *)failedNotice {
@@ -387,6 +408,16 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.verifycodeTextField becomeFirstResponder];
+    } else if (textField == self.verifycodeTextField) {
+        [self.pwdTextField becomeFirstResponder];
+    } else if (textField == self.pwdTextField) {
+        [self.surePWDTextField becomeFirstResponder];
+    } else if (textField == self.surePWDTextField) {
+        [self logonClick:nil];
+    }
+    
     [textField resignFirstResponder];
 
     [self setupSignupState];
@@ -529,6 +560,16 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 - (void)updateVerifycodeBtnTitle:(NSString *)title {
     [_getVerifycodeBtn setTitle:title forState:UIControlStateNormal];
     [_getVerifycodeBtn setTitle:title forState:UIControlStateHighlighted];
+}
+
+- (void)addGestureOperation  {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHandle)];
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)tapGestureHandle {
+    [self.view endEditing:YES];
 }
 
 @end
