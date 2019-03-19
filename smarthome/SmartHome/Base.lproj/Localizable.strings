@@ -179,7 +179,7 @@
 "kSDKVersionInfo" = "SDK Version";
 
 "kLogining" = "Loging...";
-"kInvalidEmailOrPassword" = "Incorrect E-mail or password, try again.";
+"kInvalidEmailOrPassword" = "Incorrect E-mail or password, try again.(Make sure your password at least %zd~%zd characters.)";
 "kLoginFailed" = "Sign in failed";
 "kLogin" = "SIGN IN";
 "kForgotPassword" = "Forgot password";
@@ -199,7 +199,7 @@
 "kSignuping" = "Sing up...";
 "kInvalidVerifycode" = "Incorrect verify code";
 "kEnterVerifycode" = "Verify code";
-"kAccountPasswordDes" = "Use at least 8~16 characters.";
+"kAccountPasswordDes" = "Incorrect password, Make sure your password at least %zd~%zd characters.";
 "kEnterAccoutPasswordDisagree" = "Incorrect password. Check again";
 "kResetPasswordFailed" = "Reset password failed";
 "kSignupFailed" = "Sign up failed";

@@ -186,7 +186,7 @@
 "kSDKVersionInfo" = "SDK版本號";
 
 "kLogining" = "正在登入...";
-"kInvalidEmailOrPassword" = "輸入的郵箱或密碼無效，請重新輸入";
+"kInvalidEmailOrPassword" = "輸入的郵箱或密碼無效，請重新輸入（请确保密码长度在[%zd-%zd]位之间）";
 "kLoginFailed" = "登入失敗";
 "kLogin" = "登入";
 "kForgotPassword" = "忘記密碼";
@@ -206,7 +206,7 @@
 "kSignuping" = "正在註冊...";
 "kInvalidVerifycode" = "驗證碼無效，請重新輸入";
 "kEnterVerifycode" = "請輸入驗證碼";
-"kAccountPasswordDes" = "請確保密碼長度在8-16位之間";
+"kAccountPasswordDes" = "輸入的密碼無效，請確保密碼長度在[%zd-%zd]位之間";
 "kEnterAccoutPasswordDisagree" = "兩次密碼輸入不一致，請重新輸入";
 "kResetPasswordFailed" = "重置密碼失敗";
 "kSignupFailed" = "註冊失敗";

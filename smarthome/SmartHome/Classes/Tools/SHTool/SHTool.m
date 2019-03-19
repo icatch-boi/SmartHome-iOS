@@ -572,9 +572,28 @@
         return NO;
     }
     
-    NSString *regex = [NSString stringWithFormat:@"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}", (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength];
+    NSString *regex = [NSString stringWithFormat:kDeviceNameRegularExpression, (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength];
     NSRange nameRange = [deviceName rangeOfString:regex options:NSRegularExpressionSearch];
     if (nameRange.location == NSNotFound) {
+        SHLogWarn(SHLogTagAPP, @"String mismatching.");
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (BOOL)isValidPassword:(NSString *)pwd {
+    NSUInteger length = [self getCharLength:pwd];
+    SHLogInfo(SHLogTagAPP, @"Current string: %@, length: %lu", pwd, (unsigned long)length);
+    
+    if (length > kPasswordMaxLength || length < kPasswordMinLength) {
+        SHLogWarn(SHLogTagAPP, @"String too log or too short (valid length range: [%zd-%zd]).", kPasswordMinLength, kPasswordMaxLength);
+        return NO;
+    }
+    
+    NSString *regex = [NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength];
+    NSRange pwdRange = [pwd rangeOfString:regex options:NSRegularExpressionSearch];
+    if (pwdRange.location == NSNotFound) {
         SHLogWarn(SHLogTagAPP, @"String mismatching.");
         return NO;
     }

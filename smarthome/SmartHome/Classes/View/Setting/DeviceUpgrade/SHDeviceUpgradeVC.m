@@ -163,10 +163,6 @@ static int totalCount = 10;
     
     self.updateDesLabel.text = @"安装更新中...";
     self.updateNoteLabel.text = @"安装过程需要重启设备，可能耗时较长，请耐心等待";
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self upgradFailedHandle];
-    });
 }
 
 - (void)startUpgrade {

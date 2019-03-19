@@ -245,13 +245,18 @@
 }
 
 - (BOOL)checkPassword:(NSString *)password newPassword:(NSString *)newPassword surePassword:(NSString *)surePassword {
-    if (![newPassword isEqualToString:surePassword]) {
-        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the new password and confirming password disagree!"*/NSLocalizedString(@"kNewPasswordDisagree", nil)];
+    if (![SHTool isValidPassword:password] || ![SHTool isValidPassword:newPassword] || ![SHTool isValidPassword:surePassword]) {
+        [self showAlertWithTitle:NSLocalizedString(@"kModifyPasswordFailed", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
         return NO;
     }
     
     if ([password isEqualToString:newPassword]) {
         [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the old password and new password agree!"*/NSLocalizedString(@"kOldAndNewPasswordAgree", nil)];
+        return NO;
+    }
+    
+    if (![newPassword isEqualToString:surePassword]) {
+        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the new password and confirming password disagree!"*/NSLocalizedString(@"kNewPasswordDisagree", nil)];
         return NO;
     }
 

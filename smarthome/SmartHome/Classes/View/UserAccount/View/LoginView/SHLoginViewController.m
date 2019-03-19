@@ -152,19 +152,31 @@ static const CGFloat kBottomDefaultValue = 80;
     [_pwdTextField resignFirstResponder];
     __block NSRange emailRange;
     __block NSRange passwordRange;
-    
+    __block BOOL invalid = NO;
+
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLogining", nil)];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             emailRange = [_emailTextField.text rangeOfString:[NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
+            passwordRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
+            
+            if (![SHTool isValidPassword:_pwdTextField.text]) {
+                [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+                invalid = YES;
+                return;
+            }
         });
+        
+        if (invalid) {
+            SHLogWarn(SHLogTagAPP, @"Enter content invalid.");
+            return;
+        }
         
         if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kInvalidEmailOrPassword", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength] preferredStyle:UIAlertControllerStyleAlert];
                 [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alertC animated:YES completion:nil];
             });
@@ -198,6 +210,16 @@ static const CGFloat kBottomDefaultValue = 80;
                 });
             }];
         }
+    });
+}
+
+- (void)showTipsWithInfo:(NSString *)info {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressHUD hideProgressHUD:YES];
+        
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:info preferredStyle:UIAlertControllerStyleAlert];
+        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alertC animated:YES completion:nil];
     });
 }
 

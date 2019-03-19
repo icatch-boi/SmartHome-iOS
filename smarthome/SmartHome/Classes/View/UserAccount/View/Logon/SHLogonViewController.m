@@ -194,32 +194,41 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     __block NSRange emailRange;
     __block NSRange passwordRange;
     __block NSRange surePWDRange;
+    __block BOOL invalid = NO;
     
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:tips];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-            surePWDRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
+            passwordRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
+            surePWDRange = [_pwdTextField.text rangeOfString:[NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength] options:NSRegularExpressionSearch];
         });
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             if(_verifycodeTextField.text.length != 6) {
                 NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil);
                 if(_verifycodeTextField.text.length == 0) {
                     errInfo = NSLocalizedString(@"kEnterVerifycode", nil);
                 }
                 [self showTipsWithInfo:errInfo];
+                invalid = YES;
                 return;
             }
-            if(_pwdTextField.text.length < 8 || _pwdTextField.text.length > 16) {
-                [self showTipsWithInfo:NSLocalizedString(@"kAccountPasswordDes", nil)];
+            if(_pwdTextField.text.length < kPasswordMinLength || _pwdTextField.text.length > kPasswordMaxLength) {
+                [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+                invalid = YES;
                 return;
             }
         });
+        
+        if (invalid) {
+            SHLogWarn(SHLogTagAPP, @"Enter content invalid.");
+            return;
+        }
+        
         if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound || surePWDRange.location == NSNotFound) {
-            [self showTipsWithInfo:NSLocalizedString(@"kInvalidEmailOrPassword", nil)];
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
         } else {
             __block NSString *email = nil;
             __block NSString *password = nil;
