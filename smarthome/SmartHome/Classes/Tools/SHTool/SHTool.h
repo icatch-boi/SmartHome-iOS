@@ -38,5 +38,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)localDBTimeStringFromServer:(NSString *)remoteTime;
 + (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font;
 + (BOOL)isValidPassword:(NSString *)pwd;
++ (void)backToRootViewController;
 
 @end

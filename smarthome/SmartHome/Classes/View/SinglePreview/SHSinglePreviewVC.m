@@ -44,7 +44,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 @property (nonatomic, weak) UINavigationController *rootViewController;
 
 @property (nonatomic, getter = isBatteryLowAlertShowed) BOOL batteryLowAlertShowed;
-@property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, weak) XDSDropDownMenu *resolutionMenu;
 
 @end
 
@@ -1334,7 +1334,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 }
 
 - (void)setupResolutionMenu {
-    self.resolutionMenu = [[XDSDropDownMenu alloc] init];
+    XDSDropDownMenu *resolutionMenu = [[XDSDropDownMenu alloc] init];
+    self.resolutionMenu = resolutionMenu;
     self.resolutionMenu.tag = 1000;
     
     self.resolutionMenu.delegate = self;//设置代理
@@ -1600,6 +1601,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         _zoomImageView = [[UIImageView alloc] init];
         
         _zoomImageView.userInteractionEnabled = YES;
+        _zoomImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
     return _zoomImageView;

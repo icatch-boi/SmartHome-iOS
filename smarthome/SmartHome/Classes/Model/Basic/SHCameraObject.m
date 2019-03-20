@@ -295,12 +295,7 @@
             
             dispatch_semaphore_signal(self.semaphore);
             
-            [self removeCameraPropertyObserver];
-            //delete download list before disconnect
-            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
-            [self.sdk destroySHSDK];
-
-            [self cleanCamera];
+            [self disconnectHandle];
             
 			if (failedBlock) {
 				failedBlock();
@@ -308,12 +303,7 @@
 		} else {
             dispatch_semaphore_signal(self.semaphore);
         
-            [self removeCameraPropertyObserver];
-            //delete download list before disconnect
-            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
-            [self.sdk destroySHSDK];
-            [self.streamOper uploadPreviewThumbnailToServer];
-            [self cleanCamera];
+            [self disconnectHandle];
 
             if (successBlock) {
                 successBlock();
@@ -322,6 +312,22 @@
 	});
 }
 
+- (void)disconnectHandle {
+//    [self.sdk disableTutk];
+    
+    if (self.streamOper.PVRun) {
+        [self.streamOper stopMediaStreamWithComplete:nil];
+    }
+    
+    [self.controler.pbCtrl stopWithCamera:self];
+    
+    [self removeCameraPropertyObserver];
+    //delete download list before disconnect
+    [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
+    [self.sdk destroySHSDK];
+    [self.streamOper uploadPreviewThumbnailToServer];
+    [self cleanCamera];
+}
 
 #pragma mark - Observer
 - (void)addCameraPropertyObserver {

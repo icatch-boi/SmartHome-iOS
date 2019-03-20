@@ -162,7 +162,7 @@
 "kNotDetectSome" = "Not detected someone";
 "kSDCardErrorTipsInfo" = "The device %@ in %@ Occure SDCard error";
 "kDeviceRemoveTipsInfo" = "The device %@ have been removed";
-"kNotificationContentInfo" = "%@ in %@ receive %@ event";
+"kNotificationContentInfo" = "%@ in %@ receive [%@] event";
 "kBuildNumber" = "APP Build Number: %@";
 
 "kScan" = "Scan";

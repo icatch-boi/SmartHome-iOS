@@ -105,7 +105,7 @@
     NSString *str = nil;
     if ([msgType isEqualToString:@"100"]) {
         str = NSLocalizedString(@"kMonitorTypePir", nil);
-    } else if ([msgType isEqualToString:@"102"]) {
+    } else if ([msgType isEqualToString:@"102"] || [msgType isEqualToString:@"110"]) {
         str = NSLocalizedString(@"ALERT_LOW_BATTERY", nil);
     } else if ([msgType isEqualToString:@"103"]) {
         str = NSLocalizedString(@"CARD_FULL", nil);

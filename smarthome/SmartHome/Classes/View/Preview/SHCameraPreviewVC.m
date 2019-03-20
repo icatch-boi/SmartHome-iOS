@@ -75,7 +75,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 @property (nonatomic, assign) NSUInteger connectTimes;
 @property (nonatomic, strong) MBProgressHUD *progressHUDPreview;
 @property (nonatomic, assign) BOOL alreadyBack;
-@property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, weak) XDSDropDownMenu *resolutionMenu;
 @property (nonatomic, weak) UIAlertController *upgradesAlertView;
 
 @end
@@ -133,7 +133,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [[NSUserDefaults standardUserDefaults] setObject:_notification forKey:kRecvNotification];
 
     [self releaseTalkAnimTimer];
-    [self releaseConectAndPreview];
+    [self releaseConnectAndPreviewTimer];
     [self releaseRingTimer];
     
     [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:nil];
@@ -261,7 +261,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         });
         
         [_shCameraObj initCamera];
-        [self releaseConectAndPreview];
+        [self releaseConnectAndPreviewTimer];
 
         [self addDeviceObserver];
     } failedBlock:^(NSInteger errorCode) {
@@ -884,8 +884,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             return;
         }
         
-        [_shCameraObj.streamOper stopPreview];
+//        [_shCameraObj.streamOper stopPreview];
         [_shCameraObj.sdk disableTutk];
+        [_shCameraObj.streamOper stopMediaStreamWithComplete:nil];
         [_shCameraObj disConnectWithSuccessBlock:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
@@ -1431,7 +1432,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     return _connectAndPreviewTimer;
 }
 
-- (void)releaseConectAndPreview {
+- (void)releaseConnectAndPreviewTimer {
     if ([_connectAndPreviewTimer isValid]) {
         [_connectAndPreviewTimer invalidate];
         _connectAndPreviewTimer = nil;
@@ -1617,7 +1618,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)setupResolutionMenu {
-    self.resolutionMenu = [[XDSDropDownMenu alloc] init];
+    XDSDropDownMenu *resolutionMenu = [[XDSDropDownMenu alloc] init];
+    self.resolutionMenu = resolutionMenu;
     self.resolutionMenu.tag = 1000;
     
     self.resolutionMenu.delegate = self;//设置代理
@@ -1912,6 +1914,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         _zoomImageView = [[UIImageView alloc] init];
         
         _zoomImageView.userInteractionEnabled = YES;
+        _zoomImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
     return _zoomImageView;

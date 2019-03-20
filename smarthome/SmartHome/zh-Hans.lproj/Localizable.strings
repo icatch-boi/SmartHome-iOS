@@ -170,7 +170,7 @@
 "kNotDetectSome" = "没有侦测到有人";
 "kSDCardErrorTipsInfo" = "装置 %@ 于 %@ 发生SD卡错误";
 "kDeviceRemoveTipsInfo" = "⚠️ 装置 %@ 遭拆除";
-"kNotificationContentInfo" = "%@ 于 %@ 收到 %@ 事件";
+"kNotificationContentInfo" = "%@ 于 %@ 收到 [%@] 事件";
 "kBuildNumber" = "应用程序子版本：%@";
 
 "kScan" = "扫一扫";

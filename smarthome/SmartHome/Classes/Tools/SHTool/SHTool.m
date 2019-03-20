@@ -617,4 +617,59 @@
     return [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
 }
 
++ (void)backToRootViewController {    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+        UIViewController *vc = nav.visibleViewController;
+
+        UIViewController *presentingVc = vc.presentingViewController;
+        while (presentingVc.presentingViewController) {
+            presentingVc = presentingVc.presentingViewController;
+        }
+
+        if (presentingVc) {
+            [presentingVc dismissViewControllerAnimated:YES completion:nil];
+        }
+
+        [nav popToRootViewControllerAnimated:YES];
+
+//        if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[ZJSlidingDrawerViewController class]]) {
+//            return;
+//        }
+//
+//        ZJSlidingDrawerViewController *rootVC = (ZJSlidingDrawerViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        UINavigationController *currentNav = (UINavigationController *)rootVC.mainVC;
+//        UIViewController *currentVC = currentNav.topViewController;
+//
+//        //第一部分 导航控制器的顶部控制器弹出的模态
+//        UIViewController *vcPresentVC = currentVC.presentedViewController;
+//        if (vcPresentVC) {
+//            while (vcPresentVC.presentedViewController)  {
+//                vcPresentVC = vcPresentVC.presentedViewController;
+//            }
+//            [vcPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+//
+//        //第二部分 导航控制器弹出的模态
+//        UIViewController *navPresentVC = currentNav.presentedViewController;
+//        if (navPresentVC) {
+//            while (navPresentVC.presentedViewController)  {
+//                navPresentVC = navPresentVC.presentedViewController;
+//            }
+//            [navPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+//
+//        //第三部分 tab控制器弹出的模态
+//        UIViewController *tabPresentVC = rootVC.presentedViewController;
+//        if (tabPresentVC) {
+//            while (tabPresentVC.presentedViewController)  {
+//                tabPresentVC = tabPresentVC.presentedViewController;
+//            }
+//            [tabPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+        
+//        [currentNav popToRootViewControllerAnimated:YES];
+    });
+}
+
 @end

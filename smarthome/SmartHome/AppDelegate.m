@@ -39,6 +39,7 @@
 @property (nonatomic, strong) NSMutableArray *messages;
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, weak) UIAlertController *networkAlertVC;
+@property (nonatomic, weak) UIAlertController *lowBatteryAlertVC;
 
 @end
 
@@ -485,6 +486,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 	
 	SHLogInfo(SHLogTagAPP, @"iOS6及以下系统，收到通知:%@", [self logDic:userInfo]);
     [self postNotification:userInfo];
+    [self notificationHandleWithInfo:userInfo withCompletionHandler:nil];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -493,6 +495,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [self postNotification:userInfo];
     
 	completionHandler(UIBackgroundFetchResultNewData);
+    [self notificationHandleWithInfo:userInfo withCompletionHandler:nil];
 }
 
 // iOS 10收到通知
@@ -538,6 +541,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             
         case 108:
             [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeSuccessNotification object:nil];
+            break;
+            
+        case 102:
+        case 110:
+            [self lowBatteryHandleWithUID:aps[@"devID"]];
             break;
             
         default:
@@ -876,6 +884,63 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (self.networkAlertVC != nil) {
         [self.networkAlertVC dismissViewControllerAnimated:YES completion:^{
             self.networkAlertVC = nil;
+        }];
+    }
+}
+
+#pragma mark - LowBattery Handle
+- (void)lowBatteryHandleWithUID:(NSString *)uid {
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    if ([NSStringFromClass([vc class]) isEqualToString:@"SHHomeTableViewController"]) {
+        SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+        [self dismissLowBatteryAlertVC];
+        return;
+    }
+    
+    if (uid == nil) {
+        SHLogError(SHLogTagAPP, @"Camera uid is nil.");
+        return;
+    }
+    
+    SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:uid];
+    if (camObj == nil) {
+        SHLogWarn(SHLogTagAPP, @"camera object is nil.");
+        return;
+    }
+    
+    if (camObj.isConnect || [NSStringFromClass([vc class]) isEqualToString:@"SHCameraPreviewVC"]) {
+        [self showLowBatteryAlertViewWithCameraObj:camObj];
+    } else {
+        [self dismissLowBatteryAlertVC];
+    }
+}
+
+- (void)showLowBatteryAlertViewWithCameraObj:(SHCameraObject *)camObj {
+    if (self.lowBatteryAlertVC != nil) {
+        return;
+    }
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:@"%@ %@", camObj.camera.cameraName, NSLocalizedString(@"ALERT_LOW_BATTERY", nil)] preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [camObj.sdk disableTutk];
+        [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+        
+        [SHTool backToRootViewController];
+    }]];
+    
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    [vc presentViewController:alertVC animated:YES completion:nil];
+    
+    self.lowBatteryAlertVC = alertVC;
+}
+
+- (void)dismissLowBatteryAlertVC {
+    if (self.lowBatteryAlertVC != nil) {
+        [self.lowBatteryAlertVC dismissViewControllerAnimated:YES completion:^{
+            self.lowBatteryAlertVC = nil;
         }];
     }
 }
