@@ -909,9 +909,17 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         return;
     }
     
-    if (camObj.isConnect || [NSStringFromClass([vc class]) isEqualToString:@"SHCameraPreviewVC"]) {
+    if (camObj.isConnect) {
         [self showLowBatteryAlertViewWithCameraObj:camObj];
     } else {
+        if ([NSStringFromClass([vc class]) isEqualToString:@"SHCameraPreviewVC"]) {
+            SHCameraPreviewVC *temp = (SHCameraPreviewVC *)vc;
+            if ([temp.cameraUid isEqualToString:uid]) {
+                [self showLowBatteryAlertViewWithCameraObj:camObj];
+                return;
+            }
+        }
+        
         [self dismissLowBatteryAlertVC];
     }
 }
@@ -924,10 +932,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:@"%@ %@", camObj.camera.cameraName, NSLocalizedString(@"ALERT_LOW_BATTERY", nil)] preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [camObj.sdk disableTutk];
-        [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
-        
-        [SHTool backToRootViewController];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SHTool backToRootViewController];
+            [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+        });
     }]];
     
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;

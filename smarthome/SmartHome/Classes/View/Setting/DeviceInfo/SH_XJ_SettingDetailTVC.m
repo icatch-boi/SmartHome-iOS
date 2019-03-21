@@ -653,7 +653,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 - (void)fillCameraNameTable {
     SHSettingData *data = [[SHSettingData alloc] init];
     
-    data.textLabel = NSLocalizedString(@"kCameraName", @"");
+    data.textLabel = NSLocalizedString(@"kDeviceName", @"");
     data.detailTextLabel = _shCamObj.camera.cameraName;
     data.methodName = @"modifyCameraName";
     
