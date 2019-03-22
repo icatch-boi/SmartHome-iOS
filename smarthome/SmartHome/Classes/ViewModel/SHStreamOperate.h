@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-#define DataDisplayImmediately 0
+#define DataDisplayImmediately 1
 
 @interface SHStreamOperate : NSObject
 

@@ -365,7 +365,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
     [self addGestureRecognizers];
-    [self setupZoomScrollView];
+//    [self setupZoomScrollView];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -1461,9 +1461,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self connectCameraHandler];
         });
     } else {
-        [self initPlayer];
-        
-        [self startPreview];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initPlayer];
+            
+            [self startPreview];
+        });
     }
 }
 

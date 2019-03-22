@@ -294,7 +294,7 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                         
 #if DataDisplayImmediately
                         [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:self.avslayer];
-                        [self recordCurrentVideoFrame:headFrame];
+//                        [self recordCurrentVideoFrame:headFrame];
 #else
                         [self.h264Decoder decodeAndDisplayH264Frame:headFrame displayImageView:self.displayImageView];
 #endif
@@ -380,6 +380,17 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)getCurrentFrameImage:(void (^)(UIImage *image))currentImage {
+#if DataDisplayImmediately
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage *image = [self.h264Decoder getCurrentImage];
+        
+        _lastFrameImage = image ? image : _lastFrameImage;
+        
+        if (currentImage) {
+            currentImage(image);
+        }
+    });
+#else
     dispatch_async(dispatch_get_main_queue(), ^{
         UIImage *image = self.displayImageView.image;
         
@@ -389,10 +400,11 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             currentImage(image);
         }
     });
+#endif
 }
 
 - (void)updatePreviewThumbnail {
-#if DataDisplayImmediately
+#if !DataDisplayImmediately
     UIImage *lastImage = [self getLastFrameImage];
 
     if (lastImage != nil) {

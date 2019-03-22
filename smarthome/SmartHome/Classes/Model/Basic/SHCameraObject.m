@@ -359,7 +359,7 @@
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
-    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
+//    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
 
 	if (self.cameraPropertyValueChangeBlock) {
 		self.cameraPropertyValueChangeBlock(evt);

@@ -15,6 +15,7 @@
     NSInteger _ppsSize;
     CMVideoFormatDescriptionRef _decoderFormatDescription;
     VTDecompressionSessionRef _deocderSession;
+    CVPixelBufferRef _pixelBuffer;
 }
 
 @end
@@ -103,6 +104,11 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
         _decoderFormatDescription = NULL;
     }
     
+    if (_pixelBuffer != nullptr) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = nullptr;
+    }
+    
     free(_sps);
     free(_pps);
     _spsSize = _ppsSize = 0;
@@ -140,6 +146,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
                     [avslayer enqueueSampleBuffer:sampleBuffer];
                 });
             }
+            [self recordPixelBufferWithSampleBuffer:sampleBuffer];
             CFRelease(sampleBuffer);
         }
     }
@@ -302,6 +309,48 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     UIGraphicsEndImageContext();
     
     return drawImage;
+}
+
+- (void)recordPixelBufferWithSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CVPixelBufferRef pixelBuffer = [self pixelBufferFromSampleBuffer:sampleBuffer];
+    
+    if (pixelBuffer == nullptr) {
+        return;
+    }
+    
+    @synchronized (self) {
+        if (_pixelBuffer != nullptr) {
+            CVPixelBufferRelease(_pixelBuffer);
+            _pixelBuffer = nullptr;
+        }
+        
+        _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
+    }
+    
+    CVPixelBufferRelease(pixelBuffer);
+}
+
+- (UIImage *)getCurrentImage {
+    CIImage *ciImage = nil;
+    CGRect rect = CGRectZero;
+    @synchronized (self) {
+        if (_pixelBuffer == nullptr) {
+            return nil;
+        }
+        
+        ciImage = [[CIImage alloc] initWithCVPixelBuffer:_pixelBuffer];
+        rect = CGRectMake(0, 0, CVPixelBufferGetWidth(_pixelBuffer), CVPixelBufferGetHeight(_pixelBuffer));
+    }
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    
+    CGImageRef imageRef = [context createCGImage:ciImage fromRect:rect];
+    
+    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
+    
+    return image;
 }
 
 @end

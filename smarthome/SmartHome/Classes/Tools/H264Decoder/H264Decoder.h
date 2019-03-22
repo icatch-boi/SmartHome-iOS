@@ -16,5 +16,6 @@
 - (void)decodeAndDisplayH264Frame:(NSData *)frame andAVSLayer:(AVSampleBufferDisplayLayer *)avslayer;
 - (UIImage *)imageFromPixelBufferRef:(NSData *)data;
 - (void)decodeAndDisplayH264Frame:(NSData *)frame displayImageView:(UIImageView *)displayImageView;
+- (UIImage *)getCurrentImage;
 
 @end

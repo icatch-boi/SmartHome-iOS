@@ -332,8 +332,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     [super viewWillDisappear:animated];
     
-    [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:nil];
-    [self.avslayer removeFromSuperlayer];
+//    [_shCameraObj.streamOper initAVSLayer:self.avslayer bufferingBlock:nil];
+//    [self.avslayer removeFromSuperlayer];
     
     _notification = nil;
     
@@ -350,7 +350,14 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kSingleDownloadCompleteNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kCameraDisconnectNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.preview  removeObserver:self forKeyPath:@"bounds"];
+//    [self.preview  removeObserver:self forKeyPath:@"bounds"];
+    @try {
+        [self.preview  removeObserver:self forKeyPath:@"bounds"];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+    } @finally {
+        
+    }
     
     [self removePreviewCacheObserver];
     [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
@@ -443,7 +450,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     _bitRateLabel.text = @"0kb/s";
     
     [self setupResolutionButton];
-    [self setupZoomScrollView];
+//    [self setupZoomScrollView];
 }
 
 - (void)setButtonRadius:(UIButton *)button withRadius:(CGFloat)radius {
@@ -866,7 +873,18 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             [CATransaction setDisableActions:YES];
             
             if (([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) || ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight)) {
-                self.avslayer.bounds = self.view.bounds;
+                CGFloat w = CGRectGetWidth(self.view.bounds);
+                CGFloat h = CGRectGetHeight(self.view.bounds);
+                CGFloat scale =  w / h;
+                CGFloat defaultScale = 16.0 / 9;
+                if (scale > defaultScale) {
+                    w = defaultScale * h;
+                } else {
+                    h = w / defaultScale;
+                }
+                
+                self.avslayer.bounds = CGRectMake(0, 0, w, h);
+//                self.avslayer.bounds = self.view.bounds;
                 self.avslayer.position = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
                 
             } else {
