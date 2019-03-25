@@ -168,7 +168,7 @@
 "kNotDetectSome" = "沒有偵測到有人";
 "kSDCardErrorTipsInfo" = "裝置 %@ 於 %@ 發生SD卡錯誤";
 "kDeviceRemoveTipsInfo" = "⚠️ 裝置 %@ 遭拆除";
-"kNotificationContentInfo" = "%@ 於 %@ 收到 [%@] 事件";
+"kNotificationContentInfo" = "設備 %@ 於 %@ 收到 [%@] 事件";
 "kBuildNumber" = "應用程序子版本：%@";
 
 "kScan" = "掃一掃";
@@ -436,3 +436,6 @@
 "kDoorbellAnsweringDescription" = "[%@] 在按門鈴 \"%@\"，是否要接聽？";
 "kBiometricsDescription" = "使用 '生物識別' 功能務必確保帳戶下添加有自己的（非分享）相機設備，否則此功能不能被使用。";
 "kTamperAlarm" = "防拆報警";
+
+"kLowBatteryNotification" = "電池電量低，將無法正常工作，app將會與其自動斷開連接，請及時充電";
+"kLowBatteryAlert" = "设备 [%@] %@ 谢谢！";

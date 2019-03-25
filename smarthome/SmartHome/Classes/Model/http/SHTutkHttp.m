@@ -77,7 +77,7 @@ static NSString * const keychain_key = @"push.udid";
 
     NSString *identifierNumber = [self getDeviceUUID];
     
-    NSString *url = [NSString stringWithFormat:@"%@&appid=%@&uid=%@&udid=%@&lang=enUS&interval=0&os=ios&format=e21zZ30=", mapUrl,applicationId,camera.cameraUid,identifierNumber];
+    NSString *url = [NSString stringWithFormat:@"%@&appid=%@&uid=%@&udid=%@&lang=enUS&interval=1&os=ios&format=e21zZ30=", mapUrl,applicationId,camera.cameraUid,identifierNumber];
     
     if ([HttpRequest getSyncWithUrl:url]) {
         camera.mapToTutk = YES;
@@ -218,7 +218,7 @@ static NSString * const keychain_key = @"push.udid";
     
     NSString *identifierNumber = [self getDeviceUUID];
     
-    NSString *url = [NSString stringWithFormat:@"%@&appid=%@&uid=%@&udid=%@&lang=enUS&interval=0&os=ios&format=e21zZ30=", mapUrl,applicationId,camera.cameraUid,identifierNumber];
+    NSString *url = [NSString stringWithFormat:@"%@&appid=%@&uid=%@&udid=%@&lang=enUS&interval=1&os=ios&format=e21zZ30=", mapUrl,applicationId,camera.cameraUid,identifierNumber];
     
     [self requestWithURLString:url completionHandler:^(BOOL isSuccess) {
         SHLogInfo(SHLogTagAPP, @"mapping is success: %d, uid is: %@", isSuccess, camera.cameraUid);

@@ -24,7 +24,7 @@
     if(sender) {
         Error *err = sender.object;
 
-        SHLogInfo(SHLogTagAPP, @"sender : %@", err.error_description);
+        SHLogInfo(SHLogTagAPP, @"sender : %@", err/*.error_description*/);
     } else {
         SHLogError(SHLogTagAPP, @"nil object !!!");
     }

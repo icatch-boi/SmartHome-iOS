@@ -619,6 +619,10 @@
 
 + (void)backToRootViewController {    
     dispatch_async(dispatch_get_main_queue(), ^{
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        app.isFullScreenPV = NO;
+        app.isVideoPB = NO;
+        
         UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
         UIViewController *vc = nav.visibleViewController;
 

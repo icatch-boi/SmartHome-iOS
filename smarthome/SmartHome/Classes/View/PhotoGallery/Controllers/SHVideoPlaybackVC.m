@@ -436,7 +436,7 @@
     if (_played) {
         [self stopVideoPb];
     } else {
-        [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+//        [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
     }
     
     [self showDisconnectAlert:shCamObj];
@@ -586,7 +586,7 @@
                     [self hideProgressHUD:YES];
                     
                     if (_disconnectHandling) {
-                        [_shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+//                        [_shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
                     }
                 });
             }
@@ -1325,7 +1325,8 @@
     
     __weak typeof(self) weakSelf = self;
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Exit", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        
+        [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             _disconnectHandling = NO;
             
@@ -1333,6 +1334,8 @@
         });
     }]];
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"STREAM_RECONNECT", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+        
         [weakSelf reconnect:shCamObj];
     }]];
     

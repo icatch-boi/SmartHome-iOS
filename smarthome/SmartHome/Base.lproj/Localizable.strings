@@ -162,7 +162,7 @@
 "kNotDetectSome" = "Not detected someone";
 "kSDCardErrorTipsInfo" = "The device %@ in %@ Occure SDCard error";
 "kDeviceRemoveTipsInfo" = "The device %@ have been removed";
-"kNotificationContentInfo" = "%@ in %@ receive [%@] event";
+"kNotificationContentInfo" = "Device %@ in %@ receive [%@] event";
 "kBuildNumber" = "APP Build Number: %@";
 
 "kScan" = "Scan";
@@ -429,3 +429,6 @@
 "kDoorbellAnsweringDescription" = "[%@] at the doorbell \"%@\", do you want to answer?";
 "kBiometricsDescription" = "Use the 'Biometric' feature to ensure that your own (non-shared) camera device is added under your account, otherwise this feature will not be available.";
 "kTamperAlarm" = "Tamper alarm";
+
+"kLowBatteryNotification" = "The battery is low and will not work properly. The app will automatically disconnect from it. Please charge it in time.";
+"kLowBatteryAlert" = "Device [%@] %@ Thanks!";

@@ -544,8 +544,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             break;
             
         case 102:
+            [self lowBatteryHandleWithUID:aps[@"devID"] disconnect:NO];
+            break;
+            
         case 110:
-            [self lowBatteryHandleWithUID:aps[@"devID"]];
+            [self lowBatteryHandleWithUID:aps[@"devID"] disconnect:YES];
             break;
             
         default:
@@ -893,7 +896,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 #pragma mark - LowBattery Handle
-- (void)lowBatteryHandleWithUID:(NSString *)uid {
+- (void)lowBatteryHandleWithUID:(NSString *)uid disconnect:(BOOL)disconnect {
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
     UIViewController *vc = nav.visibleViewController;
     if ([NSStringFromClass([vc class]) isEqualToString:@"SHHomeTableViewController"]) {
@@ -914,12 +917,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
     
     if (camObj.isConnect) {
-        [self showLowBatteryAlertViewWithCameraObj:camObj];
+        [self showLowBatteryAlertViewWithCameraObj:camObj disconnect:disconnect];
     } else {
         if ([NSStringFromClass([vc class]) isEqualToString:@"SHCameraPreviewVC"]) {
             SHCameraPreviewVC *temp = (SHCameraPreviewVC *)vc;
             if ([temp.cameraUid isEqualToString:uid]) {
-                [self showLowBatteryAlertViewWithCameraObj:camObj];
+                [self showLowBatteryAlertViewWithCameraObj:camObj disconnect:disconnect];
                 return;
             }
         }
@@ -928,17 +931,25 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
 }
 
-- (void)showLowBatteryAlertViewWithCameraObj:(SHCameraObject *)camObj {
+- (void)showLowBatteryAlertViewWithCameraObj:(SHCameraObject *)camObj disconnect:(BOOL)disconnect {
     if (self.lowBatteryAlertVC != nil) {
         return;
     }
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:@"%@ %@", camObj.camera.cameraName, NSLocalizedString(@"ALERT_LOW_BATTERY", nil)] preferredStyle:UIAlertControllerStyleAlert];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"kLowBatteryAlert", nil), camObj.camera.cameraName, NSLocalizedString(@"ALERT_LOW_BATTERY", nil)];
+    if (disconnect) {
+        message = [NSString stringWithFormat:NSLocalizedString(@"kLowBatteryAlert", nil), camObj.camera.cameraName, NSLocalizedString(@"kLowBatteryNotification", nil)];
+        [camObj.sdk disableTutk];
+    }
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SHTool backToRootViewController];
-            [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            if (disconnect) {
+                [SHTool backToRootViewController];
+                [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }
         });
     }]];
     
