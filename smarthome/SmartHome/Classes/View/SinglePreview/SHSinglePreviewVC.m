@@ -428,7 +428,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
     self.avslayer = avslayer;
     
-    [self.preview.layer addSublayer:self.avslayer];
+//    [self.preview.layer addSublayer:self.avslayer];
+    [self.zoomImageView.layer addSublayer:self.avslayer];
 }
 
 - (void)initPreviewGUI {
@@ -450,7 +451,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     _bitRateLabel.text = @"0kb/s";
     
     [self setupResolutionButton];
-//    [self setupZoomScrollView];
+    [self setupZoomScrollView];
 }
 
 - (void)setButtonRadius:(UIButton *)button withRadius:(CGFloat)radius {
@@ -873,18 +874,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             [CATransaction setDisableActions:YES];
             
             if (([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) || ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight)) {
-                CGFloat w = CGRectGetWidth(self.view.bounds);
-                CGFloat h = CGRectGetHeight(self.view.bounds);
-                CGFloat scale =  w / h;
-                CGFloat defaultScale = 16.0 / 9;
-                if (scale > defaultScale) {
-                    w = defaultScale * h;
-                } else {
-                    h = w / defaultScale;
-                }
-                
-                self.avslayer.bounds = CGRectMake(0, 0, w, h);
-//                self.avslayer.bounds = self.view.bounds;
+                self.avslayer.bounds = [self calcDisplayLayerFrame]; //self.view.bounds;
                 self.avslayer.position = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
                 
             } else {
@@ -902,6 +892,20 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             self.talkbackButton.enabled = _shCameraObj.cameraProperty.serverOpened;
         });
     }
+}
+
+- (CGRect)calcDisplayLayerFrame {
+    CGFloat w = CGRectGetWidth(self.view.bounds);
+    CGFloat h = CGRectGetHeight(self.view.bounds);
+    CGFloat scale =  w / h;
+    CGFloat defaultScale = 16.0 / 9;
+    if (scale > defaultScale) {
+        w = defaultScale * h;
+    } else {
+        h = w / defaultScale;
+    }
+    
+    return CGRectMake(0, 0, w, h);
 }
 
 - (ICVoiceHud *)voiceHud {

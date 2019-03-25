@@ -365,7 +365,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
     [self addGestureRecognizers];
-//    [self setupZoomScrollView];
+    [self setupZoomScrollView];
 }
 
 - (void)setupSampleBufferDisplayLayer {
@@ -396,7 +396,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     
     self.avslayer = avslayer;
     
-    [self.previewImageView.layer addSublayer:self.avslayer];
+//    [self.previewImageView.layer addSublayer:self.avslayer];
+    [self.zoomImageView.layer addSublayer:self.avslayer];
 }
 
 - (CGRect)calcAVSlayerBounds {
