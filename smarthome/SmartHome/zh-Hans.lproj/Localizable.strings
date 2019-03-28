@@ -462,3 +462,4 @@
 "kFWUpgradeDescription" = "固件版本: %@\r\n 固件大小: %@\r\n 更新说明: \r\n";
 "kFWUpdateTitle" = "检测到固件有更新\r\n";
 "kLater" = "下次再说";
+"kCompletion" = "完成";

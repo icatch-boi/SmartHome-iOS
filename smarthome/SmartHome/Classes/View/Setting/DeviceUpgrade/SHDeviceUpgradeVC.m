@@ -74,8 +74,8 @@
     self.updateNoteLabel.textColor = [UIColor orangeColor];
     self.activityView.color = [UIColor orangeColor];
     
-    [self.finishButton setTitle:@"完成" forState:UIControlStateNormal];
-    [self.finishButton setTitle:@"完成" forState:UIControlStateHighlighted];
+    [self.finishButton setTitle:NSLocalizedString(@"kCompletion", nil) forState:UIControlStateNormal];
+    [self.finishButton setTitle:NSLocalizedString(@"kCompletion", nil) forState:UIControlStateHighlighted];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

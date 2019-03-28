@@ -453,3 +453,4 @@
 "kFWUpgradeDescription" = "Firmware version: %@\r\n Firmware size: %@\r\n Release Notes: \r\n";
 "kFWUpdateTitle" = "Firmware detected updated\r\n";
 "kLater" = "Later";
+"kCompletion" = "Completion";

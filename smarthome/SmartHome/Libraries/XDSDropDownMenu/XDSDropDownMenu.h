@@ -18,8 +18,8 @@
 
 @interface XDSDropDownMenu : UIView <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) id <XDSDropDownMenuDelegate> delegate;//代理
-@property (nonatomic, retain) NSString *animationDirection;//动画方向
+@property (nonatomic, weak) id <XDSDropDownMenuDelegate> delegate;//代理
+@property (nonatomic, copy) NSString *animationDirection;//动画方向
 @property (nonatomic, strong) UIImageView *imageView;//图片视图
 @property (nonatomic, assign) NSInteger currentRow;
 

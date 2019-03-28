@@ -112,10 +112,25 @@
             });
         }];
     } else {
+        if (self.camObj.cameraProperty.clientCount > 1) {
+            [self showCannotUpgradeAlert];
+            
+            SHLogWarn(SHLogTagAPP, @"Current cann't upgrade, client count: %zd", self.camObj.cameraProperty.clientCount);
+            return;
+        }
+        
         SHDeviceUpgradeVC *vc = [SHDeviceUpgradeVC deviceUpgradeVCWithCameraObj:self.camObj];
         
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+
+- (void)showCannotUpgradeAlert {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"其它用户正在连接，当前暂不能进行固件升级，谢谢!" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 #pragma mark - Action Progress

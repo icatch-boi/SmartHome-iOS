@@ -69,6 +69,9 @@
               @(ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kConnectionUnknownError", nil),
               @(ICH_QR_USEABORT) : NSLocalizedString(@"kConnectTimedout", nil),//NSLocalizedString(@"kQrCodeAccessHasExpired", nil),
               @(ICH_SESSION_PASSWORD_ERR) : NSLocalizedString(@"kConnectTimedout", nil),//@"password error, verify failed.",
+              @(ICH_PLAYING_VIDEO_BY_OTHERS): NSLocalizedString(@"kPlayingVideoByOthers", nil),
+              @(ICH_PREVIEWING_BY_OTHERS): NSLocalizedString(@"kPreviewingByOthers", nil),
+              @(ICH_ERR_DEVICE_LOCAL_PLAYBACK): NSLocalizedString(@"kLocalPlaybackDescription", nil),
               };
 }
 

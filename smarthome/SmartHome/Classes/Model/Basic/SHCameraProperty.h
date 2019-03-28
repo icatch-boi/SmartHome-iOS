@@ -56,6 +56,7 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 @property (nonatomic, strong) SHICatchEvent *curChargeStatus;
 
 @property (nonatomic, strong) SHUpgradesInfo *upgradesInfo;
+@property (nonatomic, assign) NSInteger clientCount;
 
 - (void)cleanCurrentCameraAllProperty;
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj;

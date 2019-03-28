@@ -75,7 +75,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 @property (nonatomic, assign) NSUInteger connectTimes;
 @property (nonatomic, strong) MBProgressHUD *progressHUDPreview;
 @property (nonatomic, assign) BOOL alreadyBack;
-@property (nonatomic, weak) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
 @property (nonatomic, weak) UIAlertController *upgradesAlertView;
 
 @end
@@ -149,6 +149,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     [self hideResolutionMenu];
+    self.resolutionMenu = nil;
     
     [_shCameraObj.streamOper updatePreviewThumbnail];
     
@@ -753,6 +754,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)enterSettingAction {
     SHLogTRACE();
     
+    if (self.shCameraObj.cameraProperty.clientCount > 1) {
+        [self showCurrentOnlyCanPreviewAlert];
+        
+        SHLogWarn(SHLogTagAPP, @"Current only can preview, client count: %zd", self.shCameraObj.cameraProperty.clientCount);
+        return;
+    }
+    
     UIViewController *vc = [self prepareSettingViewController];
     
     if (_shCameraObj.streamOper.PVRun) {
@@ -791,6 +799,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self presentViewController:vc animated:YES completion:nil];
         });
     }
+}
+
+- (void)showCurrentOnlyCanPreviewAlert {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"其它用户正在连接，当前只支持视频预览，谢谢！" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+     
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (UIViewController *)prepareSettingViewController {
@@ -1938,6 +1954,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         }
         
         if (hint == YES) {
+            if (self.shCameraObj.cameraProperty.clientCount > 1) {
+                return;
+            }
             [self showUpgradesAlertViewWithVersionInfo:info];
         }
     }];

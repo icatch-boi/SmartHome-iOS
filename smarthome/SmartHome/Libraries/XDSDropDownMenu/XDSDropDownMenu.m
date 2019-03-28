@@ -12,8 +12,8 @@
 @property(nonatomic, strong) UITableView *menuTableView;
 @property(nonatomic, strong) UIButton *btnSender;
 @property(nonatomic) CGRect buttonFrame;
-@property(nonatomic, retain) NSArray *titleList;
-@property(nonatomic, retain) NSArray *imageList;
+@property(nonatomic, strong) NSArray *titleList;
+@property(nonatomic, strong) NSArray *imageList;
 @end
 
 @implementation XDSDropDownMenu

@@ -26,6 +26,7 @@
 @property (nonatomic, strong) SHObserver *bitRateObserver;
 @property (nonatomic, strong) SHObserver *chargeStatusObserver;
 @property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
+@property (nonatomic, strong) SHObserver *clientCountObserver;
 
 @end
 
@@ -361,6 +362,10 @@
     SHSDKEventListener *packagedownloadSizeListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.packageDownloadSizeObserver = [SHObserver cameraObserverWithListener:packagedownloadSizeListener eventType:ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.packageDownloadSizeObserver];
+    
+    SHSDKEventListener *clientCountListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.clientCountObserver = [SHObserver cameraObserverWithListener:clientCountListener eventType:ICATCH_EVENT_CONNECTION_CLIENT_COUNT isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.clientCountObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -383,6 +388,10 @@
             if (evt.intValue1 == -1) {
                 self.cameraProperty.memorySizeData = nil;
             }
+            break;
+            
+        case ICATCH_EVENT_CONNECTION_CLIENT_COUNT:
+            self.cameraProperty.clientCount = evt.intValue1;
             break;
             
         default:
@@ -483,6 +492,17 @@
         }
         
         self.packageDownloadSizeObserver = nil;
+    }
+    
+    if (self.clientCountObserver != nil) {
+        [self.sdk removeObserver:self.clientCountObserver];
+        
+        if (self.clientCountObserver.listener != nullptr) {
+            delete self.clientCountObserver.listener;
+            self.clientCountObserver.listener = nullptr;
+        }
+        
+        self.clientCountObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

@@ -44,7 +44,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 @property (nonatomic, weak) UINavigationController *rootViewController;
 
 @property (nonatomic, getter = isBatteryLowAlertShowed) BOOL batteryLowAlertShowed;
-@property (nonatomic, weak) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
 
 @end
 
@@ -342,6 +342,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     }
     
     [self hideResolutionMenu];
+    self.resolutionMenu = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
