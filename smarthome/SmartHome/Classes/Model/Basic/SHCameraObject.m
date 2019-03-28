@@ -25,6 +25,7 @@
 @property (nonatomic) SHObserver *powerOffObserver;
 @property (nonatomic, strong) SHObserver *bitRateObserver;
 @property (nonatomic, strong) SHObserver *chargeStatusObserver;
+@property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
 
 @end
 
@@ -356,6 +357,10 @@
     SHSDKEventListener *chargeStatusListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.chargeStatusObserver = [SHObserver cameraObserverWithListener:chargeStatusListener eventType:ICATCH_EVENT_CHARGE_STATUS_CHANGED isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.chargeStatusObserver];
+    
+    SHSDKEventListener *packagedownloadSizeListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.packageDownloadSizeObserver = [SHObserver cameraObserverWithListener:packagedownloadSizeListener eventType:ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.packageDownloadSizeObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -467,6 +472,17 @@
         }
         
         self.chargeStatusObserver = nil;
+    }
+    
+    if (self.packageDownloadSizeObserver != nil) {
+        [self.sdk removeObserver:self.packageDownloadSizeObserver];
+        
+        if (self.packageDownloadSizeObserver.listener) {
+            delete self.packageDownloadSizeObserver.listener;
+            self.packageDownloadSizeObserver.listener = nullptr;
+        }
+        
+        self.packageDownloadSizeObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

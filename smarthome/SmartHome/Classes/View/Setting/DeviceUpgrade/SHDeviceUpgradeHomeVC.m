@@ -38,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *descriptionWebView;
 
 @property (weak, nonatomic) IBOutlet UIButton *upgradeButton;
+@property (weak, nonatomic) IBOutlet UILabel *upgradeDesLabel;
 
 @property (nonatomic, weak) SHCameraObject *camObj;
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
@@ -63,34 +64,42 @@
 }
 
 - (void)setupGUI {
-    NSString *btnTitle = @"检测更新";
-    
+    NSString *btnTitle = NSLocalizedString(@"kCheckUpdate", nil);
+    self.currentVersionLbl.text = [NSString stringWithFormat:NSLocalizedString(@"kLocalFWVersion", nil), [self getLocalVersion]];
+
     SHUpgradesInfo *info = self.camObj.cameraProperty.upgradesInfo;
     if (info != nil) {
-        btnTitle = @"立即更新";
-        
-        self.currentVersionLbl.text = [NSString stringWithFormat:@"当前版本 %@", info.localVersion];
-        self.remoteVersionLbl.text = [NSString stringWithFormat:@"最新版本 %@", info.versionid];
+        self.remoteVersionLbl.text = [NSString stringWithFormat:NSLocalizedString(@"kRemoteFWVersion", nil), info.versionid];
         
         if (info.needUpgrade == NO) {
-            btnTitle = @"当前已是最新版本";
-            self.upgradeButton.enabled = NO;
+//            btnTitle = @"当前已是最新版本";
+//            self.upgradeButton.enabled = NO;
+            self.upgradeDesLabel.text = NSLocalizedString(@"kAlreadyLatestVerdion", nil);
         } else {
+            btnTitle = NSLocalizedString(@"kRightAwayUpdate", nil);
+
             [self.descriptionWebView loadHTMLString:info.html_description baseURL:nil];
         }
     }
     
-    self.currentVersionLbl.hidden = (info == nil);
+//    self.currentVersionLbl.hidden = (info == nil);
     self.remoteVersionLbl.hidden = (info == nil);
     self.updateLabel.hidden = (info == nil || info.needUpgrade == NO);
     self.descriptionWebView.hidden = (info == nil || info.needUpgrade == NO);
+    self.upgradeDesLabel.hidden = (info == nil || info.needUpgrade == YES);
     
     [self.upgradeButton setTitle:btnTitle forState:UIControlStateNormal];
     [self.upgradeButton setTitle:btnTitle forState:UIControlStateHighlighted];
 }
 
+- (NSString *)getLocalVersion {
+    shared_ptr<ICatchCameraVersion> version = [self.camObj.controler.propCtrl retrieveCameraVersionWithCamera:self.camObj];
+
+    return [NSString stringWithFormat:@"%s", version->getFirmwareVer().c_str()];
+}
+
 - (IBAction)upgradeClick:(id)sender {
-    if (self.camObj.cameraProperty.upgradesInfo == nil) {
+    if (self.camObj.cameraProperty.upgradesInfo.needUpgrade == NO) {
         [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kTesting3", nil)];
         
         WEAK_SELF(self);
@@ -107,14 +116,6 @@
         
         [self.navigationController pushViewController:vc animated:YES];
     }
-}
-
-- (void)alreadyLatestVersionHandle {
-    NSString *title = @"已是最新版本";
-    [self.upgradeButton setTitle:title forState:UIControlStateNormal];
-    [self.upgradeButton setTitle:title forState:UIControlStateHighlighted];
-    
-    self.upgradeButton.enabled = NO;
 }
 
 #pragma mark - Action Progress

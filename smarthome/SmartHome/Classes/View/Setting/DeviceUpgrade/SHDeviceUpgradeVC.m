@@ -24,8 +24,6 @@
  
  // Created by zj on 2019/3/14 2:11 PM.
     
-static int totalCount = 10;
-
 #import "SHDeviceUpgradeVC.h"
 #import "SHProgressView.h"
 #import "SHUpgradesInfo.h"
@@ -42,9 +40,6 @@ static int totalCount = 10;
 
 @property (nonatomic, strong) SHObserver *downloadSizeObserver;
 @property (nonatomic, strong) UIImageView *finishedImgView;
-
-@property (nonatomic, strong) NSTimer *testTimer;
-@property (nonatomic, assign) int count;
 
 @end
 
@@ -65,27 +60,37 @@ static int totalCount = 10;
     
     [self setupGUI];
     
-    [self addDownloadSizeObserver];
-//    [self testTimer];
-    [self startUpgrade];
+    [self devicePropertyChangeHandle];
+    self.hasBegun ? void() : [self startUpgrade];
 }
 
 - (void)setupGUI {
-    self.title = @"固件升级";
+    self.title = NSLocalizedString(@"kFWUpgrade", nil);
     self.navigationItem.hidesBackButton = YES;
     self.activityView.hidden = YES;
     
-    self.updateDesLabel.text = @"更新中...";
-    self.updateNoteLabel.text = @"更新中，请勿断电，等待升级完成之后再使用";
+    self.updateDesLabel.text = NSLocalizedString(@"kUpdating", nil);
+    self.updateNoteLabel.text = NSLocalizedString(@"kFWUpdateDescription", nil);
+    self.updateNoteLabel.textColor = [UIColor orangeColor];
+    self.activityView.color = [UIColor orangeColor];
+    
+    [self.finishButton setTitle:@"完成" forState:UIControlStateNormal];
+    [self.finishButton setTitle:@"完成" forState:UIControlStateHighlighted];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self addUpgradeObserver];
+}
+
+- (void)addUpgradeObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(upgradFailedHandle) name:kDeviceUpgradeFailedNotification object:nil];
+                                             selector:@selector(upgradeFailedHandle) name:kDeviceUpgradeFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(upgradSuccessHandle) name:kDeviceUpgradeSuccessNotification object:nil];
+                                             selector:@selector(upgradeSuccessHandle) name:kDeviceUpgradeSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(downloadFinishHandle) name:kDownloadUpgradePackageSuccessNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -95,10 +100,11 @@ static int totalCount = 10;
 }
 
 - (IBAction)updateFinishClick:(id)sender {
-    [self removeDownloadSizeObserver];
-    [[SHCameraManager sharedCameraManger] destroyAllDeviceResoure];
-
-    [self backToRootViewController];
+//    [[SHCameraManager sharedCameraManger] destroyAllDeviceResoure];
+//
+//    [self backToRootViewController];
+    [SHTool backToRootViewController];
+    [self.camObj disConnectWithSuccessBlock:nil failedBlock:nil];
 }
 
 - (void)backToRootViewController {
@@ -118,71 +124,39 @@ static int totalCount = 10;
     }
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self testTimer];
-}
-
-- (NSTimer *)testTimer {
-    if (_testTimer == nil) {
-        _testTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(pregressHandle) userInfo:nil repeats:YES];
-    }
-    
-    return _testTimer;
-}
-
-- (void)releaseTestTimer {
-    if ([_testTimer isValid]) {
-        [_testTimer invalidate];
-        _testTimer = nil;
-    }
-}
-
-- (void)pregressHandle {
-    float progress = self.count++ * 1.0 / totalCount;
-    if (self.count >= totalCount) {
-        [self releaseTestTimer];
-
-        [self downloadFinishHandle];
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.progressView.progress = progress;
-        });
-    }
-}
-
 - (void)downloadFinishHandle {
-    [self removeDownloadSizeObserver];
-    [[SHCameraManager sharedCameraManger] destroyAllDeviceResoure];
+//    [[SHCameraManager sharedCameraManger] destroyAllDeviceResoure];
+    [self.camObj disConnectWithSuccessBlock:nil failedBlock:nil];
 
     self.progressView.hidden = YES;
     
     self.activityView.hidden = NO;
-    CGAffineTransform transform = CGAffineTransformMakeScale(2.0, 2.0);
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.5, 1.5);
     self.activityView.transform = transform;
     [self.activityView startAnimating];
     
-    self.updateDesLabel.text = @"安装更新中...";
-    self.updateNoteLabel.text = @"安装过程需要重启设备，可能耗时较长，请耐心等待";
+    self.updateDesLabel.text = NSLocalizedString(@"kInstallUpdating", nil);
+    self.updateNoteLabel.text = NSLocalizedString(@"kFWInstallDescription", nil);
 }
 
 - (void)startUpgrade {
     NSString *version = self.camObj.cameraProperty.upgradesInfo.versionid;
     if (version == nil || version.length <= 0) {
-        [self upgradFailedHandle];
+        [self upgradeFailedHandle];
         
         return;
     }
     
     int size = [self.camObj.cameraProperty.upgradesInfo.size intValue];
     if (size <= 0) {
-        [self upgradFailedHandle];
+        [self upgradeFailedHandle];
         
         return;
     }
     
     NSArray *urls = self.camObj.cameraProperty.upgradesInfo.url;
     if (urls == nil || urls.count <= 0) {
-        [self upgradFailedHandle];
+        [self upgradeFailedHandle];
         
         return;
     }
@@ -192,66 +166,97 @@ static int totalCount = 10;
         urlList->push_back(obj.UTF8String);
     }];
     
-    int ret = self.camObj.sdk.control->downloadUpgradePackage(version.UTF8String, size, *urlList);
+    int ret = self.camObj.sdk.control->upgradeFW(version.UTF8String, size, *urlList);
     if (ret != ICH_SUCCEED) {
         SHLogError(SHLogTagSDK, @"downloadUpgradePackage failed, ret: %d", ret);
-        [self upgradFailedHandle];
+        ret != ICH_ERR_IS_DOWNLOADING ? [self upgradeFailedHandle] : void();
+        
+        [self upgradeErrorHandle:ret];
     }
 }
 
-- (void)upgradFailedHandle {
-    [self.activityView stopAnimating];
-    self.activityView.hidden = YES;
-    
-    self.finishButton.enabled = YES;
-    
-    self.finishedImgView.image = [UIImage imageNamed:@"nav-btn-cancel"];
-    [self.view addSubview:self.finishedImgView];
-    
-    self.updateDesLabel.text = @"更新失败";
-    self.updateDesLabel.textColor = [UIColor redColor];
-    self.updateDesLabel.font = [UIFont systemFontOfSize:20.0];
-    
-    self.updateNoteLabel.hidden = YES;
+- (void)upgradeErrorHandle:(int)errorno {
+    switch (errorno) {
+        case ICH_SD_CARD_NOT_EXIST:
+            [self showUpgradeFailedAlertWithMessage:NSLocalizedString(@"NoCard", nil)];
+            break;
+            
+        case ICH_SD_CARD_MEMORY_FULL:
+            [self showUpgradeFailedAlertWithMessage:NSLocalizedString(@"CARD_FULL", nil)];
+            break;
+            
+        case ICH_PROP_NOT_SUPPORTED:
+            [self showUpgradeFailedAlertWithMessage:NSLocalizedString(@"kNetworkRequestError_10061", nil)];
+            break;
+            
+        case ICH_ERR_DEVICE_LOCAL_PLAYBACK:
+            [self showUpgradeFailedAlertWithMessage:NSLocalizedString(@"kLocalPlaybackDescription", nil)];
+            break;
+            
+        default:
+            break;
+    }
 }
 
-- (void)upgradSuccessHandle {
+- (void)showUpgradeFailedAlertWithMessage:(NSString *)message {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)upgradeFailedHandle {
+    [self upgradeFinishWithSuccess:NO];
+}
+
+- (void)upgradeSuccessHandle {
+    [self upgradeFinishWithSuccess:YES];
+}
+
+- (void)upgradeFinishWithSuccess:(BOOL)success {
     [self.activityView stopAnimating];
     self.activityView.hidden = YES;
     
     self.finishButton.enabled = YES;
     
-    self.finishedImgView.image = [UIImage imageNamed:@"Checkmark"];
+    UIImage *image = [UIImage imageNamed:@"upgrade-success"];
+    NSString *updateDes = NSLocalizedString(@"kUpdateSuccess", nil);
+    UIColor *textColor = [UIColor greenColor];
+    if (success == NO) {
+        image = [UIImage imageNamed:@"upgrade-fail"];
+        updateDes = NSLocalizedString(@"kUpdateFailed", nil);
+        textColor = [UIColor redColor];
+    }
+
+    self.finishedImgView.image = image;
     [self.view addSubview:self.finishedImgView];
     
-    self.updateDesLabel.text = @"更新成功";
-    self.updateDesLabel.textColor = [UIColor blueColor];
+    self.updateDesLabel.text = updateDes;
+    self.updateDesLabel.textColor = textColor;
     self.updateDesLabel.font = [UIFont systemFontOfSize:20.0];
-
+    
     self.updateNoteLabel.hidden = YES;
+    self.progressView.hidden = YES;
 }
 
 #pragma mark - Download Observer
-- (void)addDownloadSizeObserver {
-    SHSDKEventListener *downloadSizeListener = new SHSDKEventListener(self, @selector(downloadSizeCallback:));
-    self.downloadSizeObserver = [SHObserver cameraObserverWithListener:downloadSizeListener eventType:ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE isCustomized:NO isGlobal:NO];
-    [self.camObj.sdk addObserver:self.downloadSizeObserver];
-}
-
-- (void)removeDownloadSizeObserver {
-    if (self.downloadSizeObserver != nil) {
-        [self.camObj.sdk removeObserver:self.downloadSizeObserver];
-        
-        if (self.downloadSizeObserver.listener) {
-            delete self.downloadSizeObserver.listener;
-            self.downloadSizeObserver.listener = nullptr;
+- (void)devicePropertyChangeHandle {
+    WEAK_SELF(self);
+    
+    [self.camObj setCameraPropertyValueChangeBlock:^ (SHICatchEvent *evt){
+        switch (evt.eventID) {
+            case ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE:
+                [weakself packageDownloadSizeCallback:evt];
+                break;
+                
+            default:
+                break;
         }
-        
-        self.downloadSizeObserver = nil;
-    }
+    }];
 }
 
-- (void)downloadSizeCallback:(SHICatchEvent *)event {
+- (void)packageDownloadSizeCallback:(SHICatchEvent *)event {
     int recv = event.intValue1;
     int total = event.intValue2;
     
@@ -268,11 +273,18 @@ static int totalCount = 10;
 
 - (UIImageView *)finishedImgView {
     if (_finishedImgView == nil) {
-        _finishedImgView = [[UIImageView alloc] initWithFrame:self.progressView.frame];
-        _finishedImgView.backgroundColor = [UIColor lightGrayColor];
+        _finishedImgView = [[UIImageView alloc] initWithFrame:[self finishedFrame]];
     }
     
     return _finishedImgView;
+}
+
+- (CGRect)finishedFrame {
+    CGFloat width = 120;
+    CGFloat height = width;
+    CGFloat x = (CGRectGetWidth(self.view.frame) - width ) * 0.5;
+    CGFloat y = CGRectGetMinY(self.updateDesLabel.frame) - 20 - height;
+    return CGRectMake(x, y, width, height);
 }
 
 @end

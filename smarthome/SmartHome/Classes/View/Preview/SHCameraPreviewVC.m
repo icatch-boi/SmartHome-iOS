@@ -462,6 +462,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
                 break;
                 
+            case ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE:
+                if (self.shCameraObj.isConnect && self.shCameraObj.streamOper.PVRun) {
+                    [weakSelf upgradeHandleWithHasBegun:YES];
+                }
+                break;
+                
             default:
                 break;
         }
@@ -1925,6 +1931,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)checkDeviceUpgrades {
     [SHUpgradesInfo checkUpgradesWithCameraObj:_shCameraObj completion:^(BOOL hint, SHUpgradesInfo * _Nullable info) {
+
+        if (![[SHTool appVisibleViewController] isMemberOfClass:[self class]]) {
+            SHLogInfo(SHLogTagAPP, @"Current already not preview page.");
+            return;
+        }
+        
         if (hint == YES) {
             [self showUpgradesAlertViewWithVersionInfo:info];
         }
@@ -1938,9 +1950,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [alertVC setValue:[SHUpgradesInfo upgradesAlertViewTitle] forKey:@"attributedTitle"];
     [alertVC setValue:[SHUpgradesInfo upgradesAlertViewMessageWithInfo:info] forKey:@"attributedMessage"];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"下次再说" style:UIAlertActionStyleDefault handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self upgradeHandle];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kLater", nil) style:UIAlertActionStyleDefault handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kRightAwayUpdate", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self upgradeHandleWithHasBegun:NO];
     }]];
     
     self.upgradesAlertView = alertVC;
@@ -1950,8 +1962,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     });
 }
 
-- (void)upgradeHandle {
+- (void)upgradeHandleWithHasBegun:(BOOL)hasBegun {
     SHDeviceUpgradeVC *vc = [SHDeviceUpgradeVC deviceUpgradeVCWithCameraObj:self.shCameraObj];
+    vc.hasBegun = hasBegun;
     
     dispatch_async(self.previewQueue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{

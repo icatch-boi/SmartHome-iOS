@@ -130,13 +130,13 @@
     } else if ([msgType isEqualToString:@"105"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDeviceRemoveTipsInfo", nil), devID];
     } else if ([msgType isEqualToString:@"106"]) {
-        self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ 下载固件升级包成功", devID];
+        self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDownloadUpgradePackageSuccess", nil), devID];
     }  else if ([msgType isEqualToString:@"107"]) {
-        self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ 下载固件升级包失败", devID];
+        self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDownloadUpgradePackageFailed", nil), devID];
     }  else if ([msgType isEqualToString:@"108"]) {
-        self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ 固件升级成功", devID];
+        self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kFWUpgradeSuccess", nil), devID];
     }  else if ([msgType isEqualToString:@"109"]) {
-        self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ 固件升级失败", devID];
+        self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kFWUpgradeFailed", nil), devID];
     }
     
     if (str != nil) {

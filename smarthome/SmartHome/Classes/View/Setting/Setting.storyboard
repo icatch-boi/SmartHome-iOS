@@ -174,15 +174,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-app logo" translatesAutoresizingMaskIntoConstraints="NO" id="IeV-cJ-OdG">
-                                <rect key="frame" x="100" y="127" width="120" height="120"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-app logo" translatesAutoresizingMaskIntoConstraints="NO" id="IeV-cJ-OdG">
+                                <rect key="frame" x="100" y="107" width="120" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="H40-Eu-mv6"/>
                                     <constraint firstAttribute="width" secondItem="IeV-cJ-OdG" secondAttribute="height" multiplier="1:1" id="Jyy-b3-PXu"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPp-1a-UR1">
-                                <rect key="frame" x="70" y="259" width="180" height="50"/>
+                                <rect key="frame" x="70" y="239" width="180" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="当前版本  1111.222.333" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWG-33-cqc">
                                         <rect key="frame" x="2" y="2" width="176" height="18"/>
@@ -209,13 +209,13 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="更新说明" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4So-51-kdM">
-                                <rect key="frame" x="24" y="333" width="69.5" height="20.5"/>
+                                <rect key="frame" x="24" y="322.5" width="69.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AcJ-9t-uLt">
-                                <rect key="frame" x="24" y="353.5" width="272" height="104.5"/>
+                                <rect key="frame" x="24" y="343" width="272" height="115"/>
                             </webView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gg7-yQ-67m">
                                 <rect key="frame" x="24" y="482" width="272" height="56"/>
@@ -225,19 +225,28 @@
                                     <action selector="upgradeClick:" destination="jz8-Yz-r42" eventType="touchUpInside" id="Eb5-7y-gIs"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="当前已上最新版本" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eZJ-2O-iHq">
+                                <rect key="frame" x="30" y="301" width="260" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.98039215690000003" green="0.20000000000000001" blue="0.21176470589999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="4So-51-kdM" firstAttribute="top" secondItem="XPp-1a-UR1" secondAttribute="bottom" constant="24" id="4fV-RL-YIn"/>
                             <constraint firstItem="AcJ-9t-uLt" firstAttribute="leading" secondItem="ByM-K0-f2p" secondAttribute="leading" constant="24" id="9iT-s9-dzM"/>
                             <constraint firstItem="gg7-yQ-67m" firstAttribute="top" secondItem="AcJ-9t-uLt" secondAttribute="bottom" constant="24" id="CVP-u3-bFi"/>
                             <constraint firstItem="IeV-cJ-OdG" firstAttribute="centerX" secondItem="02o-m0-Sbw" secondAttribute="centerX" id="HBV-sc-Y5S"/>
                             <constraint firstItem="gg7-yQ-67m" firstAttribute="centerX" secondItem="02o-m0-Sbw" secondAttribute="centerX" id="Ita-1m-Tr7"/>
                             <constraint firstItem="ByM-K0-f2p" firstAttribute="trailing" secondItem="AcJ-9t-uLt" secondAttribute="trailing" constant="24" id="Lb4-PQ-VdU"/>
                             <constraint firstItem="ByM-K0-f2p" firstAttribute="bottom" secondItem="gg7-yQ-67m" secondAttribute="bottom" constant="30" id="Zis-rG-akJ"/>
+                            <constraint firstItem="eZJ-2O-iHq" firstAttribute="top" secondItem="XPp-1a-UR1" secondAttribute="bottom" constant="12" id="b5w-09-7c8"/>
+                            <constraint firstItem="eZJ-2O-iHq" firstAttribute="centerX" secondItem="02o-m0-Sbw" secondAttribute="centerX" id="gIl-Lu-w8Z"/>
+                            <constraint firstItem="ByM-K0-f2p" firstAttribute="trailing" secondItem="eZJ-2O-iHq" secondAttribute="trailing" constant="30" id="icO-il-RHh"/>
                             <constraint firstItem="XPp-1a-UR1" firstAttribute="top" secondItem="IeV-cJ-OdG" secondAttribute="bottom" constant="12" id="kHz-8m-xhi"/>
+                            <constraint firstItem="4So-51-kdM" firstAttribute="top" secondItem="eZJ-2O-iHq" secondAttribute="bottom" id="peM-48-p1b"/>
                             <constraint firstItem="4So-51-kdM" firstAttribute="leading" secondItem="ByM-K0-f2p" secondAttribute="leading" constant="24" id="r0D-YR-WOH"/>
-                            <constraint firstItem="XPp-1a-UR1" firstAttribute="centerY" secondItem="02o-m0-Sbw" secondAttribute="centerY" id="r43-o6-U7x"/>
+                            <constraint firstItem="XPp-1a-UR1" firstAttribute="centerY" secondItem="02o-m0-Sbw" secondAttribute="centerY" constant="-20" id="r43-o6-U7x"/>
                             <constraint firstItem="db2-UG-F4s" firstAttribute="top" secondItem="lWG-33-cqc" secondAttribute="bottom" constant="10" id="rnU-AB-Dfv"/>
                             <constraint firstItem="AcJ-9t-uLt" firstAttribute="top" secondItem="4So-51-kdM" secondAttribute="bottom" id="ruu-ZE-37A"/>
                             <constraint firstItem="XPp-1a-UR1" firstAttribute="centerX" secondItem="02o-m0-Sbw" secondAttribute="centerX" id="xGf-Te-XHg"/>
@@ -250,6 +259,7 @@
                         <outlet property="remoteVersionLbl" destination="db2-UG-F4s" id="vJ4-Pf-0GP"/>
                         <outlet property="updateLabel" destination="4So-51-kdM" id="3xa-h8-N77"/>
                         <outlet property="upgradeButton" destination="gg7-yQ-67m" id="wlq-7P-Z2Q"/>
+                        <outlet property="upgradeDesLabel" destination="eZJ-2O-iHq" id="905-1V-KNm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oEW-hS-8KE" userLabel="First Responder" sceneMemberID="firstResponder"/>

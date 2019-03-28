@@ -441,3 +441,24 @@
 
 "kLowBatteryNotification" = "电池电量低，将无法正常工作，app将会与其自动断开连接，请及时充电";
 "kLowBatteryAlert" = "设备 [%@] %@ 谢谢！";
+
+"kCheckUpdate" = "检测更新";
+"kLocalFWVersion" = "当前版本 %@";
+"kRemoteFWVersion" = "最新版本 %@";
+"kAlreadyLatestVerdion" = "当前已是最新版本";
+"kRightAwayUpdate" = "立即更新";
+"kFWUpgrade" = "固件升级";
+"kUpdating" = "更新中...";
+"kFWUpdateDescription" = "更新中，请勿断电，等待升级完成之后再使用，谢谢";
+"kInstallUpdating" = "安装更新中...";
+"kFWInstallDescription" = "安装过程需要重启设备，可能耗时较长，请耐心等待，谢谢";
+"kLocalPlaybackDescription" = "本地正在操作设备，现在禁止远程操作";
+"kUpdateSuccess" = "更新成功";
+"kUpdateFailed" = "更新失败";
+"kDownloadUpgradePackageSuccess" = "%@ 下载固件升级包成功";
+"kDownloadUpgradePackageFailed" = "%@ 下载固件升级包失败";
+"kFWUpgradeSuccess" = "%@ 固件升级成功";
+"kFWUpgradeFailed" = "%@ 固件升级失败";
+"kFWUpgradeDescription" = "固件版本: %@\r\n 固件大小: %@\r\n 更新说明: \r\n";
+"kFWUpdateTitle" = "检测到固件有更新\r\n";
+"kLater" = "下次再说";

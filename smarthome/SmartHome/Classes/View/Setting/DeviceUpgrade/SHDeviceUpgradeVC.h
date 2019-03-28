@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHDeviceUpgradeVC : UIViewController
 
+@property (nonatomic, assign) BOOL hasBegun;
+@property (nonatomic, weak, readonly) SHCameraObject *camObj;
+
 + (instancetype)deviceUpgradeVCWithCameraObj:(SHCameraObject *)camObj;
 
 @end

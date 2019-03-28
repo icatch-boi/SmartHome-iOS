@@ -29,6 +29,7 @@
 #import "XJLocalAssetHelper.h"
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "SHDeviceUpgradeVC.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -534,13 +535,16 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     int msgType = [aps[@"msgType"] intValue];
     switch (msgType) {
+        case 106:
+            [self upgradingWithCameraUID:aps[@"devID"]] ? [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadUpgradePackageSuccessNotification object:nil] : void();
+            break;
         case 107:
         case 109:
-            [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeFailedNotification object:nil];
+            [self upgradingWithCameraUID:aps[@"devID"]] ? [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeFailedNotification object:nil] : void();
             break;
             
         case 108:
-            [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeSuccessNotification object:nil];
+            [self upgradingWithCameraUID:aps[@"devID"]] ? [[NSNotificationCenter defaultCenter] postNotificationName:kDeviceUpgradeSuccessNotification object:nil] : void();
             break;
             
         case 102:
@@ -562,6 +566,24 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         
         completionHandler(UNNotificationPresentationOptionAlert/*|UNNotificationPresentationOptionBadge*/); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     }
+}
+
+- (BOOL)upgradingWithCameraUID:(NSString *)uid {
+    BOOL upgrade = NO;
+    
+    if (uid == nil || uid.length <= 0) {
+        return upgrade;
+    }
+    
+    UIViewController *vc = [SHTool appVisibleViewController];
+    if ([vc isMemberOfClass:[SHDeviceUpgradeVC class]]) {
+        SHDeviceUpgradeVC *temp = (SHDeviceUpgradeVC *)vc;
+        if ([temp.camObj.camera.cameraUid isEqualToString:uid]) {
+            upgrade = YES;
+        }
+    }
+    
+    return upgrade;
 }
 
 - (void)notificationHandler:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {

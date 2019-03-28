@@ -432,3 +432,24 @@
 
 "kLowBatteryNotification" = "The battery is low and will not work properly. The app will automatically disconnect from it. Please charge it in time.";
 "kLowBatteryAlert" = "Device [%@] %@ Thanks!";
+
+"kCheckUpdate" = "Check for updates";
+"kLocalFWVersion" = "Current version %@";
+"kRemoteFWVersion" = "Latest version %@";
+"kAlreadyLatestVerdion" = "Currently already the latest version";
+"kRightAwayUpdate" = "Update immediately";
+"kFWUpgrade" = "Firmware Upgrade";
+"kUpdating" = "Updating...";
+"kFWUpdateDescription" = "In the update, please do not power off, wait for the upgrade to be completed, thank you";
+"kInstallUpdating" = "Install updating...";
+"kFWInstallDescription" = "The installation process needs to restart the device, which may take a long time, please be patient, thank you";
+"kLocalPlaybackDescription" = "Device is operating by local, remote operation is prohibited now";
+"kUpdateSuccess" = "Update success";
+"kUpdateFailed" = "Update failed";
+"kDownloadUpgradePackageSuccess" = "%@ Download firmware upgrade package successfully";
+"kDownloadUpgradePackageFailed" = "%@ Failed to download firmware upgrade package";
+"kFWUpgradeSuccess" = "%@ Firmware upgrade succeeded";
+"kFWUpgradeFailed" = "%@ Firmware upgrade failed";
+"kFWUpgradeDescription" = "Firmware version: %@\r\n Firmware size: %@\r\n Release Notes: \r\n";
+"kFWUpdateTitle" = "Firmware detected updated\r\n";
+"kLater" = "Later";

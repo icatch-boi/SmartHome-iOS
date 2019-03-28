@@ -68,6 +68,15 @@
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
 + (void)checkUpgradesWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL hint, SHUpgradesInfo * _Nullable info))completion {
+    if (shCameraObj.camera.operable != 1) {
+        if (completion) {
+            completion(NO, nil);
+        }
+        
+        SHLogWarn(SHLogTagAPP, @"Current user isn't device owner.");
+        return;
+    }
+    
     if (shCameraObj.cameraProperty.upgradesInfo != nil) {
         if (completion) {
             completion(NO, nil);
@@ -75,6 +84,20 @@
         return;
     }
     
+    BOOL support = [shCameraObj.controler.propCtrl deviceSupportUpgradeWithCamera:shCameraObj];
+    if (support == NO) {
+        if (completion) {
+            completion(NO, nil);
+        }
+        
+        SHLogWarn(SHLogTagAPP, @"Device no support upgrade.");
+        return;
+    }
+    
+    [self getDeviceUpgradeInfoWithCameraObj:shCameraObj completion:completion];
+}
+
++ (void)getDeviceUpgradeInfoWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL hint, SHUpgradesInfo * _Nullable info))completion {
     [[NSOperationQueue new] addOperationWithBlock:^{
         shared_ptr<ICatchCameraVersion> version = [shCameraObj.controler.propCtrl retrieveCameraVersionWithCamera:shCameraObj];
 
@@ -125,8 +148,8 @@
         return NO;
     }
     
-    // FIXME: --
-    currentVersion = @"31368.23224.2245";
+    // FIXME: -- for test
+//    currentVersion = @"31368.23224.2245";
     
     NSArray *currentVers = [currentVersion componentsSeparatedByString:@"."];
     NSArray *remoteVers = [remoteVersion componentsSeparatedByString:@"."];
@@ -163,9 +186,7 @@
 }
 
 + (NSAttributedString *)upgradesAlertViewMessageWithInfo:(SHUpgradesInfo *)info {
-    NSString *message = [NSString stringWithFormat:@"固件版本: %@\r\n"
-                         "固件大小: %@\r\n"
-                         "更新说明: \r\n", info.versionid, [DiskSpaceTool humanReadableStringFromBytes:[info.size longLongValue]]];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"kFWUpgradeDescription", nil), info.versionid, [DiskSpaceTool humanReadableStringFromBytes:[info.size longLongValue]]];
     
     NSMutableAttributedString *attributedMessage = [[NSMutableAttributedString alloc] initWithString:message];
     
@@ -185,7 +206,7 @@
 }
 
 + (NSAttributedString *)upgradesAlertViewTitle {
-    NSString *title = @"检测到固件有更新\r\n";
+    NSString *title = NSLocalizedString(@"kFWUpdateTitle", nil);
     NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:title];
     
     NSMutableParagraphStyle *titleParagraph = [[NSMutableParagraphStyle alloc] init];

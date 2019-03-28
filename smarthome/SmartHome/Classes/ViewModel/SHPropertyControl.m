@@ -58,6 +58,7 @@
     [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL_SIZE];
     
     [currentPro addProperty:TRANS_PROP_CAMERA_VERSION];
+    [currentPro addProperty:TRANS_PROP_CAMERA_UPGRADE_FW];
 
     result = [currentPro submit];
     
@@ -470,6 +471,27 @@
     ICatchCameraVersion::parseString(versionString.UTF8String, *(version.get()));
     
     return version;
+}
+
+- (BOOL)deviceSupportUpgradeWithCamera:(SHCameraObject *)shCameraObj {
+    __block int value = -1;
+    
+    dispatch_sync([shCameraObj.sdk sdkQueue], ^{
+        if (!shCameraObj.curResult) {
+            SHGettingProperty *pro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+            [pro addProperty:TRANS_PROP_CAMERA_UPGRADE_FW];
+            SHPropertyQueryResult *result = [pro submit];
+            
+            value = [result praseInt:TRANS_PROP_CAMERA_UPGRADE_FW];
+        } else {
+            value = [shCameraObj.curResult praseInt:TRANS_PROP_CAMERA_UPGRADE_FW];
+        }
+    });
+    
+    BOOL support = (value == 1) ? YES : NO;
+    SHLogInfo(SHLogTagAPP, @"Device support upgrade: %d", support);
+    
+    return support;
 }
 
 @end

@@ -312,7 +312,7 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         return;
     }
     
-    if (indexPath.section == SHSettingSectionTypeDetail && indexPath.row == self.mainMenuDetailTable.count - 1) {
+    if (/*indexPath.section == SHSettingSectionTypeDetail && indexPath.row == self.mainMenuDetailTable.count - 1*/[cell.textLabel.text isEqualToString:NSLocalizedString(@"kFWUpgrade", nil)]) {
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"New"];
         
         [str setAttributes:@{NSForegroundColorAttributeName: [UIColor redColor], NSFontAttributeName: [UIFont boldSystemFontOfSize:16.0], NSObliquenessAttributeName: @(0.25), } range:NSMakeRange(0, str.length)];
@@ -720,13 +720,15 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     
     // [self fillWiFiSettingTable];
     [self fillDeviceInfoTable];
-    [self fillUpgradesTable];
+    if ([self.shCamObj.controler.propCtrl deviceSupportUpgradeWithCamera:self.shCamObj] && self.shCamObj.camera.operable == 1) {
+        [self fillUpgradesTable];
+    }
 }
 
 - (void)fillUpgradesTable {
     SHSettingData *upgradesData = [[SHSettingData alloc] init];
     
-    upgradesData.textLabel = @"固件升级";
+    upgradesData.textLabel = NSLocalizedString(@"kFWUpgrade", nil);
     upgradesData.methodName = @"enterUpgradesHandle:";
     
     if (upgradesData != nil) {

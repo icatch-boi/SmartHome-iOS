@@ -676,4 +676,13 @@
     });
 }
 
++ (UIViewController *)appVisibleViewController {
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    
+    SHLogInfo(SHLogTagAPP, @"App current visibleViewController: %@", NSStringFromClass([vc class]));
+    
+    return vc;
+}
+
 @end

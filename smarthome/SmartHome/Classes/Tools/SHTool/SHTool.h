@@ -39,5 +39,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font;
 + (BOOL)isValidPassword:(NSString *)pwd;
 + (void)backToRootViewController;
++ (UIViewController *)appVisibleViewController;
 
 @end
