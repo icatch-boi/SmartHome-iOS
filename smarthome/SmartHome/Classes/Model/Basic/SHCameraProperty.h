@@ -57,6 +57,7 @@ typedef NS_OPTIONS(NSUInteger, SHPreviewMode) {
 
 @property (nonatomic, strong) SHUpgradesInfo *upgradesInfo;
 @property (nonatomic, assign) NSInteger clientCount;
+@property (nonatomic, assign) NSInteger noTalking;
 
 - (void)cleanCurrentCameraAllProperty;
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj;

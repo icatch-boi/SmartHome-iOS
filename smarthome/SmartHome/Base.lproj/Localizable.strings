@@ -454,3 +454,6 @@
 "kFWUpdateTitle" = "Firmware detected updated\r\n";
 "kLater" = "Later";
 "kCompletion" = "Completion";
+"kCurrentOnlyCanPreview" = "Other users are connecting, currently only supports video preview, thank you!";
+"kCurrentCannotUpgrade" = "Other users are connecting, currently can not perform firmware upgrade, thank you!";
+"kOthersTalking" = "Other users are talking, please try again later, thank you!";

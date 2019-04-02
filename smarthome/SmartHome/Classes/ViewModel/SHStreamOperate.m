@@ -711,7 +711,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 
 - (void)startTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/self.streamQ, ^{
         if (_shCamObj.cameraProperty.serverOpened == NO) {
             [_shCamObj openAudioServer];
             
@@ -758,7 +758,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 
 - (void)stopTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/self.streamQ, ^{
         [self.audioUnitRecord stopAudioUnit];
 
         __block BOOL ret;

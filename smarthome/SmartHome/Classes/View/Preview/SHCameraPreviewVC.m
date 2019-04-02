@@ -346,6 +346,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     if (_TalkBackRun) {
         [self talkAnimTimer];
     }
+    
+    [self updateTalkButtonState];
 }
 
 - (void)setupGUI {
@@ -469,10 +471,42 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 }
                 break;
                 
+            case ICATCH_EVENT_NO_TALKING:
+                [weakSelf noTalkingHandle:evt];
+                break;
+                
+            case ICATCH_EVENT_CONNECTION_CLIENT_COUNT:
+                [weakSelf updateTalkButtonState];
+                break;
+                
             default:
                 break;
         }
     }];
+}
+
+- (void)updateTalkButtonState {
+    NSString *speakerImg = @"video-btn-speak";
+    NSString *speakerImg_Pre = @"video-btn-speak-pre";
+    
+    if (self.shCameraObj.cameraProperty.noTalking == 1) {
+        speakerImg = @"video_btn_speak_1";
+        speakerImg_Pre = @"video_btn_speak_pre_1";
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.speakerButton setImage:[UIImage imageNamed:speakerImg] forState:UIControlStateNormal];
+        [self.speakerButton setImage:[UIImage imageNamed:speakerImg_Pre] forState:UIControlStateHighlighted];
+    });
+}
+
+- (void)noTalkingHandle:(SHICatchEvent *)evt {
+    if (evt.intValue1 == 1) {
+        _TalkBackRun ? [self showCannotTalkAlert] : void();
+        [self stopCurrentTalkBack];
+    }
+    
+    [self updateTalkButtonState];
 }
 
 - (void)initBatteryHandler {
@@ -614,8 +648,21 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
 }
 
+- (void)showCannotTalkAlert {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kOthersTalking", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
 - (IBAction)talkBackAction:(id)sender {
     SHLogTRACE();
+    
+    if (self.shCameraObj.cameraProperty.noTalking == 1) {
+        [self showCannotTalkAlert];
+        return;
+    }
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreferenceSpecifier:PushToTalk"]) {
         if (_TalkBackRun /*&& interval > 1.0*/) {
@@ -802,7 +849,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)showCurrentOnlyCanPreviewAlert {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"其它用户正在连接，当前只支持视频预览，谢谢！" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kCurrentOnlyCanPreview", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
      
@@ -1399,6 +1446,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         
         self.bitRateLabel.text = bitRate;
         self.bitRateInfoLabel.text = bitRate;
+        
+        self.clientCountLabel.text = [NSString stringWithFormat:@"%zd client", self.shCameraObj.cameraProperty.clientCount];
     });
 }
 
@@ -1570,7 +1619,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self initPlayer];
             [self updateTitle];
-            
+            [self updateTalkButtonState];
+
             [self startPreview];
         });
     } else {

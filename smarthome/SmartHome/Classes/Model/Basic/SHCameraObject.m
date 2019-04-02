@@ -27,6 +27,7 @@
 @property (nonatomic, strong) SHObserver *chargeStatusObserver;
 @property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
 @property (nonatomic, strong) SHObserver *clientCountObserver;
+@property (nonatomic, strong) SHObserver *noTalkingObserver;
 
 @end
 
@@ -366,14 +367,14 @@
     SHSDKEventListener *clientCountListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.clientCountObserver = [SHObserver cameraObserverWithListener:clientCountListener eventType:ICATCH_EVENT_CONNECTION_CLIENT_COUNT isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.clientCountObserver];
+    
+    SHSDKEventListener *noTalkingListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.noTalkingObserver = [SHObserver cameraObserverWithListener:noTalkingListener eventType:ICATCH_EVENT_NO_TALKING isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.noTalkingObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
 //    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
-
-	if (self.cameraPropertyValueChangeBlock) {
-		self.cameraPropertyValueChangeBlock(evt);
-	}
     
     switch (evt.eventID) {
         case ICATCH_EVENT_FILE_ADDED:
@@ -391,11 +392,27 @@
             break;
             
         case ICATCH_EVENT_CONNECTION_CLIENT_COUNT:
+            if (self.cameraProperty.clientCount == 0) {
+                self.cameraProperty.noTalking = evt.intValue1 > 1 ? 1 : 0;
+            } else {
+                if (evt.intValue1 == 1) {
+                    self.cameraProperty.noTalking = 0;
+                }
+            }
             self.cameraProperty.clientCount = evt.intValue1;
+            break;
+            
+        case ICATCH_EVENT_NO_TALKING:
+            SHLogInfo(SHLogTagAPP, @"No talking state: %d", evt.intValue1);
+            self.cameraProperty.noTalking = evt.intValue1;
             break;
             
         default:
             break;
+    }
+    
+    if (self.cameraPropertyValueChangeBlock) {
+        self.cameraPropertyValueChangeBlock(evt);
     }
 }
 
@@ -503,6 +520,17 @@
         }
         
         self.clientCountObserver = nil;
+    }
+    
+    if (self.noTalkingObserver != nil) {
+        [self.sdk removeObserver:self.noTalkingObserver];
+        
+        if (self.noTalkingObserver.listener != nullptr) {
+            delete self.noTalkingObserver.listener;
+            self.noTalkingObserver.listener = nullptr;
+        }
+        
+        self.noTalkingObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

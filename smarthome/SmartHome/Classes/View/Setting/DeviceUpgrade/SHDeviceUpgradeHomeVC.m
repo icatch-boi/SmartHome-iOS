@@ -101,7 +101,8 @@
 - (IBAction)upgradeClick:(id)sender {
     if (self.camObj.cameraProperty.upgradesInfo.needUpgrade == NO) {
         [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kTesting3", nil)];
-        
+        self.camObj.cameraProperty.upgradesInfo = nil;
+         
         WEAK_SELF(self);
         [SHUpgradesInfo checkUpgradesWithCameraObj:self.camObj completion:^(BOOL hint, SHUpgradesInfo * _Nullable info) {
             STRONG_SELF(self);
@@ -126,7 +127,7 @@
 }
 
 - (void)showCannotUpgradeAlert {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"其它用户正在连接，当前暂不能进行固件升级，谢谢!" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kCurrentCannotUpgrade", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
     

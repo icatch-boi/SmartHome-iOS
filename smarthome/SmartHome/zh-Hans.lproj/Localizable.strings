@@ -463,3 +463,6 @@
 "kFWUpdateTitle" = "检测到固件有更新\r\n";
 "kLater" = "下次再说";
 "kCompletion" = "完成";
+"kCurrentOnlyCanPreview" = "其它用户正在连接，当前只支持视频预览，谢谢！";
+"kCurrentCannotUpgrade" = "其它用户正在连接，当前暂不能进行固件升级，谢谢!";
+"kOthersTalking" = "其他用户正在对讲，请稍后再试，谢谢！";

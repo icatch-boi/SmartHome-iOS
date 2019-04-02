@@ -50,6 +50,7 @@
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 @property (weak, nonatomic) IBOutlet UIButton *resolutionButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *resolutionBtnWidthCons;
+@property (weak, nonatomic) IBOutlet UILabel *clientCountLabel;
 
 @property (nonatomic, weak) UIView *topToolView;
 @property (nonatomic, weak) UIButton *topCloseBtn;

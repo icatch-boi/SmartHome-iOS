@@ -85,6 +85,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         [self talkAnimTimer];
         _noHidden = YES;
     }
+    
+    [self updateTalkButtonState];
 }
 
 - (void)connectCamera {
@@ -575,8 +577,21 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     }
 }
 
+- (void)showCannotTalkAlert {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kOthersTalking", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
 - (IBAction)talkBackAction:(UIButton *)sender {
     SHLogTRACE();
+    
+    if (self.shCameraObj.cameraProperty.noTalking == 1) {
+        [self showCannotTalkAlert];
+        return;
+    }
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreferenceSpecifier:PushToTalk"]) {
         NSDate *endDate = [NSDate date];
@@ -1217,10 +1232,43 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             }
                 break;
                 
+            case ICATCH_EVENT_NO_TALKING:
+                [weakSelf noTalkingHandle:evt];
+                break;
+                
+            case ICATCH_EVENT_CONNECTION_CLIENT_COUNT:
+                [weakSelf updateTalkButtonState];
+                break;
+                
             default:
                 break;
         }
     }];
+}
+
+- (void)updateTalkButtonState {
+    NSString *speakerImg = @"full screen-video-btn-speak";
+    NSString *speakerImg_Pre = @"full screen-video-btn-speak-pre";
+    
+    if (self.shCameraObj.cameraProperty.noTalking == 1) {
+        speakerImg = @"full screen-video-btn-speak_1";
+        speakerImg_Pre = @"full screen-video-btn-speak-pre_1";
+        
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.talkbackButton setImage:[UIImage imageNamed:speakerImg] forState:UIControlStateNormal];
+        [self.talkbackButton setImage:[UIImage imageNamed:speakerImg_Pre] forState:UIControlStateHighlighted];
+    });
+    
+}
+
+- (void)noTalkingHandle:(SHICatchEvent *)evt {
+    if (evt.intValue1 == 1) {
+        [self checkTalkBackState];
+    }
+    
+    [self updateTalkButtonState];
 }
 
 - (void)initBatteryHandler {
@@ -1334,7 +1382,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _bitRateLabel.text = [SHTool bitRateStringFromBits:value];
+        NSString *clientCount = [NSString stringWithFormat:@" %zd client", self.shCameraObj.cameraProperty.clientCount];
+        _bitRateLabel.text = [[SHTool bitRateStringFromBits:value] stringByAppendingString:clientCount];
     });
 }
 

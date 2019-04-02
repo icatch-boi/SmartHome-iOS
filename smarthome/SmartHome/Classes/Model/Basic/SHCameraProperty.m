@@ -20,6 +20,18 @@
     self.serverOpened = NO;
     self.curBatteryLevel = nil;
     self.tamperalarmData = nil;
+    self.aboutData = nil;
+    
+    self.mute = NO;
+    self.talk = NO;
+    self.avslayer = nil;
+    self.avslayerFrame = CGRectZero;
+    self.sdCardResult = nil;
+    self.SDUseableSize = 0;
+    self.curChargeStatus = nil;
+    
+    self.clientCount = 0;
+    self.noTalking = 0;
 }
 
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj {

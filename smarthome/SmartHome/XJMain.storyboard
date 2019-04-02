@@ -123,12 +123,20 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aUR-Si-wr5">
+                                        <rect key="frame" x="16" y="25" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="aUR-Si-wr5" firstAttribute="leading" secondItem="OAB-41-i5J" secondAttribute="leading" constant="16" id="2VQ-Kw-WsO"/>
                                     <constraint firstAttribute="trailing" secondItem="OMO-7q-ZwB" secondAttribute="trailing" constant="10" id="S2M-c4-tq9"/>
                                     <constraint firstItem="OMO-7q-ZwB" firstAttribute="leading" secondItem="van-gw-yUM" secondAttribute="trailing" constant="2" id="Sxr-6i-KfW"/>
                                     <constraint firstItem="OMO-7q-ZwB" firstAttribute="centerY" secondItem="van-gw-yUM" secondAttribute="centerY" id="baO-hF-M0k"/>
+                                    <constraint firstItem="aUR-Si-wr5" firstAttribute="centerY" secondItem="OAB-41-i5J" secondAttribute="centerY" id="cc8-Dx-E8u"/>
                                     <constraint firstItem="OMO-7q-ZwB" firstAttribute="centerY" secondItem="OAB-41-i5J" secondAttribute="centerY" id="qfZ-rO-9FW"/>
                                     <constraint firstAttribute="height" constant="50" id="vmP-dr-WqG"/>
                                 </constraints>
@@ -216,6 +224,7 @@
                         <outlet property="bitRateLabel" destination="VXz-F7-Lag" id="3Jp-dc-QGW"/>
                         <outlet property="captureBtnWidthCons" destination="w55-2e-qgQ" id="Jbg-eU-PA9"/>
                         <outlet property="captureButton" destination="yJ1-hB-ftW" id="W2i-iL-7Db"/>
+                        <outlet property="clientCountLabel" destination="aUR-Si-wr5" id="phB-TC-f7i"/>
                         <outlet property="footerView" destination="TXA-de-l86" id="KK2-X7-ywd"/>
                         <outlet property="funScreenButton" destination="I5e-Z7-j2P" id="6EN-dP-bWZ"/>
                         <outlet property="headerView" destination="OAB-41-i5J" id="z8e-cP-odh"/>
