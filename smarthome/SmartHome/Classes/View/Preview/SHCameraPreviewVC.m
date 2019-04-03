@@ -106,6 +106,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    if ([[SHCamStaticData instance] isBackToHome]) {
+        return;
+    }
     [SHTool setupCurrentFullScreen:NO];
     [super viewWillAppear:animated];
     [self updateTitle];

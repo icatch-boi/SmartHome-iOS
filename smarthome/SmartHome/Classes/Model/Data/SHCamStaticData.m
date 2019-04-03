@@ -8,6 +8,11 @@
 
 #import "SHCamStaticData.h"
 
+@interface SHCamStaticData ()
+
+@property (nonatomic, assign) BOOL backToHome;
+
+@end
 
 @implementation SHCamStaticData
 
@@ -96,6 +101,14 @@
     return @[NSLocalizedString(@"kResolution_Smooth", nil),
              NSLocalizedString(@"kResolution_HD", nil),
              ];
+}
+
+- (void)setBackToHomeState:(BOOL)state {
+    self.backToHome = state;
+}
+
+- (BOOL)isBackToHome {
+    return self.backToHome;
 }
 
 @end

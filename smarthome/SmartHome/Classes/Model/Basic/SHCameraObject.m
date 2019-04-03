@@ -290,7 +290,7 @@
 
 - (void)disConnectWithSuccessBlock:(void(^)())successBlock failedBlock:(void(^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		
 		dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
 		if ((dispatch_semaphore_wait(self.semaphore, time) != 0)) {
@@ -312,7 +312,7 @@
                 successBlock();
             }
 		}
-	});
+//    });
 }
 
 - (void)disconnectHandle {

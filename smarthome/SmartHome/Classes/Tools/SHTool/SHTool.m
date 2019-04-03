@@ -617,12 +617,14 @@
     return [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
 }
 
-+ (void)backToRootViewController {    
++ (void)backToRootViewControllerWithCompletion: (void (^ __nullable)(void))completion {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[SHCamStaticData instance] setBackToHomeState:YES];
         AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         app.isFullScreenPV = NO;
         app.isVideoPB = NO;
         
+        [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
         UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
         UIViewController *vc = nav.visibleViewController;
 
@@ -631,12 +633,22 @@
             presentingVc = presentingVc.presentingViewController;
         }
 
+        [nav popToRootViewControllerAnimated:NO];
+
         if (presentingVc) {
-            [presentingVc dismissViewControllerAnimated:YES completion:nil];
+            [presentingVc dismissViewControllerAnimated:NO completion:^{
+                if (completion) {
+                    completion();
+                }
+                [[SHCamStaticData instance] setBackToHomeState:NO];
+            }];
+        } else {
+            if (completion) {
+                completion();
+            }
+            [[SHCamStaticData instance] setBackToHomeState:NO];
         }
-
-        [nav popToRootViewControllerAnimated:YES];
-
+        
 //        if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[ZJSlidingDrawerViewController class]]) {
 //            return;
 //        }

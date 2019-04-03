@@ -92,6 +92,9 @@
 }
 
 - (void)popViewController {
+    if (_showingVC == nil) {
+        return;
+    }
     [UIView animateWithDuration:0.25 animations:^{
         self.showingVC.view.transform = CGAffineTransformMakeTranslation(self.mainVC.view.frame.size.width, 0);
     } completion:^(BOOL finished) {
@@ -192,6 +195,7 @@
 }
 
 - (void)coverButtonClick {
+    [self popViewController];
     [self.coverButton removeFromSuperview];
 
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{

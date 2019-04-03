@@ -96,4 +96,14 @@
     }];
 }
 
+- (void)destroyAllDeviceResoureExcept:(NSString *)uid {
+    [self.smarthomeCams enumerateObjectsUsingBlock:^(SHCameraObject * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj.camera.cameraUid isEqualToString:uid] && obj.isConnect) {
+            [obj.sdk disableTutk];
+            
+            [obj disConnectWithSuccessBlock:nil failedBlock:nil];
+        }
+    }];
+}
+
 @end

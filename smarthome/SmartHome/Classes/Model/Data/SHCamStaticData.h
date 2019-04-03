@@ -19,4 +19,7 @@
 @property (nonatomic, readonly) NSDictionary *monthStringDict;
 @property (nonatomic, readonly) NSArray *streamQualityArray;
 
+- (BOOL)isBackToHome;
+- (void)setBackToHomeState:(BOOL)state;
+
 @end

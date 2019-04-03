@@ -650,6 +650,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (void)presentSinglePreview:(NSDictionary *)userInfo {
+#if 0
     UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
     UIViewController *vc = nav.visibleViewController;
     SHLogInfo(SHLogTagAPP, @"vc: %@", vc);
@@ -686,6 +687,46 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [vc.navigationController pushViewController:[self getSinglePreview:aps] animated:YES];
         });
     });
+#else
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    SHLogInfo(SHLogTagAPP, @"vc: %@", vc);
+
+    NSDictionary *aps = [self parseNotification:userInfo];
+    NSString *uid = aps[@"devID"];
+
+    NSString *className = [NSString stringWithFormat:@"%@", [vc class]];
+    if ([className isEqualToString:@"SHCameraPreviewVC"]) {
+        SHCameraPreviewVC *previewVC = (SHCameraPreviewVC *)vc;
+
+        if ([uid isEqualToString:previewVC.cameraUid]) {
+            return;
+        }
+    } else if ([className isEqualToString:@"SHSinglePreviewVC"]) {
+        SHSinglePreviewVC *singlePVVC = (SHSinglePreviewVC *)vc;
+
+        if ([uid isEqualToString:singlePVVC.cameraUid]) {
+            return;
+        }
+    }
+
+    if ([className isEqualToString:@"SHVideoPlaybackVC"]) {
+        SHVideoPlaybackVC *pbVC = (SHVideoPlaybackVC *)vc;
+        [pbVC stopVideoPb];
+
+        [SHTool configureAppThemeWithController:vc.navigationController];
+    }
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [self stopAllPreview];
+
+        [SHTool backToRootViewControllerWithCompletion:^{
+            [[SHCameraManager sharedCameraManger] destroyAllDeviceResoureExcept:uid];
+            
+            [nav pushViewController:[self getSinglePreview:aps] animated:YES];
+        }];
+    });
+#endif
 }
 
 - (void)stopAllPreview {
@@ -969,8 +1010,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (disconnect) {
-                [SHTool backToRootViewController];
-                [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+                [SHTool backToRootViewControllerWithCompletion:^{
+                    [camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+                }];
             }
         });
     }]];

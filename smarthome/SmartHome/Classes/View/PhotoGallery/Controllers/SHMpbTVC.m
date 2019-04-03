@@ -314,6 +314,9 @@ static int const kNewFileIconTag = 888;
             SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
         }
     }
+    
+    [self.progressHUD hideProgressHUD:YES];
+    _progressHUD = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

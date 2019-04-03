@@ -103,8 +103,9 @@
 //    [[SHCameraManager sharedCameraManger] destroyAllDeviceResoure];
 //
 //    [self backToRootViewController];
-    [SHTool backToRootViewController];
-    [self.camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+    [SHTool backToRootViewControllerWithCompletion:^{
+        [self.camObj disConnectWithSuccessBlock:nil failedBlock:nil];
+    }];
 }
 
 - (void)backToRootViewController {
