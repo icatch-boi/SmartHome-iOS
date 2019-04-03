@@ -473,7 +473,10 @@
             weakself.poweroffHandling = NO;
             weakself.disconnectHandling = NO;
 
-            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
+//            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [SHTool backToRootViewControllerWithCompletion:^{
+                [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }];
         });
     }]];
     
@@ -1330,7 +1333,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             _disconnectHandling = NO;
             
-            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [SHTool backToRootViewControllerWithCompletion:^{
+                [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }];
         });
     }]];
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"STREAM_RECONNECT", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

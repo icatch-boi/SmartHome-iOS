@@ -124,7 +124,7 @@
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-        if (([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
+        if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             homeVC.notRequiredLogin = YES;
         }
     }
@@ -189,7 +189,7 @@
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-        if (([msgType isEqualToString:@"201"] && ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
+        if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
         
             vc.cameraUid = aps[@"devID"]; //@"CVL32D1VV9BJ4XLN111A";

@@ -284,7 +284,10 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             weakself.poweroffHandling = NO;
             weakself.disconnectHandling = NO;
 
-            [weakself goHome:nil];
+//            [weakself goHome:nil];
+            [SHTool backToRootViewControllerWithCompletion:^{
+                [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }];
         });
     }]];
     
@@ -1054,7 +1057,10 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
                 [self.delegate disconnectHandle];
             }
 
-            [self goHome:nil];
+//            [self goHome:nil];
+            [SHTool backToRootViewControllerWithCompletion:^{
+                [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }];
         });
     }]];
     [alertVc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"STREAM_RECONNECT", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

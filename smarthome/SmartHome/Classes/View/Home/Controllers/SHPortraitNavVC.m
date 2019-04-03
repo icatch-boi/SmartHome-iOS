@@ -121,7 +121,10 @@
                 [listVC.tableView reloadData];
 #endif
             } else {
-                [weakself dismissViewControllerAnimated:YES completion:nil];
+//                [weakself dismissViewControllerAnimated:YES completion:nil];
+                [SHTool backToRootViewControllerWithCompletion:^{
+                    [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+                }];
             }
         });
     }]];
@@ -169,7 +172,10 @@
                 [listVC.tableView reloadData];
 #endif
             } else {
-                [self dismissViewControllerAnimated:YES completion:nil];
+//                [self dismissViewControllerAnimated:YES completion:nil];
+                [SHTool backToRootViewControllerWithCompletion:^{
+                    [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+                }];
             }
         });
     }]];
