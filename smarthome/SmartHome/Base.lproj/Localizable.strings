@@ -457,3 +457,4 @@
 "kCurrentOnlyCanPreview" = "Other users are connecting, currently only supports video preview, thank you!";
 "kCurrentCannotUpgrade" = "Other users are connecting, currently can not perform firmware upgrade, thank you!";
 "kOthersTalking" = "Other users are talking, please try again later, thank you!";
+"kCannotAddFaceDataDescription" = "The system recognizes that a stranger is ringing the doorbell. I am sorry that you are not the owner of the doorbell and do not have permission to add face data to the face database. I want to play the 'Face Recognition' function and buy a doorbell of my own. Thank you for your trust and support to the SmartHome project team!";

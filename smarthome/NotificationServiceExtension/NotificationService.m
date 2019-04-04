@@ -30,7 +30,7 @@
 
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
         NSDictionary *userInfo = self.bestAttemptContent.userInfo;
-        if ([userInfo.allKeys containsObject:@"msgType"] && [userInfo[@"msgType"] isEqualToString:@"202"]) {
+        if ([userInfo.allKeys containsObject:@"msgType"] && [userInfo[@"msgType"] intValue] == 202) {
             self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
         }
         

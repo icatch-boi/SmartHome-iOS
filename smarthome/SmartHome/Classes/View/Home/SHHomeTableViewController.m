@@ -115,7 +115,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 - (void)setupRefreshView {
     WEAK_SELF(self);
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [SHNetworkManager sharedNetworkManager].userLogin ? [self loadUserData] : weakself.tableView.mj_header.endRefreshing;
+        [SHNetworkManager sharedNetworkManager].userLogin ? [weakself loadUserData] : weakself.tableView.mj_header.endRefreshing;
     }];
     
     // 设置文字
@@ -697,8 +697,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     if (notification && [notification.allKeys containsObject:@"result"] && [notification.allKeys containsObject:@"attachment"]) {
         int result = [notification[@"result"] intValue];
         NSString *devID = notification[@"devID"];
-        if (result == 0 && [self deviceOperable:devID]) {
-            [self showAddFacesAlertView];
+        if (result == 0) {
+            if ([self deviceOperable:devID]) {
+                [self showAddFacesAlertView];
+            } else {
+                [self showCannotAddFacesAlertView];
+            }
         } else {
             [self cleanFaceNotification];
         }
@@ -718,6 +722,17 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     }
     
     return NO;
+}
+
+- (void)showCannotAddFacesAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kCannotAddFaceDataDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakself cleanFaceNotification];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (void)showAddFacesAlertView {

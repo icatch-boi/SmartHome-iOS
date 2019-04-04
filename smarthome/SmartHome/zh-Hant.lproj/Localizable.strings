@@ -464,3 +464,4 @@
 "kCurrentOnlyCanPreview" = "其他用戶正在連接，當前只能支持視頻預覽，謝謝！";
 "kCurrentCannotUpgrade" = "其他用戶正在連接，當前暫不能進行固件升級，謝謝!";
 "kOthersTalking" = "其他用戶正在對講，請稍候再試，謝謝！";
+"kCannotAddFaceDataDescription" = "系統識別到有陌生人在按門鈴，非常抱歉您不是門鈴的擁有者，沒有權限將人臉數據添加到人臉數據看中。想要把玩'人臉識別'功能立馬購買一台屬於自己的門鈴吧，感謝您對SmartHome項目組的信任與支持！";
