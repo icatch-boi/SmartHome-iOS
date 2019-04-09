@@ -26,7 +26,7 @@ static NSString * const keychain_key = @"push.udid";
         [self mapping:camera];
     }
 #else
-    [self registerDevice:camera completionHandler:nil];
+    kUseTUTKPushServer ? [self registerDevice:camera completionHandler:nil] : void();
 #endif
 }
 
@@ -34,7 +34,7 @@ static NSString * const keychain_key = @"push.udid";
 #ifdef USE_SYNC_REQUEST_PUSH
     return [self unmapping:uid];
 #else
-    [self unregisterDevice:uid completionHandler:nil];
+    kUseTUTKPushServer ? [self unregisterDevice:uid completionHandler:nil] : void();
     return YES;
 #endif
 }
