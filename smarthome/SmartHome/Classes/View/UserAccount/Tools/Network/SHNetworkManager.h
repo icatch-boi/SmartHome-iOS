@@ -20,25 +20,7 @@ typedef enum : NSUInteger {
 } SHRequestMethod;
 
 static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
-
-//static NSString * const ServerBaseUrl = @"http://52.79.113.238:3006/";
-static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";
 static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
-
-#define Use_OurServer 1
-#define Use_LocalServer 1
-
-#if Use_OurServer
-
-#if Use_LocalServer
-static NSString * const ServerBaseUrl = @"http://52.83.116.127:3006/"; //@"http://172.28.28.17:80/";
-#else
-static NSString * const ServerBaseUrl = @"http://www.smarthome.icatchtek.com/";
-#endif
-
-#else
-static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
-#endif
 
 @class SHUserAccount;
 @class AFHTTPSessionManager;

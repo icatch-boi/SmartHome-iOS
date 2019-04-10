@@ -184,7 +184,7 @@
     [_pwdTextField resignFirstResponder];
     
     NSRange ssidRange = [_ssidTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,32}" options:NSRegularExpressionSearch];
-    NSRange pwdRange = [_pwdTextField.text rangeOfString:@"[A-Za-z0-9_(?![，。？：；’‘！”“、]]{8,63}" options:NSRegularExpressionSearch];
+    NSRange pwdRange = [_pwdTextField.text rangeOfString:@"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{8,63}" options:NSRegularExpressionSearch];
     
     if (ssidRange.location == NSNotFound || pwdRange.location == NSNotFound) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", @"") message:NSLocalizedString(@"kInvalidSSIDOrPassword", @"") preferredStyle:UIAlertControllerStyleAlert];

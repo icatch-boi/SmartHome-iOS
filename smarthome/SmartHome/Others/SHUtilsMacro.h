@@ -142,7 +142,7 @@ static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
 #pragma mark - RegularExpression
 static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
 static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-static NSString * const kPasswordRegularExpression = @"[A-Za-z0-9_(?![，。？：；’‘！”“、]]{%zd,%zd}";
+static NSString * const kPasswordRegularExpression = @"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{%zd,%zd}";
 static const NSInteger kPasswordMinLength = 6;
 static const NSInteger kPasswordMaxLength = 16;
 static NSString * const kDeviceNameRegularExpression = @"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}";
@@ -160,6 +160,10 @@ static const float kMaxZoomScale = 5.0;
 static const NSInteger kQRCodeValidDuration = 24; //hours
 static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
+
+#pragma mark - Config Account Server
+static NSString * const kServerBaseURL = @"http://wechat.ereagle.com/"; //@"http://52.83.116.127:3006/";
+static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
 #define kScreenHeightScale MAX([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width) / 480.0

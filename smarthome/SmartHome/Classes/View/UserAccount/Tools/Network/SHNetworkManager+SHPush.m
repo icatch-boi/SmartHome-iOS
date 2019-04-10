@@ -166,7 +166,7 @@
 - (AFHTTPSessionManager *)pushRequestSessionManager {
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // https request must set baseURL
-    NSURL *url = [NSURL URLWithString:ServerBaseUrl];
+    NSURL *url = [NSURL URLWithString:kServerBaseURL];
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
     
     NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
@@ -177,7 +177,7 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 - (BOOL)setCertificatesWithManager:(AFURLSessionManager *)manager
