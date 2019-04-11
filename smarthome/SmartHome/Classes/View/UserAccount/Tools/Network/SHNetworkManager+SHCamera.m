@@ -777,7 +777,7 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 #pragma mark - Error Handle

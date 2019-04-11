@@ -36,7 +36,7 @@
     dispatch_once(&onceToken, ^{
         instance = [[self alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(showErr:) name:reloginNotifyName object:nil];
-        [ServerUrl sharedServerUrl].BaseUrl = ServerBaseUrl;
+        [ServerUrl sharedServerUrl].BaseUrl = kServerBaseURL;
     });
     
     return instance;
@@ -44,7 +44,7 @@
 
 - (void)getVerifyCodeWithEmail:(NSString *)email completion:(RequestCompletionBlock)completion
 {
-    [self.tokenOperate checkMailValid:email customerid:kServerCustomerid success:^{
+    [self.tokenOperate checkMailValid:email customerid:kServerCustomerID success:^{
         if (completion) {
             completion(YES, nil);
         }
@@ -60,7 +60,7 @@
 - (void)resetPwdGetVerifyCodeWithEmail:(NSString * _Nonnull)email
                             completion:(RequestCompletionBlock)completion
 {
-    [self.accountOperate restUserPwdBegWithMail:email customerid:kServerCustomerid success:^{
+    [self.accountOperate restUserPwdBegWithMail:email customerid:kServerCustomerID success:^{
         if (completion) {
             completion(YES, nil);
         }
@@ -78,7 +78,7 @@
                   andCode:(NSString * _Nonnull)code
                completion:(RequestCompletionBlock)completion
 {
-    [self.accountOperate resetUserPwdWithEmail:email andNewPwd:password andCheckCode:code customerid:kServerCustomerid success:^(Account * _Nonnull account) {
+    [self.accountOperate resetUserPwdWithEmail:email andNewPwd:password andCheckCode:code customerid:kServerCustomerID success:^(Account * _Nonnull account) {
         if (completion) {
             completion(YES, account);
         }
@@ -92,7 +92,7 @@
 }
 
 - (void)changePasswordWithOldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword completion:(RequestCompletionBlock)completion {
-    [self.accountOperate changeAccountPasswrodWithToken:[self createToken] andOldPassword:oldPassword andNewPasswrod:newPassword customerid:kServerCustomerid success:^(Account * _Nonnull account) {
+    [self.accountOperate changeAccountPasswrodWithToken:[self createToken] andOldPassword:oldPassword andNewPasswrod:newPassword customerid:kServerCustomerID success:^(Account * _Nonnull account) {
         
         NSString *accountId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserAccounts];
         accountId = accountId ? accountId : account.email;
@@ -158,7 +158,7 @@
 }
 
 - (void)logonWithUserName:(NSString *)userName email:(NSString *)email password:(NSString *)password checkCode:(NSString *)checkCode completion:(RequestCompletionBlock)completion {
-    [self.accountOperate signUpWithUserName:[self repairNickName:userName] andEmail:email andPassword:password andCheckCode:checkCode customerid:kServerCustomerid success:^(Account * _Nonnull account) {
+    [self.accountOperate signUpWithUserName:[self repairNickName:userName] andEmail:email andPassword:password andCheckCode:checkCode customerid:kServerCustomerID success:^(Account * _Nonnull account) {
         
         if (completion) {
             completion(YES, account);
@@ -651,7 +651,7 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 - (AFHTTPSessionManager *)defaultRequestSessionManager {

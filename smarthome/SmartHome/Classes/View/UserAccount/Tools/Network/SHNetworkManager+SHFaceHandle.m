@@ -56,7 +56,7 @@
                                  @"id": deviceID,
                                  @"image": dataString,
                                  @"time": dateString,
-                                 @"customerid": kServerCustomerid,
+                                 @"customerid": kServerCustomerID,
                                  };
     
     [self requestWithMethod:ZJRequestMethodPOST opertionType:ZJOperationTypeDevice urlString:FACE_RECOGNITION_PATH parametes:parameters finished:finished];
@@ -146,7 +146,7 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 - (void)uploadDataWithURLString:(NSString *)urlString parameters:(id)parameters finished:(ZJRequestCallBack)finished {
