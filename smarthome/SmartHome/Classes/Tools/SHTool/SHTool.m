@@ -697,4 +697,16 @@
     return vc;
 }
 
++ (void)appToSystemSettings {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+}
+
 @end

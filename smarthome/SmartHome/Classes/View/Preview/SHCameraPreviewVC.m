@@ -152,7 +152,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     [self hideResolutionMenu];
-    self.resolutionMenu = nil;
+//    self.resolutionMenu = nil;
     
     [_shCameraObj.streamOper updatePreviewThumbnail];
     

@@ -41,4 +41,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (void)backToRootViewControllerWithCompletion: (void (^ __nullable)(void))completion;
 + (UIViewController *)appVisibleViewController;
 
++ (void)appToSystemSettings;
+
 @end

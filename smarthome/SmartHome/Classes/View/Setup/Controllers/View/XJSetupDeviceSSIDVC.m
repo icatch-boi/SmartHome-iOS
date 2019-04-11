@@ -176,14 +176,7 @@ static const CGFloat kTipsViewDefaultHeight = 140;
 - (void)setupDeviceWiFi {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
     
-    NSString *urlString = @"App-Prefs:root=WIFI";
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlString]]) {
-        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        }
-    }
+    [SHTool appToSystemSettings];
 }
 
 /*
