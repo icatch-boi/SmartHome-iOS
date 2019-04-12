@@ -16,7 +16,7 @@
 
 #import "SHUtilsMacro.h"
 #import <CoreData/CoreData.h>
-//#import "MBProgressHUD+SH.h"
+
 #import "SHSDK.h"
 #import "SHSettingCommon.h"
 #import "SHCameraManager.h"

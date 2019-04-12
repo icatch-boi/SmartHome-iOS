@@ -24,15 +24,8 @@
     dispatch_sync(shCameraObj.sdk.sdkQueue, ^{
         SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
         
-//        [currentPro addProperty:TRANS_PROP_CAMERA_WHITE_BALANCE];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_LIGHT_FREQUENCY];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_VIDEO_SIZE];
-        
-//        [currentPro addProperty:TRANS_PROP_DET_PIR_SENSITIVITY];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_BRIGHTNESS];
         [currentPro addProperty:TRANS_PROP_DET_VID_REC_DURATION];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
+
         [currentPro addProperty:TRANS_PROP_CAMERA_SLEEP_TIME];
         
         [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
@@ -42,9 +35,6 @@
         [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
         
         [currentPro addProperty:TRANS_PROP_CAMERA_VERSION];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_TIME_ZONE];
-        
-//        [currentPro addProperty:TRANS_PROP_CAMERA_ULTRA_POWER_SAVING_MODE];
         
         [currentPro addProperty:TRANS_PROP_TAMPER_ALARM];
         
@@ -57,20 +47,20 @@
 - (SHPropertyQueryResult *)retrievePVCurPropertyWithCamera:(SHCameraObject *)shCameraObj {
     __block SHPropertyQueryResult *result = nil;
     
-//    dispatch_sync(shCamera.sdk.sdkQueue, ^{
-        SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
-        
-        [currentPro addProperty:TRANS_PROP_CAMERA_BATTERY_LEVEL];
-        [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
-//        [currentPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
-        [currentPro addProperty:TRANS_PROP_CAMERA_WIFI_SIGNAL];
-        
-        [currentPro addProperty:TRANS_PROP_CAMERA_LAST_PREVIEW_TIME];
-        [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL_SIZE];
-//        [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL];
-        
-        result = [currentPro submit];
-//    });
+    SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+    
+    [currentPro addProperty:TRANS_PROP_CAMERA_BATTERY_LEVEL];
+//    [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
+
+//    [currentPro addProperty:TRANS_PROP_CAMERA_WIFI_SIGNAL];
+    
+    [currentPro addProperty:TRANS_PROP_CAMERA_LAST_PREVIEW_TIME];
+    [currentPro addProperty:TRANS_PROP_CAMERA_PREVIEW_THUMBNAIL_SIZE];
+    
+    [currentPro addProperty:TRANS_PROP_CAMERA_VERSION];
+    [currentPro addProperty:TRANS_PROP_CAMERA_UPGRADE_FW];
+
+    result = [currentPro submit];
     
     return result;
 }
@@ -92,11 +82,6 @@
             [supportedPro addProperty:TRANS_PROP_CAMERA_MIC_VOLUME];
             [supportedPro addProperty:TRANS_PROP_CAMERA_SPEAKER_VOLUME];
             [supportedPro addProperty:TRANS_PROP_CAMERA_SLEEP_TIME];
-            
-            //    [supportedPro addProperty:TRANS_PROP_SD_MEMORY_SIZE];
-            //
-            //    [supportedPro addProperty:TRANS_PROP_DET_VID_REC_STATUS];
-            //    [supportedPro addProperty:TRANS_PROP_DET_PUSH_MSG_STATUS];
             
             result = [supportedPro submit];
         });
@@ -127,7 +112,7 @@
             level = [curResult praseInt:TRANS_PROP_CAMERA_BATTERY_LEVEL];
         }
     });
-//    return [self transBatteryLevel2NStr:level];
+
     SHLogInfo(SHLogTagAPP, @"battery level: %d", level);
     return level;
 }
@@ -463,6 +448,50 @@
 
     
     return newFilesCount;
+}
+
+- (shared_ptr<ICatchCameraVersion>)retrieveCameraVersionWithCamera:(SHCameraObject *)shCameraObj {
+    __block NSString *versionString = nil;
+    
+    dispatch_sync([shCameraObj.sdk sdkQueue], ^{
+        if (!shCameraObj.curResult) {
+            SHGettingProperty *pro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+            [pro addProperty:TRANS_PROP_CAMERA_VERSION];
+            SHPropertyQueryResult *result = [pro submit];
+            
+            versionString = [result praseString:TRANS_PROP_CAMERA_VERSION];
+        } else {
+            versionString = [shCameraObj.curResult praseString:TRANS_PROP_CAMERA_VERSION];
+        }
+    });
+    
+    SHLogInfo(SHLogTagAPP, @"Camera version: %@", versionString);
+    shared_ptr<ICatchCameraVersion> version = make_shared<ICatchCameraVersion>();
+    
+    ICatchCameraVersion::parseString(versionString.UTF8String, *(version.get()));
+    
+    return version;
+}
+
+- (BOOL)deviceSupportUpgradeWithCamera:(SHCameraObject *)shCameraObj {
+    __block int value = -1;
+    
+    dispatch_sync([shCameraObj.sdk sdkQueue], ^{
+        if (!shCameraObj.curResult) {
+            SHGettingProperty *pro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
+            [pro addProperty:TRANS_PROP_CAMERA_UPGRADE_FW];
+            SHPropertyQueryResult *result = [pro submit];
+            
+            value = [result praseInt:TRANS_PROP_CAMERA_UPGRADE_FW];
+        } else {
+            value = [shCameraObj.curResult praseInt:TRANS_PROP_CAMERA_UPGRADE_FW];
+        }
+    });
+    
+    BOOL support = (value == 1) ? YES : NO;
+    SHLogInfo(SHLogTagAPP, @"Device support upgrade: %d", support);
+    
+    return support;
 }
 
 @end

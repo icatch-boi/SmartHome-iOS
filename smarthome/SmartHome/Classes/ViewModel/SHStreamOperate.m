@@ -12,9 +12,7 @@
 #import "H264Decoder.h"
 #import "HYOpenALHelper.h"
 #import "PCMDataPlayer.h"
-#import "SHAudioUnit.h"
 #import "SHAudioUnitRecord.h"
-#import "SHVideoFormat.h"
 #import "XJLocalAssetHelper.h"
 #import "SHNetworkManager+SHCamera.h"
 
@@ -37,7 +35,6 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
 @property (nonatomic, strong) HYOpenALHelper *audioHelper;
 @property (nonatomic, strong) SHObserver *streamObserver;
 @property (nonatomic, strong) PCMDataPlayer *pcmPl;
-@property (nonatomic) SHAudioUnit *audioUnit;
 @property (nonatomic) SHAudioUnitRecord *audioUnitRecord;
 
 @property (nonatomic) void (^bufferingBlock)(BOOL isBuffering, BOOL timeout);
@@ -108,15 +105,6 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
     }
     
     return _audioHelper;
-}
-
-- (SHAudioUnit *)audioUnit {
-    if (_audioUnit == nil) {
-        _audioUnit = [[SHAudioUnit alloc] init];
-        _audioUnit.shCameraObj = _shCamObj;
-    }
-    
-    return _audioUnit;
 }
 
 - (SHAudioUnitRecord *)audioUnitRecord {
@@ -207,18 +195,14 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             }
             return;
         } else {
-            /*
-            SHSDKEventListener *lister = new SHSDKEventListener(aTarget, streamCloseCallback);
-            self.streamObserver = [SHObserver cameraObserverWithListener:lister eventType:ICATCH_EVENT_MEDIA_STREAM_CLOSED isCustomized:NO isGlobal:NO];
-            [_shCamObj.sdk addObserver:self.streamObserver];
-            */
-            
+            [self tryStartAudioUnit];
+
             if (successBlock) {
                 successBlock();
             }
             
             [self play];
-            [self tryStartAudioUnit];
+//            [self tryStartAudioUnit];
             if (_shCamObj.cameraProperty.serverOpened == NO) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [_shCamObj openAudioServer];
@@ -279,30 +263,6 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
             break;
         }
         
-//        for(;;) {
-//            @autoreleasepool {
-//                // 1st frame contains sps & pps data.
-//
-//                SHAVData *shData = [_shCamObj.sdk getVideoFrameData];
-//                //SHLogDebug(SHLogTagAPP, @"shData length: %zd", shData.data.length);
-//                if (shData.data.length > 0 || !_PVRun) {
-//                    NSUInteger loc = format.getCsd_0_size() + format.getCsd_1_size();
-//                    nalSize = (uint32_t)(shData.data.length - loc - 4);
-//                    NSRange iRange = NSMakeRange(loc, shData.data.length - loc);
-//                    const uint8_t lengthBytes[] = {(uint8_t)(nalSize>>24),
-//                        (uint8_t)(nalSize>>16), (uint8_t)(nalSize>>8), (uint8_t)nalSize};
-//                    headFrame = [NSMutableData dataWithData:[shData.data subdataWithRange:iRange]];
-//                    [headFrame replaceBytesInRange:headerRange withBytes:lengthBytes];
-//
-//                    if (_enableDecoder) {
-//                        [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:self.avslayer];
-//                    }
-//
-//                    [self resetCurrentDate];
-//                    break;
-//                }
-//            }
-//        }
         [self resetCurrentDate];
 #if 0
         BOOL first = YES;
@@ -333,10 +293,8 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                         [headFrame replaceBytesInRange:headerRange withBytes:lengthBytes];
                         
 #if DataDisplayImmediately
-//                        if (_enableDecoder) {
-                            [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:self.avslayer];
-//                        }
-                        [self recordCurrentVideoFrame:headFrame];
+                        [self.h264Decoder decodeAndDisplayH264Frame:headFrame andAVSLayer:self.avslayer];
+//                        [self recordCurrentVideoFrame:headFrame];
 #else
                         [self.h264Decoder decodeAndDisplayH264Frame:headFrame displayImageView:self.displayImageView];
 #endif
@@ -347,9 +305,7 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                         [shData.data replaceBytesInRange:headerRange withBytes:lengthBytes];
 
 #if DataDisplayImmediately
-//                        if (_enableDecoder) {
-                            [self.h264Decoder decodeAndDisplayH264Frame:shData.data andAVSLayer:self.avslayer];
-//                        }
+                        [self.h264Decoder decodeAndDisplayH264Frame:shData.data andAVSLayer:self.avslayer];
 #else
                         [self.h264Decoder decodeAndDisplayH264Frame:shData.data displayImageView:self.displayImageView];
 #endif
@@ -399,25 +355,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
                         NSLog(@"Nal type is B/P frame");
                         break;
                 }
-                
-//                if (spsSize == 0) {
-//                    spsSize = packetSize;
-////                    NSLog(@"sps size: %ld", (long)spsSize);
-////                    printf("sps: ");
-////                    for (int i = 0; i < spsSize; i++) {
-////                        printf("0x%x ", ((uint8_t *)data.bytes)[i]);
-////                    }
-////                    printf("\n");
-//                } else {
-//                    ppsSize = packetSize - spsSize;
-////                    NSLog(@"pps size: %ld", (long)ppsSize);
-////                    printf("pps: ");
-////                    for (int i = 0; i < ppsSize; i++) {
-////                        printf("0x%x ", ((uint8_t *)data.bytes + spsSize)[i]);
-////                    }
-////                    printf("\n");
-//                    break;
-//                }
             }
         }
         ++bufferBegin;
@@ -443,6 +380,17 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 }
 
 - (void)getCurrentFrameImage:(void (^)(UIImage *image))currentImage {
+#if DataDisplayImmediately
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage *image = [self.h264Decoder getCurrentImage];
+        
+        _lastFrameImage = image ? image : _lastFrameImage;
+        
+        if (currentImage) {
+            currentImage(image);
+        }
+    });
+#else
     dispatch_async(dispatch_get_main_queue(), ^{
         UIImage *image = self.displayImageView.image;
         
@@ -452,10 +400,11 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
             currentImage(image);
         }
     });
+#endif
 }
 
 - (void)updatePreviewThumbnail {
-#if DataDisplayImmediately
+#if !DataDisplayImmediately
     UIImage *lastImage = [self getLastFrameImage];
 
     if (lastImage != nil) {
@@ -498,7 +447,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 #endif
                 } else {
                     SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-//                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kNeedReloadDataBase];
                     [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateDeviceInfoNotification object:self.shCamObj.camera.cameraUid];
                 }
             }
@@ -542,7 +490,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     
     if (elapse > kBufferingMaxTime) {
         if (self.bufferingBlock) {
-            // FIXME: - timeout 未处理
             self.bufferingBlock(NO, NO);
             _isBuffering = NO;
             
@@ -587,15 +534,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
                 continue;
             }
  
-#if APP_DEBUG
-//            NSDate *begin = [NSDate date];
-//            SHAVData *audioData = [_shCamObj.camera.sdk getAudioFrameData];
-//            NSDate *end = [NSDate date];
-//            NSTimeInterval elapse = [end timeIntervalSinceDate:begin];
-#else
-//            SHAVData *audioData = [_shCamObj.sdk getAudioFrameData];
-#endif
-//            SHLogDebug(SHLogTagAPP, @"[A]Get %lu, elapse: %f", (unsigned long)audioData.data.length, elapse);
 			SHAVData *audioData = [_shCamObj.sdk getAudioFrameData];
             if (audioData.data.length > 0 && _enableDecoder) {
                 [self.audioHelper insertPCMDataToQueue:audioData.data.bytes
@@ -695,12 +633,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     
     [_shCamObj.sdk stopMediaStream];
     dispatch_group_notify(self.streamGroup, self.streamQ, ^{
-        /*
-        [_shCamObj.sdk removeObserver:self.streamObserver];
-        delete self.streamObserver.listener;
-        self.streamObserver.listener = NULL;
-        self.streamObserver = nil;
-         */
         self.enableDecoder = NO;
         
         dispatch_semaphore_signal(_shCamObj.semaphore);
@@ -755,7 +687,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         ICatchAudioFormat *audioFormat = new ICatchAudioFormat();
 		NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
-		int audioRate = [defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+		int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
         audioFormat->setCodec(ICATCH_CODEC_MPEG4_GENERIC);
         audioFormat->setFrequency(audioRate);
         audioFormat->setSampleBits(kBitsPerChannel);
@@ -779,11 +711,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 
 - (void)startTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [_shCamObj.sdk setAECEnabled:NO];
-
-//        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-//        Config::getInstance()->openSaveAudio(path.UTF8String, "recvFile", "sendFile");
+    dispatch_async(/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/self.streamQ, ^{
         if (_shCamObj.cameraProperty.serverOpened == NO) {
             [_shCamObj openAudioServer];
             
@@ -810,9 +738,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
         });
 
         if (ret) {
-
-//            [self.audioUnit startAudioRecord];
-//            [self.audioUnitRecord startAudioUnit];
             
             if (successBlock) {
                 successBlock();
@@ -833,11 +758,7 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 
 - (void)stopTalkBackWithSuccessBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        Config::getInstance()->closeSaveAudio();
-
-//        [_pcmPl stopRecord];
-//        [self.audioUnit stopAudioRecord];
+    dispatch_async(/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/self.streamQ, ^{
         [self.audioUnitRecord stopAudioUnit];
 
         __block BOOL ret;
@@ -873,37 +794,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
 - (void)stillCaptureWithSuccessBlock:(void(^)())successBlock failedBlock:(void (^)())failedBlock {
     SHLogTRACE();
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-#if 0
-        if (self.currentVideoData.length > 0) {
-            UIImage *currentImage = [self.h264Decoder imageFromPixelBufferRef:self.currentVideoData];
-            
-            if (currentImage != nil) {
-                NSString *imagePath = [self createImagePath];
-                
-                if ([UIImageJPEGRepresentation(currentImage, 1.0) writeToFile:imagePath atomically:YES]) {
-                    if (successBlock) {
-                        successBlock();
-                    }
-                    
-                    NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
-                    [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_IMAGE forKey:_shCamObj.camera.cameraUid];
-                } else {
-                    if (failedBlock) {
-                        failedBlock();
-                    }
-                }
-                
-            } else {
-                if (failedBlock) {
-                    failedBlock();
-                }
-            }
-        } else {
-            if (failedBlock) {
-                failedBlock();
-            }
-        }
-#else
         [self getCurrentFrameImage:^(UIImage *image) {
             if (image != nil) {
                 NSString *imagePath = [self createImagePath];
@@ -927,7 +817,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
                 }
             }
         }];
-#endif
     });
 }
 
@@ -945,33 +834,6 @@ const uint8_t KStartCode[4] = {0, 0, 0, 1};
     SHLogInfo(SHLogTagAPP, @"Capture path: %@", fullPath);
     
     return fullPath;
-}
-
-/*********************** Write UIImage to local *************************/
-- (void)writeImageDataToFile:(UIImage *)image andName:(NSString *)fileName {
-    // Create paths to output images
-    NSString  *pngPath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.png" , fileName]];
-    //NSString  *jpgPath = [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.jpg", fileName]];
-    
-    // Write a UIImage to JPEG with minimum compression (best quality)
-    // The value 'image' must be a UIImage object
-    // The value '1.0' represents image compression quality as value from 0.0 to 1.0
-    //[UIImageJPEGRepresentation(image, 1.0) writeToFile:jpgPath atomically:YES];
-    
-    // Write image to PNG
-    [UIImagePNGRepresentation(image) writeToFile:pngPath atomically:YES];
-    
-    // Let's check to see if files were successfully written...
-    
-    // Create file manager
-    NSError *error;
-    NSFileManager *fileMgr = [NSFileManager defaultManager];
-    
-    // Point to Document directory
-    NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-    
-    // Write out the contents of home directory to console
-    SHLogInfo(SHLogTagAPP, @"Documents directory: %@", [fileMgr contentsOfDirectoryAtPath:documentsDirectory error:&error]);
 }
 
 #pragma mark - AudioSession Observer

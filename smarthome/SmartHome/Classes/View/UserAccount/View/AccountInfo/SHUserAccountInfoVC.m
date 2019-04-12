@@ -26,12 +26,9 @@
     
 
 #import "SHUserAccountInfoVC.h"
-#import "UIViewController+CWLateralSlide.h"
 #import "SHAccountTableViewCell.h"
 #import "SHAccountInfoHeaderView.h"
 #import "SHUserAccountItem.h"
-#import "SHMessagesListTVC.h"
-#import "SHAccountSettingTVC.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHUserAccountInfoTVC.h"
 #import "SHAppInfoVC.h"
@@ -57,9 +54,6 @@ static const CGFloat kTableViewRowHeight = 60;
 #pragma mark prepare Data
 - (NSArray *)itemsArray {
     if (_itemsArray == nil) {
-//        @[@{@"index" : @0, @"iconName" : @"ic_alarm_red_400_36dp", @"title" : @"Message", @"methodName" : @"enterMessageList" },
-//          @{@"index" : @1, @"iconName" : @"ic_perm_identity_36dp", @"title" : @"Setting", @"methodName" : @"enterSetting"},
-//          ];
         NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
         NSString *jsonPath = [docDir stringByAppendingPathComponent:kJSONFileName];
         
@@ -189,26 +183,10 @@ static const CGFloat kTableViewRowHeight = 60;
 
 
 - (void)enterMyCameras {
-#if 0
-    SHMessagesListTVC *vc = [SHMessagesListTVC messageListTVC];
-    vc.managedObjectContext = _managedObjectContext;
-    vc.title = item.title;
-    
-    [self cw_pushViewController:vc drewerHiddenDuration:0];
-#endif
-//    [self dismissViewControllerAnimated:YES completion:nil];
     [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
 }
 
 - (void)enterSuggestion:(SHUserAccountItem *)item {
-#if 0
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.title = item.title;
-    vc.view.frame = self.view.frame;
-    vc.view.backgroundColor = [UIColor whiteColor];
-
-    [self cw_pushViewController:vc drewerHiddenDuration:0];
-#endif
     [self newEmail];
 }
 
@@ -221,38 +199,15 @@ static const CGFloat kTableViewRowHeight = 60;
 }
 
 - (void)enterAbout:(SHUserAccountItem *)item {
-#if 0
-    SHAccountSettingTVC *vc = [SHAccountSettingTVC accountSettingTVC];
-    vc.title = item.title;
-    
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-#endif
     SHAppInfoVC *vc = [SHAppInfoVC appInfoVC];
     vc.title = item.title;
     
-//    [self cw_pushViewController:vc drewerHiddenDuration:0];
-//    [self presentViewController:nav animated:YES completion:nil];
-    
-#if 0
-    vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:[ZJSlidingDrawerViewController sharedSlidingDrawerVC] action:@selector(popViewController) isBack:NO];
-    
-    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] pushViewController:vc];
-#endif
     [self presentViewController:[[UserAccountPortraitNavVC alloc] initWithRootViewController:vc] animated:YES completion:nil];
 }
 
 #pragma mark -
 - (void)enterAccountWithHeaderView:(SHAccountInfoHeaderView *)headerView {
-#if 0
-    SHUserAccountInfoTVC *vc = [SHUserAccountInfoTVC userAccountInfoTVC];
-    
-//    [self cw_pushViewController:vc drewerHiddenDuration:0];
-    
-    vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil target:[ZJSlidingDrawerViewController sharedSlidingDrawerVC] action:@selector(retunbackHome) isBack:YES];
 
-    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] pushViewController:vc];
-#endif
 }
 
 - (NSString *)deviceInfo {

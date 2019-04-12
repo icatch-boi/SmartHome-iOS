@@ -30,10 +30,6 @@
 @interface SHCameraHelper : NSObject
 
 @property (nonatomic, copy) NSString *cameraName;
-#if USE_ENCRYP
-@property (nonatomic, copy) NSString *cameraToken;
-@property (nonatomic, copy) NSString *cameraUidToken;
-#endif
 @property (nonatomic, copy) NSString *cameraUid;
 @property (nonatomic, copy) NSString *devicePassword;
 @property (nonatomic, copy) NSString *id;
@@ -41,21 +37,11 @@
 @property (nonatomic) int operable;
 @property (nonatomic, copy) NSString *addTime;
 
-#if USE_ENCRYP
-+ (instancetype)cameraWithName:(NSString *)cameraName
-                   cameraToken:(NSString *)cameraToken
-                cameraUidToken:(NSString *)cameraUidToken
-                devicePassword:(NSString *)devicePassword
-                            id:(NSString *)cameraId
-                     thumbnail:(UIImage *)thumnail
-                      operable:(int)operable;
-#else
 + (instancetype)cameraWithName:(NSString *)cameraName
                      cameraUid:(NSString *)cameraUid
                 devicePassword:(NSString *)devicePassword
                             id:(NSString *)cameraId
                      thumbnail:(UIImage *)thumnail
                       operable:(int)operable;
-#endif
 
 @end

@@ -184,7 +184,7 @@
     [_pwdTextField resignFirstResponder];
     
     NSRange ssidRange = [_ssidTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,32}" options:NSRegularExpressionSearch];
-    NSRange pwdRange = [_pwdTextField.text rangeOfString:@"[A-Za-z0-9_(?![，。？：；’‘！”“、]]{8,63}" options:NSRegularExpressionSearch];
+    NSRange pwdRange = [_pwdTextField.text rangeOfString:@"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{8,63}" options:NSRegularExpressionSearch];
     
     if (ssidRange.location == NSNotFound || pwdRange.location == NSNotFound) {
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", @"") message:NSLocalizedString(@"kInvalidSSIDOrPassword", @"") preferredStyle:UIAlertControllerStyleAlert];
@@ -275,24 +275,14 @@
         }]];
         [self presentViewController:alertC animated:YES completion:nil];
         
-        //        _nextButton.enabled = NO;
-        //        [self updateButtonBorderColor:_nextButton];
-        
         return nil;
     } else return @[mssid,mmac];
 }
 
 - (void)setupDeviceWiFi {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
-    
-    NSString *urlString = @"App-Prefs:root=WIFI";
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlString]]) {
-        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        }
-    }
+
+    [SHTool appToSystemSettings];
 }
 
 #pragma mark - UITextFiledDelegate
@@ -304,7 +294,7 @@
 
 #pragma mark - Check Network Reachable
 - (void)showSurePasswordAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kMakeSureWiFiNameAndPassword", nil)/*@"⚠️ 请确保Wi-Fi名称和密码的正确性。"*/ preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kMakeSureWiFiNameAndPassword", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:nil]];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -320,9 +310,9 @@
     if (netStatus == NotReachable) {
         SHLogWarn(SHLogTagAPP, @"Current network Unreachable.");
 
-        [self showNetworkNotReachableAlertView:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil)];
+        [self showNetworkNotReachableAlertView:NSLocalizedString(@"kNetworkNotReachable", nil)];
     } else if (netStatus == ReachableViaWWAN) {
-        [self showNetworkNotReachableAlertView:/*@"⚠️ 当前Wi-Fi不可用，请连接至可用Wi-Fi。"*/NSLocalizedString(@"kWiFiNotReachable", nil)];
+        [self showNetworkNotReachableAlertView:NSLocalizedString(@"kWiFiNotReachable", nil)];
     } else {
         if (self.qrcodeSetup) {
             [self performSegueWithIdentifier:@"go2QRCodeSetupDeviceVCSegue" sender:nil];

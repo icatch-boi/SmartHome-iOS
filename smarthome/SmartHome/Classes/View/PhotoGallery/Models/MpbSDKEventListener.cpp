@@ -16,7 +16,6 @@ MpbSDKEventListener::MpbSDKEventListener(SHVideoPlaybackVC *controller) {
 
 void MpbSDKEventListener::updateVideoPbProgress(ICatchEvent* icatchEvt) {
   if (icatchEvt) {
-//    AppLog(@"updateVideoPbProgress: %f", icatchEvt->getDoubleValue1());
     [controller updateVideoPbProgress:icatchEvt->getDoubleValue1() ];
   }
 }
@@ -25,11 +24,9 @@ void MpbSDKEventListener::updateVideoPbProgressState(ICatchEvent* icatchEvt) {
   if (icatchEvt) {
     if (icatchEvt->getIntValue1() == 1) {
       SHLogInfo(SHLogTagAPP, @"I received an event: Pause");
-      //sdk.videoPbNeedPause = YES;
       [controller updateVideoPbProgressState:YES];
     } else if (icatchEvt->getIntValue1() == 2) {
       SHLogInfo(SHLogTagAPP, @"I received an event: Resume");
-      //sdk.videoPbNeedPause = NO;
       [controller updateVideoPbProgressState:NO];
     }
   }
@@ -37,7 +34,6 @@ void MpbSDKEventListener::updateVideoPbProgressState(ICatchEvent* icatchEvt) {
 
 void MpbSDKEventListener::stopVideoPb(ICatchEvent* icatchEvt) {
   SHLogInfo(SHLogTagAPP, @"I received an event: *Playback done");
-  //[[SDK instance] setVideoPbDone:YES];
   [controller stopVideoPb];
 }
 

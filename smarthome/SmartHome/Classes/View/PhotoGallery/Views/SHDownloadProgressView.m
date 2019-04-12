@@ -14,7 +14,7 @@
 @interface SHDownloadProgressView()
 
 @property (nonatomic, assign) CGFloat                   toStartCountDown;
-//@property (nonatomic, weak  ) UIView                   *showunderView;
+
 @property (nonatomic, assign) BOOL                       isResume;
 @property (nonatomic, weak  ) NSTimer                     *countTimer;
 
@@ -70,17 +70,9 @@
         self.showunderView.alpha=(1-settime);
     }
     
-    if (self.toStartCountDown<=0) {
-        
-        
-        
+    if (self.toStartCountDown <=0) {
         [self.countTimer invalidate];
         self.countTimer=nil;
-        
-//        if ([self.delegate respondsToSelector:@selector(ZWProgramTimerTimeUp:)]) {
-//            [self.delegate ZWProgramTimerTimeUp:self];
-//        }
-        
     }
 }
 

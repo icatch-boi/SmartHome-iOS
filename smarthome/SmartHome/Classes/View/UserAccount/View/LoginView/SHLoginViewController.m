@@ -26,7 +26,6 @@
     
 
 #import "SHLoginViewController.h"
-#import "SHUserAccountCell.h"
 #import "SHLogonViewController.h"
 #import "SHNetworkManagerHeader.h"
 #import "ZJSlidingDrawerViewController.h"
@@ -63,6 +62,7 @@ static const CGFloat kBottomDefaultValue = 80;
     // Do any additional setup after loading the view.
     
     [self setupGUI];
+    [self addGestureOperation];
 }
 
 - (void)setupGUI {
@@ -79,10 +79,6 @@ static const CGFloat kBottomDefaultValue = 80;
     UIColor *color = [UIColor ic_colorWithHex:kButtonThemeColor];
     _emailTextField.lineColor = color;
     _pwdTextField.lineColor = color;
-    
-    // FIXME: - debug
-//    _emailTextField.text = @"cj787696506@163.com";
-//    _pwdTextField.text = @"1234567890";
     
     [self setSigninButtonColor];
     
@@ -129,12 +125,7 @@ static const CGFloat kBottomDefaultValue = 80;
 }
 
 - (void)setSigninButtonColor {
-#if 0
-    uint32_t colorValue = ![_emailTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] ? kButtonThemeColor : kButtonDefaultColor;
-    _signinButton.backgroundColor = [UIColor ic_colorWithHex:colorValue];
-#else
     _signinButton.enabled = ![_emailTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
-#endif
 }
 
 - (void)close {
@@ -160,24 +151,13 @@ static const CGFloat kBottomDefaultValue = 80;
 - (IBAction)loginClick {
     [_emailTextField resignFirstResponder];
     [_pwdTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    
+
     self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:/*@"正在登录..."*/NSLocalizedString(@"kLogining", nil)];
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLogining", nil)];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:[NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-        });
-        
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"输入的邮箱或密码无效，请重新输入"*/NSLocalizedString(@"kInvalidEmailOrPassword", nil) preferredStyle:UIAlertControllerStyleAlert];
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alertC animated:YES completion:nil];
-            });
+
+        if (![self isValidInput]) {
+            SHLogWarn(SHLogTagAPP, @"Input content invalid.");
         } else {
             __block NSString *email = nil;
             __block NSString *password = nil;
@@ -202,7 +182,7 @@ static const CGFloat kBottomDefaultValue = 80;
                         SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                         
                         weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-                        NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
+                        NSString *notice = NSLocalizedString(@"kLoginFailed", nil);
                         [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                     }
                 });
@@ -211,39 +191,68 @@ static const CGFloat kBottomDefaultValue = 80;
     });
 }
 
+- (BOOL)isValidInput {
+    __block BOOL valid = YES;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        NSRange emailRange = [_emailTextField.text rangeOfString:[NSString stringWithFormat:@"%@|%@", kPhoneRegularExpression, kEmailRegularExpression] options:NSRegularExpressionSearch];
+        
+        if (emailRange.location == NSNotFound) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input email invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_pwdTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input password invalid.");
+            return;
+        }
+    });
+    
+    return valid;
+}
+
+- (void)showTipsWithInfo:(NSString *)info {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressHUD hideProgressHUD:YES];
+        
+        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:info preferredStyle:UIAlertControllerStyleAlert];
+        [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alertC animated:YES completion:nil];
+    });
+}
+
 - (IBAction)forgotPWDClick {
     SHLogTRACE();
     
     [self close];
 
-#if 0
-    SHMainViewController *mainVC = (SHMainViewController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
-    [mainVC signupAccountHandleWithEmail:_emailTextField.text isResetPWD:YES];
-#else
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.26 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] signupAccountHandleWithEmail:_emailTextField.text isResetPWD:YES];
     });
-#endif
 }
 
 - (IBAction)signupClick:(id)sender {
     [self close];
     
-//    SHLogonViewController *vc = [SHLogonViewController logonViewController];
-//
-//    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:vc animated:YES completion:nil];
-#if 0
-    SHMainViewController *mainVC = (SHMainViewController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
-    [mainVC signupAccountHandleWithEmail:_emailTextField.text isResetPWD:NO];
-#else
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.26 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] signupAccountHandleWithEmail:_emailTextField.text isResetPWD:NO];
     });
-#endif
 }
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.emailTextField) {
+        [self.pwdTextField becomeFirstResponder];
+    } else if (textField == self.pwdTextField) {
+        [self loginClick];
+    }
+    
     [textField resignFirstResponder];
 
     [self setSigninButtonColor];
@@ -260,14 +269,14 @@ static const CGFloat kBottomDefaultValue = 80;
     return _progressHUD;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)addGestureOperation  {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHandle)];
+    
+    [self.view addGestureRecognizer:tap];
 }
-*/
+
+- (void)tapGestureHandle {
+    [self.view endEditing:YES];
+}
 
 @end

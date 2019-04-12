@@ -414,6 +414,18 @@
     [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav"] forBarMetrics:UIBarMetricsDefault];
 }
 
++ (void)resetNavigationBarAttributes:(UINavigationController *)nav {
+    if (![nav isKindOfClass:[UINavigationController class]]) {
+        SHLogError(SHLogTagAPP, @"Controller is not NavigationController.");
+        return;
+    }
+    
+    nav.navigationBar.translucent = NO;
+    nav.navigationBar.tintColor = nil;
+    nav.navigationBar.titleTextAttributes = nil;
+    [nav.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+}
+
 #pragma mark - Device info
 + (NSString *)deviceInfo {
     NSString *userPhoneNameStr = [[UIDevice currentDevice] name];
@@ -560,9 +572,28 @@
         return NO;
     }
     
-    NSString *regex = [NSString stringWithFormat:@"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}", (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength];
+    NSString *regex = [NSString stringWithFormat:kDeviceNameRegularExpression, (unsigned long)kDeviceNameMinLength, (unsigned long)kDeviceNameMaxLength];
     NSRange nameRange = [deviceName rangeOfString:regex options:NSRegularExpressionSearch];
     if (nameRange.location == NSNotFound) {
+        SHLogWarn(SHLogTagAPP, @"String mismatching.");
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (BOOL)isValidPassword:(NSString *)pwd {
+    NSUInteger length = [self getCharLength:pwd];
+    SHLogInfo(SHLogTagAPP, @"Current string: %@, length: %lu", pwd, (unsigned long)length);
+    
+    if (length > kPasswordMaxLength || length < kPasswordMinLength) {
+        SHLogWarn(SHLogTagAPP, @"String too log or too short (valid length range: [%zd-%zd]).", kPasswordMinLength, kPasswordMaxLength);
+        return NO;
+    }
+    
+    NSString *regex = [NSString stringWithFormat:kPasswordRegularExpression, kPasswordMinLength, kPasswordMaxLength];
+    NSRange pwdRange = [pwd rangeOfString:regex options:NSRegularExpressionSearch];
+    if (pwdRange.location == NSNotFound) {
         SHLogWarn(SHLogTagAPP, @"String mismatching.");
         return NO;
     }
@@ -584,6 +615,98 @@
 
 + (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font {
     return [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
+}
+
++ (void)backToRootViewControllerWithCompletion: (void (^ __nullable)(void))completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[SHCamStaticData instance] setBackToHomeState:YES];
+        AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        app.isFullScreenPV = NO;
+        app.isVideoPB = NO;
+        
+        [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
+        UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+        UIViewController *vc = nav.visibleViewController;
+
+        UIViewController *presentingVc = vc.presentingViewController;
+        while (presentingVc.presentingViewController) {
+            presentingVc = presentingVc.presentingViewController;
+        }
+
+        [nav popToRootViewControllerAnimated:NO];
+
+        if (presentingVc) {
+            [presentingVc dismissViewControllerAnimated:NO completion:^{
+                if (completion) {
+                    completion();
+                }
+                [[SHCamStaticData instance] setBackToHomeState:NO];
+            }];
+        } else {
+            if (completion) {
+                completion();
+            }
+            [[SHCamStaticData instance] setBackToHomeState:NO];
+        }
+        
+//        if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[ZJSlidingDrawerViewController class]]) {
+//            return;
+//        }
+//
+//        ZJSlidingDrawerViewController *rootVC = (ZJSlidingDrawerViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        UINavigationController *currentNav = (UINavigationController *)rootVC.mainVC;
+//        UIViewController *currentVC = currentNav.topViewController;
+//
+//        //第一部分 导航控制器的顶部控制器弹出的模态
+//        UIViewController *vcPresentVC = currentVC.presentedViewController;
+//        if (vcPresentVC) {
+//            while (vcPresentVC.presentedViewController)  {
+//                vcPresentVC = vcPresentVC.presentedViewController;
+//            }
+//            [vcPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+//
+//        //第二部分 导航控制器弹出的模态
+//        UIViewController *navPresentVC = currentNav.presentedViewController;
+//        if (navPresentVC) {
+//            while (navPresentVC.presentedViewController)  {
+//                navPresentVC = navPresentVC.presentedViewController;
+//            }
+//            [navPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+//
+//        //第三部分 tab控制器弹出的模态
+//        UIViewController *tabPresentVC = rootVC.presentedViewController;
+//        if (tabPresentVC) {
+//            while (tabPresentVC.presentedViewController)  {
+//                tabPresentVC = tabPresentVC.presentedViewController;
+//            }
+//            [tabPresentVC dismissViewControllerAnimated:NO completion:nil];
+//        }
+        
+//        [currentNav popToRootViewControllerAnimated:YES];
+    });
+}
+
++ (UIViewController *)appVisibleViewController {
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    
+    SHLogInfo(SHLogTagAPP, @"App current visibleViewController: %@", NSStringFromClass([vc class]));
+    
+    return vc;
+}
+
++ (void)appToSystemSettings {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
 }
 
 @end

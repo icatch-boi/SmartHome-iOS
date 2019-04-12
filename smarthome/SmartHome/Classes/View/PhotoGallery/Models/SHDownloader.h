@@ -15,7 +15,7 @@
 @interface SHDownloader : NSObject
 @property (nonatomic,weak) id<SHDownloadInfoDelegate> delegate;
 - (instancetype)initWithCameraObject:(SHCameraObject *)camObj;
-//- (void)downloadFile:(SHFile *)file downloadInfoBlock:(void (^)(int downloadInfo))downloadInfoBlock progressBlock:(void (^)(NSInteger progress))progressBlock isDownloading:(BOOL)downloading;
+
 - (void)cancelDownloadFile:(SHFile *)file successBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock;
 - (Boolean)cancelDownloadFile:(SHFile *)file;
 - (void)downloadFile:(SHFile *)file;

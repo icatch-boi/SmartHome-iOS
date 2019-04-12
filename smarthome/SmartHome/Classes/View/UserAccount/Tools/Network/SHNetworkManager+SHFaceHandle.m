@@ -56,7 +56,7 @@
                                  @"id": deviceID,
                                  @"image": dataString,
                                  @"time": dateString,
-                                 @"customerid": kServerCustomerid,
+                                 @"customerid": kServerCustomerID,
                                  };
     
     [self requestWithMethod:ZJRequestMethodPOST opertionType:ZJOperationTypeDevice urlString:FACE_RECOGNITION_PATH parametes:parameters finished:finished];
@@ -146,11 +146,11 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 - (void)uploadDataWithURLString:(NSString *)urlString parameters:(id)parameters finished:(ZJRequestCallBack)finished {
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -168,7 +168,7 @@
 }
 
 - (AFHTTPSessionManager *)facesRequestSessionManager {
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -224,10 +224,10 @@
         
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME: 发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误： %@", error);
@@ -273,10 +273,10 @@
     id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME:发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);

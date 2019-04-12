@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import <SHAccountManagementKit/CameraOperate.h>
-//#import <SHAccountManagementKit/AccountOperate.h>
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -21,27 +19,12 @@ typedef enum : NSUInteger {
     SHRequestMethodDELETE,
 } SHRequestMethod;
 
-static NSTimeInterval TIME_OUT_INTERVAL = 10.0;
-
-//static NSString * const ServerBaseUrl = @"http://52.79.113.238:3006/";
-static NSString * const kServerCustomerid = @"5aa0d55246c14813a2313c17";
-
-#define Use_OurServer 1
-#define Use_LocalServer 1
-
-#if Use_OurServer
-
-#if Use_LocalServer
-static NSString * const ServerBaseUrl = @"http://52.83.116.127:3006/"; //@"http://172.28.28.17:80/";
-#else
-static NSString * const ServerBaseUrl = @"http://www.smarthome.icatchtek.com/";
-#endif
-
-#else
-static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
-#endif
+static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
+static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 
 @class SHUserAccount;
+@class AFHTTPSessionManager;
+@class ZJRequestError;
 @interface SHNetworkManager : NSObject
 
 @property (nonatomic, assign, readonly) BOOL userLogin;
@@ -72,6 +55,9 @@ static NSString * const ServerBaseUrl = @"https://www.smarthome.icatchtek.com/";
 - (void)getMessages:(RequestCompletionBlock)completion;
 - (void)getMessageWithMessageId:(NSString *)msgId completion:(RequestCompletionBlock)completion;
 - (void)clearMessageWithMessageIds:(NSArray *)msgIds completion:(RequestCompletionBlock)completion;
+
+- (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion;
+- (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parameters:(id _Nullable)parameters finished:(RequestCompletionBlock)finished;
 
 @end
 

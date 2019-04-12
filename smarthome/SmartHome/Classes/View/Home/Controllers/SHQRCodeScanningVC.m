@@ -87,12 +87,8 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     
     _coverView = v;
 
-#if 0
-    [self addTipsViewToCoverView];
-#else
     [self setupScrollView];
     [self setupPageControl];
-#endif
     
     return v;
 }
@@ -244,74 +240,14 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 - (void)SGQRCodeInformationFromeAibum:(NSNotification *)noti {
     NSString *string = noti.object;
     
-#if 0
-    SHCameraInfoVC *jumpVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"SHCameraInfoVCID"];
-    jumpVC.managedObjectContext = _managedObjectContext;
-    jumpVC.cameraUid = string;
-    jumpVC.cameraName = string;
-    [self.navigationController pushViewController:jumpVC animated:YES];
-#else
-#if 0
-    if (_isStandardMode) {
-        [self getCameraUIDWithCiphertext:string];
-
-        SHSetupWiFiViewController *vc = [SHSetupWiFiViewController setupWiFiViewController];
-        vc.managedObjectContext = _managedObjectContext;
-        [self.navigationController pushViewController:vc animated:YES];
-        
-        return;
-    }
-    
-    SHCameraInfoViewController *jumpVC = [[UIStoryboard storyboardWithName:kSetupStoryboardName bundle:nil] instantiateViewControllerWithIdentifier:@"SHCameraInfoViewControllerID"];
-    jumpVC.managedObjectContext = _managedObjectContext;
-    jumpVC.cameraUid = string;
-    [self.navigationController pushViewController:jumpVC animated:YES];
-#endif
     [self scanResultHandle:string];
-#endif
 }
 
 - (void)SGQRCodeInformationFromeScanning:(NSNotification *)noti {
     SGQRCodeLog(@"noti - - %@", noti);
     NSString *string = noti.object;
     
-#if 0
-    SHCameraInfoVC *jumpVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"SHCameraInfoVCID"];
-    jumpVC.managedObjectContext = _managedObjectContext;
-    jumpVC.cameraUid = string;
-    jumpVC.cameraName = string;
-    [self.navigationController pushViewController:jumpVC animated:YES];
-#else
-#if 0
-    if (_isStandardMode) {
-        [self getCameraUIDWithCiphertext:string];
-        
-        SHSetupWiFiViewController *vc = [SHSetupWiFiViewController setupWiFiViewController];
-        vc.managedObjectContext = _managedObjectContext;
-        [self.navigationController pushViewController:vc animated:YES];
-
-        return;
-    }
-    
-    SHCameraInfoViewController *jumpVC = [[UIStoryboard storyboardWithName:kSetupStoryboardName bundle:nil] instantiateViewControllerWithIdentifier:@"SHCameraInfoViewControllerID"];
-    jumpVC.managedObjectContext = _managedObjectContext;
-    jumpVC.cameraUid = string;
-    [self.navigationController pushViewController:jumpVC animated:YES];
-#endif
     [self scanResultHandle:string];
-#endif
-
-//    if ([string hasPrefix:@"http"]) {
-//        ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];
-//        jumpVC.jump_URL = string;
-//        [self.navigationController pushViewController:jumpVC animated:YES];
-//        
-//    } else { // 扫描结果为条形码
-//        
-//        ScanSuccessJumpVC *jumpVC = [[ScanSuccessJumpVC alloc] init];
-//        jumpVC.jump_bar_code = string;
-//        [self.navigationController pushViewController:jumpVC animated:YES];
-//    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -362,7 +298,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     
     switch (result) {
         case ICH_QR_VALID:
-            message = NSLocalizedString(@"kQRCodeInvalidTipsDescription", nil); //@"无效二维码，请扫描机台上的二维码或APP内生成的分享二维码。"/*NSLocalizedString(@"kQRCodeInvalidTipsInfo", nil)*/;
+            message = NSLocalizedString(@"kQRCodeInvalidTipsDescription", nil);
             break;
             
         case ICH_QR_DIE:
@@ -392,19 +328,12 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 }
 
 - (void)standardModeAddCamera:(NSString *)str {
-#if 0
-    [self getCameraUIDWithCiphertext:str];
-    
-    XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
-    [self.navigationController pushViewController:vc animated:YES];
-#else
     NSString *uid = [self getCameraUIDWithCiphertext:str];
     if (uid == nil || [self checkDeviceExistsByUID:uid]) {
         return;
     }
     
     [self checkNetworkStatus];
-#endif
 }
 
 - (void)shareQRCodeAddCamera:(NSString *)str {
@@ -425,7 +354,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     
     if (camObj) {
         hasExist = YES;
-        [self showDeviceExistAlertWithMessage:/*@"Device Already Exist."*/NSLocalizedString(@"kDeviceAlreadyExist", nil)];
+        [self showDeviceExistAlertWithMessage:NSLocalizedString(@"kDeviceAlreadyExist", nil)];
     }
     
     return hasExist;
@@ -437,7 +366,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     for (SHCameraObject *obj in [SHCameraManager sharedCameraManger].smarthomeCams) {
         if ([obj.camera.id isEqualToString:cameraID]) {
             hasExist = YES;
-            [self showDeviceExistAlertWithMessage:/*@"Device Already Exist."*/NSLocalizedString(@"kDeviceAlreadyExist", nil)];
+            [self showDeviceExistAlertWithMessage:NSLocalizedString(@"kDeviceAlreadyExist", nil)];
 
             break;
         }
@@ -447,9 +376,9 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 }
 
 - (void)showDeviceExistAlertWithMessage:(NSString *)message {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:/*@"Tips"*/NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:/*@"OK"*/NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self viewWillAppear:YES];
         });
@@ -481,7 +410,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 }
 
 - (void)checkDeviceHasExistsHandler {
-    [self.progressHUD showProgressHUDWithMessage:/*@"Checking..."*/NSLocalizedString(@"kCheckDeviceWhetherBind", nil)];
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kCheckDeviceWhetherBind", nil)];
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] checkDeviceHasExistsWithUID:[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID] completion:^(BOOL isSuccess, id  _Nullable result) {
         SHLogInfo(SHLogTagAPP, @"checkDeviceExistsWithUID is success: %d, result: %@", isSuccess, result);
@@ -491,19 +420,19 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
         if (isSuccess) {
             NSNumber *exist = result;
             if (exist.integerValue == 1) {
-                [weakself showDeviceExistAlertWithMessage:/*@"Device have been bind by other accounts."*/NSLocalizedString(@"kDeviceBindByOtherAccounts", nil)];
+                [weakself showDeviceExistAlertWithMessage:NSLocalizedString(@"kDeviceBindByOtherAccounts", nil)];
             } else {
                 XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
                 [weakself.navigationController pushViewController:vc animated:YES];
             }
         } else {
-            [weakself showDeviceExistAlertWithMessage:/*@"Check the device has exists operation failed, please try again."*/NSLocalizedString(@"kCheckDeviceWhetherBindFailed", nil)];
+            [weakself showDeviceExistAlertWithMessage:NSLocalizedString(@"kCheckDeviceWhetherBindFailed", nil)];
         }
     }];
 }
 
 - (void)showNetworkNotReachableAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"⚠️ 当前网络不可用, 请检查手机网络设置。"*/NSLocalizedString(@"kNetworkNotReachable", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kNetworkNotReachable", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -523,14 +452,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
 - (void)setupDeviceWiFi {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
     
-    NSString *urlString = @"App-Prefs:root=WIFI";
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlString]]) {
-        if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
-        } else {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        }
-    }
+    [SHTool appToSystemSettings];
 }
 
 @end

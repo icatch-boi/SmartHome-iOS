@@ -15,6 +15,7 @@
     NSInteger _ppsSize;
     CMVideoFormatDescriptionRef _decoderFormatDescription;
     VTDecompressionSessionRef _deocderSession;
+    CVPixelBufferRef _pixelBuffer;
 }
 
 @end
@@ -27,20 +28,6 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
 
 @implementation H264Decoder
 
-//- (BOOL)initH264Env:(ICatchVideoFormat)format {
-//    SHLogInfo(SHLogTagAPP, @"w:%d, h: %d", format.getVideoW(), format.getVideoH());
-//    
-//    if (format.getCsd_0_size()) {
-//        _spsSize = format.getCsd_0_size()-4;
-//        _sps = (uint8_t *)malloc(_spsSize);
-//        memcpy(_sps, format.getCsd_0()+4, _spsSize);
-//    }
-//    
-//    if (format.getCsd_1_size()) {
-//        _ppsSize = format.getCsd_1_size()-4;
-//        _pps = (uint8_t *)malloc(_ppsSize);
-//        memcpy(_pps, format.getCsd_1()+4, _ppsSize);
-//    }
 - (BOOL)initH264EnvWithSPSSize:(int)spsSize sps:(const unsigned char *)sps ppsSize:(int)ppsSize pps:(const unsigned char *)pps {
     if (!spsSize || !sps || !ppsSize || !pps) {
         SHLogError(SHLogTagAPP, @"Invalid parameter.");
@@ -117,6 +104,11 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
         _decoderFormatDescription = NULL;
     }
     
+    if (_pixelBuffer != nullptr) {
+        CVPixelBufferRelease(_pixelBuffer);
+        _pixelBuffer = nullptr;
+    }
+    
     free(_sps);
     free(_pps);
     _spsSize = _ppsSize = 0;
@@ -154,6 +146,7 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
                     [avslayer enqueueSampleBuffer:sampleBuffer];
                 });
             }
+            [self recordPixelBufferWithSampleBuffer:sampleBuffer];
             CFRelease(sampleBuffer);
         }
     }
@@ -294,29 +287,6 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
 
 - (UIImage *)imageFromPixelBufferRef:(NSData *)data {
     CVPixelBufferRef pixelBuffer = [self decodeToPixelBufferRef:data];
-#if 0
-//    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-//    UIImage *image = [UIImage imageWithCIImage:ciImage];
-    CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer];
-    UIImage *image = [[UIImage alloc] initWithCIImage:ciImage];
-//    NSLog(@"last image: %@", image);
-    return [self reDrawOrangeImage:image];
-#else
-#if 0
-    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
-    
-    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
-    
-    CGImageRef videoImage = [temporaryContext
-                             createCGImage:ciImage
-                             fromRect:CGRectMake(0, 0, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer))];
-    
-    UIImage *uiImage = [UIImage imageWithCGImage:videoImage];
-    
-    CGImageRelease(videoImage);
-    
-    return uiImage;
-#else
     
     CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer];
     CIContext *context = [CIContext contextWithOptions:nil];
@@ -328,8 +298,6 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     CGImageRelease(imageRef);
     
     return image;
-#endif
-#endif
 }
 
 - (UIImage *)reDrawOrangeImage:(UIImage *)image {
@@ -341,6 +309,48 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     UIGraphicsEndImageContext();
     
     return drawImage;
+}
+
+- (void)recordPixelBufferWithSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    CVPixelBufferRef pixelBuffer = [self pixelBufferFromSampleBuffer:sampleBuffer];
+    
+    if (pixelBuffer == nullptr) {
+        return;
+    }
+    
+    @synchronized (self) {
+        if (_pixelBuffer != nullptr) {
+            CVPixelBufferRelease(_pixelBuffer);
+            _pixelBuffer = nullptr;
+        }
+        
+        _pixelBuffer = CVPixelBufferRetain(pixelBuffer);
+    }
+    
+    CVPixelBufferRelease(pixelBuffer);
+}
+
+- (UIImage *)getCurrentImage {
+    CIImage *ciImage = nil;
+    CGRect rect = CGRectZero;
+    @synchronized (self) {
+        if (_pixelBuffer == nullptr) {
+            return nil;
+        }
+        
+        ciImage = [[CIImage alloc] initWithCVPixelBuffer:_pixelBuffer];
+        rect = CGRectMake(0, 0, CVPixelBufferGetWidth(_pixelBuffer), CVPixelBufferGetHeight(_pixelBuffer));
+    }
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    
+    CGImageRef imageRef = [context createCGImage:ciImage fromRect:rect];
+    
+    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
+    
+    return image;
 }
 
 @end

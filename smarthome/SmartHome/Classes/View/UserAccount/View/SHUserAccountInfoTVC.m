@@ -8,7 +8,6 @@
 
 #import "SHUserAccountInfoTVC.h"
 #import "SHNetworkManagerHeader.h"
-#import "SHMessagesListTVC.h"
 #import <Photos/Photos.h>
 #import "ZJSlidingDrawerViewController.h"
 #import "SHWechatServerVC.h"
@@ -60,7 +59,6 @@
 }
 
 - (void)setupGUI {
-//    [_logoutButton setCornerWithRadius:_logoutButton.bounds.size.height * 0.5 masksToBounds:NO];
     UIImage *placeholderImage = [UIImage imageNamed:@"portrait-1"];
     _avatorImgView.image = [placeholderImage ic_avatarImageWithSize:placeholderImage.size backColor:[UIColor whiteColor] lineColor:[UIColor lightGrayColor] lineWidth:1.0];
     _nickNameLabel.text = SHNetworkManager.sharedNetworkManager.userAccount.screen_name;
@@ -77,10 +75,6 @@
 }
 
 - (IBAction)logoutClick:(id)sender {
-#if 0
-    [[SHNetworkManager sharedNetworkManager] logout];
-    [self.navigationController popViewControllerAnimated:YES];
-#endif
     UIAlertController *alertC = [UIAlertController alertControllerWithTitle:/*@"Alert"*/NSLocalizedString(@"Tips", nil) message:/*@"Here is a message where we an put absolutely anything we want."*/NSLocalizedString(@"kLogoutAlertInfo", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
@@ -93,23 +87,24 @@
 }
 
 - (void)logout {
-//    [self.navigationController popViewControllerAnimated:YES];
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:nil];
     
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] logoutWithCompation:^(BOOL isSuccess, id  _Nonnull result) {
         if (isSuccess) {
-            [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] popViewController];
-            [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
+                
+                [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] popViewController];
+                [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
             });
         } else {
-            weakself.progressHUD.detailsLabelText = NSLocalizedString(@"kLogoutAgain", nil); //@"please try again later";
-            [weakself.progressHUD showProgressHUDNotice:/*@"Sign out failed"*/NSLocalizedString(@"kLogoutFailed", nil) showTime:1.5];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.progressHUD.detailsLabelText = NSLocalizedString(@"kLogoutAgain", nil); //@"please try again later";
+                [weakself.progressHUD showProgressHUDNotice:/*@"Sign out failed"*/NSLocalizedString(@"kLogoutFailed", nil) showTime:1.5];
+            });
         }
     }];
 }
@@ -167,8 +162,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"go2MessagesListTVCID"]) {
-        SHMessagesListTVC *vc = segue.destinationViewController;
-        vc.managedObjectContext = _managedObjectContext;
+
     }
 }
 
@@ -253,13 +247,18 @@
 }
 
 - (BOOL)checkPassword:(NSString *)password newPassword:(NSString *)newPassword surePassword:(NSString *)surePassword {
-    if (![newPassword isEqualToString:surePassword]) {
-        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the new password and confirming password disagree!"*/NSLocalizedString(@"kNewPasswordDisagree", nil)];
+    if (![SHTool isValidPassword:password] || ![SHTool isValidPassword:newPassword] || ![SHTool isValidPassword:surePassword]) {
+        [self showAlertWithTitle:NSLocalizedString(@"kModifyPasswordFailed", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
         return NO;
     }
     
     if ([password isEqualToString:newPassword]) {
         [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the old password and new password agree!"*/NSLocalizedString(@"kOldAndNewPasswordAgree", nil)];
+        return NO;
+    }
+    
+    if (![newPassword isEqualToString:surePassword]) {
+        [self showAlertWithTitle:/*@"Change password failed"*/NSLocalizedString(@"kModifyPasswordFailed", nil) message:/*@"Sorry, the new password and confirming password disagree!"*/NSLocalizedString(@"kNewPasswordDisagree", nil)];
         return NO;
     }
 

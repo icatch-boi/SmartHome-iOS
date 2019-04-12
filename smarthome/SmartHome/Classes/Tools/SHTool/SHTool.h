@@ -30,11 +30,17 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (NSString *)createDownloadComplete:(NSDictionary *)tempDict;
 + (NSString *)bitRateStringFromBits:(CGFloat)bitCount;
 + (void)configureAppThemeWithController:(UINavigationController *)nav;
++ (void)resetNavigationBarAttributes:(UINavigationController *)nav;
 + (NSString *)deviceInfo;
 + (void)setupCurrentFullScreen:(BOOL)fullscreen;
 
 + (BOOL)isValidDeviceName:(NSString *)deviceName;
 + (NSString *)localDBTimeStringFromServer:(NSString *)remoteTime;
 + (CGSize)stringSizeWithString:(NSString *)str font:(UIFont *)font;
++ (BOOL)isValidPassword:(NSString *)pwd;
++ (void)backToRootViewControllerWithCompletion: (void (^ __nullable)(void))completion;
++ (UIViewController *)appVisibleViewController;
+
++ (void)appToSystemSettings;
 
 @end

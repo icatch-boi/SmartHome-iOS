@@ -49,18 +49,6 @@
 	return instance;
 }
 
-//- (void)cancelDownloadFile:(SHFile *)file successBlock:(void (^)())successBlock failedBlock:(void (^)())failedBlock {
-//	id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
-//
-//	SHDownloader *downloader = [self.downLoaderCache objectForKey:key];
-//	if(downloader == nil){//current file is not downloading
-//		successBlock();//return success
-//	}else{//is downloading
-//		[downloader cancelDownloadFile:file successBlock:successBlock failedBlock:failedBlock];
-//	}
-//}
-
-
 - (Boolean)cancelDownloadFile:(SHFile *)file {
 	SHLogInfo(SHLogTagAPP, @"cancelDownloadFile filename is %s", file.f.getFileName().c_str());
 	id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];

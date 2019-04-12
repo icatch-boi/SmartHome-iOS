@@ -7,7 +7,6 @@
 //
 
 #import "SHLogonViewController.h"
-#import "SHUserAccountCell.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHLoginViewController.h"
 #import "SHMainViewController.h"
@@ -57,12 +56,13 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
     [self initParameter];
     [self setupGUI];
+    [self addGestureOperation];
 }
 
 - (void)initParameter {
     if (_resetPWD) {
-        [_logonButton setTitle:/*@"Reset password"*/NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateNormal];
-        [_logonButton setTitle:/*@"Reset password"*/NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateHighlighted];
+        [_logonButton setTitle:NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateNormal];
+        [_logonButton setTitle:NSLocalizedString(@"kResetPassword", nil) forState:UIControlStateHighlighted];
         
         _agreeDesLabel.hidden = YES;
         _userAgreementButton.hidden = YES;
@@ -77,8 +77,6 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 - (void)setupGUI {
     [_logonButton setCornerWithRadius:_logonButton.bounds.size.height * 0.25 masksToBounds:NO];
 
-//    self.navigationController.navigationBar.barTintColor = [UIColor ic_colorWithHex:kThemeColor];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil target:self action:@selector(close) isBack:YES];
     
     _signupBtnBottomCons.constant = kBottomDefaultValue * kScreenHeightScale;
@@ -171,13 +169,14 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 }
 
 - (IBAction)logonClick:(id)sender {
-    NSString *notice = _resetPWD ? NSLocalizedString(@"kResetPasswording", nil) : NSLocalizedString(@"kSignuping", nil); //@"正在重置密码..." : @"正在注册...";
+    NSString *notice = _resetPWD ? NSLocalizedString(@"kResetPasswording", nil) : NSLocalizedString(@"kSignuping", nil);
     
     [self accountHandleWithTipsTitle:notice];
 }
 - (void)showTipsWithInfo:(NSString *)info {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.progressHUD hideProgressHUD:YES];
+        
         UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:info preferredStyle:UIAlertControllerStyleAlert];
         [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alertC animated:YES completion:nil];
@@ -194,44 +193,14 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     [_emailTextField resignFirstResponder];
     [_pwdTextField resignFirstResponder];
     [_surePWDTextField resignFirstResponder];
-    __block NSRange emailRange;
-    __block NSRange passwordRange;
-    __block NSRange surePWDRange;
+    [_verifycodeTextField resignFirstResponder];
     
     self.progressHUD.detailsLabelText = nil;
     [self.progressHUD showProgressHUDWithMessage:tips];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
-            passwordRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-            surePWDRange = [_pwdTextField.text rangeOfString:@"[^\u4e00-\u9fa5]{1,16}" options:NSRegularExpressionSearch];
-        });
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(_verifycodeTextField.text.length != 6) {
-                NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil); //@"验证码无效，请重新输入.";
-                if(_verifycodeTextField.text.length == 0) {
-                    errInfo = NSLocalizedString(@"kEnterVerifycode", nil); //@"请输入验证码.";
-                }
-                [self showTipsWithInfo:errInfo];
-                return;
-            }
-            if(_pwdTextField.text.length < 8 || _pwdTextField.text.length > 16) {
-                [self showTipsWithInfo:/*@"请确保密码长度在8-16位之间."*/NSLocalizedString(@"kAccountPasswordDes", nil)];
-                return;
-            }
-        });
-        if (emailRange.location == NSNotFound || passwordRange.location == NSNotFound || surePWDRange.location == NSNotFound) {
-#if 0
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"输入的邮箱或密码无效，请重新输入." preferredStyle:UIAlertControllerStyleAlert];
-                [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [self presentViewController:alertC animated:YES completion:nil];
-            });
-#else
-            [self showTipsWithInfo:/*@"输入的邮箱或密码无效，请重新输入."*/NSLocalizedString(@"kInvalidEmailOrPassword", nil)];
-#endif
+        if (![self isValidInput]) {
+            SHLogWarn(SHLogTagAPP, @"Input content invalid.");
         } else {
             __block NSString *email = nil;
             __block NSString *password = nil;
@@ -245,28 +214,66 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
             });
             
             if (![password isEqualToString:surePWD]) {
-#if 0
-                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"两次密码输入不一致，请重新输入." preferredStyle:UIAlertControllerStyleAlert];
-                
-                [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.progressHUD hideProgressHUD:YES];
-                    [self presentViewController:alertVC animated:YES completion:nil];
-                });
-#else
-                [self showTipsWithInfo:/*@"两次密码输入不一致，请重新输入."*/NSLocalizedString(@"kEnterAccoutPasswordDisagree", nil)];
-#endif
+                [self showTipsWithInfo:NSLocalizedString(@"kEnterAccoutPasswordDisagree", nil)];
                 return;
 
             }
             if (_resetPWD) {
-                [self resetPasswordWithEmail:email password:password checkCode:checkCode failedNotice:/*@"重置密码失败"*/NSLocalizedString(@"kResetPasswordFailed", nil)];
+                [self resetPasswordWithEmail:email password:password checkCode:checkCode failedNotice:NSLocalizedString(@"kResetPasswordFailed", nil)];
             } else {
-                [self signupWithEmail:email password:password checkCode:checkCode failedNotice:/*@"注册失败"*/NSLocalizedString(@"kSignupFailed", nil)];
+                [self signupWithEmail:email password:password checkCode:checkCode failedNotice:NSLocalizedString(@"kSignupFailed", nil)];
             }
         }
     });
+}
+
+- (BOOL)isValidInput {
+    __block BOOL valid = YES;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        NSRange emailRange = [_emailTextField.text rangeOfString:[self accountRegularExpression] options:NSRegularExpressionSearch];
+        
+        if (emailRange.location == NSNotFound) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kInvalidEmailOrPassword", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input email or phone-number invalid.");
+            return;
+        }
+        
+        NSInteger verifyLength = _verifycodeTextField.text.length;
+        if (verifyLength != 6) {
+            NSString *errInfo = NSLocalizedString(@"kInvalidVerifycode", nil);
+            
+            if (verifyLength == 0) {
+                errInfo = NSLocalizedString(@"kEnterVerifycode", nil);
+            }
+            
+            [self showTipsWithInfo:errInfo];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input verify code invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_pwdTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input password invalid.");
+            return;
+        }
+        
+        if (![SHTool isValidPassword:_surePWDTextField.text]) {
+            [self showTipsWithInfo:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
+            
+            valid = NO;
+            SHLogError(SHLogTagAPP, @"Input sure password invalid.");
+            return;
+        }
+    });
+    
+    return valid;
 }
 
 - (void)signupWithEmail:(NSString *)email password:(NSString *)password checkCode:(NSString *)checkCode failedNotice:(NSString *)failedNotice {
@@ -274,31 +281,13 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     [[SHNetworkManager sharedNetworkManager] logonWithUserName:email email:email password:password checkCode:checkCode completion:^(BOOL isSuccess, id result) {
         SHLogInfo(SHLogTagAPP, @"logon is success: %d", isSuccess);
         
-#if 0
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *notice = @"注册成功.";
-            if (isSuccess) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    //                            [self.navigationController popViewControllerAnimated:YES];
-                    [weakself signinClick];
-                });
-            } else {
-                Error *error = result;
-                
-                weakself.progressHUD.detailsLabelText = error.error_description;
-                notice = @"注册失败";
-            }
-            
-            [weakself.progressHUD showProgressHUDNotice:notice showTime:1.0];
-        });
-#endif
         if (isSuccess) {
             [weakself loginHandle];
         } else {
             Error *error = result;
             
             weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-            //weakself.progressHUD.detailsLabelText = @"验证码无效";
+
             NSString *notice = failedNotice;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
@@ -320,7 +309,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
             Error *error = result;
             
             weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-            NSString *notice = failedNotice; //@"重置密码失败";
+            NSString *notice = failedNotice;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
@@ -333,7 +322,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
 - (void)loginHandle {
     self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:/*@"正在登录..."*/NSLocalizedString(@"kLogining", nil)];
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLogining", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSString *email = nil;
@@ -359,7 +348,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
                     SHLogError(SHLogTagAPP, @"loadAccessTokenByEmail is failed, error: %@", error.error_description);
                     
                     weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-                    NSString *notice = NSLocalizedString(@"kLoginFailed", nil); //@"登录失败";
+                    NSString *notice = NSLocalizedString(@"kLoginFailed", nil);
                     [weakself.progressHUD showProgressHUDNotice:notice showTime:2.0];
                 }
                 
@@ -385,17 +374,9 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 - (IBAction)signinClick {
     [self close];
 
-//    SHLoginViewController *vc = [SHLoginViewController loginViewController];
-//
-//    [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:vc animated:YES completion:nil];
-#if 0
-    SHMainViewController *mainVC = (SHMainViewController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
-    [mainVC signinAccountHandle];
-#else
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.26 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] signinAccountHandle];
     });
-#endif
 }
 
 - (IBAction)getVerifycodeClick:(id)sender {
@@ -427,14 +408,19 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
+    if (textField == self.emailTextField) {
+        [self.verifycodeTextField becomeFirstResponder];
+    } else if (textField == self.verifycodeTextField) {
+        [self.pwdTextField becomeFirstResponder];
+    } else if (textField == self.pwdTextField) {
+        [self.surePWDTextField becomeFirstResponder];
+    } else if (textField == self.surePWDTextField) {
+        [self logonClick:nil];
+    }
     
-#if 0
-    uint32_t colorValue = ![_emailTextField.text isEqualToString:@""] && ![_verifycodeTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && ![_surePWDTextField.text isEqualToString:@""] ? kButtonThemeColor : kButtonDefaultColor;
-    _logonButton.backgroundColor = [UIColor ic_colorWithHex:colorValue];
-#else
+    [textField resignFirstResponder];
+
     [self setupSignupState];
-#endif
     
     return YES;
 }
@@ -471,7 +457,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
         if (emailRange.location == NSNotFound ) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.progressHUD hideProgressHUD:YES];
-                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:/*@"输入的邮箱无效，请重新输入."*/NSLocalizedString(@"kInvalidEmail", nil) preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kInvalidEmail", nil) preferredStyle:UIAlertControllerStyleAlert];
                 [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alertC animated:YES completion:nil];
             });
@@ -517,7 +503,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 
 - (void)getVerifycodeFailedTips:(id)result isSuccess:(BOOL)success {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *notice = NSLocalizedString(@"Tips", nil); //NSLocalizedString(@"kVerifycodeAlreadySend", nil); //@"校验码已发送到邮箱";
+        NSString *notice = NSLocalizedString(@"Tips", nil);
         self.progressHUD.detailsLabelText = NSLocalizedString(@"kVerifycodeAlreadySend", nil);
 
         if (success) {
@@ -530,7 +516,7 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
             Error *error = result;
             
             self.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code]; //error.error_description;
-            notice = NSLocalizedString(@"kVerifycodeSendFailed", nil); //@"校验码发送失败";
+            notice = NSLocalizedString(@"kVerifycodeSendFailed", nil);
             SHLogError(SHLogTagAPP, @"Get Verifycode Failed: %@", error.error_description);
         }
         
@@ -574,6 +560,16 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
 - (void)updateVerifycodeBtnTitle:(NSString *)title {
     [_getVerifycodeBtn setTitle:title forState:UIControlStateNormal];
     [_getVerifycodeBtn setTitle:title forState:UIControlStateHighlighted];
+}
+
+- (void)addGestureOperation  {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHandle)];
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)tapGestureHandle {
+    [self.view endEditing:YES];
 }
 
 @end

@@ -35,8 +35,7 @@ static int const kNewFileIconTag = 888;
 @implementation SHMpbTVC
 
 #pragma mark - initVariable
-// 懒加载
-//图片缓存
+
 - (NSCache *)mpbCache {
     if (_mpbCache == nil) {
         _mpbCache = [[NSCache alloc] init];
@@ -46,7 +45,7 @@ static int const kNewFileIconTag = 888;
     
     return _mpbCache;
 }
-//日期和对应是否有文件8天
+
 - (NSMutableArray *)storageInfoArray {
     if (!_storageInfoArray) {
         _storageInfoArray = [NSMutableArray arrayWithCapacity:8];
@@ -55,7 +54,6 @@ static int const kNewFileIconTag = 888;
     return _storageInfoArray;
 }
 
-//?cellTable是什么？
 - (SHTableViewSelectedCellTable *)selCellsTable {
     if (!_selCellsTable) {
         _selCellsTable = [_ctrl.fileCtrl createOneCellsTable];
@@ -105,7 +103,6 @@ static int const kNewFileIconTag = 888;
     return _getThumbnailQueue;
 }
 
-//全部过滤条件
 - (NSArray *)filterArray {
     if (!_filterArray) {
         _filterArray = [SHTool registerDefaultsFromSHFileFilter];
@@ -114,7 +111,6 @@ static int const kNewFileIconTag = 888;
     return _filterArray;
 }
 
-//选中的过滤条件
 - (NSMutableArray *)selectedFilterCells {
     if (!_selectedFilterCells) {
         _selectedFilterCells = [NSMutableArray array];
@@ -152,8 +148,6 @@ static int const kNewFileIconTag = 888;
     [self creatCalendar];
     [self initPhotoGallery];
     
-    //    [self stringToDate:@"2017/04/20 11:11:11" andFormat:kDateFormat]
-//    [self updateShowDate:_remoteDateTime];
     [self addCameraPropertyValueChangeBlock];
     [self setupRefreshView];
 }
@@ -211,7 +205,6 @@ static int const kNewFileIconTag = 888;
     
     self.run = YES;
     
-//    if (_curMpbState == SHMpbStateNor || _isDownloading) {
 	if (_curMpbState == SHMpbStateNor) {
         [self clearSelectedCellTable];
     }
@@ -223,12 +216,7 @@ static int const kNewFileIconTag = 888;
 - (void)singleDownloadCompleteHandle:(NSNotification *)nc {
     NSDictionary *tempDict = nc.userInfo;
     
-#if 0
-    SHFile *file = tempDict[@"file"];
-    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"kFileDownloadCompleteTipsInfo", nil), tempDict[@"cameraName"], file.f.getFileName().c_str()];
-#else
     NSString *msg = [SHTool createDownloadComplete:tempDict];
-#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.notificationView showGCDNoteWithMessage:msg andTime:kShowDownloadCompleteNoteTime withAcvity:NO];
@@ -246,12 +234,8 @@ static int const kNewFileIconTag = 888;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-//    if (_isDownloading || _readyGoToFileDownloadVC) {
-//        _readyGoToFileDownloadVC = NO;
-//        return;
-//    }
     [self updateShowDate:_remoteDateTime];
-    self.curDate = [_remoteDateTime convertToStringWithFormat:kDateFormat];//[SHGUIHandleTool dateToString:_remoteDateTime andFormat:kDateFormat];
+    self.curDate = [_remoteDateTime convertToStringWithFormat:kDateFormat];
     
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
     WEAK_SELF(self);
@@ -308,7 +292,6 @@ static int const kNewFileIconTag = 888;
     self.db = nil;
     
     if (_selCellsTable.count > 0) {
-        //        [self.selCellsTable removeObserver:self forKeyPath:@"count"];
     }
     
     if (!_filterView.hidden) {
@@ -331,6 +314,9 @@ static int const kNewFileIconTag = 888;
             SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
         }
     }
+    
+    [self.progressHUD hideProgressHUD:YES];
+    _progressHUD = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -776,9 +762,7 @@ static int const kNewFileIconTag = 888;
                                   detailsMessage:nil
                                             mode:MBProgressHUDModeIndeterminate];
     
-	//  NSMutableArray *toDeletedIndexPaths = [[NSMutableArray alloc] init];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		//        NSString *cachedKey = nil;
 		
 		dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
 		dispatch_semaphore_wait(self.mpbSemaphore, time);
@@ -789,10 +773,9 @@ static int const kNewFileIconTag = 888;
         NSInteger curFileNum = _curFileTable.fileList.size();
 		int ii = 0;
 		for (NSIndexPath *ip in _selCellsTable.selectedCells) {
-			//      int type = [[a objectAtIndex:1] intValue];
 			ICatchFile f = _curFileTable.fileList.at(ip.row);
-			//ICatchFile *file = (ICatchFile *)[[a lastObject] pointerValue];
-			if ([_ctrl.fileCtrl deleteFile:&f] == NO) {
+
+            if ([_ctrl.fileCtrl deleteFile:&f] == NO) {
 				++failedCount;
 			}else{
 				[self.db deleteFromDataBaseWithFileHandle:f.getFileHandle()];
@@ -816,7 +799,6 @@ static int const kNewFileIconTag = 888;
                 *stop = YES;
             }
         }];
-        //        [self resetTableViewCellDataWithDate:self.curDate];
         
         dispatch_semaphore_signal(self.mpbSemaphore);
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -831,7 +813,6 @@ static int const kNewFileIconTag = 888;
                 self.run = YES;
                 [self initMpbGUI];
                 [self updateMpbGUI];
-                //                [self.tableView reloadData];
             }
             
             NSString *noticeMessage = nil;
@@ -959,7 +940,7 @@ static int const kNewFileIconTag = 888;
         }];
     }
 }
-//默认按照1M/s来计算下载速度，产生需要多少时间的message
+
 - (NSString *)makeupDownloadMessageWithSize:(unsigned long long)sizeInKB
                                   andNumber:(NSInteger)num
 {
@@ -972,40 +953,12 @@ static int const kNewFileIconTag = 888;
     unsigned long long downloadTimeInSeconds = sizeInKB/1024 - downloadTimeInHours*3600 - downloadTimeInMinutes*60;
     SHLogInfo(SHLogTagAPP, @"downloadTimeInHours: %llu, downloadTimeInMinutes: %llu, downloadTimeInSeconds: %llu",
               downloadTimeInHours, downloadTimeInMinutes, downloadTimeInSeconds);
-#if 0
-    if (downloadTimeInHours > 0) {
-        message = NSLocalizedString(@"DownloadConfirmMessage3", nil);
-        message = [message stringByReplacingOccurrencesOfString:@"%1"
-                                                     withString:[NSString stringWithFormat:@"%ld", (long)num]];
-        message = [message stringByReplacingOccurrencesOfString:@"%2"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInHours]];
-        message = [message stringByReplacingOccurrencesOfString:@"%3"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInMinutes]];
-        message = [message stringByReplacingOccurrencesOfString:@"%4"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInSeconds]];
-    } else if (downloadTimeInMinutes > 0) {
-        message = NSLocalizedString(@"DownloadConfirmMessage2", nil);
-        message = [message stringByReplacingOccurrencesOfString:@"%1"
-                                                     withString:[NSString stringWithFormat:@"%ld", (long)num]];
-        message = [message stringByReplacingOccurrencesOfString:@"%2"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInMinutes]];
-        message = [message stringByReplacingOccurrencesOfString:@"%3"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInSeconds]];
-    } else {
-        message = NSLocalizedString(@"DownloadConfirmMessage1", nil);
-        message = [message stringByReplacingOccurrencesOfString:@"%1"
-                                                     withString:[NSString stringWithFormat:@"%ld", (long)num]];
-        message = [message stringByReplacingOccurrencesOfString:@"%2"
-                                                     withString:[NSString stringWithFormat:@"%llu", downloadTimeInSeconds]];
-    }
-    message = [message stringByAppendingString:[NSString stringWithFormat:@"\n%@", humanDownloadFileSize]];
-#else
+
     message = NSLocalizedString(@"DownloadConfirmMessage4", nil);
     message = [message stringByReplacingOccurrencesOfString:@"%1"
                                                  withString:[NSString stringWithFormat:@"%ld", (long)num]];
     message = [message stringByReplacingOccurrencesOfString:@"%2"
                                                  withString:humanDownloadFileSize];
-#endif
     return message;
     
 }
@@ -1055,26 +1008,6 @@ static int const kNewFileIconTag = 888;
 		[_popController dismissPopoverAnimated:YES];
 	}
 
-#if 0
-    for (NSIndexPath *ip in _selCellsTable.selectedCells) {
-        ICatchFile f = _curFileTable.fileList.at(ip.row);
-		NSString *uid = _shCamObj.camera.cameraUid;
-		SHFile *file = [SHFile fileWithUid:uid file:f];
-		[[SHDownloadManager shareDownloadManger] addDownloadFile:file];
-		//
-//		if([[SHDownloadManager shareDownloadManger].downloadArray containsObject:file] == NO){
-//			[[SHDownloadManager shareDownloadManger].downloadArray addObject:file];
-//		}
-    }
-    [[SHDownloadManager shareDownloadManger] startDownloadFile];
-    [self clearSelectedCellTable];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        self.isDownloading = YES;
-//        self.readyGoToFileDownloadVC = YES;
-        [self performSegueWithIdentifier:@"go2FileDownloadSegue" sender:nil];
-    });
-#else
     [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSIndexPath *ip in _selCellsTable.selectedCells) {
@@ -1093,7 +1026,6 @@ static int const kNewFileIconTag = 888;
             [self editAction:nil];
         });
     });
-#endif
 }
 
 - (NSArray *)downloadSelectedFiles
@@ -1109,7 +1041,7 @@ static int const kNewFileIconTag = 888;
         
         self.downloadFileProcessing = YES;
         self.downloadedPercent = 0;//Before the download clear downloadedPercent and increase downloadedFileNumber.
-        //        self.downloadedFileNumber = [_ctrl.fileCtrl retrieveDownloadedTotalNumber];
+
         self.downloadedFileNumber ++;
         [self requestDownloadPercent:&f];
         if (![_ctrl.fileCtrl downloadFile:&f]) {
@@ -1120,8 +1052,6 @@ static int const kNewFileIconTag = 888;
         
         self.downloadFileProcessing = NO;
         [NSThread sleepForTimeInterval:0.5];
-        
-        //[self.shareFiles addObject:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), [NSString stringWithUTF8String:f.getFileName().c_str()]]]];
     }
     
     return [NSArray arrayWithObjects:@(downloadedPhotoNum), @(downloadedVideoNum), @(downloadFailedCount), nil];
@@ -1139,10 +1069,9 @@ static int const kNewFileIconTag = 888;
     NSString *locatePath = nil;
     NSString *fileName = [NSString stringWithUTF8String:f->getFileName().c_str()];
     unsigned long long fileSize = f->getFileSize();
-    //locatePath = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), fileName];
     
     NSString *fileDirectory = nil;
-    if (f->getFileType() == ICH_FILE_TYPE_VIDEO /*[fileName hasSuffix:@".MP4"] || [fileName hasSuffix:@".MOV"]*/) {
+    if (f->getFileType() == ICH_FILE_TYPE_VIDEO) {
         fileDirectory = [SHTool createMediaDirectoryWithPath:_shCamObj.camera.cameraUid.md5][2];
     } else {
         fileDirectory = [SHTool createMediaDirectoryWithPath:_shCamObj.camera.cameraUid.md5][1];
@@ -1155,7 +1084,6 @@ static int const kNewFileIconTag = 888;
         do {
             @autoreleasepool {
                 if (_cancelDownload) break;
-                //self.downloadedPercent = [_ctrl.fileCtrl requestDownloadedPercent:f];
                 self.downloadedPercent = [_ctrl.fileCtrl requestDownloadedPercent2:locatePath
                                                                           fileSize:fileSize];
                 SHLogInfo(SHLogTagAPP, @"percent: %lu", (unsigned long)self.downloadedPercent);
@@ -1247,7 +1175,6 @@ static int const kNewFileIconTag = 888;
         
         self.footerView.alpha = 0.85;
         
-        //        [self.selCellsTable addObserver:self forKeyPath:@"count" options:0x0 context:nil];
         [self updateSelectStatus];
     } else {
         self.title = NSLocalizedString(@"Albums", @"");
@@ -1262,8 +1189,6 @@ static int const kNewFileIconTag = 888;
         
         // Clear
         [self clearSelectedCellTable];
-        
-        //        [self.selCellsTable removeObserver:self forKeyPath:@"count"];
     }
 }
 
@@ -1273,7 +1198,6 @@ static int const kNewFileIconTag = 888;
     
     [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        //此处标题不正确，ALERT_TITLE_SET_SELF_TIMER，需要添加新的title
         self.filterView = [[CustomIOS7AlertView alloc] initWithTitle:NSLocalizedString(@"ALERT_SET_FILTER", nil) inView:self.view];
         self.filterView.delegate = self;
         UIView      *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 150)];
@@ -1287,7 +1211,7 @@ static int const kNewFileIconTag = 888;
         
         _filterView.containerView = containerView;
         [_filterView setUseMotionEffects:TRUE];
-        //    [NSArray arrayWithObjects:NSLocalizedString(@"ALERT_CLOSE", @""), nil]
+
         [_filterView setButtonTitles:@[NSLocalizedString(@"ALERT_CLOSE", @""), NSLocalizedString(@"SavePhoto", nil)]];
         
         __weak SHMpbTVC *weakSelf = self;
@@ -1305,7 +1229,6 @@ static int const kNewFileIconTag = 888;
 - (IBAction)showDownloadAction:(id)sender {
     [self.progressHUD showProgressHUDWithMessage:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-//        self.readyGoToFileDownloadVC = YES;
         [self performSegueWithIdentifier:@"go2FileDownloadSegue" sender:nil];
         [self.progressHUD hideProgressHUD:YES];
     });
@@ -1363,7 +1286,7 @@ static int const kNewFileIconTag = 888;
     }
     
     [self updateShowDate:curDate];
-    self.curDate = [curDate convertToStringWithFormat:kDateFormat];//[SHGUIHandleTool dateToString:curDate andFormat:kDateFormat];
+    self.curDate = [curDate convertToStringWithFormat:kDateFormat];
     
     WEAK_SELF(self);
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
@@ -1400,7 +1323,7 @@ static int const kNewFileIconTag = 888;
 }
 
 - (BOOL)isCurrentDate:(NSDate *)newDate {
-    NSString *tempDate = [newDate convertToStringWithFormat:kDateFormat];//[SHGUIHandleTool dateToString:newDate andFormat:kDateFormat];
+    NSString *tempDate = [newDate convertToStringWithFormat:kDateFormat];
     NSArray *tempDateArray = [tempDate componentsSeparatedByString:@" "];
     NSArray *curDateArray = [self.curDate componentsSeparatedByString:@" "];
     
@@ -1469,58 +1392,9 @@ static int const kNewFileIconTag = 888;
         cell.file = &file;
         cell.cameraNameLabel.text = _shCamObj.camera.cameraName;
         [cell.fileThumbs layoutIfNeeded];
-#if 0
-        UIImage *image = [self getFileThumbnail:file];
-        [cell.fileThumbs layoutIfNeeded];
-        if (image) {
-            cell.fileThumbs.image = [image ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];
-        } else {
-            cell.fileThumbs.image = [[UIImage imageNamed:@"empty_photo"] ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];
-            double delayInSeconds = 0.05;
-            dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(delayTime, self.thumbnailQueue, ^{
-                if (!_run) {
-                    SHLogInfo(SHLogTagAPP, @"bypass...");
-                    return;
-                }
-                
-                dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5ull * NSEC_PER_SEC);
-                dispatch_semaphore_wait(self.mpbSemaphore, time);
-                // Just in case, make sure the cell for this indexPath is still On-Screen.
-                __block UITableViewCell *tempCell = nil;
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    tempCell = [tableView cellForRowAtIndexPath:indexPath];
-                });
-                
-                if (tempCell) {
-                    NSData *imageData = [_ctrl.propCtrl requestThumbnail:(ICatchFile *)&file andPropertyID:TRANS_PROP_GET_FILE_THUMBNAIL andCamera:_shCamObj];
-                    
-                    //                    UIImage *image = [_ctrl.fileCtrl requestThumbnail:(ICatchFile *)&file];
-                    UIImage *image = [UIImage imageWithData:imageData];
-                    if (image) {
-                        SHFileThumbnail *thumbFile = [SHFileThumbnail fileThumbnailWithFile:(ICatchFile *)&file andThumbnailData:imageData];
-                        
-                        [self.db insertToDataBaseWithFileThumbnail:thumbFile];
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            //                            [self.mpbCache setObject:image forKey:cachedKey];
-                            SHMpbTableViewCell *c = (SHMpbTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-                            if (c) {
-                                c.fileThumbs.image = [image ic_cornerImageWithSize:cell.fileThumbs.bounds.size radius:kImageCornerRadius];//image;
-                            }
-                        });
-                    } else {
-                        SHLogError(SHLogTagAPP, @"request thumbnail failed");
-                    }
-                }
-                
-                dispatch_semaphore_signal(self.mpbSemaphore);
-            });
-        }
-#else
+
         [self setupThumbnailWithCell:cell cellForRowAtIndexPath:indexPath];
-#endif
-        //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         return cell;
     } else {
         SHFilterTableViewCell *cell = [[SHFilterTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
@@ -1599,8 +1473,6 @@ static int const kNewFileIconTag = 888;
 }
 
 - (UIImage *)getFileThumbnail:(ICatchFile)file {
-    //    NSString *cachedKey = [NSString stringWithFormat:@"ID%d", file.getFileHandle()];
-    //    UIImage *image = [self.mpbCache objectForKey:cachedKey];
     UIImage *image = nil;
     
     NSArray *fileThumbArray = [self.db queryFromDataBaseWithFileHandle:file.getFileHandle()];
@@ -1760,7 +1632,6 @@ static int const kNewFileIconTag = 888;
     
     CGFloat rowH = imgViewH + space * 2;
     
-    //    NSLog(@"height: %f", rowH);
     return rowH;
 }
 
@@ -1778,60 +1649,11 @@ static int const kNewFileIconTag = 888;
 - (void)videoSinglePlaybackCallback:(NSIndexPath *)indexPath
 {
     SHLogTRACE();
-    //    if (![_ctrl.pbCtrl videoPlaybackStreamEnabled]) {
-    //        [self.progressHUD showProgressHUDNotice:NSLocalizedString(@"ShowNoViewVideoTip", nil) showTime:1.0];
-    //        return;
-    //    }
     
     ICatchFile file = _curFileTable.fileList.at(indexPath.row);
     
-    //    NSString *cachedKey = [NSString stringWithFormat:@"ID%d", file.getFileHandle()];
     _videoPlaybackIndex = indexPath.row;
-#if 0
-    //    UIImage *image = [self.mpbCache objectForKey:cachedKey];
-    UIImage *image = [self getFileThumbnail:file];
-    if (!image) {
-        dispatch_suspend(self.thumbnailQueue);
-        
-        [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"STREAM_ERROR_CAPTURING_CAPTURE", nil)
-                                      detailsMessage:nil
-                                                mode:MBProgressHUDModeIndeterminate];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            if (!_run) {
-                return;
-            }
-            
-            dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5ull * NSEC_PER_SEC);
-            dispatch_semaphore_wait(_mpbSemaphore, time);
-            
-            //            UIImage *image = [_ctrl.fileCtrl requestThumbnail:(ICatchFile *)&file];
-            //            if (image != nil) {
-            //                [_mpbCache setObject:image forKey:cachedKey];
-            //            }
-            NSData *imageData = [_ctrl.propCtrl requestThumbnail:(ICatchFile *)&file andPropertyID:TRANS_PROP_GET_FILE_THUMBNAIL andCamera:_shCamObj];
-            
-            UIImage *image = [UIImage imageWithData:imageData];
-            if (image) {
-                SHFileThumbnail *thumbFile = [SHFileThumbnail fileThumbnailWithFile:(ICatchFile *)&file andThumbnailData:imageData];
-                
-                [self.db insertToDataBaseWithFileThumbnail:thumbFile];
-            }
-            
-            dispatch_semaphore_signal(_mpbSemaphore);
-            dispatch_resume(self.thumbnailQueue);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressHUD hideProgressHUD:YES];
-                _videoPlaybackThumb = image;
-                [self performSegueWithIdentifier:@"go2PlaybackVideoSegue" sender:nil];
-            });
-        });
-    } else {
-        _videoPlaybackThumb = image;
-        [self performSegueWithIdentifier:@"go2PlaybackVideoSegue" sender:nil];
-    }
-#else
+
     [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"STREAM_ERROR_CAPTURING_CAPTURE", nil)
                                   detailsMessage:nil
                                             mode:MBProgressHUDModeIndeterminate];
@@ -1839,7 +1661,6 @@ static int const kNewFileIconTag = 888;
         [self.progressHUD hideProgressHUD:YES];
         [self performSegueWithIdentifier:@"go2PlaybackVideoSegue" sender:nil];
     });
-#endif
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -1856,11 +1677,6 @@ static int const kNewFileIconTag = 888;
     } else if ([segue.identifier isEqualToString:@"go2FileDownloadSegue"]) {
         SHFileDownloadTVC *vc = segue.destinationViewController;
         vc.cameraUid = _shCamObj.camera.cameraUid;
-        //vc.downloadArray = [NSMutableArray arrayWithArray:[SHDownloadManager shareDownloadManger].downloadArray];
-//        [vc setDownloadCompleteBlock:^ {
-//            _isDownloading = NO;
-//            _totalDownloadSize = 0;
-//        }];
     }
 }
 
@@ -1879,10 +1695,6 @@ static int const kNewFileIconTag = 888;
 }
 
 - (MBProgressHUD *)progressHUDFilter {
-    //    if (!_progressHUDFilter) {
-    //        _progressHUDFilter = [MBProgressHUD progressHUDWithView:self.filterTableView.window];
-    //    }
-    
     return [MBProgressHUD progressHUDWithView:self.filterTableView.window];
 }
 
@@ -1932,9 +1744,6 @@ static int const kNewFileIconTag = 888;
 - (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (!buttonIndex) {
     } else {
-        //        dispatch_queue_t setFileFilterQ = dispatch_queue_create("WifiCam.GCD.Queue.SetFileFilter", DISPATCH_QUEUE_SERIAL);
-        
-        //        dispatch_sync(setFileFilterQ, ^{
         [self setSelectedFileFilter];
         
         int retVal = [_shCamObj.controler.fileCtrl setFilesFilter:self.filterArray];
@@ -1979,7 +1788,6 @@ static int const kNewFileIconTag = 888;
                 });
             }];
         }
-        //        });
     }
     
     [self.selectedFilterCells removeAllObjects];
@@ -2058,12 +1866,7 @@ static int const kNewFileIconTag = 888;
 - (void)newFileEventHandler:(SHICatchEvent *)evt {
     ICatchFile newFile = evt.fileValue;
     _latestFileDate = [NSString stringWithFormat:@"%s", newFile.getFileDate().c_str()];
-    
-//    if ([_latestFileDate isEqualToString:_curFileTable.fileCreateDate]) {
-//        [self updateCameraFileList];
-//    } else {
-//        [self updateDateViewGUI];
-//    }
+
     [self updateDateViewGUI];
 }
 

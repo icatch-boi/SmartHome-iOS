@@ -38,8 +38,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-//    [_photoButton setCornerWithRadius:kImageCornerRadius masksToBounds:YES];
-//    [_videoButton setCornerWithRadius:kImageCornerRadius masksToBounds:YES];
     
     _thumnailImgView.contentMode = UIViewContentModeScaleAspectFill;
 }
@@ -79,33 +77,19 @@
     
     if (photoAssets.count) {
         if(_mediaType) {
-#if 0
-            image = [self getImage:photoAssets[0]];
-#else
             [self updateVideoThumnailWithAsset:photoAssets[0]];
-#endif
         } else {
-#if 0
-            image = [UIImage imageWithContentsOfFile:((NSURL *)photoAssets[0]).path];
-#else
             [self updatePhotoThumnailWithAsset:photoAssets[0]];
-#endif
         }
         
     } else {
-#if 0
-        image = [UIImage imageNamed:@"default_thumb"];
-#else
         NSString *imageName = @"camera roll-btn-photo-loading";
         if (_mediaType) {
             imageName = @"camera roll-btn-video-loading";
         }
         
         image = [UIImage imageNamed:imageName];
-#endif
-        //[image ic_cornerImageWithSize:_photoButton.bounds.size radius:kImageCornerRadius];
-        //[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
-        //_photoLabel.text = [NSString stringWithFormat:@"%@ (0)", NSLocalizedString(@"PhotosLabel", nil)];
+
         [_thumnailImgView setImage:image];
     }
     
@@ -200,119 +184,12 @@
 }
 
 - (IBAction)showLocalMediaBrowser:(UIButton *)sender {
-#if 0
-    if(_mediaType) {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-video-pre"]];
-    } else {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-photo-pre"]];
-    }
-    _selectSender = sender;
-    // Browser
-    NSMutableArray *photos = [[NSMutableArray alloc] init];
-    NSMutableArray *thumbs = [[NSMutableArray alloc] init];
-    //MWPhoto *photo, *thumb;
-    BOOL displayActionButton = YES;
-    BOOL displaySelectionButtons = NO;
-    BOOL displayNavArrows = YES;
-    BOOL enableGrid = YES;
-    BOOL startOnGrid = YES;
-    BOOL autoPlayOnAppear = NO;
-
-    if (_mediaType == 0) {//image
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[MWPhoto photoWithURL:photoURL]];
-                    [thumbs addObject:[MWPhoto photoWithURL:photoURL]];
-                }
-            }
-        }
-    } else {
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[MWPhoto videoWithURL:photoURL]];
-                    [thumbs addObject:[MWPhoto videoWithURL:photoURL]];
-                }
-            }
-        }
-    }
-    
-    self.photos = photos;
-    self.thumbs = thumbs;
-    
-    // Create browser
-    MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
-    browser.displayActionButton = displayActionButton;
-    browser.displayNavArrows = displayNavArrows;
-    browser.displaySelectionButtons = displaySelectionButtons;
-    browser.alwaysShowControls = displaySelectionButtons;
-    browser.zoomPhotosToFill = YES;
-    browser.enableGrid = enableGrid;
-    browser.startOnGrid = startOnGrid;
-    browser.enableSwipeToDismiss = NO;
-    browser.autoPlayOnAppear = autoPlayOnAppear;
-	if (_mediaType == 0) {//image
-		browser.isImage = YES;
-	}else{
-		browser.isImage = NO;
-	}
-	
-    // Reset selections
-    if (displaySelectionButtons) {
-        _selections = [NSMutableArray new];
-        for (int i = 0; i < photos.count; i++) {
-            [_selections addObject:[NSNumber numberWithBool:NO]];
-        }
-    }
-
-    // Modal
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
-    nc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//    [self presentViewController:nc animated:YES completion:nil];
-    if (self.showLocalMediaBrowserBlock) {
-        self.showLocalMediaBrowserBlock(nc);
-    }
-    
-    // Test reloading of data after delay
-    double delayInSeconds = 3;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    });
-    if(_mediaType) {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-video"]];
-    } else {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-photo"]];
-    }
-#endif
-    
     [self enterPhotoBrowser];
 }
 
 #pragma mark - MWPhotoBrowserDelegate
 
 // use new photoBrowser
-#if 0
-- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
-    return _photos.count;
-
-}
-
-- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
-    if (index < _photos.count)
-        return [_photos objectAtIndex:index];
-    return nil;
-}
-
-- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
-    if (index < _thumbs.count)
-        return [_thumbs objectAtIndex:index];
-    return nil;
-}
-#endif
-
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index {
     NSLog(@"Did start viewing photo at index %lu", (unsigned long)index);
 }
@@ -326,49 +203,7 @@
     NSLog(@"Photo at index %lu selected %@", (unsigned long)index, selected ? @"YES" : @"NO");
 }
 
-//- (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser {
-//    // If we subscribe to this method we must dismiss the view controller ourselves
-//    NSLog(@"Did finish modal presentation");
-////    [self dismissViewControllerAnimated:YES completion:^{
-////    }];
-//}
-
 // use new photoBrowser
-#if 0
-- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser deletePhotoAtIndex:(NSUInteger)index
-{
-    BOOL ret = NO;
-    
-    if (self.deleteLocalFileBlock) {
-        ret = self.deleteLocalFileBlock(_mediaType, index);
-    }
-    
-    if (ret) {
-//        [self performLoadLocalAssets];
-        if (_photos.count) {
-            [_photos removeAllObjects];
-        }
-        if (_thumbs.count) {
-            [_thumbs removeAllObjects];
-        }
-        
-        if (_mediaType == 0) {
-            for (NSURL *photoURL in _assetsArray) {
-                [_photos addObject:[MWPhoto photoWithURL:photoURL]];
-                [_thumbs addObject:[MWPhoto photoWithURL:photoURL]];
-            }
-        } else {
-            for (NSURL *videoURL in _assetsArray) {
-                [_photos addObject:[MWPhoto videoWithURL:videoURL]];
-                [_thumbs addObject:[MWPhoto videoWithURL:videoURL]];
-            }
-        }
-    }
-	
-    return ret;
-}
-#endif
-
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser shareImageAtIndex:(NSUInteger)index{
 	//share...
 }
@@ -428,101 +263,7 @@
 }
 
 - (IBAction)enterMediaStore:(UIButton *)sender {
-#if 0
-    if(_mediaType) {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-video-pre"]];
-    } else {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-photo-pre"]];
-    }
-    _selectSender = sender;
-    // Browser
-    NSMutableArray *photos = [[NSMutableArray alloc] init];
-    NSMutableArray *thumbs = [[NSMutableArray alloc] init];
-    //MWPhoto *photo, *thumb;
-    BOOL displayActionButton = YES;
-    BOOL displaySelectionButtons = NO;
-    BOOL displayNavArrows = YES;
-    BOOL enableGrid = YES;
-    BOOL startOnGrid = YES;
-    BOOL autoPlayOnAppear = NO;
-    
-    if (_mediaType == 0) {//image
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[MWPhoto photoWithURL:photoURL]];
-                    [thumbs addObject:[MWPhoto photoWithURL:photoURL]];
-                }
-            }
-        }
-    } else {
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[MWPhoto videoWithURL:photoURL]];
-                    [thumbs addObject:[MWPhoto videoWithURL:photoURL]];
-                }
-            }
-        }
-    }
-    
-    self.photos = photos;
-    self.thumbs = thumbs;
-    
-    // Create browser
-    MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
-    browser.displayActionButton = displayActionButton;
-    browser.displayNavArrows = displayNavArrows;
-    browser.displaySelectionButtons = displaySelectionButtons;
-    browser.alwaysShowControls = displaySelectionButtons;
-    browser.zoomPhotosToFill = YES;
-    browser.enableGrid = enableGrid;
-    browser.startOnGrid = startOnGrid;
-    browser.enableSwipeToDismiss = NO;
-    browser.autoPlayOnAppear = autoPlayOnAppear;
-    if (_mediaType == 0) {//image
-        browser.isImage = YES;
-    }else{
-        browser.isImage = NO;
-    }
-    
-    // Reset selections
-    if (displaySelectionButtons) {
-        _selections = [NSMutableArray new];
-        for (int i = 0; i < photos.count; i++) {
-            [_selections addObject:[NSNumber numberWithBool:NO]];
-        }
-    }
-    
-    // Modal
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:browser];
-    nc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    //    [self presentViewController:nc animated:YES completion:nil];
-#if 0
-    if (self.showLocalMediaBrowserBlock) {
-        self.showLocalMediaBrowserBlock(nc);
-    }
-#else
-    if ([self.delegate respondsToSelector:@selector(localAlbumCell:showLocalMediaBrowser:)]) {
-        [self.delegate localAlbumCell:self showLocalMediaBrowser:nc];
-    }
-#endif
-    
-    // Test reloading of data after delay
-    double delayInSeconds = 3;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    });
-    if(_mediaType) {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-video"]];
-    } else {
-        [_iconBackImgView setImage:[UIImage imageNamed:@"camera roll-btn-photo"]];
-    }
-#else
     [self enterPhotoBrowser];
-#endif
 }
 
 #pragma mark - New method
@@ -536,37 +277,7 @@
     // Browser
     BOOL displaySelectionButtons = NO;
     
-#if 0
-    //ZJPhoto *photo, *thumb;
-    NSMutableArray *photos = [[NSMutableArray alloc] init];
-    NSMutableArray *thumbs = [[NSMutableArray alloc] init];
-    if (_mediaType == 0) {//image
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[ZJPhoto photoWithURL:photoURL]];
-                    [thumbs addObject:[ZJPhoto photoWithURL:photoURL]];
-                }
-            }
-        }
-    } else {
-        @synchronized (_assetsArray) {
-            NSMutableArray *copy = [_assetsArray copy];
-            for (NSURL *photoURL in copy) {
-                @autoreleasepool {
-                    [photos addObject:[ZJPhoto videoWithURL:photoURL]];
-                    [thumbs addObject:[ZJPhoto videoWithURL:photoURL]];
-                }
-            }
-        }
-    }
-    
-    self.photos = photos;
-    self.thumbs = thumbs;
-#else
     [self addAssets];
-#endif
     
     // Create browser
     ZJPhotoBrowserController *browser = [[ZJPhotoBrowserController alloc] initWithDelegate:self];
@@ -586,15 +297,10 @@
     nc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     //    [self presentViewController:nc animated:YES completion:nil];
     [SHTool configureAppThemeWithController:nc];
-#if 0
-    if (self.showLocalMediaBrowserBlock) {
-        self.showLocalMediaBrowserBlock(nc);
-    }
-#else
+
     if ([self.delegate respondsToSelector:@selector(localAlbumCell:showLocalMediaBrowser:)]) {
         [self.delegate localAlbumCell:self showLocalMediaBrowser:nc];
     }
-#endif
     
     // Test reloading of data after delay
     double delayInSeconds = 3;
@@ -653,37 +359,6 @@
 
 - (void)photoBrowser:(ZJPhotoBrowserController *)photoBrowser deletePhotoAtIndex:(NSUInteger)index completionHandler:(nullable void (^)(BOOL))completionHandler
 {
-#if 0
-    BOOL ret = NO;
-    
-    if (self.deleteLocalFileBlock) {
-        ret = self.deleteLocalFileBlock(_mediaType, index);
-    }
-    
-    if (ret) {
-        //        [self performLoadLocalAssets];
-        if (_photos.count) {
-            [_photos removeAllObjects];
-        }
-        if (_thumbs.count) {
-            [_thumbs removeAllObjects];
-        }
-        
-        if (_mediaType == 0) {
-            for (NSURL *photoURL in _assetsArray) {
-                [_photos addObject:[ZJPhoto photoWithURL:photoURL]];
-                [_thumbs addObject:[ZJPhoto photoWithURL:photoURL]];
-            }
-        } else {
-            for (NSURL *videoURL in _assetsArray) {
-                [_photos addObject:[ZJPhoto videoWithURL:videoURL]];
-                [_thumbs addObject:[ZJPhoto videoWithURL:videoURL]];
-            }
-        }
-    }
-    
-    return ret;
-#else
     if ([self.delegate respondsToSelector:@selector(localAlbumCell:deleteLocalAssetWithIndex:tag:completionHandler:)]) {
         [self.delegate localAlbumCell:self deleteLocalAssetWithIndex:index tag:_mediaType completionHandler:^(BOOL success) {
             if (success) {
@@ -695,7 +370,6 @@
             }
         }];
     }
-#endif
 }
 
 @end

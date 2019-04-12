@@ -44,16 +44,9 @@ enum SHParseError {
 #import "SHGettingProperty.h"
 #import "SHSettingProperty.h"
 
-#import "SHWhiteBalance.h"
-#import "SHLightFrequency.h"
-#import "SHVideoSize.h"
 #import "SHAbout.h"
 #import "SHRangeItemData.h"
-#import "SHPir.h"
-#import "SHCameraBrightness.h"
 #import "SHVidRecDuration.h"
-#import "SHMICVolume.h"
-#import "SHSpeakerVolume.h"
 #import "SHSleepTime.h"
 
 #endif /* SHSettingCommon_h */

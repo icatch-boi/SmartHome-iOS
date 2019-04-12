@@ -24,22 +24,6 @@
 
 - (void)startVideoRecWithSuccessBlock:(void(^)())successBlock failedBlock:(void (^)(int result))failedBlock noCardBlock:(void(^)())noCardBlock cardFullBlock:(void(^)())cardFullBlock {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        if (![_shCamObj.controler.propCtrl checkSDExistWithCamera:_shCamObj curResult:_shCamObj.cameraProperty.sdCardResult]) {
-//            if (noCardBlock) {
-//                noCardBlock();
-//            }
-//
-//            return;
-//        }
-//
-//        if ([_shCamObj.controler.propCtrl checkSDFullWithCamera:_shCamObj curResult:_shCamObj.cameraProperty.sdCardResult]) {
-//            if (cardFullBlock) {
-//                cardFullBlock();
-//            }
-//
-//            return;
-//        }
-        
         SHLogTRACE();
         int ret = [_shCamObj.sdk startVideoRecord];
         SHLogTRACE();
@@ -153,7 +137,6 @@
                     SHLogInfo(SHLogTagAPP, @"%@", fullPath);
                     fileURL = [NSURL fileURLWithPath:fullPath];
                     
-//                    [_shCamObj.sdk addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_IMAGE forKey:_shCamObj.camera.cameraUid];
                     [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_IMAGE forKey:_shCamObj.camera.cameraUid];
                 }
             } else {

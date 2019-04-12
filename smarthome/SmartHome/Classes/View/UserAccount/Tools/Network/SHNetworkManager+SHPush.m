@@ -78,22 +78,20 @@
         
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME: 发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
         
         if (finished) {
             finished(NO, err);
         }
     };
     
-//    message = [message stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-//    NSString *urlString = [NSString stringWithFormat:@"http://www.smarthome.icatchtek.com/messages/topic4?cmd=event&uid=%@&img=1&msg=%@", uid, message];
     NSString *baseURL = @"http://www.smarthome.icatchtek.com/messages/topic4?";
     if (pushType == SHPushTypeOther) {
         baseURL = @"http://push.iotcplatform.com/tpns?";
@@ -119,14 +117,14 @@
     id failure = ^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
         
-        if (respose.statusCode == 403) {
+        if (respose.statusCode == 401) {
             SHLogError(SHLogTagAPP, @"Token invalid.");
             
-            // FIXME:发送通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         NSDictionary *err = [self parseErrorInfo:error];
-        SHLogError(SHLogTagAPP, @"网络请求错误: %@", err);
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
         
         if (finished) {
             finished(NO, err);
@@ -168,10 +166,10 @@
 - (AFHTTPSessionManager *)pushRequestSessionManager {
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // https request must set baseURL
-    NSURL *url = [NSURL URLWithString:ServerBaseUrl];
+    NSURL *url = [NSURL URLWithString:kServerBaseURL];
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
     
-    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token];
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     [manager.requestSerializer setValue:token forHTTPHeaderField:@"Authorization"];
 
@@ -179,7 +177,7 @@
 }
 
 - (NSString *)requestURLString:(NSString *)urlString {
-    return [ServerBaseUrl stringByAppendingString:urlString];
+    return [kServerBaseURL stringByAppendingString:urlString];
 }
 
 - (BOOL)setCertificatesWithManager:(AFURLSessionManager *)manager

@@ -33,12 +33,6 @@
   CGRect result = [super trackRectForBounds:bounds];
   result.size.height = 11.0;
   return result;
-    
-//    bounds.origin.x=15;
-//    bounds.origin.y=bounds.size.height/3;
-//    bounds.size.height=bounds.size.height/5;
-//    bounds.size.width=bounds.size.width-30;
-//    return bounds;
 }
 
 - (CGRect)thumbRectForBounds:(CGRect)bounds trackRect:(CGRect)rect value:(float)value

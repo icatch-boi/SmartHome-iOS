@@ -45,9 +45,8 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//    [self.tableView registerClass:[SHLocalAlbumCell class] forCellReuseIdentifier:@"localAlbumCellID"];
+
     self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.title = NSLocalizedString(@"Photos", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -76,58 +75,6 @@
     SHLocalAlbumCell *cell = [tableView dequeueReusableCellWithIdentifier:@"localAlbumCellID" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
-#if 0
-    NSString *key = self.localAssetsDict.allKeys[indexPath.section];
-    
-    NSString *secondKey = @"photos";
-    if(indexPath.row) {
-        secondKey = @"videos";
-    }
-    UIView *backgroudViews = [[UIView alloc] initWithFrame:cell.frame];
-    backgroudViews.backgroundColor = [UIColor blueColor];
-    [cell setSelectedBackgroundView:backgroudViews];
-    cell.mediaType = indexPath.row;
-    
-    NSMutableArray *assetsArray = [[self.localAssetsDict objectForKey:key] objectForKey:secondKey];
-    cell.assetsArray = assetsArray;
-    
-    [cell setShowLocalMediaBrowserBlock:^ (UINavigationController *nc){
-        [self presentViewController:nc animated:YES completion:nil];
-    }];
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    cell.deleteLocalFileBlock = ^BOOL(NSInteger tag, NSInteger index) {
-        NSString *filePath = nil;
-        NSArray *documentsDirectoryContents;
-        
-        if (tag == 0) {
-            filePath = [SHTool createMediaDirectoryWithPath:key][1];
-        } else {
-            filePath = [SHTool createMediaDirectoryWithPath:key][2];
-        }
-        documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:filePath error:nil];
-    
-        BOOL ret = [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", filePath, documentsDirectoryContents[index]] error:nil];
-        if (ret) {
-
-            if (tag == 0) {
-                NSMutableArray *photoAsstes = assetsArray;
-                [photoAsstes removeObjectAtIndex:index];
-            } else {
-                NSMutableArray *videoAsstes = assetsArray;
-                [videoAsstes removeObjectAtIndex:index];
-            }
-            
-            NSIndexPath *curIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            });
-        }
-        
-        return ret;
-    };
-#endif
 
     UIView *backgroudViews = [[UIView alloc] initWithFrame:cell.frame];
     backgroudViews.backgroundColor = [UIColor ic_colorWithHex:kButtonThemeColor];
@@ -152,20 +99,7 @@
 
 #pragma mark - UITableViewDelegate
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-#if 1
-//    return self.localAssetsDict.allKeys[section];
     return [[SHCameraManager  sharedCameraManger] getSHCameraObjectWithCameraUid:_cameraUid].camera.cameraName;
-#else
-    NSArray *camobjs = [[SHCameraManager  sharedCameraManger] smarthomeCams];
-    NSString *uidMd5 = self.localAssetsDict.allKeys[section];
-    for(SHCameraObject *camobj in camobjs) {
-        SHCamera *camera = camobj.camera;
-        if( [uidMd5 compare:camera.cameraUid.md5] == 0) {
-            return camera.cameraName;
-        }
-    }
-    return @"Unknown";
-#endif
 }
 
 #pragma mark - Load Assets
@@ -191,50 +125,6 @@
 - (void)performLoadLocalAssets {
     [self.localAssetsDict removeAllObjects];
     
-#if 0
-    // Load
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *mediaDirectory = [documentsDirectory stringByAppendingPathComponent:@"SmartHome-Medias"];
-        NSArray *dirArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:mediaDirectory error:nil];
-        SHLogDebug(SHLogTagAPP, @"dirArray: %@", dirArray);
-        
-        for (NSString *path in dirArray) {
-            
-//            if (![path isEqualToString:_cameraUid.md5]) {
-//                continue;
-//            }
-            
-            // photo
-            NSString *photosPath = [SHTool createMediaDirectoryWithPath:path][1];
-            NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:photosPath error:nil];
-            
-            NSMutableArray *photosAssets = [[NSMutableArray alloc] initWithCapacity:documentsDirectoryContents.count];
-            for (NSString *photoPath in documentsDirectoryContents) {
-                [photosAssets addObject:[NSURL fileURLWithPath:[photosPath stringByAppendingPathComponent:photoPath]]];
-            }
-            
-            SHLogInfo(SHLogTagAPP, @"_photosAssets.count: %lu", (unsigned long)photosAssets.count);
-            
-            // video
-            NSString *videosPath = [SHTool createMediaDirectoryWithPath:path][2];
-            NSArray *videoDocuments = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:videosPath error:nil];
-            
-            NSMutableArray *videosAssets = [[NSMutableArray alloc] initWithCapacity:videoDocuments.count];
-            for (NSString *videoPath in videoDocuments) {
-                [videosAssets addObject:[NSURL fileURLWithPath:[videosPath stringByAppendingPathComponent:videoPath]]];
-            }
-            
-            SHLogInfo(SHLogTagAPP, @"_videosAssets.count: %lu", (unsigned long)videosAssets.count);
-            [self.localAssetsDict setObject:@{@"photos":photosAssets, @"videos":videosAssets} forKey:path];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    });
-#else
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PHFetchResult *assetsFetchResult = nil;
         PHFetchResult *topLevelUserCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
@@ -305,7 +195,6 @@
             [self.tableView reloadData];
         });
     });
-#endif
 }
 
 
@@ -337,29 +226,6 @@
         return;
     }
     
-#if 0
-    [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAsset:asset.localIdentifier forKey:self.cameraUid completionHandler:^(BOOL success) {
-        if (success) {
-            if (tag == 0) {
-                NSMutableArray *photoAsstes = assetsArray;
-                [photoAsstes removeObjectAtIndex:index];
-            } else {
-                NSMutableArray *videoAsstes = assetsArray;
-                [videoAsstes removeObjectAtIndex:index];
-            }
-            
-            NSIndexPath *curIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadRowsAtIndexPaths:@[curIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            });
-        }
-        
-        if (completionHandler) {
-            completionHandler(success);
-        }
-    }];
-#else
     SHLogInfo(SHLogTagAPP, @"current index: %lu, assets count: %lu", (unsigned long)index, (unsigned long)assetsArray.count);
     WEAK_SELF(self);
     [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAsset:asset.localIdentifier forKey:self.cameraUid completionHandler:^(BOOL success) {
@@ -378,7 +244,6 @@
             completionHandler(success);
         }
     }];
-#endif
 }
 
 @end

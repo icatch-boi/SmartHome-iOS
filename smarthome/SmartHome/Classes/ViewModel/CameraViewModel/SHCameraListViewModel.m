@@ -40,18 +40,6 @@
 @implementation SHCameraListViewModel
 
 - (void)loadCamerasWithCompletion:(void (^)())completion {
-#if 0
-    NSArray *cameras = [[CoreDataHandler sharedCoreDataHander] fetchedCamera];
-    
-    [self.camerasArray removeAllObjects];
-    [[SHCameraManager sharedCameraManger] removeAllCameraObjects];
-    [cameras enumerateObjectsUsingBlock:^(SHCamera *camera, NSUInteger idx, BOOL * _Nonnull stop) {
-        [[SHCameraManager sharedCameraManger] addSHCameraObject:camera];
-        [self addShareCamera:camera];
-    }];
-    
-    [self saveShareCameras];
-#endif
     [[[SHLocalCamerasHelper alloc] init] prepareCamerasData];
     [self addCameraToViewModel];
     

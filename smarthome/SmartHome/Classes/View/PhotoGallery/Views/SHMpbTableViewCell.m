@@ -79,7 +79,6 @@
     NSMutableString *dateStr = [NSMutableString string];
     
     NSString *dateString = [NSString stringWithFormat:@"%s", date.c_str()];
-    //AppLogDebug(AppLogTagAPP, @"dateString: %@", dateString);
     
     if (dateString.length == 15) {
         [dateStr appendString:[dateString substringWithRange:NSMakeRange(0, 4)]];

@@ -41,4 +41,7 @@
 - (BOOL)compareFWVersion:(SHCameraObject *)shCameraObj curResult:(SHPropertyQueryResult *)curResult;
 - (uint)retrieveNewFilesCountWithCamera:(SHCameraObject *)shCameraObj pbTime:(NSString *)pbTime;
 
+- (shared_ptr<ICatchCameraVersion>)retrieveCameraVersionWithCamera:(SHCameraObject *)shCameraObj;
+- (BOOL)deviceSupportUpgradeWithCamera:(SHCameraObject *)shCameraObj;
+
 @end

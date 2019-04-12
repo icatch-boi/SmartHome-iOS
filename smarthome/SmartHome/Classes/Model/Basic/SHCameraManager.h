@@ -22,4 +22,7 @@
 - (void)removeAllCameraObjects;
 - (void)unmappingAllCamera;
 
+- (void)destroyAllDeviceResoure;
+- (void)destroyAllDeviceResoureExcept:(NSString *)uid;
+
 @end

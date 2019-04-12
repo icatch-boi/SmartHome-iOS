@@ -99,22 +99,30 @@ const int UNDEFINED_NUM = 0xffff;
 #define kSingleDownloadCompleteNotification @"kSingleDownloadCompleteNotification"
 #define kCameraAlreadyExistNotification @"kCameraAlreadyExistNotification"
 
+#pragma mark - Project
+static NSString * const kEnterAPMode = @"kEnterAPMode";
+static NSString * const kCameraSSIDPrefix = @"SH-IPC_";
+static NSString * const kPowerOffEventValue = @"kPowerOffEventValue";
+static NSString * const kAppGroupsName = @"group.com.icatchtek.smarthome";
+static NSString * const kShareCameraInfoKey = @"SHShareCameras";
+static NSString * const kDeviceToken = @"deviceToken";
+static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
+static NSString * const kLocalAlbumName = @"SmartHome";
+static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
+
+#pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";
 static NSString * const kCameraDisconnectNotification = @"kCameraDisconnectNotification";
 static NSString * const kCameraNetworkConnectedNotification = @"kCameraNetworkConnectedNotification";
 static NSString * const kCameraPowerOffNotification = @"kCameraPowerOffNotification";
-static NSString * const kEnterAPMode = @"kEnterAPMode";
-static NSString * const kCameraSSIDPrefix = @"SH-IPC_";
-static NSString * const kPowerOffEventValue = @"kPowerOffEventValue";
-static NSString * const kAppGroupsName = @"group.com.xj.app.doorbell"; //@"group.com.icatchtek.smarthome";
-static NSString * const kShareCameraInfoKey = @"SHShareCameras";
-static NSString * const kDeviceToken = @"deviceToken";
-static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kUserShouldLoginNotification = @"kUserShouldLoginNotification";
 static NSString * const kLoginSuccessNotification = @"kLoginSuccessNotification";
 static NSString * const kUpdateDeviceInfoNotification = @"UpdateDeviceInfoNotification";
+static NSString * const kDeviceUpgradeFailedNotification = @"DeviceUpgradeFailedNotification";
+static NSString * const kDeviceUpgradeSuccessNotification = @"DeviceUpgradeSuccessNotification";
+static NSString * const kDownloadUpgradePackageSuccessNotification = @"DownloadUpgradePackageSuccessNotification";
 
-static int const kNetworkDetectionInterval = 2.0; //5.0;
+#pragma mark - Color
 static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;
 static NSUInteger const kButtonThemeColor = 0x333333; //0x000000; //0x076EE4;
 static NSUInteger const kButtonDefaultColor = 0x9b9b9b;
@@ -122,6 +130,7 @@ static NSUInteger const kTextThemeColor = 0x333333;
 static NSUInteger const kBackgroundThemeColor = 0xF2F2F2;
 static NSUInteger const kTextColor = 0x47525E;
 
+#pragma mark - Storyboard
 static NSString * const kUserAccountStoryboardName = @"UserAccount";
 static NSString * const kSetupStoryboardName = @"Setup";
 static NSString * const kSettingStoryboardName = @"Setting";
@@ -130,22 +139,31 @@ static NSString * const kMainStoryboardName = @"XJMain";
 static NSString * const kMessageCenterStoryboardName = @"MessageCenter";
 static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
 
-static NSString * const kLocalAlbumName = @"SmartHome"; //@"XJ doorbell";
+#pragma mark - RegularExpression
+static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
+static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+static NSString * const kPasswordRegularExpression = @"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{%zd,%zd}";
+static const NSInteger kPasswordMinLength = 6;
+static const NSInteger kPasswordMaxLength = 16;
+static NSString * const kDeviceNameRegularExpression = @"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}";
+static const NSUInteger kDeviceNameMinLength = 3;
+static const NSUInteger kDeviceNameMaxLength = 12;
+
+#pragma mark - Others
 static NSTimeInterval const kDataBaseFileStorageTime = 7 * 24 * 3600;
 static NSString * const kUserAccounts = @"kUserAccounts";
 static NSString * const kRecvNotificationCount = @"kRecvNotificationCount";
-static const NSUInteger kDeviceNameMinLength = 1;
-static const NSUInteger kDeviceNameMaxLength = 12;
 static NSString * const kRecvNotification = @"RecvNotification";
-
-static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
-static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
-
+static int const kNetworkDetectionInterval = 2.0; //5.0;
 static const float kMinZoomScale = 1.0;
 static const float kMaxZoomScale = 5.0;
+static const NSInteger kQRCodeValidDuration = 24; //hours
+static const NSInteger kDeviceValidUsedDuration = 7; //days
+static const BOOL kUseTUTKPushServer = NO;
 
-#define USE_ENCRYP 0
+#pragma mark - Config Account Server
+static NSString * const kServerBaseURL = @"http://wechat.ereagle.com/"; //@"http://52.83.116.127:3006/";
+static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 
 #define kScreenWidthScale MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) / 320.0
 #define kScreenHeightScale MAX([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width) / 480.0

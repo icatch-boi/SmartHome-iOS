@@ -19,15 +19,15 @@
 @interface SHCameraObject ()
 
 @property (nonatomic) SHObserver *batteryLevelObserver;
-@property (nonatomic) SHObserver *pirDetectionObserver;
 @property (nonatomic) SHObserver *sdCardObserver;
-@property (nonatomic) SHObserver *wifiStatusObserver;
 @property (nonatomic) SHObserver *fileAddedObserver;
-@property (nonatomic) SHObserver *pvThumbnailChangedObserver;
 @property (nonatomic) SHObserver *disconnectObserver;
 @property (nonatomic) SHObserver *powerOffObserver;
 @property (nonatomic, strong) SHObserver *bitRateObserver;
 @property (nonatomic, strong) SHObserver *chargeStatusObserver;
+@property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
+@property (nonatomic, strong) SHObserver *clientCountObserver;
+@property (nonatomic, strong) SHObserver *noTalkingObserver;
 
 @end
 
@@ -237,18 +237,9 @@
         }
     
 	return retValue;
-		//
-//		SHLogInfo(SHLogTagAPP, @"NotReachable -- Sleep 500ms");
-//		[NSThread sleepForTimeInterval:0.5];
-	//});
 }
 
 - (void)initCamera {
-//    [self addCameraPropertyObserver];
-//    [self updatePreviewThumbnail];
-    
-//    [self openAudioServer];
-    
     [self checkIsMapToTutk];
 }
 
@@ -281,26 +272,25 @@
         SHLogInfo(SHLogTagAPP, @"Audio server already opened.");
         return;
     }
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        ICatchAudioFormat *audioFormat = new ICatchAudioFormat();
-        NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
-        int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
-        audioFormat->setCodec(ICATCH_CODEC_MPEG4_GENERIC);
-        audioFormat->setFrequency(audioRate);
-        audioFormat->setSampleBits(kBitsPerChannel);
-        audioFormat->setNChannels(kChannelsPerFrame);
-        
-        if ([_sdk openAudioServer:*audioFormat]) {
-            self.cameraProperty.serverOpened = YES;
-        } else {
-            self.cameraProperty.serverOpened = NO;
-        }
-//    });
+   
+    ICatchAudioFormat *audioFormat = new ICatchAudioFormat();
+    NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
+    int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+    audioFormat->setCodec(ICATCH_CODEC_MPEG4_GENERIC);
+    audioFormat->setFrequency(audioRate);
+    audioFormat->setSampleBits(kBitsPerChannel);
+    audioFormat->setNChannels(kChannelsPerFrame);
+    
+    if ([_sdk openAudioServer:*audioFormat]) {
+        self.cameraProperty.serverOpened = YES;
+    } else {
+        self.cameraProperty.serverOpened = NO;
+    }
 }
 
 - (void)disConnectWithSuccessBlock:(void(^)())successBlock failedBlock:(void(^)())failedBlock {
     SHLogTRACE();
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		
 		dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 10ull * NSEC_PER_SEC);
 		if ((dispatch_semaphore_wait(self.semaphore, time) != 0)) {
@@ -308,12 +298,7 @@
             
             dispatch_semaphore_signal(self.semaphore);
             
-            [self removeCameraPropertyObserver];
-            //delete download list before disconnect
-            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
-            [self.sdk destroySHSDK];
-
-            [self cleanCamera];
+            [self disconnectHandle];
             
 			if (failedBlock) {
 				failedBlock();
@@ -321,48 +306,46 @@
 		} else {
             dispatch_semaphore_signal(self.semaphore);
         
-            [self removeCameraPropertyObserver];
-            //delete download list before disconnect
-            [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
-            [self.sdk destroySHSDK];
-            // FIXME: - 暂时mark
-            [self.streamOper uploadPreviewThumbnailToServer];
-            [self cleanCamera];
+            [self disconnectHandle];
 
             if (successBlock) {
                 successBlock();
             }
 		}
-	});
+//    });
 }
 
+- (void)disconnectHandle {
+//    [self.sdk disableTutk];
+    
+    if (self.streamOper.PVRun) {
+        [self.streamOper stopMediaStreamWithComplete:nil];
+    }
+    
+    [self.controler.pbCtrl stopWithCamera:self];
+    
+    [self removeCameraPropertyObserver];
+    //delete download list before disconnect
+    [[SHDownloadManager shareDownloadManger] clearDownloadingByUid:self.camera.cameraUid];
+    [self.sdk destroySHSDK];
+    [self.streamOper uploadPreviewThumbnailToServer];
+    [self cleanCamera];
+}
 
 #pragma mark - Observer
 - (void)addCameraPropertyObserver {
 	SHSDKEventListener *batteryLevelListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
 	self.batteryLevelObserver = [SHObserver cameraObserverWithListener:batteryLevelListener eventType:ICATCH_EVENT_BATTERY_LEVEL_CHANGED isCustomized:NO isGlobal:NO];
 	[self.sdk addObserver:self.batteryLevelObserver];
-	/*
-	SHSDKEventListener *pirListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
-	self.pirDetectionObserver = [SHObserver cameraObserverWithListener:pirListener eventType:ICATCH_EVENT_PIR_DETECTION_CHANGED isCustomized:NO isGlobal:NO];
-	[self.sdk addObserver:self.pirDetectionObserver];
-	*/
+
 	SHSDKEventListener *sdCardListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
 	self.sdCardObserver = [SHObserver cameraObserverWithListener:sdCardListener eventType:ICATCH_EVENT_SDCARD_INFO_CHANGED isCustomized:NO isGlobal:NO];
 	[self.sdk addObserver:self.sdCardObserver];
-	/*
-	SHSDKEventListener *wifiStatusListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
-	self.wifiStatusObserver = [SHObserver cameraObserverWithListener:wifiStatusListener eventType:ICATCH_EVENT_WIFI_SIGNAL_LEVEL_CHANGED isCustomized:NO isGlobal:NO];
-	[self.sdk addObserver:self.wifiStatusObserver];
-	*/
+
 	SHSDKEventListener *fileAddedListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
 	self.fileAddedObserver = [SHObserver cameraObserverWithListener:fileAddedListener eventType:ICATCH_EVENT_FILE_ADDED isCustomized:NO isGlobal:NO];
 	[self.sdk addObserver:self.fileAddedObserver];
-	/*
-	SHSDKEventListener *pvThumbnailChangedListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
-	self.pvThumbnailChangedObserver = [SHObserver cameraObserverWithListener:pvThumbnailChangedListener eventType:ICATCH_EVENT_PV_THUMBNAIL_CHANGED isCustomized:NO isGlobal:NO];
-	[self.sdk addObserver:self.pvThumbnailChangedObserver];
-    */
+
     SHSDKEventListener *disconnectListener = new SHSDKEventListener(self, @selector(notifyDisconnectionEvent));
     self.disconnectObserver = [SHObserver cameraObserverWithListener:disconnectListener eventType:ICATCH_EVENT_CONNECTION_DISCONNECTED isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.disconnectObserver];
@@ -376,14 +359,22 @@
     SHSDKEventListener *chargeStatusListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.chargeStatusObserver = [SHObserver cameraObserverWithListener:chargeStatusListener eventType:ICATCH_EVENT_CHARGE_STATUS_CHANGED isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.chargeStatusObserver];
+    
+    SHSDKEventListener *packagedownloadSizeListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.packageDownloadSizeObserver = [SHObserver cameraObserverWithListener:packagedownloadSizeListener eventType:ICATCH_EVENT_UPGRADE_PACKAGE_DOWNLOADED_SIZE isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.packageDownloadSizeObserver];
+    
+    SHSDKEventListener *clientCountListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.clientCountObserver = [SHObserver cameraObserverWithListener:clientCountListener eventType:ICATCH_EVENT_CONNECTION_CLIENT_COUNT isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.clientCountObserver];
+    
+    SHSDKEventListener *noTalkingListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
+    self.noTalkingObserver = [SHObserver cameraObserverWithListener:noTalkingListener eventType:ICATCH_EVENT_NO_TALKING isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.noTalkingObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
-    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
-
-	if (self.cameraPropertyValueChangeBlock) {
-		self.cameraPropertyValueChangeBlock(evt);
-	}
+//    SHLogInfo(SHLogTagAPP, @"receive event: %@", evt);
     
     switch (evt.eventID) {
         case ICATCH_EVENT_FILE_ADDED:
@@ -400,8 +391,28 @@
             }
             break;
             
+        case ICATCH_EVENT_CONNECTION_CLIENT_COUNT:
+            if (self.cameraProperty.clientCount == 0) {
+                self.cameraProperty.noTalking = evt.intValue1 > 1 ? 1 : 0;
+            } else {
+                if (evt.intValue1 == 1) {
+                    self.cameraProperty.noTalking = 0;
+                }
+            }
+            self.cameraProperty.clientCount = evt.intValue1;
+            break;
+            
+        case ICATCH_EVENT_NO_TALKING:
+            SHLogInfo(SHLogTagAPP, @"No talking state: %d", evt.intValue1);
+            self.cameraProperty.noTalking = evt.intValue1;
+            break;
+            
         default:
             break;
+    }
+    
+    if (self.cameraPropertyValueChangeBlock) {
+        self.cameraPropertyValueChangeBlock(evt);
     }
 }
 
@@ -434,17 +445,6 @@
 		self.batteryLevelObserver = nil;
 	}
 	
-	if (self.pirDetectionObserver) {
-		[self.sdk removeObserver:self.pirDetectionObserver];
-		
-		if (self.pirDetectionObserver.listener) {
-			delete self.pirDetectionObserver.listener;
-			self.pirDetectionObserver.listener = NULL;
-		}
-		
-		self.pirDetectionObserver = nil;
-	}
-	
 	if (self.sdCardObserver) {
 		[self.sdk removeObserver:self.sdCardObserver];
 		
@@ -454,17 +454,6 @@
 		}
 		
 		self.sdCardObserver = nil;
-	}
-	
-	if (self.wifiStatusObserver) {
-		[self.sdk removeObserver:self.wifiStatusObserver];
-		
-		if (self.wifiStatusObserver.listener) {
-			delete self.wifiStatusObserver.listener;
-			self.wifiStatusObserver.listener = NULL;
-		}
-		
-		self.wifiStatusObserver = nil;
 	}
     
     if (self.fileAddedObserver) {
@@ -476,17 +465,6 @@
         }
         
         self.fileAddedObserver = nil;
-    }
-    
-    if (self.pvThumbnailChangedObserver) {
-        [self.sdk removeObserver:self.pvThumbnailChangedObserver];
-        
-        if (self.pvThumbnailChangedObserver.listener) {
-            delete self.pvThumbnailChangedObserver.listener;
-            self.pvThumbnailChangedObserver.listener = NULL;
-        }
-        
-        self.pvThumbnailChangedObserver = nil;
     }
     
     if (self.disconnectObserver) {
@@ -520,6 +498,39 @@
         }
         
         self.chargeStatusObserver = nil;
+    }
+    
+    if (self.packageDownloadSizeObserver != nil) {
+        [self.sdk removeObserver:self.packageDownloadSizeObserver];
+        
+        if (self.packageDownloadSizeObserver.listener) {
+            delete self.packageDownloadSizeObserver.listener;
+            self.packageDownloadSizeObserver.listener = nullptr;
+        }
+        
+        self.packageDownloadSizeObserver = nil;
+    }
+    
+    if (self.clientCountObserver != nil) {
+        [self.sdk removeObserver:self.clientCountObserver];
+        
+        if (self.clientCountObserver.listener != nullptr) {
+            delete self.clientCountObserver.listener;
+            self.clientCountObserver.listener = nullptr;
+        }
+        
+        self.clientCountObserver = nil;
+    }
+    
+    if (self.noTalkingObserver != nil) {
+        [self.sdk removeObserver:self.noTalkingObserver];
+        
+        if (self.noTalkingObserver.listener != nullptr) {
+            delete self.noTalkingObserver.listener;
+            self.noTalkingObserver.listener = nullptr;
+        }
+        
+        self.noTalkingObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

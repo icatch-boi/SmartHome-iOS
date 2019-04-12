@@ -70,7 +70,6 @@
 
 - (void)tempStoreDataForBackgroundDownload:(NSMutableArray *)downloadArray
 {
-    //[_shCamObj.sdk.downloadArray setArray:downloadArray];
 }
 
 - (NSUInteger)requestDownloadedPercent2:(NSString *)locatePath fileSize:(unsigned long long)fileSize

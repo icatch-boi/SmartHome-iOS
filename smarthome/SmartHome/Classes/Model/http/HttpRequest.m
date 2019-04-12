@@ -29,13 +29,6 @@
 	NSLog(@"receive is :%@",str);
     
     return YES;
-	
-//	[NSURLConnection sendAsynchronousRequest:request queue:[[NSOperationQueue alloc] init] completionHandler: ^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-//		NSHTTPURLResponse *response1 = (NSHTTPURLResponse*)response;
-//			if(response1.statusCode != 0){
-//				NSLog(@"error http request url is :%@",url);
-//				return;
-//			}	}];
 }
 
 + (void) postSyncWithUrl:(NSString *)url :(NSString *)jsonData{

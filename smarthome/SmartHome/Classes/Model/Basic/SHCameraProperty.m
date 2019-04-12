@@ -11,14 +11,7 @@
 @implementation SHCameraProperty
 
 - (void)cleanCurrentCameraAllProperty {
-    self.whiteBalanceData = nil;
-    self.lightFrequencyData = nil;
-    self.videoSizeData = nil;
-    self.pirData = nil;
-    self.cameraBrightnessData = nil;
     self.vidRecDurationData = nil;
-    self.micVolumeData = nil;
-    self.speakerVolumeData = nil;
     self.sleepTimeData = nil;
     self.memorySizeData = nil;
     self.recStatusData = nil;
@@ -27,18 +20,18 @@
     self.serverOpened = NO;
     self.curBatteryLevel = nil;
     self.tamperalarmData = nil;
-}
-
-//- (NSMutableArray *)downloadArray {
-//    if (!_downloadArray) {
-//        _downloadArray = [NSMutableArray array];
-//    }
-//    
-//    return _downloadArray;
-//}
-
-- (BOOL)checkSupportPropertyExist {
-    return self.whiteBalanceData && self.lightFrequencyData && self.videoSizeData && self.pirData && self.cameraBrightnessData && self.vidRecDurationData && self.micVolumeData && self.speakerVolumeData && self.sleepTimeData ? YES : NO;
+    self.aboutData = nil;
+    
+    self.mute = NO;
+    self.talk = NO;
+    self.avslayer = nil;
+    self.avslayerFrame = CGRectZero;
+    self.sdCardResult = nil;
+    self.SDUseableSize = 0;
+    self.curChargeStatus = nil;
+    
+    self.clientCount = 0;
+    self.noTalking = 0;
 }
 
 - (void)updateSDCardInfo:(SHCameraObject *)shCamObj {

@@ -84,34 +84,21 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 }
 
 - (void)setupGUI {
-//    self.title = @"Device Information";
 }
 
 - (void)initParameter {
     SHCameraManager *app = [SHCameraManager sharedCameraManger];
     self.shCamObj = [app getSHCameraObjectWithCameraUid:_cameraUid];
     self.ctrl = self.shCamObj.controler;
-//    self.shCamObj.cameraProperty.fwUpdate = [_ctrl.propCtrl compareFWVersion:self.shCamObj curResult:self.curResult];
 }
 
 - (void)initMenuTable {
-//    if (!self.shCamObj.cameraProperty.fwUpdate && ![self.shCamObj.cameraProperty checkSupportPropertyExist]) {
-//        [_ctrl.propCtrl.ssp readFromPath:self.shCamObj.camera.cameraUid.md5];
-//    } else {
-//        [_ctrl.propCtrl.ssp cleanCache];
-//    }
-    
     [self.mainMenuTable insertObject:self.mainMenuBasicTable atIndex:SHDetailSettingSectionTypeBasic];
     [self.mainMenuTable insertObject:self.mainMenuSDCardTable atIndex:SHDetailSettingSectionTypeSDCard];
     [self.mainMenuTable insertObject:self.mainMenuAlertTable atIndex:SHDetailSettingSectionTypeAlert];
-    //[self.mainMenuTable insertObject:self.mainMenuAboutTable atIndex:SHDetailSettingSectionTypeAbout];
-    
-//    [self loadSettingData];
 }
 
 - (void)loadSettingData {
-//    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"LOAD_SETTING_DATA", nil)];
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self fillBasicTable];
         [self fillAlertTable];
@@ -172,12 +159,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 - (void)singleDownloadCompleteHandle:(NSNotification *)nc {
     NSDictionary *tempDict = nc.userInfo;
     
-#if 0
-    SHFile *file = tempDict[@"file"];
-    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"kFileDownloadCompleteTipsInfo", nil), tempDict[@"cameraName"], file.f.getFileName().c_str()];
-#else
     NSString *msg = [SHTool createDownloadComplete:tempDict];
-#endif
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.notificationView showGCDNoteWithMessage:msg andTime:kShowDownloadCompleteNoteTime withAcvity:NO];
@@ -366,30 +348,8 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         }
         
         [self.progressHUD showProgressHUDWithMessage:nil];
-//        _shCamObj.camera.cameraName = nameField.text;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-#if 0
-            // Save data to sqlite
-            NSError *error = nil;
-
-            if (![_shCamObj.camera.managedObjectContext save:&error]) {
-                /*
-                 Replace this implementation with code to handle the error appropriately.
-                 
-                 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-                 */
-                SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
-                abort();
-            } else {
-                SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
-                [self updateShareCameras];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf loadSettingData];
-                });
-            }
-#endif
             __block NSString *newName = nil;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 newName = nameField.text;
@@ -610,50 +570,6 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark - PrepareData
 - (void)fillBasicTable {
     [self.mainMenuBasicTable removeAllObjects];
@@ -737,7 +653,7 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 - (void)fillCameraNameTable {
     SHSettingData *data = [[SHSettingData alloc] init];
     
-    data.textLabel = NSLocalizedString(@"kCameraName", @"");
+    data.textLabel = NSLocalizedString(@"kDeviceName", @"");
     data.detailTextLabel = _shCamObj.camera.cameraName;
     data.methodName = @"modifyCameraName";
     
@@ -836,8 +752,8 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         
         recStatusData = [[SHSettingData alloc] init];
         recStatusData.textLabel = NSLocalizedString(@"SETTING_REC_STATUS", nil);
-//        recStatusData.detailLastItem = recStatus;
-        recStatusData.detailTextLabel = recStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
+        recStatusData.detailTextLabel = recStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil);
 
         _shCamObj.cameraProperty.recStatusData = recStatusData;
     }
@@ -861,8 +777,8 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
         
         fasterConnectionData = [[SHSettingData alloc] init];
         fasterConnectionData.textLabel = NSLocalizedString(@"SETTING_ULTRA_POWER_SAVING_MODE", nil);
-//        fasterConnectionData.detailLastItem = pushMsgStatus;
-        fasterConnectionData.detailTextLabel = fasterConStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil); //@"On" : @"Off";
+
+        fasterConnectionData.detailTextLabel = fasterConStatus ? NSLocalizedString(@"SETTING_ON", nil) : NSLocalizedString(@"SETTING_OFF", nil);
 
         _shCamObj.cameraProperty.fasterConnectionData = fasterConnectionData;
     }
@@ -946,14 +862,6 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
     return _curResult;
 }
 
-//- (SHPropertyQueryResult *)supResult {
-//    if (!_supResult) {
-//        _supResult = [_ctrl.propCtrl retrieveSettingSupPropertyWithCamera:_shCamObj];
-//    }
-//    
-//    return _supResult;
-//}
-
 #pragma mark - Action Progress
 - (MBProgressHUD *)progressHUD {
     if (!_progressHUD) {
@@ -1006,7 +914,6 @@ typedef NS_OPTIONS(NSUInteger, SHDetailSettingSectionType) {
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
-        //_bitRateLabel.text = [NSString stringWithFormat:@"%dkb/s", (int)value];
         _SDUseableSize = (int)value;
         [self.tableView reloadData];
     });

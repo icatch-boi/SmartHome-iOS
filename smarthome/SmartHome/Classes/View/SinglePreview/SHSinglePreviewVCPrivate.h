@@ -17,9 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *talkbackButton;
 @property (weak, nonatomic) IBOutlet UIButton *muteButton;
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
-@property (weak, nonatomic) IBOutlet UIButton *recordButton;
 @property (weak, nonatomic) IBOutlet UILabel *cameraNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *curTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *videoRecordTimerLabel;
 @property (weak, nonatomic) IBOutlet UIView *footerView;
 
@@ -28,9 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *returnButton;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *wifiStatusImgView;
 @property (weak, nonatomic) IBOutlet UIImageView *batteryImgView;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *resolutionButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *resolutionBtnWidthCons;
@@ -43,10 +39,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *captureBtnWidthCons;
 
 @property (nonatomic) SystemSoundID stillCaptureSound;
-@property (nonatomic) SystemSoundID delayCaptureSound;
-@property (nonatomic) SystemSoundID changeModeSound;
-@property (nonatomic) SystemSoundID videoCaptureSound;
-@property (nonatomic) SystemSoundID burstCaptureSound;
+
 @property (nonatomic) MBProgressHUD *progressHUD;
 @property (nonatomic, getter = isVideoReCordStartOn) BOOL videoReCordStartOn;
 
@@ -59,9 +52,6 @@
 
 @property (nonatomic) SHObserver *videoCacheObserver;
 @property (nonatomic) SHObserver *audioCacheObserver;
-
-@property(nonatomic) UIImage *startOnImage;
-@property(nonatomic) UIImage *startOffImage;
 
 @property (nonatomic, strong) UIScrollView *zoomScrollView;
 @property (nonatomic, strong) UIImageView *zoomImageView;

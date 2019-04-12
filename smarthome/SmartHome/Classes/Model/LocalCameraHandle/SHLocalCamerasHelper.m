@@ -40,13 +40,7 @@
     NSArray *cameras = [[CoreDataHandler sharedCoreDataHander] fetchedCamera];
     
     [self.camerasArray removeAllObjects];
-#if 0
-    [[SHCameraManager sharedCameraManger] removeAllCameraObjects];
-    [cameras enumerateObjectsUsingBlock:^(SHCamera *camera, NSUInteger idx, BOOL * _Nonnull stop) {
-        [[SHCameraManager sharedCameraManger] addSHCameraObject:camera];
-        [self addShareCamera:camera];
-    }];
-#else
+
     [self updateCacheCamerasWithLocalCameras:cameras];
 
     WEAK_SELF(self);
@@ -54,7 +48,6 @@
         [weakself addShareCamera:camera];
         [weakself addCameraToCameraManager:camera];
     }];
-#endif
     
     [self saveShareCameras];
 }
