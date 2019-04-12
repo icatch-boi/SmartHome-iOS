@@ -1278,16 +1278,20 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 }
 
 - (void)initBatteryHandler {
-    int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
-    
-    self.batteryLabel.hidden = (batteryStatus == 1);
-    
-    if (batteryStatus == 1) {
-        [self setupChargeGUI];
-        SHLogInfo(SHLogTagAPP, @"Device chargeing.");
-    } else {
-        [self initBatteryLevelIcon];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.batteryLabel.hidden = (batteryStatus == 1);
+        });
+
+        if (batteryStatus == 1) {
+            [self setupChargeGUI];
+            SHLogInfo(SHLogTagAPP, @"Device chargeing.");
+        } else {
+            [self initBatteryLevelIcon];
+        }
+    });
 }
 
 - (void)setupChargeGUI {
@@ -1316,12 +1320,17 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 }
 
 - (void)initBatteryLevelIcon {
-    uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
-    NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
-    UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
-    self.batteryImgView.image = batteryStatusImage;
-    self.batteryLowAlertShowed = NO;
-    _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
+        UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.batteryImgView.image = batteryStatusImage;
+            self.batteryLowAlertShowed = NO;
+            _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
+        });
+    });
 }
 
 - (void)updateBatteryLevelIcon:(SHICatchEvent *)evt {

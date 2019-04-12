@@ -93,16 +93,18 @@
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] logoutWithCompation:^(BOOL isSuccess, id  _Nonnull result) {
         if (isSuccess) {
-            [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] popViewController];
-            [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakself.progressHUD hideProgressHUD:YES];
+                
+                [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] popViewController];
+                [[ZJSlidingDrawerViewController sharedSlidingDrawerVC] closeLeftMenu];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserShouldLoginNotification object:nil];
             });
         } else {
-            weakself.progressHUD.detailsLabelText = NSLocalizedString(@"kLogoutAgain", nil); //@"please try again later";
-            [weakself.progressHUD showProgressHUDNotice:/*@"Sign out failed"*/NSLocalizedString(@"kLogoutFailed", nil) showTime:1.5];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.progressHUD.detailsLabelText = NSLocalizedString(@"kLogoutAgain", nil); //@"please try again later";
+                [weakself.progressHUD showProgressHUDNotice:/*@"Sign out failed"*/NSLocalizedString(@"kLogoutFailed", nil) showTime:1.5];
+            });
         }
     }];
 }
