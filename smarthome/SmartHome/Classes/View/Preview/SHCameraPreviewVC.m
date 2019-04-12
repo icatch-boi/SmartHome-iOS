@@ -289,27 +289,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
 }
 
-- (void)clickNotificationHandle {
-    if (_managedObjectContext) {
-        if (!_shCameraObj.isConnect) {
-            [self.progressHUD showProgressHUDWithMessage:nil];
-            
-            dispatch_async(self.previewQueue, ^{
-                [self connectCamera];
-                
-                if (_shCameraObj.isConnect) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self initPlayer];
-                        [self updateTitle];
-                        
-                        [self startPreview];
-                    });
-                }
-            });
-        }
-    }
-}
-
 - (void)checkLoginStatus {
     WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] refreshToken:^(BOOL isSuccess, id  _Nonnull result) {
@@ -513,16 +492,20 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)initBatteryHandler {
-    int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
-    
-    self.batteryLabel.hidden = (batteryStatus == 1);
-    
-    if (batteryStatus == 1) {
-        [self setupChargeGUI];
-        SHLogInfo(SHLogTagAPP, @"Device chargeing.");
-    } else {
-        [self initBatteryLevelIcon];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.batteryLabel.hidden = (batteryStatus == 1);
+        });
+
+        if (batteryStatus == 1) {
+            [self setupChargeGUI];
+            SHLogInfo(SHLogTagAPP, @"Device chargeing.");
+        } else {
+            [self initBatteryLevelIcon];
+        }
+    });
 }
 
 - (void)setupChargeGUI {
@@ -551,15 +534,20 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)initBatteryLevelIcon {
-    uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
-    NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
-    UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
-    self.batteryImageView.image = batteryStatusImage;
-    self.batteryLowAlertShowed = NO;
-    _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
-    
-    self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
-    self.batteryInfoImgView.image = batteryStatusImage;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
+        UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.batteryImageView.image = batteryStatusImage;
+            self.batteryLowAlertShowed = NO;
+            _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
+            
+            self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
+            self.batteryInfoImgView.image = batteryStatusImage;
+        });
+    });
 }
 
 - (void)updateBatteryLevelIcon:(SHICatchEvent *)evt {
@@ -1999,19 +1987,23 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)checkDeviceUpgrades {
+    WEAK_SELF(self);
     [SHUpgradesInfo checkUpgradesWithCameraObj:_shCameraObj completion:^(BOOL hint, SHUpgradesInfo * _Nullable info) {
-
-        if (![[SHTool appVisibleViewController] isMemberOfClass:[self class]]) {
-            SHLogInfo(SHLogTagAPP, @"Current already not preview page.");
-            return;
-        }
+        STRONG_SELF(self);
         
-        if (hint == YES) {
-            if (self.shCameraObj.cameraProperty.clientCount > 1) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![[SHTool appVisibleViewController] isMemberOfClass:[self class]]) {
+                SHLogInfo(SHLogTagAPP, @"Current already not preview page.");
                 return;
             }
-            [self showUpgradesAlertViewWithVersionInfo:info];
-        }
+            
+            if (hint == YES) {
+                if (self.shCameraObj.cameraProperty.clientCount > 1) {
+                    return;
+                }
+                [self showUpgradesAlertViewWithVersionInfo:info];
+            }
+        });
     }];
 }
 

@@ -84,17 +84,19 @@
         return;
     }
     
-    BOOL support = [shCameraObj.controler.propCtrl deviceSupportUpgradeWithCamera:shCameraObj];
-    if (support == NO) {
-        if (completion) {
-            completion(NO, nil);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL support = [shCameraObj.controler.propCtrl deviceSupportUpgradeWithCamera:shCameraObj];
+        if (support == NO) {
+            if (completion) {
+                completion(NO, nil);
+            }
+            
+            SHLogWarn(SHLogTagAPP, @"Device no support upgrade.");
+            return;
         }
         
-        SHLogWarn(SHLogTagAPP, @"Device no support upgrade.");
-        return;
-    }
-    
-    [self getDeviceUpgradeInfoWithCameraObj:shCameraObj completion:completion];
+        [self getDeviceUpgradeInfoWithCameraObj:shCameraObj completion:completion];
+    });
 }
 
 + (void)getDeviceUpgradeInfoWithCameraObj:(SHCameraObject *)shCameraObj completion:(void (^)(BOOL hint, SHUpgradesInfo * _Nullable info))completion {
