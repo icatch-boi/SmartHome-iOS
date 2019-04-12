@@ -37,6 +37,7 @@
         instance = [[self alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(showErr:) name:reloginNotifyName object:nil];
         [ServerUrl sharedServerUrl].BaseUrl = kServerBaseURL;
+        [[ServerUrl sharedServerUrl] configAccountServerWithClientID:kServerClientID client_secret:kServerClientSecret];
     });
     
     return instance;
