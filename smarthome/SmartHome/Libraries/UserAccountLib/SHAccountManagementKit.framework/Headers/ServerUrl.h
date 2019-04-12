@@ -31,4 +31,10 @@
 + (instancetype)sharedServerUrl;
 @property (nonatomic,copy, setter=setBaseUrl:)  NSString *BaseUrl;
 @property (nonatomic, readonly) BOOL useSSL ;
+
+@property (nonatomic, copy, readonly) NSString *client_id;
+@property (nonatomic, copy, readonly) NSString *client_secret;
+
+- (void)configAccountServerWithClientID:(NSString *)client_id client_secret:(NSString *)client_secret;
+
 @end
