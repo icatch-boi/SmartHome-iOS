@@ -1,6 +1,6 @@
 {
     "AccountSettingItems": {
-        "Basic":
+        "Profile":
         [
             {
                 "title" : "zhangsan",
@@ -22,7 +22,7 @@
         [
             {
                 "title" : "kModifyPassword",
-                "methodName" : "modifyAccountPassword",
+                "methodName" : "modifyAccountPassword:",
                 "identifier" : "SHAccountSettingCommonCell",
             },
             {

@@ -129,7 +129,7 @@
     
     SEL method = NSSelectorFromString(item.methodName);
     if ([self respondsToSelector:method]) {
-        [self performSelector:method withObject:item afterDelay:0];
+        [self performSelector:method withObject:indexPath afterDelay:0];
     }
 }
 
@@ -141,82 +141,11 @@
 }
 
 #pragma mark - Click Handle
-- (void)modifyAccountPassword {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kModifyPassword", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    UITextField *oldPWDField = [self addTextFieldWithAlertController:alertVC placeholder:NSLocalizedString(@"kOldPassword", nil)];
-    
-    UITextField *newPWDField = [self addTextFieldWithAlertController:alertVC placeholder:NSLocalizedString(@"kNewPassword", nil)];
-    
-    UITextField *surePWDField = [self addTextFieldWithAlertController:alertVC placeholder:NSLocalizedString(@"kSurePassword", nil)];
-    
-    WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
-    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if ([weakself checkPassword:oldPWDField.text newPassword:newPWDField.text surePassword:surePWDField.text]) {
-            [weakself changePasswordWithOldPassword:oldPWDField.text newPassword:newPWDField.text];
-        }
-    }]];
-    
-    [self presentViewController:alertVC animated:YES completion:nil];
-}
-
-- (UITextField *)addTextFieldWithAlertController:(UIAlertController *)alertVC placeholder:(NSString *)placeholder {
-    __block UITextField *textF = nil;
-    [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.returnKeyType = UIReturnKeyDone;
-        textField.placeholder = placeholder;
-        textField.secureTextEntry = YES;
-        
-        textF = textField;
-    }];
-    
-    return textF;
-}
-
-- (void)changePasswordWithOldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword {
-    self.progressHUD.detailsLabelText = nil;
-    [self.progressHUD showProgressHUDWithMessage:nil];
-    
-    WEAK_SELF(self);
-    [[SHNetworkManager sharedNetworkManager] changePasswordWithOldPassword:oldPassword newPassword:newPassword completion:^(BOOL isSuccess, id  _Nonnull result) {
-        SHLogInfo(SHLogTagAPP, @"changePasswordWithOldPassword is success: %d", isSuccess);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *message = NSLocalizedString(@"kModifyPasswordSuccess", nil);
-            
-            if (!isSuccess) {
-                Error *error = result;
-                SHLogError(SHLogTagAPP, @"changePasswordWithOldPassword is failed, error: %@", error.error_description);
-                
-                weakself.progressHUD.detailsLabelText = [SHNetworkRequestErrorDes errorDescriptionWithCode:error.error_code];
-                
-                message = NSLocalizedString(@"kModifyPasswordFailed", nil);
-            }
-            
-            [weakself.progressHUD showProgressHUDNotice:message showTime:2.0];
-        });
-    }];
-}
-
-- (BOOL)checkPassword:(NSString *)password newPassword:(NSString *)newPassword surePassword:(NSString *)surePassword {
-    if (![SHTool isValidPassword:password] || ![SHTool isValidPassword:newPassword] || ![SHTool isValidPassword:surePassword]) {
-        [self showAlertWithTitle:NSLocalizedString(@"kModifyPasswordFailed", nil) message:[NSString stringWithFormat:NSLocalizedString(@"kAccountPasswordDes", nil), kPasswordMinLength, kPasswordMaxLength]];
-        return NO;
+- (void)modifyAccountPassword:(NSIndexPath *)indexPath {
+    id <SHAccountSettingViewModelItem> item = self.viewModel.viewModelItems[indexPath.section];
+    if ([item respondsToSelector:@selector(modifyAccountPasswordHandle)]) {
+        [item performSelector:@selector(modifyAccountPasswordHandle)];
     }
-    
-    if ([password isEqualToString:newPassword]) {
-        [self showAlertWithTitle:NSLocalizedString(@"kModifyPasswordFailed", nil) message:NSLocalizedString(@"kOldAndNewPasswordAgree", nil)];
-        return NO;
-    }
-    
-    if (![newPassword isEqualToString:surePassword]) {
-        [self showAlertWithTitle:NSLocalizedString(@"kModifyPasswordFailed", nil) message:NSLocalizedString(@"kNewPasswordDisagree", nil)];
-        return NO;
-    }
-    
-    return YES;
 }
 
 - (void)enterFaceRecognition {

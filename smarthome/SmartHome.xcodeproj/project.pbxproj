@@ -142,6 +142,7 @@
 		38AAE0282202CAAA009B37F8 /* SHWCQRCodeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38AAE0272202CAAA009B37F8 /* SHWCQRCodeView.xib */; };
 		38AAE02B2202EB05009B37F8 /* SHWCConcernView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38AAE02A2202EB05009B37F8 /* SHWCConcernView.m */; };
 		38AAE02D2202EB12009B37F8 /* SHWCConcernView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38AAE02C2202EB12009B37F8 /* SHWCConcernView.xib */; };
+		38B2495D2265D01C009EE014 /* SHAccountSettingViewModelItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */; };
 		38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */; };
 		38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263421DF08EE00270CE1 /* ZJFaceRecognition.m */; };
 		38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263A21DF08EE00270CE1 /* ZJRequestError.m */; };
@@ -635,6 +636,8 @@
 		38AAE0292202EB05009B37F8 /* SHWCConcernView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWCConcernView.h; sourceTree = "<group>"; };
 		38AAE02A2202EB05009B37F8 /* SHWCConcernView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWCConcernView.m; sourceTree = "<group>"; };
 		38AAE02C2202EB12009B37F8 /* SHWCConcernView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHWCConcernView.xib; sourceTree = "<group>"; };
+		38B2495B2265D01C009EE014 /* SHAccountSettingViewModelItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingViewModelItem.h; sourceTree = "<group>"; };
+		38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingViewModelItem.m; sourceTree = "<group>"; };
 		38BB262F21DF08EE00270CE1 /* FRDFaceInfoViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceInfoViewModel.h; sourceTree = "<group>"; };
 		38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceInfoViewModel.m; sourceTree = "<group>"; };
 		38BB263321DF08EE00270CE1 /* ZJFaceRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJFaceRecognition.h; sourceTree = "<group>"; };
@@ -1253,6 +1256,8 @@
 			children = (
 				384EF4C622646DB50027C7AB /* SHAccountSettingViewModel.h */,
 				384EF4C722646DB50027C7AB /* SHAccountSettingViewModel.m */,
+				38B2495B2265D01C009EE014 /* SHAccountSettingViewModelItem.h */,
+				38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2992,6 +2997,7 @@
 				384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */,
 				38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */,
 				38E5C2E520A3F7FA003004E0 /* SHDownloadManager.m in Sources */,
+				38B2495D2265D01C009EE014 /* SHAccountSettingViewModelItem.m in Sources */,
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
 				38E5C25E20A3F66D003004E0 /* SHCameraProperty.m in Sources */,
 				38E5C26020A3F66D003004E0 /* SHMessage.m in Sources */,

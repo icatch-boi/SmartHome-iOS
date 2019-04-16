@@ -27,9 +27,8 @@
 
 #import "SHAccountSettingViewModel.h"
 #import "SHAccountSettingItem.h"
-#import "SHAccountSettingAvatarCell.h"
-#import "SHAccountSettingCommonCell.h"
-#import "SHAccountSettingSwitchCell.h"
+
+static NSString * const kAccountSettingFileName = @"AccountSettingItems.json";
 
 @interface SHAccountSettingViewModel ()
 
@@ -49,7 +48,7 @@
 }
 
 - (void)prepareData {
-    id obj = [SHAccountSettingViewModel dataFromFile:@"AccountSettingItems"];
+    id obj = [SHAccountSettingViewModel dataFromFile:kAccountSettingFileName];
     
     if (obj != nil && [obj isKindOfClass:[NSDictionary class]]) {
         NSDictionary *dict = (NSDictionary *)obj;
@@ -58,8 +57,8 @@
         
         NSMutableArray *viewModelItems = [NSMutableArray arrayWithCapacity:3];
         
-        if ([itemsDict.allKeys containsObject:@"Basic"]) {
-            NSArray *basicArray = itemsDict[@"Basic"];
+        if ([itemsDict.allKeys containsObject:@"Profile"]) {
+            NSArray *basicArray = itemsDict[@"Profile"];
             
             NSMutableArray *items = [NSMutableArray array];
             [basicArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -114,7 +113,7 @@
 }
 
 + (id)dataFromFile:(NSString *)fileName {
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
     
     NSData *data = [NSData dataWithContentsOfFile:path];
     if (data == nil) {
@@ -139,91 +138,6 @@
     UITableViewCell *cell = [item cellWithTableView:tableView forIndexPath:indexPath];
     
     return cell;
-}
-
-@end
-
-#pragma mark - SHAccountSettingViewModelBaseItem
-@implementation SHAccountSettingViewModelBaseItem
-
-@synthesize items;
-@synthesize rowCount;
-@synthesize sectionTitle;
-@synthesize rowHeight;
-@synthesize type;
-
-+ (instancetype)baseItemWithAccountSettingItems:(NSArray<SHAccountSettingItem *> *)items {
-    id <SHAccountSettingViewModelItem> viewModelItem = [self new];
-    
-    viewModelItem.items = items;
-    
-    return viewModelItem;
-}
-
-- (NSInteger)rowCount {
-    return self.items.count;
-}
-
-- (CGFloat)rowHeight {
-    return 50.0;
-}
-
-- (UITableViewCell *)cellWithTableView:(UITableView *)tableView forIndexPath:(NSIndexPath *)indexPath {
-    SHAccountSettingItem *item = items[indexPath.row];
-    
-    NSString *identifier = item.identifier;
-    if ([identifier isEqualToString:NSStringFromClass([SHAccountSettingAvatarCell class])]) {
-        SHAccountSettingAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-        
-        cell.item = item;
-        
-        return cell;
-    } else if ([identifier isEqualToString:NSStringFromClass([SHAccountSettingCommonCell class])]) {
-        SHAccountSettingCommonCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-        
-        cell.item = item;
-
-        return cell;
-    } else if ([identifier isEqualToString:NSStringFromClass([SHAccountSettingSwitchCell class])]) {
-        SHAccountSettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-        
-        cell.item = item;
-
-        return cell;
-    }
-    
-    return [UITableViewCell new];
-}
-
-@end
-
-#pragma mark - SHAccountSettingViewModelProfileItem
-@implementation SHAccountSettingViewModelProfileItem
-
-- (AccountSettingViewModelItemType)type {
-    return AccountSettingViewModelItemTypeProfile;
-}
-
-- (CGFloat)rowHeight {
-    return 100.0;
-}
-
-@end
-
-#pragma mark - SHAccountSettingViewModelServiceItem
-@implementation SHAccountSettingViewModelServiceItem
-
-- (AccountSettingViewModelItemType)type {
-    return AccountSettingViewModelItemTypeService;
-}
-
-@end
-
-#pragma mark - SHAccountSettingViewModelSettingItem
-@implementation SHAccountSettingViewModelSettingItem
-
-- (AccountSettingViewModelItemType)type {
-    return AccountSettingViewModelItemTypeSetting;
 }
 
 @end

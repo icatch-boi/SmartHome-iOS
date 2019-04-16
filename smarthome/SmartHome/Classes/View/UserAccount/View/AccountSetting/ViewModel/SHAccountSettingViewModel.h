@@ -26,54 +26,14 @@
     
 
 #import <Foundation/Foundation.h>
+#import "SHAccountSettingViewModelItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef enum : NSUInteger {
-    AccountSettingViewModelItemTypeProfile,
-    AccountSettingViewModelItemTypeService,
-    AccountSettingViewModelItemTypeSetting,
-} AccountSettingViewModelItemType;
-
-@class SHAccountSettingItem;
-@protocol SHAccountSettingViewModelItem <NSObject>
-
-@property (nonatomic, assign) AccountSettingViewModelItemType type;
-@property (nonatomic, assign) NSInteger rowCount;
-@property (nonatomic, copy) NSString *sectionTitle;
-@property (nonatomic, assign) CGFloat rowHeight;
-@property (nonatomic, strong) NSArray<SHAccountSettingItem *> *items;
-
-- (UITableViewCell *)cellWithTableView:(UITableView *)tableView forIndexPath:(NSIndexPath *)indexPath;
-
-@end
 
 #pragma mark - SHAccountSettingViewModelItem
 @interface SHAccountSettingViewModel : NSObject <UITableViewDataSource>
 
 @property (nonatomic, strong, readonly) NSArray<SHAccountSettingViewModelItem> *viewModelItems;
-
-@end
-
-#pragma mark - SHAccountSettingViewModelBaseItem
-@interface SHAccountSettingViewModelBaseItem : NSObject <SHAccountSettingViewModelItem>
-
-+ (instancetype)baseItemWithAccountSettingItems:(NSArray<SHAccountSettingItem *>*)items;
-
-@end
-
-#pragma mark - SHAccountSettingViewModelProfileItem
-@interface SHAccountSettingViewModelProfileItem : SHAccountSettingViewModelBaseItem
-
-@end
-
-#pragma mark - SHAccountSettingViewModelServiceItem
-@interface SHAccountSettingViewModelServiceItem : SHAccountSettingViewModelBaseItem
-
-@end
-
-#pragma mark - SHAccountSettingViewModelSettingItem
-@interface SHAccountSettingViewModelSettingItem : SHAccountSettingViewModelBaseItem
 
 @end
 
