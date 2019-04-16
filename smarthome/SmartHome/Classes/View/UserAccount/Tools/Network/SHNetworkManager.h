@@ -21,6 +21,7 @@ typedef enum : NSUInteger {
 
 static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
+static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 
 @class SHUserAccount;
 @class AFHTTPSessionManager;
@@ -58,6 +59,10 @@ static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 
 - (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion;
 - (void)requestWithMethod:(SHRequestMethod)method manager:(AFHTTPSessionManager * _Nullable)manager urlString:(NSString *)urlString parameters:(id _Nullable)parameters finished:(RequestCompletionBlock)finished;
+
+- (void)setUserExtensionsInfo:(NSDictionary *)info completion:(RequestCompletionBlock)completion;
+- (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
+- (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
 
 @end
 
