@@ -276,6 +276,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="switchButton" destination="adp-JH-1EM" id="8oc-af-TLM"/>
                                     <outlet property="titleLabel" destination="jrj-lM-4Z3" id="wJb-iC-wK7"/>
                                 </connections>
                             </tableViewCell>
@@ -662,7 +663,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MIy-k8-aqX" customClass="UserAccountPortraitNavVC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="aVj-dx-MEN">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>

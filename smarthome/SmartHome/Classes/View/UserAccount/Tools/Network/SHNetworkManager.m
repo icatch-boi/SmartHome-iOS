@@ -148,6 +148,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
@@ -273,6 +275,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"refreshToken failed, error: %@", error.error_description);
 
@@ -525,7 +529,16 @@
     NSDictionary *paramete = @{
                                @"info": str,
                                };
-    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:EXTENSIONS_INFO_PATH parameters:paramete finished:completion];
+    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:EXTENSIONS_INFO_PATH parameters:paramete finished:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            self.userAccount.userExtensionsInfo = info;
+            [self.userAccount saveUserAccount];
+        }
+        
+        if (completion) {
+            completion(isSuccess, result);
+        }
+    }];
 }
 
 - (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
@@ -566,6 +579,15 @@
 
 - (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
     [self requestWithMethod:SHRequestMethodDELETE manager:nil urlString:EXTENSIONS_INFO_PATH parameters:nil finished:completion];
+}
+
+- (void)cacheUserExtensionsInfo {
+    [self getUserExtensionsInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            self.userAccount.userExtensionsInfo = result;
+            [self.userAccount saveUserAccount];
+        }
+    }];
 }
 
 #pragma mark - Init

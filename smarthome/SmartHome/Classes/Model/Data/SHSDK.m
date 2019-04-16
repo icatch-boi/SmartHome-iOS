@@ -10,6 +10,7 @@
 #include "SHH264StreamParameter.hpp"
 #import <Photos/Photos.h>
 #import "XJLocalAssetHelper.h"
+#import "SHNetworkManagerHeader.h"
 
 @interface SHSDK ()
 
@@ -129,7 +130,22 @@
 }
 
 + (void)checkDeviceStatusWithUID:(NSString *)uid {
-    Session::checkDeviceStatus(uid.UTF8String, true);
+    bool enableBackgroundWakeup = false;
+    
+    do {
+        NSDictionary *info = [SHNetworkManager sharedNetworkManager].userAccount.userExtensionsInfo;
+        if (info == nil) {
+            return;
+        }
+        
+        if (![info.allKeys containsObject:@"bgWakeup"]) {
+            return;
+        }
+        
+        enableBackgroundWakeup = [info[@"bgWakeup"] intValue];
+    } while (0);
+
+    Session::checkDeviceStatus(uid.UTF8String, enableBackgroundWakeup);
 }
 
 - (int)initializeSHSDK:(NSString *)cameraUid devicePassword:(NSString *)devicePassword {

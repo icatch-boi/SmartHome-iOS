@@ -26,7 +26,7 @@
                 "identifier" : "SHAccountSettingCommonCell",
             },
             {
-                "title" : "背景唤醒",
+                "title" : "kBackgroundWakeup",
                 "methodName" : "",
                 "identifier" : "SHAccountSettingSwitchCell",
             },
