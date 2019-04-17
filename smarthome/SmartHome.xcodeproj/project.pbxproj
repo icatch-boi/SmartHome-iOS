@@ -59,6 +59,14 @@
 		384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3720C13A8F0047E152 /* UIImage+ZJPhotoBrowser.m */; };
 		384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3920C13A900047E152 /* ZJGridCell.m */; };
 		384BBE4920C13A900047E152 /* ZJPhotoBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3B20C13A900047E152 /* ZJPhotoBrowserController.m */; };
+		384EF4AD2264652B0027C7AB /* SHAccountSettingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4AC2264652B0027C7AB /* SHAccountSettingTVC.m */; };
+		384EF4B122646A000027C7AB /* SHAccountSettingBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4B022646A000027C7AB /* SHAccountSettingBaseCell.m */; };
+		384EF4BD22646B500027C7AB /* SHAccountSettingAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4BC22646B500027C7AB /* SHAccountSettingAvatarCell.m */; };
+		384EF4C322646B750027C7AB /* SHAccountSettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4C222646B750027C7AB /* SHAccountSettingSwitchCell.m */; };
+		384EF4C822646DB50027C7AB /* SHAccountSettingViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4C722646DB50027C7AB /* SHAccountSettingViewModel.m */; };
+		384EF4CC2264765F0027C7AB /* SHAccountSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4CB2264765F0027C7AB /* SHAccountSettingItem.m */; };
+		384EF4CE226484680027C7AB /* AccountSettingItems.json in Resources */ = {isa = PBXBuildFile; fileRef = 384EF4CD226484680027C7AB /* AccountSettingItems.json */; };
+		384EF4D12264A6FE0027C7AB /* SHAccountSettingCommonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384EF4D02264A6FE0027C7AB /* SHAccountSettingCommonCell.m */; };
 		385584EB201EE94A009F0D7D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 389C29F81F2EEAF5004C4806 /* Localizable.strings */; };
 		38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */; };
 		386603A6224C795D005005F8 /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3866036A224C795D005005F8 /* libturbojpeg.a */; };
@@ -134,6 +142,7 @@
 		38AAE0282202CAAA009B37F8 /* SHWCQRCodeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38AAE0272202CAAA009B37F8 /* SHWCQRCodeView.xib */; };
 		38AAE02B2202EB05009B37F8 /* SHWCConcernView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38AAE02A2202EB05009B37F8 /* SHWCConcernView.m */; };
 		38AAE02D2202EB12009B37F8 /* SHWCConcernView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38AAE02C2202EB12009B37F8 /* SHWCConcernView.xib */; };
+		38B2495D2265D01C009EE014 /* SHAccountSettingViewModelItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */; };
 		38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */; };
 		38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263421DF08EE00270CE1 /* ZJFaceRecognition.m */; };
 		38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BB263A21DF08EE00270CE1 /* ZJRequestError.m */; };
@@ -456,6 +465,21 @@
 		384BBE3B20C13A900047E152 /* ZJPhotoBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPhotoBrowserController.m; sourceTree = "<group>"; };
 		384BBE3C20C13A900047E152 /* ZJGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGridViewController.h; sourceTree = "<group>"; };
 		384BBE3D20C13A900047E152 /* ZJPhotoViewerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPhotoViewerController.h; sourceTree = "<group>"; };
+		384EF4AB2264652B0027C7AB /* SHAccountSettingTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingTVC.h; sourceTree = "<group>"; };
+		384EF4AC2264652B0027C7AB /* SHAccountSettingTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingTVC.m; sourceTree = "<group>"; };
+		384EF4AF22646A000027C7AB /* SHAccountSettingBaseCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingBaseCell.h; sourceTree = "<group>"; };
+		384EF4B022646A000027C7AB /* SHAccountSettingBaseCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingBaseCell.m; sourceTree = "<group>"; };
+		384EF4BB22646B500027C7AB /* SHAccountSettingAvatarCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingAvatarCell.h; sourceTree = "<group>"; };
+		384EF4BC22646B500027C7AB /* SHAccountSettingAvatarCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingAvatarCell.m; sourceTree = "<group>"; };
+		384EF4C122646B750027C7AB /* SHAccountSettingSwitchCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingSwitchCell.h; sourceTree = "<group>"; };
+		384EF4C222646B750027C7AB /* SHAccountSettingSwitchCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingSwitchCell.m; sourceTree = "<group>"; };
+		384EF4C622646DB50027C7AB /* SHAccountSettingViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingViewModel.h; sourceTree = "<group>"; };
+		384EF4C722646DB50027C7AB /* SHAccountSettingViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingViewModel.m; sourceTree = "<group>"; };
+		384EF4CA2264765F0027C7AB /* SHAccountSettingItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingItem.h; sourceTree = "<group>"; };
+		384EF4CB2264765F0027C7AB /* SHAccountSettingItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingItem.m; sourceTree = "<group>"; };
+		384EF4CD226484680027C7AB /* AccountSettingItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AccountSettingItems.json; sourceTree = "<group>"; };
+		384EF4CF2264A6FE0027C7AB /* SHAccountSettingCommonCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingCommonCell.h; sourceTree = "<group>"; };
+		384EF4D02264A6FE0027C7AB /* SHAccountSettingCommonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingCommonCell.m; sourceTree = "<group>"; };
 		38656B3021F9904500C5A65B /* SHQRCodeSetupDeviceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHQRCodeSetupDeviceVC.h; sourceTree = "<group>"; };
 		38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHQRCodeSetupDeviceVC.m; sourceTree = "<group>"; };
 		3866036A224C795D005005F8 /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libturbojpeg.a; sourceTree = "<group>"; };
@@ -612,6 +636,8 @@
 		38AAE0292202EB05009B37F8 /* SHWCConcernView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWCConcernView.h; sourceTree = "<group>"; };
 		38AAE02A2202EB05009B37F8 /* SHWCConcernView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWCConcernView.m; sourceTree = "<group>"; };
 		38AAE02C2202EB12009B37F8 /* SHWCConcernView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHWCConcernView.xib; sourceTree = "<group>"; };
+		38B2495B2265D01C009EE014 /* SHAccountSettingViewModelItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAccountSettingViewModelItem.h; sourceTree = "<group>"; };
+		38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingViewModelItem.m; sourceTree = "<group>"; };
 		38BB262F21DF08EE00270CE1 /* FRDFaceInfoViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRDFaceInfoViewModel.h; sourceTree = "<group>"; };
 		38BB263021DF08EE00270CE1 /* FRDFaceInfoViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRDFaceInfoViewModel.m; sourceTree = "<group>"; };
 		38BB263321DF08EE00270CE1 /* ZJFaceRecognition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJFaceRecognition.h; sourceTree = "<group>"; };
@@ -1187,6 +1213,62 @@
 				384BBE3820C13A900047E152 /* UIImage+ZJPhotoBrowser.h */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		384EF4A9226464160027C7AB /* AccountSetting */ = {
+			isa = PBXGroup;
+			children = (
+				384EF4C422646D660027C7AB /* View */,
+				384EF4C92264763F0027C7AB /* Model */,
+				384EF4C522646D8E0027C7AB /* ViewModel */,
+				384EF4CD226484680027C7AB /* AccountSettingItems.json */,
+			);
+			path = AccountSetting;
+			sourceTree = "<group>";
+		};
+		384EF4AE226469B10027C7AB /* AccountSettingCell */ = {
+			isa = PBXGroup;
+			children = (
+				384EF4AF22646A000027C7AB /* SHAccountSettingBaseCell.h */,
+				384EF4B022646A000027C7AB /* SHAccountSettingBaseCell.m */,
+				384EF4BB22646B500027C7AB /* SHAccountSettingAvatarCell.h */,
+				384EF4BC22646B500027C7AB /* SHAccountSettingAvatarCell.m */,
+				384EF4CF2264A6FE0027C7AB /* SHAccountSettingCommonCell.h */,
+				384EF4D02264A6FE0027C7AB /* SHAccountSettingCommonCell.m */,
+				384EF4C122646B750027C7AB /* SHAccountSettingSwitchCell.h */,
+				384EF4C222646B750027C7AB /* SHAccountSettingSwitchCell.m */,
+			);
+			path = AccountSettingCell;
+			sourceTree = "<group>";
+		};
+		384EF4C422646D660027C7AB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				384EF4AE226469B10027C7AB /* AccountSettingCell */,
+				384EF4AB2264652B0027C7AB /* SHAccountSettingTVC.h */,
+				384EF4AC2264652B0027C7AB /* SHAccountSettingTVC.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		384EF4C522646D8E0027C7AB /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				384EF4C622646DB50027C7AB /* SHAccountSettingViewModel.h */,
+				384EF4C722646DB50027C7AB /* SHAccountSettingViewModel.m */,
+				38B2495B2265D01C009EE014 /* SHAccountSettingViewModelItem.h */,
+				38B2495C2265D01C009EE014 /* SHAccountSettingViewModelItem.m */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		384EF4C92264763F0027C7AB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				384EF4CA2264765F0027C7AB /* SHAccountSettingItem.h */,
+				384EF4CB2264765F0027C7AB /* SHAccountSettingItem.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		38660369224C795D005005F8 /* smarthome_SDK */ = {
@@ -2069,6 +2151,7 @@
 		38E5C08820A3F5AE003004E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				384EF4A9226464160027C7AB /* AccountSetting */,
 				38AAE01B2202C669009B37F8 /* WechatServer */,
 				38E5C0AF20A3F5AE003004E0 /* Logon */,
 				38E5C0B420A3F5AE003004E0 /* LoginView */,
@@ -2710,6 +2793,7 @@
 				38E5C3DC20A419E0003004E0 /* SHAccountInfoHeaderView.xib in Resources */,
 				38F525811F2F020400F5A5A2 /* LICENSE.txt in Resources */,
 				38AAE02D2202EB12009B37F8 /* SHWCConcernView.xib in Resources */,
+				384EF4CE226484680027C7AB /* AccountSettingItems.json in Resources */,
 				38E5C1A420A3F5AF003004E0 /* UserAccount.storyboard in Resources */,
 				38AAE0282202CAAA009B37F8 /* SHWCQRCodeView.xib in Resources */,
 				38E5C15920A3F5AF003004E0 /* SHCameraViewCell.xib in Resources */,
@@ -2913,6 +2997,7 @@
 				384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */,
 				38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */,
 				38E5C2E520A3F7FA003004E0 /* SHDownloadManager.m in Sources */,
+				38B2495D2265D01C009EE014 /* SHAccountSettingViewModelItem.m in Sources */,
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
 				38E5C25E20A3F66D003004E0 /* SHCameraProperty.m in Sources */,
 				38E5C26020A3F66D003004E0 /* SHMessage.m in Sources */,
@@ -2920,6 +3005,7 @@
 				38E5C36E20A40FFC003004E0 /* UIView+Layout.m in Sources */,
 				384BBE4120C13A900047E152 /* SVRadialGradientLayer.m in Sources */,
 				3818D68B21709BA100AF846C /* UIColor+XYChart.m in Sources */,
+				384EF4CC2264765F0027C7AB /* SHAccountSettingItem.m in Sources */,
 				38E5C15420A3F5AF003004E0 /* SHAppInfoVC.m in Sources */,
 				386FAFD220AFB701007655CF /* SHLoginFirstView.m in Sources */,
 				38E5C21020A3F610003004E0 /* DiskSpaceTool.m in Sources */,
@@ -2950,6 +3036,7 @@
 				38E5C30D20A3F81F003004E0 /* VideoPlaybackBufferingView.m in Sources */,
 				38E5C19120A3F5AF003004E0 /* SHUserAccount.m in Sources */,
 				38E5C29F20A3F6C3003004E0 /* SHSDK.m in Sources */,
+				384EF4D12264A6FE0027C7AB /* SHAccountSettingCommonCell.m in Sources */,
 				38E5C30F20A3F81F003004E0 /* SHDownloadTableViewCell.m in Sources */,
 				38E5C25D20A3F66D003004E0 /* SHFileTable.m in Sources */,
 				38E5C25C20A3F66D003004E0 /* SHAVData.m in Sources */,
@@ -3009,6 +3096,7 @@
 				38E5C36A20A40FFC003004E0 /* GCDiscreetNotificationView+Addition.m in Sources */,
 				38E5C34F20A40F8A003004E0 /* SHPlaybackControl.m in Sources */,
 				389C29F21F2EEABF004C4806 /* main.m in Sources */,
+				384EF4AD2264652B0027C7AB /* SHAccountSettingTVC.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
@@ -3016,6 +3104,7 @@
 				38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */,
 				38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */,
 				38E5C32E20A40F49003004E0 /* SHAbout.m in Sources */,
+				384EF4C822646DB50027C7AB /* SHAccountSettingViewModel.m in Sources */,
 				38E5C3D220A419E0003004E0 /* SHUserAccountInfoVC.m in Sources */,
 				386FAF6B20AD2BD9007655CF /* ZJSlidingDrawerViewController.m in Sources */,
 				38E5C29E20A3F6C3003004E0 /* SHQRManager.m in Sources */,
@@ -3061,6 +3150,7 @@
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
 				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,
+				384EF4BD22646B500027C7AB /* SHAccountSettingAvatarCell.m in Sources */,
 				38E5C1B620A3F5AF003004E0 /* SH_XJ_SettingDetailTVC.m in Sources */,
 				38757838223A2A4B006A4052 /* SHProgressView.m in Sources */,
 				389C29F01F2EEA5D004C4806 /* AppDelegate.m in Sources */,
@@ -3090,6 +3180,7 @@
 				38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */,
 				38A0C56620EDE63300AE7B7F /* UIImage+ZJTint.m in Sources */,
 				38E5C1C520A3F5AF003004E0 /* SHDeleteCameraCell.m in Sources */,
+				384EF4C322646B750027C7AB /* SHAccountSettingSwitchCell.m in Sources */,
 				38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */,
 				38E5C25F20A3F66D003004E0 /* SHICatchEvent.m in Sources */,
 				38E5C26820A3F66D003004E0 /* SHCameraManager.m in Sources */,
@@ -3107,6 +3198,7 @@
 				38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */,
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
 				38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */,
+				384EF4B122646A000027C7AB /* SHAccountSettingBaseCell.m in Sources */,
 				38757834223A27F5006A4052 /* SHDeviceUpgradeVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

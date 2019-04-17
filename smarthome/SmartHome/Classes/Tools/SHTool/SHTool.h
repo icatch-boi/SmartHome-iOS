@@ -42,5 +42,6 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (UIViewController *)appVisibleViewController;
 
 + (void)appToSystemSettings;
++ (BOOL)checkUserWhetherHaveOwnDevice;
 
 @end

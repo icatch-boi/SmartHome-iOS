@@ -1,0 +1,36 @@
+{
+    "AccountSettingItems": {
+        "Profile":
+        [
+            {
+                "title" : "zhangsan",
+                "methodName" : "",
+                "identifier" : "SHAccountSettingAvatarCell",
+            },
+        ],
+        
+        "Service":
+        [
+            {
+                "title" : "kBiometricsRecognition",
+                "methodName" : "enterFaceRecognition",
+                "identifier" : "SHAccountSettingCommonCell",
+            },
+        ],
+        
+        "Setting":
+        [
+            {
+                "title" : "kModifyPassword",
+                "methodName" : "modifyAccountPassword:",
+                "identifier" : "SHAccountSettingCommonCell",
+            },
+            {
+                "title" : "kBackgroundWakeup",
+                "methodName" : "",
+                "identifier" : "SHAccountSettingSwitchCell",
+            },
+        ],
+    }
+}
+

@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSDate *expiresDate;
 @property (nonatomic, assign) NSTimeInterval expires_in;
 @property (nonatomic, copy) NSString *refresh_token;
+@property (nonatomic, copy) NSDictionary *userExtensionsInfo;
 
 - (void)saveUserAccount;
 - (void)deleteUserAccount;

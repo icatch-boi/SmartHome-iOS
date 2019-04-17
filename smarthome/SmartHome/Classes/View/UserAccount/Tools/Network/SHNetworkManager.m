@@ -148,6 +148,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
@@ -273,6 +275,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"refreshToken failed, error: %@", error.error_description);
 
@@ -493,7 +497,100 @@
     [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:urlString parameters:dict finished:completion];
 }
 
-#pragma mark -
+- (void)setUserExtensionsInfo:(NSDictionary *)info completion:(RequestCompletionBlock)completion {
+    if (info == nil || info.count <= 0) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"Paramete 'info' can't is nil or empty. => info: %@", info]);
+        }
+        
+        return;
+    }
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:info options:0 error:nil];
+    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    if (str == nil) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"JSON serialization failed. \n=> info: %@", info]);
+        }
+        
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"JSON serialization string is: %@, length: %zd", str, str.length);
+    if (str.length >= 500) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"The length of the JSON serialization string more than 500 Bytes. \n=> str: %@", str]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *paramete = @{
+                               @"info": str,
+                               };
+    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:EXTENSIONS_INFO_PATH parameters:paramete finished:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            self.userAccount.userExtensionsInfo = info;
+            [self.userAccount saveUserAccount];
+        }
+        
+        if (completion) {
+            completion(isSuccess, result);
+        }
+    }];
+}
+
+- (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:EXTENSIONS_INFO_PATH parameters:nil finished:^(BOOL isSuccess, id  _Nullable result) {
+        
+        if (isSuccess == NO) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+        
+        NSDictionary *dict = (NSDictionary *)result;
+        if (![dict.allKeys containsObject:@"info"]) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+
+        if (![result[@"info"] isKindOfClass:[NSString class]]) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+        
+        NSString *str = (NSString *)result[@"info"];
+        id obj = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        if (completion) {
+            completion(isSuccess, obj);
+        }
+    }];
+}
+
+- (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
+    [self requestWithMethod:SHRequestMethodDELETE manager:nil urlString:EXTENSIONS_INFO_PATH parameters:nil finished:completion];
+}
+
+- (void)cacheUserExtensionsInfo {
+    [self getUserExtensionsInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            self.userAccount.userExtensionsInfo = result;
+            [self.userAccount saveUserAccount];
+        }
+    }];
+}
+
+#pragma mark - Init
 - (Token *)createToken {
     if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];

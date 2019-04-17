@@ -709,4 +709,17 @@
     }
 }
 
++ (BOOL)checkUserWhetherHaveOwnDevice {
+    __block BOOL have = NO;
+    NSArray *devices = [SHCameraManager sharedCameraManger].smarthomeCams.copy;
+    [devices enumerateObjectsUsingBlock:^(SHCameraObject *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.camera.operable == 1) {
+            have = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return have;
+}
+
 @end
