@@ -203,7 +203,7 @@
             ZJSlidingDrawerViewController *slidingVC = (ZJSlidingDrawerViewController *)self.window.rootViewController;
             UINavigationController *mainVC = (UINavigationController *)slidingVC.mainVC;
         
-            [mainVC pushViewController:vc animated:YES];
+            [mainVC pushViewController:vc animated:NO];
         }
     } else {
     }
