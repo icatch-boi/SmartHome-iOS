@@ -12,7 +12,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>2.3.0</string>
+			<string>2.3.1</string>
 			<key>Key</key>
 			<string>PreferenceSpecifiers:1</string>
 			<key>Title</key>
@@ -22,7 +22,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>16230</string>
+			<string>16232</string>
 			<key>Key</key>
 			<string>PreferenceSpecifiers:2</string>
 			<key>Title</key>
