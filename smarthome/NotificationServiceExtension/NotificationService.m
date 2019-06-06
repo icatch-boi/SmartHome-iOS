@@ -97,7 +97,8 @@
     NSString *devID = [NSString stringWithFormat:@"%@", aps[@"devID"]];
     NSString *time = [NSString stringWithFormat:@"%@", aps[@"time"]];
     NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
-
+    time = [self checkRecvTime:time];
+    
     NSString *tempDevID = devID;
     devID = [self getCameraName:devID];
     devID = devID ? devID : [tempDevID substringToIndex:5];
@@ -206,6 +207,23 @@
     currentCount += count.integerValue;
     
     [defaults setObject:@(currentCount) forKey:kRecvNotificationCount];
+}
+
+- (NSString *)checkRecvTime:(NSString *)timeStr {
+    //2019-06-06 10:25:55
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSDate *recvDate = [formatter dateFromString:timeStr];
+    NSInteger recvYear = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:recvDate];
+    NSInteger currentYear = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    
+    if (recvYear != currentYear) {
+        NSTimeInterval currentSecs = [[NSDate date] timeIntervalSinceNow] - 1;
+        return [formatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:currentSecs]];
+    }
+   
+    return timeStr;
 }
 
 @end
