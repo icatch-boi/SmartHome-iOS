@@ -186,6 +186,7 @@
     
     WEAK_SELF(self);
     [self.managedObjectContext performBlockAndWait:^{
+        [SHSDK checkDeviceStatusWithUID:cameraInfo.cameraUid];
         isSuccess = [weakself addCameraDetailHandle:cameraInfo];
     }];
     
