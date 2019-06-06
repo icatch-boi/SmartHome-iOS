@@ -56,7 +56,7 @@
 #else
                 [weakself getDeviceDetailInfoAndAdd2Local:result completion:completion];
 #endif
-                [self checkDevicesStatus:result];
+//                [self checkDevicesStatus:result];
             } else {
                 Error *error = result;
                 SHLogError(SHLogTagAPP, @"getCameraList is faild: %@", error.error_description);

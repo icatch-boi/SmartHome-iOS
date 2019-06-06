@@ -396,6 +396,18 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 //    [[UIApplication sharedApplication].keyWindow addSubview:self];
     [_parentView addSubview:self];
     
+#if 1
+    self.alpha = 1.0;
+    [UIView animateWithDuration:0.5 animations:^{
+        _portraitImageView.transform = CGAffineTransformIdentity;
+        _nickNameLabel.transform = CGAffineTransformIdentity;
+        _connectLabel.transform = CGAffineTransformIdentity;
+        _swichBtn.transform = CGAffineTransformIdentity;
+        _btnContainerView.transform = CGAffineTransformIdentity;
+        [self updateLoadingViewFrame];
+        
+    }];
+#else
     [UIView animateWithDuration:0.5 animations:^{
         self.alpha = 1;
     } completion:^(BOOL finished) {
@@ -409,6 +421,7 @@ NSString *const kVideoCaptureNotification = @"kVideoCaptureNotification";
 
         }];
     }];
+#endif
 }
 
 - (void)dismiss
