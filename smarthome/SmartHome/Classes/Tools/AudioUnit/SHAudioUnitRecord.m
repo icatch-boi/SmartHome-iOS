@@ -90,10 +90,10 @@
     if (error) {
         NSLog(@"setCategory error:%@", error);
     }
-    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.05 error:&error];
-    if (error) {
-        NSLog(@"setPreferredIOBufferDuration error:%@", error);
-    }
+//    [[AVAudioSession sharedInstance] setPreferredIOBufferDuration:0.05 error:&error];
+//    if (error) {
+//        NSLog(@"setPreferredIOBufferDuration error:%@", error);
+//    }
     // buffer list
     uint32_t numberBuffers = 1;
     buffList = (AudioBufferList *)malloc(sizeof(AudioBufferList) + (numberBuffers - 1) * sizeof(AudioBuffer));
@@ -126,7 +126,7 @@
     AudioStreamBasicDescription inputFormat;
     inputFormat.mSampleRate = kSampleRate;
     inputFormat.mFormatID = kAudioFormatLinearPCM;
-    inputFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;//kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+    inputFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;//kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonInterleaved | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
     inputFormat.mFramesPerPacket = 1;
     inputFormat.mChannelsPerFrame = 1;
     inputFormat.mBytesPerPacket = 2;
@@ -152,6 +152,18 @@
                                   sizeof(flag));
     if (status != noErr) {
         NSLog(@"AudioUnitGetProperty error, ret: %d", status);
+    }
+    
+    // disable playback
+    UInt32 playFlag = 0;
+    status = AudioUnitSetProperty(audioUnit,
+                                  kAudioOutputUnitProperty_EnableIO,
+                                  kAudioUnitScope_Output,
+                                  OUTPUT_BUS,
+                                  &playFlag,
+                                  sizeof(playFlag));
+    if (status != noErr) {
+        NSLog(@"AudioUnitGetProperty error, ret: %d", (int)status);
     }
     
     // set callback

@@ -346,6 +346,19 @@
     Config::getInstance()->closeSaveVideo();
 }
 
+- (void)openSaveAudio {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *mediaDirectory = [documentsDirectory stringByAppendingPathComponent:@"TestAudio"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:mediaDirectory withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    Config::getInstance()->openSaveAudio(mediaDirectory.UTF8String, "recv", "send");
+}
+
+- (void)closeSaveAudio {
+    Config::getInstance()->closeSaveAudio();
+}
+
 #pragma mark - Properties
 
 #pragma mark - MEDIA
@@ -681,6 +694,10 @@
     
     if (retVal != ICH_SUCCEED) {
         SHLogError(SHLogTagSDK, @"startSendAudioFrame failed.");
+    } else {
+#if 0
+        [self openSaveAudio];
+#endif
     }
 
     return retVal == ICH_SUCCEED ? YES : NO;
@@ -698,6 +715,10 @@
     
     if (retVal != ICH_SUCCEED) {
         SHLogError(SHLogTagSDK, @"stopSendAvdioFrame failed.");
+    } else {
+#if 0
+        [self closeSaveAudio];
+#endif
     }
     
     return retVal == ICH_SUCCEED ? YES : NO;
