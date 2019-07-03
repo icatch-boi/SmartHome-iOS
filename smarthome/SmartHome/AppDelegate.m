@@ -30,6 +30,7 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SHDeviceUpgradeVC.h"
+#import "filecache/FileCacheConfig.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -54,6 +55,8 @@
     [Bugly startWithAppId:nil config:config];
 	[self registerDefaultsFromSettingsBundle];
 	
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    FileCache::FileCacheConfig::defaultCacheConfig()->setCacheDirectory(path.UTF8String);
 	[self setupAppLog];
 	
 	self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -344,8 +347,9 @@
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
 	NSString *logFilePath = nil;
+    string cacheNS = FileCache::FileCacheConfig::defaultCacheConfig()->getCacheNamespace();
 	for (NSString *fileName in  documentsDirectoryContents) {
-		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"]) {
+		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"] &&![fileName isEqualToString:[NSString stringWithFormat:@"%s", cacheNS.c_str()]]) {
 			
 			logFilePath = [documentsDirectory stringByAppendingPathComponent:fileName];
 			[[NSFileManager defaultManager] removeItemAtPath:logFilePath error:nil];

@@ -133,16 +133,21 @@
 
 - (void)onDownloadComplete:(SHFile*)file retvalue:(Boolean)ret{
 	SHLogInfo(SHLogTagAPP, @"onDownloadComplete filename is %s", file.f.getFileName().c_str());
+    int position = [self findPositionByFile:file];
+    if (position == -1) {
+        SHLogWarn(SHLogTagAPP, @"Not exist file: %s", file.f.getFileName().c_str());
+        return;
+    }
 	if(ret == YES){
 		self.downloadSuccessedNum++;
 	}else{
 		self.downloadFailedNum++;
 	}
-	int position = [self findPositionByFile:file];
+//    int position = [self findPositionByFile:file];
+    dispatch_async(dispatch_get_main_queue(), ^{
 	[self.downloadArray removeObject:file];
 	id key = [NSString stringWithFormat:@"%@_%@",file.uid,[NSString stringWithFormat:@"%d",file.f.getFileHandle()]];
 	[self.downLoaderCache removeObjectForKey:key];
-	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.downloadInfoDelegate onDownloadComplete:position retValue:ret];
 		[self startDownloadFile];
 		if(self.downloadArray.count == 0){
