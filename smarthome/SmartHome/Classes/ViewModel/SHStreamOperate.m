@@ -283,8 +283,9 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                             first = NO;
                         }
                         NSUInteger loc = locLength;
-#endif
+#else
                         NSUInteger loc = format.getCsd_0_size() + format.getCsd_1_size();
+#endif
                         nalSize = (uint32_t)(shData.data.length - loc - 4);
                         NSRange iRange = NSMakeRange(loc, shData.data.length - loc);
                         const uint8_t lengthBytes[] = {(uint8_t)(nalSize>>24),

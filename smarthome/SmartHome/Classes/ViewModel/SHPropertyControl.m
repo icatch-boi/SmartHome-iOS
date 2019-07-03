@@ -21,6 +21,11 @@
 - (SHPropertyQueryResult *)retrieveSettingCurPropertyWithCamera:(SHCameraObject *)shCameraObj {
     __block SHPropertyQueryResult *result = nil;
     
+    if (shCameraObj.sdk == nil) {
+        SHLogError(SHLogTagAPP, @"CameraObj 'sdk' attribute is nil.");
+        return result;
+    }
+    
     dispatch_sync(shCameraObj.sdk.sdkQueue, ^{
         SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
         

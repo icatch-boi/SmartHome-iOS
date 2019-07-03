@@ -43,7 +43,7 @@ string SHH264StreamParameter::getCmdLineParam() {
     sprintf(temp, "%d", bidirection_audio);
     string bid_audio(temp);
     
-    string url = "/H264?W="+w+"&H="+h+"&BR="+br+"&FPS="+fps1+"&bidirection_audio="+bid_audio+"&quality="+Q+"&";
+    string url = "/pv/H264?W="+w+"&H="+h+"&BR="+br+"&FPS="+fps1+"&bidirection_audio="+bid_audio+"&quality="+Q+"&";
     printf("%s\n", url.c_str());
     return url;
 }
