@@ -42,6 +42,7 @@
 #import "Reachability.h"
 #import "SDWebImageManager.h"
 #import "FRDAddFaceCollectionVC.h"
+#import "SHAddDeviceView.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -57,6 +58,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 @property (nonatomic, weak) SHUserAccountInfoVC *userAccountInfoVC;
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) NSTimer *netStatusTimer;
+@property (nonatomic, weak) SHAddDeviceView *addDeviceView;
 
 @end
 
@@ -197,6 +199,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             
             if (self) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.listViewModel.cameraList.count > 0) {
+                        [self removeAddDeviceView];
+                    } else {
+                        [self setupAddDeviceView];
+                    }
+                    
                     [self.tableView reloadData];
                 });
             }
@@ -815,6 +823,40 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 - (void)cleanFaceNotification {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kRecvNotification];
+}
+
+- (void)setupAddDeviceView {
+    if (self.addDeviceView != nil) {
+        return;
+    }
+    
+    SHAddDeviceView *addView = [SHAddDeviceView addDeviceViewWithFrame:[self calcAddDeviceViewFrame]];
+    [self.view addSubview:addView];
+    
+    WEAK_SELF(self);
+    [addView setAddDeviceHandle:^{
+        [weakself addCameraAction:nil];
+    }];
+    
+    self.addDeviceView = addView;
+}
+
+- (CGRect)calcAddDeviceViewFrame {
+    CGRect rect = self.view.frame;
+    //获取状态栏的rect
+    CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
+    //获取导航栏的rect
+    CGRect navRect = self.navigationController.navigationBar.frame;
+    return CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - CGRectGetHeight(statusRect) - CGRectGetHeight(navRect));
+}
+
+- (void)removeAddDeviceView {
+    if (self.addDeviceView == nil) {
+        return;
+    }
+    
+    [self.addDeviceView removeFromSuperview];
+    self.addDeviceView = nil;
 }
 
 @end

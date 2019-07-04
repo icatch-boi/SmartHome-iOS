@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="Y4r-B4-8Ad" customClass="SHAddDeviceView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_none_device" translatesAutoresizingMaskIntoConstraints="NO" id="F19-3b-ADU">
+                    <rect key="frame" x="96" y="92" width="128" height="128"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="暂无设备，请添加" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rl7-Vw-aM3">
+                    <rect key="frame" x="78.5" y="228" width="163.5" height="24"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Z9-Dw-pEt">
+                    <rect key="frame" x="80" y="272" width="160" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="160" id="2xc-E1-4i7"/>
+                        <constraint firstAttribute="height" constant="44" id="AFQ-81-OTu"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="添加设备" image="home_add_device">
+                        <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="addDeviceClick:" destination="Y4r-B4-8Ad" eventType="touchUpInside" id="WsS-8b-ms5"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Rl7-Vw-aM3" firstAttribute="centerY" secondItem="Y4r-B4-8Ad" secondAttribute="centerY" id="01k-6L-awL"/>
+                <constraint firstItem="Rl7-Vw-aM3" firstAttribute="centerX" secondItem="Y4r-B4-8Ad" secondAttribute="centerX" id="8iL-Lt-ZeE"/>
+                <constraint firstItem="9Z9-Dw-pEt" firstAttribute="centerX" secondItem="Y4r-B4-8Ad" secondAttribute="centerX" id="cdH-wS-0Hb"/>
+                <constraint firstItem="9Z9-Dw-pEt" firstAttribute="top" secondItem="Rl7-Vw-aM3" secondAttribute="bottom" constant="20" id="hWY-cG-HyV"/>
+                <constraint firstItem="Rl7-Vw-aM3" firstAttribute="top" secondItem="F19-3b-ADU" secondAttribute="bottom" constant="8" id="mp7-3O-w7d"/>
+                <constraint firstItem="F19-3b-ADU" firstAttribute="centerX" secondItem="Y4r-B4-8Ad" secondAttribute="centerX" id="sxg-RW-uMW"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="1ps-5i-31H"/>
+            <connections>
+                <outlet property="addDeviceBtn" destination="9Z9-Dw-pEt" id="jAC-hh-84G"/>
+                <outlet property="tipsLabel" destination="Rl7-Vw-aM3" id="eNQ-Bz-J0V"/>
+            </connections>
+            <point key="canvasLocation" x="146" y="106"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="home_add_device" width="32" height="32"/>
+        <image name="home_none_device" width="128" height="128"/>
+    </resources>
+</document>

@@ -87,6 +87,8 @@
 		388744811EA4A666004802D7 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388744801EA4A666004802D7 /* CoreImage.framework */; };
 		388744841EA4A75A004802D7 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388744831EA4A75A004802D7 /* Photos.framework */; };
 		388744861EA4A862004802D7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 388744851EA4A862004802D7 /* QuartzCore.framework */; };
+		388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 388CCA6722CCADFE00FC8909 /* SHAddDeviceView.m */; };
+		388CCA6A22CCAE0900FC8909 /* SHAddDeviceView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 388CCA6922CCAE0900FC8909 /* SHAddDeviceView.xib */; };
 		3897E0BA2180743100E72417 /* QBTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 3897E09C2180743000E72417 /* QBTools.m */; };
 		3897E0BF2180743100E72417 /* Setup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3897E0A62180743000E72417 /* Setup.storyboard */; };
 		3897E0C02180743100E72417 /* SHSetupNavVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3897E0A82180743000E72417 /* SHSetupNavVC.m */; };
@@ -516,6 +518,9 @@
 		388744801EA4A666004802D7 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		388744831EA4A75A004802D7 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		388744851EA4A862004802D7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		388CCA6622CCADFE00FC8909 /* SHAddDeviceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAddDeviceView.h; sourceTree = "<group>"; };
+		388CCA6722CCADFE00FC8909 /* SHAddDeviceView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAddDeviceView.m; sourceTree = "<group>"; };
+		388CCA6922CCAE0900FC8909 /* SHAddDeviceView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHAddDeviceView.xib; sourceTree = "<group>"; };
 		3897E09C2180743000E72417 /* QBTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBTools.m; sourceTree = "<group>"; };
 		3897E09E2180743000E72417 /* QBTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBTools.h; sourceTree = "<group>"; };
 		3897E0A62180743000E72417 /* Setup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Setup.storyboard; sourceTree = "<group>"; };
@@ -1339,6 +1344,16 @@
 			name = "Frameworks and Libraries";
 			sourceTree = "<group>";
 		};
+		388CCA6422CCADC000FC8909 /* AddDeviceView */ = {
+			isa = PBXGroup;
+			children = (
+				388CCA6622CCADFE00FC8909 /* SHAddDeviceView.h */,
+				388CCA6722CCADFE00FC8909 /* SHAddDeviceView.m */,
+				388CCA6922CCAE0900FC8909 /* SHAddDeviceView.xib */,
+			);
+			path = AddDeviceView;
+			sourceTree = "<group>";
+		};
 		3897E0992180743000E72417 /* Setup */ = {
 			isa = PBXGroup;
 			children = (
@@ -1986,6 +2001,7 @@
 		38E5BFFE20A3F5AE003004E0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				388CCA6422CCADC000FC8909 /* AddDeviceView */,
 				38E5C00320A3F5AE003004E0 /* CameraCell */,
 				38E5C00020A3F5AE003004E0 /* SHLocalAlbumCell.h */,
 				38E5C00920A3F5AE003004E0 /* SHLocalAlbumCell.m */,
@@ -2845,6 +2861,7 @@
 				38E5C30C20A3F81F003004E0 /* MpbPopover.xib in Resources */,
 				3814BECA2178276700A13148 /* Resource.bundle in Resources */,
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
+				388CCA6A22CCAE0900FC8909 /* SHAddDeviceView.xib in Resources */,
 				3897E0BF2180743100E72417 /* Setup.storyboard in Resources */,
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
@@ -3140,6 +3157,7 @@
 				38E5C34F20A40F8A003004E0 /* SHPlaybackControl.m in Sources */,
 				389C29F21F2EEABF004C4806 /* main.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
+				388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
