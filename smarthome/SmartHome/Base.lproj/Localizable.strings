@@ -462,3 +462,6 @@
 "kEnableBackgroundWakeupDescription" = "Turning on this feature will increase power consumption, but it will increase the connection speed. Are you sure you want to turn it on?";
 "kSettingup" = "Setting up...";
 "kChangeBackgroundWakeupStatusFailed" = "Changing the background wake state failed!";
+
+"kAddDeviceTips" = "No device, please add";
+"kAddDevice" = "Add device";

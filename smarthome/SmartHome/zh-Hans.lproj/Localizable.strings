@@ -471,3 +471,6 @@
 "kEnableBackgroundWakeupDescription" = "打开此功能将会增加耗电量，但可提升连接速度，确定要打开吗？";
 "kSettingup" = "正在设置...";
 "kChangeBackgroundWakeupStatusFailed" = "更改背景唤醒状态失败！";
+
+"kAddDeviceTips" = "暂无设备，请添加";
+"kAddDevice" = "添加设备";

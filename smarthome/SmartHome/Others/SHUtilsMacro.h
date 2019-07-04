@@ -143,7 +143,7 @@ static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
 static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
 static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 static NSString * const kPasswordRegularExpression = @"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{%zd,%zd}";
-static const NSInteger kPasswordMinLength = 6;
+static const NSInteger kPasswordMinLength = 8;
 static const NSInteger kPasswordMaxLength = 16;
 static NSString * const kDeviceNameRegularExpression = @"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}";
 static const NSUInteger kDeviceNameMinLength = 3;
