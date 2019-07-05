@@ -346,6 +346,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     UIImage *img = _shCameraObj.camera.thumbnail;
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    self.batteryLabel.hidden = YES;
+    self.batteryImageView.hidden = YES;
 
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
@@ -495,14 +497,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.batteryLabel.hidden = (batteryStatus == 1);
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.batteryLabel.hidden = (batteryStatus == 1);
+//        });
 
         if (batteryStatus == 1) {
             [self setupChargeGUI];
             SHLogInfo(SHLogTagAPP, @"Device chargeing.");
-        } else {
+        } else if (batteryStatus == 0) {
             [self initBatteryLevelIcon];
         }
     });
@@ -510,6 +512,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)setupChargeGUI {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.batteryLabel.hidden = YES;
+        self.batteryImageView.hidden = NO;
         self.batteryImageView.image = [UIImage imageNamed:@"vedieo-buttery_c"];
     });
 }
@@ -521,7 +525,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     
     if (status == 1) {
         [self setupChargeGUI];
-    } else {
+    } else if (status == 0) {
         [self updateBatteryLevelIcon:_shCameraObj.cameraProperty.curBatteryLevel];
     }
 }
@@ -535,7 +539,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 
 - (void)initBatteryLevelIcon {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        int level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        if (level < 0) {
+            SHLogError(SHLogTagAPP, @"Get battery level failed!");
+            return;
+        }
         NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
         UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
         
@@ -544,8 +552,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             self.batteryLowAlertShowed = NO;
             _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
             
-            self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
-            self.batteryInfoImgView.image = batteryStatusImage;
+            self.batteryLabel.hidden = NO;
+            self.batteryImageView.hidden = NO;
         });
     });
 }
@@ -571,8 +579,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         self.batteryImageView.image = batteryStatusImage;
         _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
 
-        self.batteryInfoLabel.text = [NSString stringWithFormat:@"%d%%", level];
-        self.batteryInfoImgView.image = batteryStatusImage;
+        self.batteryLabel.hidden = NO;
+        self.batteryImageView.hidden = NO;
         
         if ([imageName isEqualToString:@"vedieo-buttery"] && !_batteryLowAlertShowed) {
             self.batteryLowAlertShowed = YES;
@@ -660,7 +668,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             _TalkBackRun = NO;
             
             [self stopTalkBack];
-            _noHidden = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self setMuteButtonBackgroundImage];
@@ -706,7 +713,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
             
             _shCameraObj.cameraProperty.talk = YES;
-            _noHidden = YES;
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -734,7 +740,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [self.progressHUD hideProgressHUD:YES];
             
             _speakerButton.enabled = YES;
-            _noHidden = NO;
         });
     } failedBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1436,7 +1441,6 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         NSString *bitRate = [SHTool bitRateStringFromBits:value];
         
         self.bitRateLabel.text = bitRate;
-        self.bitRateInfoLabel.text = bitRate;
         
         self.clientCountLabel.text = [NSString stringWithFormat:@"%zd client", self.shCameraObj.cameraProperty.clientCount];
     });

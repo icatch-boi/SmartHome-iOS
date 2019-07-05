@@ -455,6 +455,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     _preview.image = [_shCameraObj.streamOper getLastFrameImage];
     _bitRateLabel.text = @"0kb/s";
+    self.batteryLabel.hidden = YES;
+    self.batteryImgView.hidden = YES;
     
     [self setupResolutionButton];
     [self setupZoomScrollView];
@@ -1281,14 +1283,14 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int batteryStatus = [_shCameraObj.controler.propCtrl prepareDataForChargeStatusWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.batteryLabel.hidden = (batteryStatus == 1);
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.batteryLabel.hidden = (batteryStatus == 1);
+//        });
 
         if (batteryStatus == 1) {
             [self setupChargeGUI];
             SHLogInfo(SHLogTagAPP, @"Device chargeing.");
-        } else {
+        } else if (batteryStatus == 0) {
             [self initBatteryLevelIcon];
         }
     });
@@ -1296,6 +1298,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)setupChargeGUI {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.batteryLabel.hidden = YES;
+        self.batteryImgView.hidden = NO;
         self.batteryImgView.image = [UIImage imageNamed:@"vedieo-buttery_c"];
     });
 }
@@ -1307,7 +1311,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     if (status == 1) {
         [self setupChargeGUI];
-    } else {
+    } else if (status == 0) {
         [self updateBatteryLevelIcon:_shCameraObj.cameraProperty.curBatteryLevel];
     }
 }
@@ -1321,11 +1325,17 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)initBatteryLevelIcon {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        uint level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        int level = [_shCameraObj.controler.propCtrl prepareDataForBatteryLevelWithCamera:_shCameraObj andCurResult:_shCameraObj.curResult];
+        if (level < 0) {
+            SHLogError(SHLogTagAPP, @"Get battery level failed!");
+            return;
+        }
         NSString *imageName = [_shCameraObj.controler.propCtrl transBatteryLevel2NStr:level];
         UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.batteryLabel.hidden = NO;
+            self.batteryImgView.hidden = NO;
             self.batteryImgView.image = batteryStatusImage;
             self.batteryLowAlertShowed = NO;
             _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
@@ -1353,6 +1363,8 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         UIImage *batteryStatusImage = [UIImage imageNamed:imageName];
         self.batteryImgView.image = batteryStatusImage;
         _batteryLabel.text = [NSString stringWithFormat:@"%d%%", level];
+        self.batteryLabel.hidden = NO;
+        self.batteryImgView.hidden = NO;
 
         if ([imageName isEqualToString:@"vedieo-buttery"] && !_batteryLowAlertShowed) {
             self.batteryLowAlertShowed = YES;
