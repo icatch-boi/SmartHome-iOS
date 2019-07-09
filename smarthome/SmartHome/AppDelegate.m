@@ -30,10 +30,7 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SHDeviceUpgradeVC.h"
-//#define V37
-#ifdef V37
 #import "filecache/FileCacheConfig.h"
-#endif
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -59,10 +56,8 @@
     [Bugly startWithAppId:nil config:config];
 	[self registerDefaultsFromSettingsBundle];
 	
-#ifdef V37
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     FileCache::FileCacheConfig::defaultCacheConfig()->setCacheDirectory(path.UTF8String);
-#endif
 	[self setupAppLog];
 	
 	self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -353,14 +348,9 @@
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
 	NSString *logFilePath = nil;
-#ifdef V37
     string cacheNS = FileCache::FileCacheConfig::defaultCacheConfig()->getCacheNamespace();
 	for (NSString *fileName in  documentsDirectoryContents) {
 		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"] &&![fileName isEqualToString:[NSString stringWithFormat:@"%s", cacheNS.c_str()]]) {
-#else
-    for (NSString *fileName in  documentsDirectoryContents) {
-        if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"]) {
-#endif
 			
 			logFilePath = [documentsDirectory stringByAppendingPathComponent:fileName];
 			[[NSFileManager defaultManager] removeItemAtPath:logFilePath error:nil];
