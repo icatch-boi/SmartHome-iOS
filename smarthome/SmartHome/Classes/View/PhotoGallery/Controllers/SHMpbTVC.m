@@ -558,7 +558,8 @@ static int const kNewFileIconTag = 888;
 - (void)creatCalendar
 {
     //日历
-    HWCalendar *calendar = [[HWCalendar alloc] initWithFrame:CGRectMake(7, [UIScreen screenHeight], 400, 396) andCurDateTime:_remoteDateTime cameraObj:_shCamObj];
+    HWCalendar *calendar = [[HWCalendar alloc] initWithFrame:CGRectMake(0, [UIScreen screenHeight], CGRectGetWidth(self.view.bounds), 396) andCurDateTime:_remoteDateTime cameraObj:_shCamObj];
+    calendar.backgroundColor = [UIColor ic_colorWithHex:kBackgroundThemeColor];
     calendar.hidden = YES;
     calendar.delegate = self;
     calendar.showTimePicker = YES;
