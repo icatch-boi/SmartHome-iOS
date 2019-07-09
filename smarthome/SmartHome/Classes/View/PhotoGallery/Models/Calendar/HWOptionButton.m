@@ -13,7 +13,7 @@
 #define KMarginYWhenMoving 20.0f
 #define KRowHeight 44.0f
 #define KMaxShowLine 7
-#define KFont [UIFont systemFontOfSize:13.0f]
+#define KFont [UIFont systemFontOfSize:16.0f]
 #define KBackColor [UIColor whiteColor]
 
 @interface HWOptionButton ()<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
