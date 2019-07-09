@@ -472,3 +472,4 @@
 
 "kAddDeviceTips" = "暫無設備，請添加";
 "kAddDevice" = "添加設備";
+"kRecvVideoTimeoutTips" = "當前網絡狀況差，已不能正常預覽，請稍候再試！";

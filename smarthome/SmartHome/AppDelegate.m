@@ -30,7 +30,10 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SHDeviceUpgradeVC.h"
+//#define V37
+#ifdef V37
 #import "filecache/FileCacheConfig.h"
+#endif
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -42,6 +45,7 @@
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, weak) UIAlertController *networkAlertVC;
 @property (nonatomic, weak) UIAlertController *lowBatteryAlertVC;
+@property (nonatomic, weak) UIAlertController *recvVideoTimeoutAlertVC;
 
 @end
 
@@ -55,8 +59,10 @@
     [Bugly startWithAppId:nil config:config];
 	[self registerDefaultsFromSettingsBundle];
 	
+#ifdef V37
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     FileCache::FileCacheConfig::defaultCacheConfig()->setCacheDirectory(path.UTF8String);
+#endif
 	[self setupAppLog];
 	
 	self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -347,9 +353,14 @@
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
 	NSString *logFilePath = nil;
+#ifdef V37
     string cacheNS = FileCache::FileCacheConfig::defaultCacheConfig()->getCacheNamespace();
 	for (NSString *fileName in  documentsDirectoryContents) {
 		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"] &&![fileName isEqualToString:[NSString stringWithFormat:@"%s", cacheNS.c_str()]]) {
+#else
+    for (NSString *fileName in  documentsDirectoryContents) {
+        if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"]) {
+#endif
 			
 			logFilePath = [documentsDirectory stringByAppendingPathComponent:fileName];
 			[[NSFileManager defaultManager] removeItemAtPath:logFilePath error:nil];
@@ -866,6 +877,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 #pragma mark - DownloadCompleteHandle
 - (void)addGlobalObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(singleDownloadCompleteHandle:) name:kSingleDownloadCompleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvVideoTimeoutHandle:) name:kRecvVideoTimeoutNotification object:nil];
 }
 
 - (void)removeGlobalObserver {
@@ -1032,6 +1044,66 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (self.lowBatteryAlertVC != nil) {
         [self.lowBatteryAlertVC dismissViewControllerAnimated:YES completion:^{
             self.lowBatteryAlertVC = nil;
+        }];
+    }
+}
+
+- (void)recvVideoTimeoutHandle:(NSNotification *)nc {
+    if (self.recvVideoTimeoutAlertVC != nil) {
+        SHLogInfo(SHLogTagAPP, @"RecvVideoTimeout Alert View Already exist.");
+        
+        UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+        UIViewController *vc = nav.visibleViewController;
+        if ([vc isMemberOfClass:[SHHomeTableViewController class]]) {
+            SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+            [self dismissRecvVideoTimeoutAlertVC];
+        }
+        
+        return;
+    }
+    
+    SHLogTRACE();
+    SHCameraObject *shCamObj = nc.object;
+
+    [shCamObj.sdk disableTutk];
+    [shCamObj.streamOper stopTalkBack];
+    
+    [shCamObj.streamOper stopMediaStreamWithComplete:nil];
+    
+    [shCamObj.controler.pbCtrl stopWithCamera:shCamObj];
+
+    [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+    
+    [self showRecvVideoTimeoutAlertView];
+}
+
+- (void)showRecvVideoTimeoutAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kRecvVideoTimeoutTips", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SHTool backToRootViewControllerWithCompletion:nil];
+            [weakself dismissRecvVideoTimeoutAlertVC];
+        });
+    }]];
+    
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    if ([vc isMemberOfClass:[SHHomeTableViewController class]]) {
+        SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+        return;
+    }
+    
+    [vc presentViewController:alertVC animated:YES completion:nil];
+    
+    self.recvVideoTimeoutAlertVC = alertVC;
+}
+
+- (void)dismissRecvVideoTimeoutAlertVC {
+    if (self.recvVideoTimeoutAlertVC != nil) {
+        [self.recvVideoTimeoutAlertVC dismissViewControllerAnimated:YES completion:^{
+            self.recvVideoTimeoutAlertVC = nil;
         }];
     }
 }
