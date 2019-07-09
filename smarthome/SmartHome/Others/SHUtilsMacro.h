@@ -121,6 +121,7 @@ static NSString * const kUpdateDeviceInfoNotification = @"UpdateDeviceInfoNotifi
 static NSString * const kDeviceUpgradeFailedNotification = @"DeviceUpgradeFailedNotification";
 static NSString * const kDeviceUpgradeSuccessNotification = @"DeviceUpgradeSuccessNotification";
 static NSString * const kDownloadUpgradePackageSuccessNotification = @"DownloadUpgradePackageSuccessNotification";
+static NSString * const kRecvVideoTimeoutNotification = @"RecvVideoTimeoutNotification";
 
 #pragma mark - Color
 static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;

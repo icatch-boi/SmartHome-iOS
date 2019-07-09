@@ -28,6 +28,7 @@
 @property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
 @property (nonatomic, strong) SHObserver *clientCountObserver;
 @property (nonatomic, strong) SHObserver *noTalkingObserver;
+@property (nonatomic, strong) SHObserver *recvVideoTimeoutObserver;
 
 @end
 
@@ -371,6 +372,10 @@
     SHSDKEventListener *noTalkingListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.noTalkingObserver = [SHObserver cameraObserverWithListener:noTalkingListener eventType:ICATCH_EVENT_NO_TALKING isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.noTalkingObserver];
+    
+    SHSDKEventListener *recvDataTimeoutListener = new SHSDKEventListener(self, @selector(notifyRecvVideoTimeoutEvent));
+    self.recvVideoTimeoutObserver = [SHObserver cameraObserverWithListener:recvDataTimeoutListener eventType:ICATCH_EVENT_RECEIVE_VIDEO_TIMEOUT isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.recvVideoTimeoutObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -430,6 +435,14 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:kCameraPowerOffNotification object:self userInfo:@{kPowerOffEventValue: @(intValue1)}];
+    });
+}
+
+- (void)notifyRecvVideoTimeoutEvent {
+    SHLogTRACE();
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecvVideoTimeoutNotification object:self];
     });
 }
 
@@ -531,6 +544,17 @@
         }
         
         self.noTalkingObserver = nil;
+    }
+    
+    if (self.recvVideoTimeoutObserver != nil) {
+        [self.sdk removeObserver:self.recvVideoTimeoutObserver];
+        
+        if (self.recvVideoTimeoutObserver.listener != nullptr) {
+            delete self.recvVideoTimeoutObserver.listener;
+            self.recvVideoTimeoutObserver.listener = nullptr;
+        }
+        
+        self.recvVideoTimeoutObserver = nil;
     }
     
     [self removeVideoBitRateObserver];

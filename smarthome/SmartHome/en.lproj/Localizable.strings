@@ -465,3 +465,4 @@
 
 "kAddDeviceTips" = "No device, please add";
 "kAddDevice" = "Add device";
+"kRecvVideoTimeoutTips" = "The current network is in poor condition and cannot be previewed properly. Please try again later!";
