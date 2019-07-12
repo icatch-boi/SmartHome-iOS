@@ -14,6 +14,11 @@
 #import "FRDFaceInfo.h"
 #import "FRDFaceInfoViewModel.h"
 
+#import "LivenessViewController.h"
+#import "LivingConfigModel.h"
+#import "IDLFaceSDK/IDLFaceSDK.h"
+#import "FaceParameterConfig.h"
+
 static NSString * const ReuseIdentifier = @"faceCellID";
 
 @interface FRDFacesViewController ()
@@ -31,6 +36,26 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFacesInfoHandler:) name:kReloadFacesInfoNotification object:nil];
     [self setupLocalizedString];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addFaceClick)];
+}
+
+- (void)addFaceClick {
+    if ([[FaceSDKManager sharedInstance] canWork]) {
+        NSString* licensePath = [[NSBundle mainBundle] pathForResource:FACE_LICENSE_NAME ofType:FACE_LICENSE_SUFFIX];
+        [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath];
+    }
+    LivenessViewController* lvc = [[LivenessViewController alloc] init];
+    LivingConfigModel* model = [LivingConfigModel sharedInstance];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLiveYawLeft)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLiveYawRight)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLivePitchUp)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLivePitchDown)];
+    model.isByOrder = YES;
+    
+    [lvc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:lvc];
+    navi.navigationBarHidden = true;
+    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (void)setupLocalizedString {

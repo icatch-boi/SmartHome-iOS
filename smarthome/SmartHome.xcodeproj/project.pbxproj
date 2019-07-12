@@ -158,6 +158,19 @@
 		38BFB23822D4663A00AA3ABC /* .cp in Resources */ = {isa = PBXBuildFile; fileRef = 38BFB22C22D4663A00AA3ABC /* .cp */; };
 		38BFB23922D4663A00AA3ABC /* libicatch_iot_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BFB22D22D4663A00AA3ABC /* libicatch_iot_sdk.a */; };
 		38BFB23A22D4663A00AA3ABC /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BFB22E22D4663A00AA3ABC /* libswscale.a */; };
+		38BFB25322D85E4A00AA3ABC /* VideoCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB25222D85E4900AA3ABC /* VideoCaptureDevice.m */; };
+		38BFB25722D85E5A00AA3ABC /* LivingConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB25522D85E5A00AA3ABC /* LivingConfigModel.m */; };
+		38BFB25B22D85E8000AA3ABC /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB25922D85E8000AA3ABC /* ImageUtils.m */; };
+		38BFB26922D85EE800AA3ABC /* FaceBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB25D22D85EE700AA3ABC /* FaceBaseViewController.m */; };
+		38BFB26B22D85EE800AA3ABC /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB26422D85EE700AA3ABC /* CircleView.m */; };
+		38BFB26C22D85EE800AA3ABC /* LivenessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB26522D85EE700AA3ABC /* LivenessViewController.m */; };
+		38BFB26D22D85EE800AA3ABC /* DisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB26622D85EE700AA3ABC /* DisplayViewController.m */; };
+		38BFB26E22D85EE800AA3ABC /* RemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38BFB26722D85EE800AA3ABC /* RemindView.m */; };
+		38BFB27022D85F3300AA3ABC /* FaceCollect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38BFB26F22D85F3300AA3ABC /* FaceCollect.storyboard */; };
+		38BFB28B22D86ABE00AA3ABC /* IDLFaceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BFB28722D86ABE00AA3ABC /* IDLFaceSDK.framework */; };
+		38BFB28C22D86ABE00AA3ABC /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 38BFB28822D86ABE00AA3ABC /* idl-license.face-ios */; };
+		38BFB28D22D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 38BFB28922D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle */; };
+		38BFB28E22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 38BFB28A22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle */; };
 		38C7940421C2279600E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -682,6 +695,28 @@
 		38BFB22C22D4663A00AA3ABC /* .cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .cp; sourceTree = "<group>"; };
 		38BFB22D22D4663A00AA3ABC /* libicatch_iot_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libicatch_iot_sdk.a; sourceTree = "<group>"; };
 		38BFB22E22D4663A00AA3ABC /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libswscale.a; sourceTree = "<group>"; };
+		38BFB24F22D85E2400AA3ABC /* FaceParameterConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceParameterConfig.h; sourceTree = "<group>"; };
+		38BFB25122D85E4900AA3ABC /* VideoCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCaptureDevice.h; sourceTree = "<group>"; };
+		38BFB25222D85E4900AA3ABC /* VideoCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCaptureDevice.m; sourceTree = "<group>"; };
+		38BFB25522D85E5A00AA3ABC /* LivingConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LivingConfigModel.m; sourceTree = "<group>"; };
+		38BFB25622D85E5A00AA3ABC /* LivingConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LivingConfigModel.h; sourceTree = "<group>"; };
+		38BFB25922D85E8000AA3ABC /* ImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtils.m; sourceTree = "<group>"; };
+		38BFB25A22D85E8000AA3ABC /* ImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
+		38BFB25D22D85EE700AA3ABC /* FaceBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceBaseViewController.m; sourceTree = "<group>"; };
+		38BFB25E22D85EE700AA3ABC /* DisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayViewController.h; sourceTree = "<group>"; };
+		38BFB25F22D85EE700AA3ABC /* FaceBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceBaseViewController.h; sourceTree = "<group>"; };
+		38BFB26022D85EE700AA3ABC /* LivenessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LivenessViewController.h; sourceTree = "<group>"; };
+		38BFB26122D85EE700AA3ABC /* RemindView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindView.h; sourceTree = "<group>"; };
+		38BFB26322D85EE700AA3ABC /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
+		38BFB26422D85EE700AA3ABC /* CircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleView.m; sourceTree = "<group>"; };
+		38BFB26522D85EE700AA3ABC /* LivenessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LivenessViewController.m; sourceTree = "<group>"; };
+		38BFB26622D85EE700AA3ABC /* DisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayViewController.m; sourceTree = "<group>"; };
+		38BFB26722D85EE800AA3ABC /* RemindView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemindView.m; sourceTree = "<group>"; };
+		38BFB26F22D85F3300AA3ABC /* FaceCollect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceCollect.storyboard; sourceTree = "<group>"; };
+		38BFB28722D86ABE00AA3ABC /* IDLFaceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IDLFaceSDK.framework; sourceTree = "<group>"; };
+		38BFB28822D86ABE00AA3ABC /* idl-license.face-ios */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "idl-license.face-ios"; sourceTree = "<group>"; };
+		38BFB28922D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.model.bundle; sourceTree = "<group>"; };
+		38BFB28A22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.faceSDK.bundle; sourceTree = "<group>"; };
 		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
@@ -1030,6 +1065,7 @@
 				388744841EA4A75A004802D7 /* Photos.framework in Frameworks */,
 				38A6FFFE208EFF3F0052B257 /* SHAccountManagementKit.framework in Frameworks */,
 				382CA9BF1EE69BFF0042442C /* libxml2.tbd in Frameworks */,
+				38BFB28B22D86ABE00AA3ABC /* IDLFaceSDK.framework in Frameworks */,
 				381DB6F81ED6E1410054D817 /* libsqlite3.0.tbd in Frameworks */,
 				38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */,
 				38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */,
@@ -1600,6 +1636,7 @@
 		38BB262C21DF08AB00270CE1 /* FaceRecognition */ = {
 			isa = PBXGroup;
 			children = (
+				38BFB24E22D85DC900AA3ABC /* FaceCollect */,
 				38BB262D21DF08EE00270CE1 /* Classes */,
 			);
 			path = FaceRecognition;
@@ -1785,6 +1822,74 @@
 				38BFB22022D4663A00AA3ABC /* ICatchMJPGStreamParam.h */,
 			);
 			path = type;
+			sourceTree = "<group>";
+		};
+		38BFB24E22D85DC900AA3ABC /* FaceCollect */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB26F22D85F3300AA3ABC /* FaceCollect.storyboard */,
+				38BFB24F22D85E2400AA3ABC /* FaceParameterConfig.h */,
+				38BFB25C22D85E8600AA3ABC /* ViewController */,
+				38BFB25822D85E8000AA3ABC /* Utils */,
+				38BFB25022D85E4900AA3ABC /* Core */,
+				38BFB25422D85E5A00AA3ABC /* Model */,
+			);
+			path = FaceCollect;
+			sourceTree = "<group>";
+		};
+		38BFB25022D85E4900AA3ABC /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB25122D85E4900AA3ABC /* VideoCaptureDevice.h */,
+				38BFB25222D85E4900AA3ABC /* VideoCaptureDevice.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		38BFB25422D85E5A00AA3ABC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB25522D85E5A00AA3ABC /* LivingConfigModel.m */,
+				38BFB25622D85E5A00AA3ABC /* LivingConfigModel.h */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		38BFB25822D85E8000AA3ABC /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB25922D85E8000AA3ABC /* ImageUtils.m */,
+				38BFB25A22D85E8000AA3ABC /* ImageUtils.h */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		38BFB25C22D85E8600AA3ABC /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB26322D85EE700AA3ABC /* CircleView.h */,
+				38BFB26422D85EE700AA3ABC /* CircleView.m */,
+				38BFB26122D85EE700AA3ABC /* RemindView.h */,
+				38BFB26722D85EE800AA3ABC /* RemindView.m */,
+				38BFB25F22D85EE700AA3ABC /* FaceBaseViewController.h */,
+				38BFB25D22D85EE700AA3ABC /* FaceBaseViewController.m */,
+				38BFB26022D85EE700AA3ABC /* LivenessViewController.h */,
+				38BFB26522D85EE700AA3ABC /* LivenessViewController.m */,
+				38BFB25E22D85EE700AA3ABC /* DisplayViewController.h */,
+				38BFB26622D85EE700AA3ABC /* DisplayViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		38BFB28622D86ABE00AA3ABC /* FaceSDK */ = {
+			isa = PBXGroup;
+			children = (
+				38BFB28722D86ABE00AA3ABC /* IDLFaceSDK.framework */,
+				38BFB28822D86ABE00AA3ABC /* idl-license.face-ios */,
+				38BFB28922D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle */,
+				38BFB28A22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle */,
+			);
+			path = FaceSDK;
 			sourceTree = "<group>";
 		};
 		38E5BF3120A3F5AE003004E0 /* Classes */ = {
@@ -2516,6 +2621,7 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				38BFB28622D86ABE00AA3ABC /* FaceSDK */,
 				38F604A421DC86EA00B0F6D0 /* XDSDropDownMenu */,
 				38C7940321C2279600E55F96 /* MJRefresh.framework */,
 				384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */,
@@ -2846,6 +2952,7 @@
 				382B99922175950400318BB8 /* test1.caf in Resources */,
 				380770391FD66C3C006E7B92 /* test.caf in Resources */,
 				38E5C38020A41190003004E0 /* Setting.storyboard in Resources */,
+				38BFB28E22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle in Resources */,
 				386FAFD420AFB712007655CF /* SHLoginFirstView.xib in Resources */,
 				38BB265F21DF110000270CE1 /* FaceRecognition.storyboard in Resources */,
 				1209ABB420D0F3890014F684 /* icatchtek.cer in Resources */,
@@ -2856,17 +2963,20 @@
 				38AAE0282202CAAA009B37F8 /* SHWCQRCodeView.xib in Resources */,
 				38E5C15920A3F5AF003004E0 /* SHCameraViewCell.xib in Resources */,
 				38E5C15B20A3F5AF003004E0 /* SHMessageAlertView.xib in Resources */,
+				38BFB28D22D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle in Resources */,
 				389C29E81F2EEA0D004C4806 /* Capture_Shutter.WAV in Resources */,
 				38F525B01F2F020400F5A5A2 /* SGQRCode.bundle in Resources */,
 				38E5C30C20A3F81F003004E0 /* MpbPopover.xib in Resources */,
 				3814BECA2178276700A13148 /* Resource.bundle in Resources */,
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
 				388CCA6A22CCAE0900FC8909 /* SHAddDeviceView.xib in Resources */,
+				38BFB27022D85F3300AA3ABC /* FaceCollect.storyboard in Resources */,
 				3897E0BF2180743100E72417 /* Setup.storyboard in Resources */,
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
 				3818D66521709AB200AF846C /* PushTest.storyboard in Resources */,
 				38E5C2E720A3F7FA003004E0 /* SHFileFilter.plist in Resources */,
+				38BFB28C22D86ABE00AA3ABC /* idl-license.face-ios in Resources */,
 				384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */,
 				389C29F71F2EEADC004C4806 /* Settings.bundle in Resources */,
 				38E5C3D320A419E0003004E0 /* userAccountItem.json in Resources */,
@@ -3111,6 +3221,7 @@
 				3818D69421709BA100AF846C /* XYBarChart.m in Sources */,
 				38E5C3D520A419E0003004E0 /* SHAccountTableViewCell.m in Sources */,
 				38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */,
+				38BFB26922D85EE800AA3ABC /* FaceBaseViewController.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
 				38E5C1C420A3F5AF003004E0 /* SH_XJ_SettingTVC.m in Sources */,
 				38E5C31020A3F81F003004E0 /* SHDownloadProgressView.m in Sources */,
@@ -3202,10 +3313,12 @@
 				38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */,
 				38E5C15C20A3F5AF003004E0 /* SHMessageAlertView.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
+				38BFB25722D85E5A00AA3ABC /* LivingConfigModel.m in Sources */,
 				38E5C23E20A3F650003004E0 /* SHRangeItem.m in Sources */,
 				38E5C19220A3F5AF003004E0 /* SHUserAccountItem.m in Sources */,
 				38E5C34C20A40F8A003004E0 /* SHCameraViewModel.m in Sources */,
 				38E5C23D20A3F650003004E0 /* SHSettingProperty.m in Sources */,
+				38BFB25B22D85E8000AA3ABC /* ImageUtils.m in Sources */,
 				38E5C2EA20A3F7FA003004E0 /* SHFile.m in Sources */,
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
@@ -3227,20 +3340,24 @@
 				38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */,
 				3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */,
 				38E5C37E20A41027003004E0 /* SHCameraHelper.m in Sources */,
+				38BFB26E22D85EE800AA3ABC /* RemindView.m in Sources */,
 				386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */,
 				38E5C33020A40F49003004E0 /* SHSettingData.m in Sources */,
 				38E5C28D20A3F698003004E0 /* SHLocalWithRemoteHelper.m in Sources */,
 				38E5C26620A3F66D003004E0 /* SHDatabase.m in Sources */,
 				3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */,
 				3818D69021709BA100AF846C /* XYChartItem.m in Sources */,
+				38BFB26C22D85EE800AA3ABC /* LivenessViewController.m in Sources */,
 				38E5C20C20A3F610003004E0 /* SHAudioUnitRecord.m in Sources */,
 				38E5C2FA20A3F80B003004E0 /* VideoPlaybackSlideController.m in Sources */,
 				384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */,
 				38E5C2E820A3F7FA003004E0 /* HWCalendar.m in Sources */,
 				38E5C31120A3F81F003004E0 /* SHMpbTableViewCell.m in Sources */,
 				38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */,
+				38BFB26D22D85EE800AA3ABC /* DisplayViewController.m in Sources */,
 				38A0C56620EDE63300AE7B7F /* UIImage+ZJTint.m in Sources */,
 				38E5C1C520A3F5AF003004E0 /* SHDeleteCameraCell.m in Sources */,
+				38BFB26B22D85EE800AA3ABC /* CircleView.m in Sources */,
 				38A38FAC22C0CE7100E831E3 /* SHAccountSettingBaseCell.m in Sources */,
 				38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */,
 				38E5C25F20A3F66D003004E0 /* SHICatchEvent.m in Sources */,
@@ -3256,6 +3373,7 @@
 				38AAE0262202CAA0009B37F8 /* SHWCQRCodeView.m in Sources */,
 				3897E0C12180743100E72417 /* XJSetupTipsView.m in Sources */,
 				38E5C23F20A3F650003004E0 /* SHPropertyQueryResult.m in Sources */,
+				38BFB25322D85E4A00AA3ABC /* VideoCaptureDevice.m in Sources */,
 				38AAE01F2202C78E009B37F8 /* SHWechatServerVC.m in Sources */,
 				38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */,
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
@@ -3447,6 +3565,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SmartHome/Libraries/UserAccountLib",
 					"$(PROJECT_DIR)/SmartHome/Libraries",
+					"$(PROJECT_DIR)/SmartHome/Libraries/FaceSDK",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -3505,6 +3624,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/SmartHome/Libraries/UserAccountLib",
 					"$(PROJECT_DIR)/SmartHome/Libraries",
+					"$(PROJECT_DIR)/SmartHome/Libraries/FaceSDK",
 				);
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;

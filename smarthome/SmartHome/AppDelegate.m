@@ -32,6 +32,9 @@
 #import "SHDeviceUpgradeVC.h"
 #import "filecache/FileCacheConfig.h"
 
+#import "IDLFaceSDK/IDLFaceSDK.h"
+#import "FaceParameterConfig.h"
+
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
 @property(nonatomic) BOOL enableLog;
@@ -55,7 +58,8 @@
     config.debugMode = YES;
     [Bugly startWithAppId:nil config:config];
 	[self registerDefaultsFromSettingsBundle];
-	
+    [self configFaceSDK];
+    
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     FileCache::FileCacheConfig::defaultCacheConfig()->setCacheDirectory(path.UTF8String);
 	[self setupAppLog];
@@ -78,6 +82,14 @@
     [self addNetworkStatusObserver];
 
 	return YES;
+}
+
+- (void)configFaceSDK {
+    NSString* licensePath = [[NSBundle mainBundle] pathForResource:FACE_LICENSE_NAME ofType:FACE_LICENSE_SUFFIX];
+    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:licensePath], @"license文件路径不对，请仔细查看文档");
+    [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath];
+    NSLog(@"canWork = %d",[[FaceSDKManager sharedInstance] canWork]);
+    NSLog(@"version = %@",[[FaceVerifier sharedInstance] getVersion]);
 }
 
 - (void)showAppVersionInfoAndRunDate {
