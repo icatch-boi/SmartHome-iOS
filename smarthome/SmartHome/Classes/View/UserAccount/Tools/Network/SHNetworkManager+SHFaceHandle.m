@@ -29,6 +29,8 @@
 #import "SHUserAccount.h"
 #import <AFNetworking/AFNetworking.h>
 
+#define kBOUNDARY @"abc123"
+
 @implementation SHNetworkManager (SHFaceHandle)
 
 - (void)faceRecognitionWithPicture:(NSData *)data deviceID:(NSString *)deviceID finished:(_Nullable ZJRequestCallBack)finished {
@@ -304,6 +306,374 @@
         default:
             break;
     }
+}
+
+// new api
+- (void)getAvailableFaceid:(ZJRequestCallBack)finished {
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:kGetFaceID parametes:nil finished:finished];
+}
+
+- (void)uploadFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceData == nil || faceData.length == 0 || faceid == nil || [faceid isEqualToString:@""] || name == nil) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"name": name,
+                                 @"faceid": faceid,
+                                 };
+    
+    NSString *urlString = [self requestURLString:kFaceInfo];
+    [[self facesRequestSessionManager] POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:faceData name:@"image" fileName:[@"FaceInfo-" stringByAppendingString:faceid] mimeType:@"multipart/form-data"];
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (finished) {
+            finished(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
+        
+        if (respose.statusCode == 401) {
+            SHLogError(SHLogTagAPP, @"Token invalid.");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+        }
+        
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
+        
+        if (finished) {
+            finished(nil, [ZJRequestError requestErrorWithNSError:error]);
+        }
+    }];
+}
+
+- (void)updateFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceData == nil || faceData.length == 0 || faceid == nil || [faceid isEqualToString:@""] || name == nil) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"name": name,
+                                 @"faceid": faceid,
+                                 };
+    
+    NSString *urlString = [self requestURLString:kFaceInfo];
+    
+    [self putRequest:urlString filedName:@"image" fileName:[@"FaceInfo-" stringByAppendingString:faceid] formData:faceData parameters:parameters finished:finished];
+}
+
+- (void)putRequest:(NSString *)urlString filedName:(NSString *)filedName fileName:(NSString *)fileName formData:(NSData *)formData parameters:(id)parameters finished:(_Nullable ZJRequestCallBack)finished {
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (urlString == nil || url == nil) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    request.HTTPMethod = @"PUT";
+    
+    //    request.allHTTPHeaderFields = @{@"":@""}//此处为请求头，类型为字典
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    [request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", kBOUNDARY] forHTTPHeaderField:@"Content-Type"];
+    
+    request.HTTPBody = [self makeBodyWithFiledName:filedName fileName:fileName datas:@[formData] params:parameters];
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            if (finished) {
+                finished(nil, [ZJRequestError requestErrorWithNSError:error]);
+            }
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+//            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+//
+//            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            if (finished) {
+                finished(data, nil);
+            }
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            NSDictionary *dict = @{
+                                   @"error_description": @"Unknown Error",
+                                   };
+            if (finished) {
+                finished(nil, [ZJRequestError requestErrorWithDict:dict]);
+            }
+        }
+    }] resume];
+}
+
+- (NSData *)makeBodyWithFiledName:(NSString *)filedName fileName:(NSString *)fileName datas:(NSArray *)datas params:(NSDictionary *)params {
+    NSMutableData *mData = [NSMutableData data];
+    // 拼文件
+    [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSMutableString *mString = [NSMutableString string];
+        if (idx == 0) {
+            [mString appendFormat:@"--%@\r\n", kBOUNDARY];
+        } else {
+            [mString appendFormat:@"\r\n--%@\r\n", kBOUNDARY];
+        }
+        
+        NSString *name = (idx > 0) ? [NSString stringWithFormat:@"%@-%d", fileName, idx] : fileName;
+        [mString appendFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", filedName, name];
+        [mString appendString:@"Content-Type: application/octet-stream\r\n"];
+
+        [mString appendString:@"\r\n"];
+        
+        // 把字符串转换成data
+        [mData appendData:[mString dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        // 加载文件
+        NSData *data = obj; //[NSData dataWithContentsOfFile:obj];
+        
+        [mData appendData:data];
+    }];
+    
+    // 拼字符串
+    [params enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSMutableString *mString = [NSMutableString string];
+        
+        [mString appendFormat:@"\r\n--%@\r\n", kBOUNDARY];
+        [mString appendFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n", key];
+        [mString appendString:@"\r\n"];
+        
+        [mString appendFormat:@"%@", obj];
+        
+        [mData appendData:[mString dataUsingEncoding:NSUTF8StringEncoding]];
+    }];
+    
+    // 结束
+    NSString *end = [NSString stringWithFormat:@"\r\n--%@--", kBOUNDARY];
+    [mData appendData:[end dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    return mData.copy;
+}
+
+- (void)getFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceid == nil || [faceid isEqualToString:@""]) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"faceid": faceid,
+                                 };
+    NSString *urlString = [self requestURLString:kFaceInfo];
+
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        if (error != nil) {
+            if (finished) {
+                finished(nil, error);
+            }
+        } else {
+            NSString *urlString = result[@"url"];
+            if (urlString == nil) {
+                if (finished) {
+                    NSDictionary *dict = @{
+                                           @"error_description": @"The url is nil.",
+                                           };
+                    if (finished) {
+                        finished(nil, [ZJRequestError requestErrorWithDict:dict]);
+                    }
+                }
+            } else {
+                [self downloadWithURLString:urlString finished:finished];
+            }
+        }
+    }];
+}
+
+- (void)deleteFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceid == nil || [faceid isEqualToString:@""]) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"faceid": faceid,
+                                 };
+    NSString *urlString = [self requestURLString:kFaceInfo];
+    
+    [self tokenRequestWithMethod:ZJRequestMethodDELETE opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:finished];
+}
+
+- (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceDataSet == nil || faceDataSet.length == 0 || faceid == nil || [faceid isEqualToString:@""]) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"faceid": faceid,
+                                 };
+    
+    NSString *urlString = [self requestURLString:kFaceInfo];
+    [[self facesRequestSessionManager] POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:faceDataSet name:@"metadata" fileName:[@"FaceDataSet-" stringByAppendingString:faceid] mimeType:@"multipart/form-data"];
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (finished) {
+            finished(responseObject, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)task.response;
+        
+        if (respose.statusCode == 401) {
+            SHLogError(SHLogTagAPP, @"Token invalid.");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+        }
+        
+        SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
+        
+        if (finished) {
+            finished(nil, [ZJRequestError requestErrorWithNSError:error]);
+        }
+    }];
+}
+
+- (void)getFaceDataSet:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+    if (faceid == nil || [faceid isEqualToString:@""]) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"faceid": faceid,
+                                 };
+    NSString *urlString = [self requestURLString:kFaceInfo];
+    
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        if (error != nil) {
+            if (finished) {
+                finished(nil, error);
+            }
+        } else {
+            NSString *urlString = result[@"url"];
+            if (urlString == nil) {
+                if (finished) {
+                    NSDictionary *dict = @{
+                                           @"error_description": @"The url is nil.",
+                                           };
+                    if (finished) {
+                        finished(nil, [ZJRequestError requestErrorWithDict:dict]);
+                    }
+                }
+            } else {
+                [self downloadWithURLString:urlString finished:finished];
+            }
+        }
+    }];
+}
+
+- (void)downloadWithURLString:(NSString *)urlString finished:(ZJRequestCallBack)finished {
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:TIME_OUT_INTERVAL];
+    
+    if (urlString == nil || url == nil || request == nil) {
+        SHLogError(SHLogTagAPP, @"Download failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            if (finished) {
+                finished(nil, [ZJRequestError requestErrorWithNSError:error]);
+            }
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+//            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            
+//            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            if (finished) {
+                finished(data, nil);
+            }
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            NSDictionary *dict = @{
+                                   @"error_description": @"Unknown Error",
+                                   };
+            if (finished) {
+                finished(nil, [ZJRequestError requestErrorWithDict:dict]);
+            }
+        }
+        
+    }] resume];
 }
 
 @end
