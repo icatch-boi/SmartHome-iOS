@@ -77,6 +77,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 @property (nonatomic, assign) BOOL alreadyBack;
 @property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
 @property (nonatomic, weak) UIAlertController *upgradesAlertView;
+@property (nonatomic, assign) BOOL startingPV;
 
 @end
 
@@ -255,6 +256,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)startMediaStream {
     [self.progressHUDPreview showProgressHUDWithMessage:NSLocalizedString(@"kStartStream", nil)];
 
+    WEAK_SELF(self);
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -268,9 +270,45 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self releaseConnectAndPreviewTimer];
 
         [self addDeviceObserver];
+        self.startingPV = NO;
     } failedBlock:^(NSInteger errorCode) {
+#if 0
         [self reConnectWithSleepForTimeInterval:kConnectAndPreviewCommonSleepTime];
+#else
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
+            if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
+                notice = NSLocalizedString(@"kPreviewingByOthers", nil); //@"Previewing by others";
+            } else if (errorCode == ICH_PLAYING_VIDEO_BY_OTHERS) {
+                notice = NSLocalizedString(@"kPlayingVideoByOthers", nil); //@"Playing video by others";
+            }
+            
+//            [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
+            [self.progressHUDPreview hideProgressHUD:YES];
+            [self enableUserInteraction:NO];
+            
+            [self showPreviewFailedAlertView:notice];
+        });
+        
+        [self releaseConnectAndPreviewTimer];
+        self.startingPV = NO;
+#endif
     } target:nil streamCloseCallback:nil];
+}
+
+- (void)showPreviewFailedAlertView:(NSString *)errorInfo {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:@"[%@] %@", _shCameraObj.camera.cameraName, errorInfo] preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self returnBack];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (void)startPreview {
@@ -280,6 +318,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self startMediaStream];
     } else {
         [self addDeviceObserver];
+        self.startingPV = NO;
+        [self releaseConnectAndPreviewTimer];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUDPreview hideProgressHUD:YES];
+        });
     }
 }
 
@@ -346,6 +389,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     UIImage *img = _shCameraObj.camera.thumbnail;
     _previewImageView.image = img; //[img ic_imageWithSize:_previewImageView.bounds.size backColor:self.view.backgroundColor];
     _bitRateLabel.text = @"0kb/s"; //[NSString stringWithFormat:@"%dkb/s", 100 + (arc4random() % 100)];
+    self.clientCountLabel.hidden = YES;
 
     [self enableUserInteraction:NO];
     [self setupResolutionButton];
@@ -1001,6 +1045,12 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     SHCameraObject *shCamObj = nc.object;
     
     if (!shCamObj.isConnect) {
+        SHLogWarn(SHLogTagAPP, @"The device is not connected yet.");
+        return;
+    }
+    
+    if (self.startingPV == YES) {
+        SHLogWarn(SHLogTagAPP, @"The device is starting to preview.");
         return;
     }
     
@@ -1091,16 +1141,22 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)reconnect:(SHCameraObject *)shCamObj {
     SHLogTRACE();
     [self.progressHUDPreview showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", @"")]];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+    WEAK_SELF(self);
+    dispatch_async(self.previewQueue/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/,^{
+        STRONG_SELF(self);
         int retValue = [shCamObj connectCamera];
         if (retValue == ICH_SUCCEED) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
                 [self.progressHUDPreview hideProgressHUD:YES];
                 
                 [self viewWillAppear:YES];
                 [self viewDidAppear:YES];
-                
+#else
+                [self initPlayer];
+                [self startPreview];
+#endif
                 _disconnectHandling = NO;
             });
         } else {
@@ -1370,6 +1426,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)connectAndPreview {
+    self.startingPV = YES;
     [self connectAndPreviewHandler];
 }
 
@@ -1439,6 +1496,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         self.bitRateInfoLabel.text = bitRate;
         
         self.clientCountLabel.text = [NSString stringWithFormat:@"%zd client", self.shCameraObj.cameraProperty.clientCount];
+        self.clientCountLabel.hidden = self.shCameraObj.cameraProperty.clientCount < 1;
     });
 }
 
@@ -1507,6 +1565,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)connectAndPreviewTimeoutHandler {
     _connectAndPreviewTimeout = YES;
     SHLogInfo(SHLogTagAPP, @"Connect and preview timeout, timeout time: %f", kConnectAndPreviewTimeout);
+    [self releaseConnectAndPreviewTimer];
 }
 
 #pragma mark - Connect and Preview Handle

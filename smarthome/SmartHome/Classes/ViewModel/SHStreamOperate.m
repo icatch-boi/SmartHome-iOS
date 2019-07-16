@@ -162,8 +162,11 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
     
     if (_PVRun) {
         SHLogInfo(SHLogTagAPP, @"streaming already started.");
-        if (failedBlock) {
-            failedBlock(ICH_NULL);
+//        if (failedBlock) {
+//            failedBlock(ICH_NULL);
+//        }
+        if (successBlock) {
+            successBlock();
         }
         return;
     }
