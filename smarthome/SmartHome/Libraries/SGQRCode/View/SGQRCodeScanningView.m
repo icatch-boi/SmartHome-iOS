@@ -120,6 +120,7 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
     promptLabel.text = NSLocalizedString(@"kScanTipsInfo", nil);
     [self addSubview:promptLabel];
     promptLabel.numberOfLines = 0;
+    [self addGestureWithView:promptLabel];
     
     // 添加闪光灯按钮
     UIButton *light_button = [[UIButton alloc] init];
@@ -270,6 +271,21 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
     }
 }
 
+- (void)addGestureWithView:(UIView *)view {
+    view.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    [view addGestureRecognizer:longPress];
+}
+
+- (void)longPressGesture:(UILongPressGestureRecognizer *)recognizer {
+    if (recognizer.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    
+    if (self.gestureHandle) {
+        self.gestureHandle(self);
+    }
+}
 
 @end
 

@@ -109,6 +109,7 @@ static NSString * const kDeviceToken = @"deviceToken";
 static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kLocalAlbumName = @"SmartHome";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
+static NSString * const kReconfigureDevice = @"ReconfigureDevice";
 
 #pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";

@@ -112,6 +112,10 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     if (_cameraUid != nil && _cameraUid.length > 0) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.cameraUid dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         dict ? [self shareHandle:dict] : [self setupDevice];
+    } else {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice]) {
+            [self setupDevice];
+        }
     }
 }
 
@@ -280,6 +284,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }
     
     NSString *cameraUID = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID];
+    cameraUID = (cameraUID == nil) ? @"" : cameraUID;
     SHLogInfo(SHLogTagAPP, @"camera uid is : %@", cameraUID);
     retValue = _link->setContent(ssid.UTF8String, pwd.UTF8String, kDeviceDefaultPassword.UTF8String, "0.0.0.0", "0.0.0.0", "00:00:00:00:00:00", cameraUID.UTF8String);
     if (retValue != icatchtek::simplelink::SIMPLELINK_ERR_OK) {
@@ -301,14 +306,29 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             [self.progressHUD hideProgressHUD:YES];
             
             if (!retVal) {
+                if (content != "" && _cameraUid == nil) {
+                    [self parseRecvContent:content];
+                }
                 [self netStatusTimer];
                 self.linkSuccess = YES;
             } else {
                 [self showConfigureDeviceFailedAlertView];
                 self.linkSuccess = NO;
+                [self releaseTimer];
             }
         });
     });
+}
+
+- (void)parseRecvContent:(string)content {
+    int parseResult = 0;
+    NSString *token = [[SHQRManager sharedQRManager] getTokenFromQRString:[NSString stringWithFormat:@"%s", content.c_str()] parseResult:&parseResult];
+    NSString *uid = [[SHQRManager sharedQRManager] getUID:token];
+    
+    if (uid != nil) {
+        SHLogInfo(SHLogTagAPP, @"Recv uid: %@", uid);
+        self.cameraUid = uid;
+    }
 }
 
 - (void)updateError:(NSString *)header error:(int)err {
@@ -413,7 +433,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     _trying = NO;
     if (_tryConnectTimes <= 0) {
-        [self showConnectFailedTips];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showConnectFailedTips];
+        });
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -433,7 +455,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         connectSuccess = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showAddDeviceTips];
+            [[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice] ? [self reconfigureDeviceHandle] : [self showAddDeviceTips];
         });
 
         [sdk destroyTryConnectResource];
@@ -1038,14 +1060,19 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [SHTool appToSystemSettings];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)reconfigureDeviceHandle {
+    _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil);
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kConfigureSuccess", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
-*/
 
 @end

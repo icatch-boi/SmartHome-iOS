@@ -103,6 +103,7 @@
     
     [_pwdTextField addTarget:self action:@selector(updateButtonEnableState) forControlEvents:UIControlEventEditingChanged];
     [self updateButtonEnableState];
+    _pwdTextField.secureTextEntry = NO;
 }
 
 - (void)addLineForChangePasswordBtn {
