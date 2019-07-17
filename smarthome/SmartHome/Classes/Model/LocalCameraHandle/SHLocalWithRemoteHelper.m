@@ -237,6 +237,10 @@
     [[SHNetworkManager sharedNetworkManager] getCameraCoverByCameraID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess) {
             [self downloadThumbnailWithURLString:result[@"url"] finised:^(UIImage *thumbnail) {
+                if (thumbnail == nil) {
+                    SHLogWarn(SHLogTagAPP, @"Obtained thumbnail is nil.");
+                    return;
+                }
                 SHCameraHelper *camera = [[SHCameraHelper alloc] init];
                 camera.cameraUid = deviceInfo.uid;
                 camera.thumnail = thumbnail;
@@ -253,6 +257,7 @@
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:TIME_OUT_INTERVAL];
     
+#if 0
     if (urlString != nil && url != nil && request != nil) {
         NSDate *start = [NSDate date];
         
@@ -283,6 +288,49 @@
     } else {
         SHLogError(SHLogTagAPP, @"Get thumbnail failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
     }
+#else
+    if (urlString == nil || url == nil || request == nil) {
+        SHLogError(SHLogTagAPP, @"Get thumbnail failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+        
+        if (finised) {
+            finised(nil);
+        }
+        
+        return;
+    }
+    
+    NSDate *start = [NSDate date];
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSDate *end = [NSDate date];
+        SHLogInfo(SHLogTagAPP, @"Get thumbnail interval: %f.", [end timeIntervalSinceDate:start]);
+        
+        if (error != nil) {
+            SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
+            
+            if (finised) {
+                finised(nil);
+            }
+            
+            return;
+        }
+        
+        NSHTTPURLResponse *respose = (NSHTTPURLResponse *)response;
+        
+        if (respose.statusCode == 200 || respose.statusCode == 304) {
+            SHLogInfo(SHLogTagAPP, @"Get thumbnail size: %lu.", (unsigned long)data.length);
+
+            if (finised) {
+                finised([[UIImage alloc] initWithData:data]);
+            }
+        } else {
+            SHLogError(SHLogTagAPP, @"服务器内部错误，statusCode: %d", respose.statusCode);
+            
+            if (finised) {
+                finised(nil);
+            }
+        }
+    }] resume];
+#endif
 }
 
 @end
