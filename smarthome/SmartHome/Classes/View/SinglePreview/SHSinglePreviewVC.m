@@ -45,6 +45,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 @property (nonatomic, getter = isBatteryLowAlertShowed) BOOL batteryLowAlertShowed;
 @property (nonatomic, strong) XDSDropDownMenu *resolutionMenu;
+@property (nonatomic, strong) dispatch_queue_t previewQueue;
 
 @end
 
@@ -142,7 +143,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
     if (!_shCameraObj.isConnect) {
         [self.progressHUD showProgressHUDWithMessage:nil];
-        dispatch_async(dispatch_queue_create("SimglePreviewQueue", DISPATCH_QUEUE_SERIAL), ^{
+        dispatch_async(self.previewQueue/*dispatch_queue_create("SimglePreviewQueue", DISPATCH_QUEUE_SERIAL)*/, ^{
             [self connectCamera];
             
             if (_shCameraObj.isConnect) {
@@ -301,6 +302,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 - (void)startPreview {
     [self initCameraPropertyGUI];
 
+    WEAK_SELF(self);
     [_shCameraObj.streamOper startMediaStreamWithEnableAudio:YES file:nil successBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressHUD hideProgressHUD:YES];
@@ -312,6 +314,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
         [_shCameraObj initCamera];
     } failedBlock:^(NSInteger errorCode) {
+        STRONG_SELF(self);
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *notice = NSLocalizedString(@"StartPVFailed", nil);
             if (errorCode == ICH_PREVIEWING_BY_OTHERS) {
@@ -319,11 +322,30 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
             } else if (errorCode == ICH_PLAYING_VIDEO_BY_OTHERS) {
                 notice = NSLocalizedString(@"kPlayingVideoByOthers", nil); //@"Playing video by others";
             }
-            [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
+//            [self.progressHUD showProgressHUDNotice:notice showTime:2.0];
             [self enableUserInteraction:NO];
+            
+            [self.progressHUD hideProgressHUD:YES];
+            [self showPreviewFailedAlertView:notice];
         });
         
     } target:nil streamCloseCallback:nil];
+}
+
+- (void)showPreviewFailedAlertView:(NSString *)errorInfo {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:[NSString stringWithFormat:@"[%@] %@", _shCameraObj.camera.cameraName, errorInfo] preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SHTool backToRootViewControllerWithCompletion:^{
+                [self.shCameraObj disConnectWithSuccessBlock:nil failedBlock:nil];
+            }];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -419,6 +441,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     AVSampleBufferDisplayLayer *avslayer = _shCameraObj.cameraProperty.avslayer;
     if (avslayer == nil) {
         avslayer = [[AVSampleBufferDisplayLayer alloc] init];
+        _shCameraObj.cameraProperty.avslayer = avslayer;
     }
 
     avslayer.bounds = _preview.bounds;
@@ -1074,17 +1097,23 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)reconnect:(SHCameraObject *)shCamObj {
     [self.progressHUD showProgressHUDWithMessage:[NSString stringWithFormat:@"%@ %@...", shCamObj.camera.cameraName, NSLocalizedString(@"kReconnecting", @"")]];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+    WEAK_SELF(self);
+    dispatch_async(self.previewQueue/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/,^{
+        STRONG_SELF(self);
         int retValue = [shCamObj connectCamera];
         if (retValue == ICH_SUCCEED) {
-            [shCamObj initCamera];
+//            [shCamObj initCamera];
             
             dispatch_async(dispatch_get_main_queue(), ^{
+#if 0
                 [self.progressHUD hideProgressHUD:YES];
                 
                 [self viewWillAppear:YES];
                 [self viewDidAppear:YES];
-                
+#else
+                [self initPlayer];
+                [self startPreview];
+#endif
                 _disconnectHandling = NO;
             });
         } else {
@@ -1409,7 +1438,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)updateBitRateLabel:(CGFloat)value {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *clientCount = [NSString stringWithFormat:@" %zd client", self.shCameraObj.cameraProperty.clientCount];
+        NSString *clientCount = (self.shCameraObj.cameraProperty.clientCount < 1) ? @"" : [NSString stringWithFormat:@" %zd client", self.shCameraObj.cameraProperty.clientCount];
         _bitRateLabel.text = [[SHTool bitRateStringFromBits:value] stringByAppendingString:clientCount];
     });
 }
@@ -1704,6 +1733,15 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     }
     
     return _zoomImageView;
+}
+
+#pragma mark - lazyLoad
+- (dispatch_queue_t)previewQueue {
+    if (_previewQueue == nil) {
+        _previewQueue = dispatch_queue_create("FullScreenPreviewQueue", DISPATCH_QUEUE_SERIAL);
+    }
+    
+    return _previewQueue;
 }
 
 @end

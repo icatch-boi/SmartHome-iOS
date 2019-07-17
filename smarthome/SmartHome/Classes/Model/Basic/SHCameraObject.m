@@ -213,6 +213,10 @@
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
 		SHLogInfo(SHLogTagAPP, @" to connect camera,camera name is : %@",self.camera.cameraName);
+    if (self.isConnect == true) {
+        SHLogWarn(SHLogTagAPP, @"The device already connect.");
+        return ICH_SUCCEED;
+    }
     if (self.camera == nil || self.camera.cameraUid == nil) {
         SHLogError(SHLogTagAPP, @"camera or camera uid is nil.");
 
