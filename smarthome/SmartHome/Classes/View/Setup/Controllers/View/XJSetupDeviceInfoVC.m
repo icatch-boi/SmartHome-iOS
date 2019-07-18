@@ -34,6 +34,7 @@
 #import "SHQRCodeScanningVC.h"
 #import "SHSetupNavVC.h"
 #import "SHLocalWithRemoteHelper.h"
+#import "SHWiFiInfoHelper.h"
 
 static int const totalFindTime = 90;
 static int const apmodeTimeout = 30;
@@ -461,6 +462,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         [sdk destroyTryConnectResource];
 
         [self releaseTimer];
+        [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:_wifiSSID password:_wifiPWD];
     } else {
         SHLogError(SHLogTagAPP, @"checkDeviceConnectState is failed, retVal: %d, tryConnectTimes: %ld", retVal, (long)self.tryConnectTimes);
     }

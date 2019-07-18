@@ -32,6 +32,7 @@
 #import "UnderLineTextField.h"
 #import "Reachability.h"
 #import "SHQRCodeSetupDeviceVC.h"
+#import "SHWiFiInfoHelper.h"
 
 @interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
 
@@ -119,6 +120,7 @@
     NSArray *array = [self getWifiSSID];
     
     _ssidTextField.text = array.firstObject;
+    _pwdTextField.text = [[SHWiFiInfoHelper sharedWiFiInfoHelper] passwordForSSID:array.firstObject];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
