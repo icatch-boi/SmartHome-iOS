@@ -252,6 +252,11 @@ void soundCompleteCallback(SystemSoundID soundID, void *clientData){
     //SGQRCodeLog(@"播放完成...");
 }
 
+- (void)setGestureHandle:(void (^)(UIView *sender))gestureHandle {
+    if (gestureHandle) {
+        self.scanningView.gestureHandle = gestureHandle;
+    }
+}
 
 @end
 
