@@ -39,6 +39,8 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     [SGQRCodeNotificationCenter addObserver:self selector:@selector(SGQRCodeInformationFromeScanning:) name:SGQRCodeInformationFromeScanning object:nil];
     
     [self setupGUI];
+    [self setupGestureHandle];
+    [self resetParameter];
 }
 
 - (void)setupGUI {
@@ -453,6 +455,25 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
     
     [SHTool appToSystemSettings];
+}
+
+- (void)setupGestureHandle {
+    WEAK_SELF(self);
+    
+    [self setGestureHandle:^(UIView *sender) {
+        XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
+        [weakself.navigationController pushViewController:vc animated:YES];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kReconfigureDevice];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }];
+}
+
+- (void)resetParameter {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentAddCameraUID];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kReconfigureDevice];
+
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

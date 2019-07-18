@@ -30,4 +30,5 @@
 /** 移除定时器(切记：一定要在Controller视图消失的时候，停止定时器) */
 - (void)removeTimer;
 
+@property (nonatomic, copy) void (^gestureHandle)(UIView *sender);
 @end
