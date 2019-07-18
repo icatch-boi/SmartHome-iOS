@@ -118,6 +118,7 @@
 		38A38FAC22C0CE7100E831E3 /* SHAccountSettingBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A38FA222C0CE7100E831E3 /* SHAccountSettingBaseCell.m */; };
 		38A38FAD22C0CE7100E831E3 /* SHAccountSettingCommonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A38FA322C0CE7100E831E3 /* SHAccountSettingCommonCell.m */; };
 		38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A38FA422C0CE7100E831E3 /* SHAccountSettingTVC.m */; };
+		38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A53CAB22DF411F003D7C1B /* SHWiFiInfoHelper.m */; };
 		38A59B0E1EA61AAB0071C8CB /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38A59B0D1EA61AAB0071C8CB /* CoreMedia.framework */; };
 		38A6000D208EFFC80052B257 /* SHAccountManagementKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38A6FFFC208EFF3E0052B257 /* SHAccountManagementKit.framework */; };
 		38A6000E208EFFC80052B257 /* SHAccountManagementKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38A6FFFC208EFF3E0052B257 /* SHAccountManagementKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -587,6 +588,8 @@
 		38A38FA222C0CE7100E831E3 /* SHAccountSettingBaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingBaseCell.m; sourceTree = "<group>"; };
 		38A38FA322C0CE7100E831E3 /* SHAccountSettingCommonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingCommonCell.m; sourceTree = "<group>"; };
 		38A38FA422C0CE7100E831E3 /* SHAccountSettingTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingTVC.m; sourceTree = "<group>"; };
+		38A53CAA22DF411F003D7C1B /* SHWiFiInfoHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWiFiInfoHelper.h; sourceTree = "<group>"; };
+		38A53CAB22DF411F003D7C1B /* SHWiFiInfoHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWiFiInfoHelper.m; sourceTree = "<group>"; };
 		38A59B0B1EA6178E0071C8CB /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		38A59B0D1EA61AAB0071C8CB /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		38A6FFFC208EFF3E0052B257 /* SHAccountManagementKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SHAccountManagementKit.framework; sourceTree = "<group>"; };
@@ -1414,6 +1417,7 @@
 			children = (
 				3897E0B92180743000E72417 /* SHSetupNavVC.h */,
 				3897E0A82180743000E72417 /* SHSetupNavVC.m */,
+				38A53CA922DF408C003D7C1B /* ViewModel */,
 				3897E0A92180743000E72417 /* View */,
 			);
 			path = Controllers;
@@ -1539,6 +1543,15 @@
 				38A38FA322C0CE7100E831E3 /* SHAccountSettingCommonCell.m */,
 			);
 			path = AccountSettingCell;
+			sourceTree = "<group>";
+		};
+		38A53CA922DF408C003D7C1B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				38A53CAA22DF411F003D7C1B /* SHWiFiInfoHelper.h */,
+				38A53CAB22DF411F003D7C1B /* SHWiFiInfoHelper.m */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		38A6FFFB208EFF3E0052B257 /* UserAccountLib */ = {
@@ -3312,6 +3325,7 @@
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
 				38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */,
 				38E5C15C20A3F5AF003004E0 /* SHMessageAlertView.m in Sources */,
+				38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
 				38BFB25722D85E5A00AA3ABC /* LivingConfigModel.m in Sources */,
 				38E5C23E20A3F650003004E0 /* SHRangeItem.m in Sources */,
