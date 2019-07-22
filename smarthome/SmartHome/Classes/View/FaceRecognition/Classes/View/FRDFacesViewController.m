@@ -116,7 +116,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *faceName = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+        NSString *faceName = self.faceInfoViewModel.facesInfoArray[indexPath.row].faceid; //self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
         faceName != nil ? [self showDeleteFacePictureTipsWithFaceName:faceName] : void();
     }
 }
@@ -138,6 +138,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD show];
     
+#if 0
     [[SHNetworkManager sharedNetworkManager] deleteFacePictureWithName:faceName finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         [SVProgressHUD dismiss];
         
@@ -150,6 +151,20 @@ static NSString * const ReuseIdentifier = @"faceCellID";
             }
         });
     }];
+#else
+    [[SHNetworkManager sharedNetworkManager] deleteFaceDataWithFaceid:faceName finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:error.error];
+                [SVProgressHUD dismissWithDelay:2.0];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadFacesInfoNotification object:nil];
+            }
+        });
+    }];
+#endif
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

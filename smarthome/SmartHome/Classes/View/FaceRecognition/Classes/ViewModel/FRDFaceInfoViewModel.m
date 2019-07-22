@@ -24,6 +24,7 @@
     [SVProgressHUD show];
     
     WEAK_SELF(self);
+#if 0
     [[SHNetworkManager sharedNetworkManager] getFacesInfoWithName:nil finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
@@ -50,6 +51,34 @@
             }
         });
     }];
+#else
+    [[SHNetworkManager sharedNetworkManager] getFacesInfoWithFinished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:error.error];
+                [SVProgressHUD dismissWithDelay:2.0];
+            } else {
+                NSArray *faceInfoArray = (NSArray *)result;
+                
+                NSMutableArray *faceInfoModelMArray = [NSMutableArray arrayWithCapacity:faceInfoArray.count];
+                [faceInfoArray enumerateObjectsUsingBlock:^(NSDictionary*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:obj];
+                    [faceInfoModelMArray addObject:faceInfo];
+                }];
+                
+                weakself.facesInfoArray = faceInfoModelMArray.copy;
+                
+                [weakself saveFacesInfoToLocal:result];
+                
+                if (completion) {
+                    completion();
+                }
+            }
+        });
+    }];
+#endif
 }
 
 - (void)saveFacesInfoToLocal:(NSArray *)faces {

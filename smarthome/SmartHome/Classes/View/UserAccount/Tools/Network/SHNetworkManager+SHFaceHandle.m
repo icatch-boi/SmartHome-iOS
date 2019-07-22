@@ -239,7 +239,9 @@
         }
     };
     
-    urlString = [self requestURLString:urlString];
+    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
+        urlString = [self requestURLString:urlString];
+    }
     AFHTTPSessionManager *manager = [self facesRequestSessionManager];
     
     switch (method) {
@@ -288,7 +290,9 @@
         }
     };
     
-    urlString = [self requestURLString:urlString];
+    if (![urlString hasPrefix:@"http://"] && ![urlString hasPrefix:@"https://"]) {
+        urlString = [self requestURLString:urlString];
+    }
     
     switch (method) {
         case ZJRequestMethodGET:
@@ -483,7 +487,7 @@
     return mData.copy;
 }
 
-- (void)getFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+- (void)getFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
             NSDictionary *dict = @{
@@ -523,7 +527,11 @@
     }];
 }
 
-- (void)deleteFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+- (void)getFacesInfoWithFinished:(_Nullable ZJRequestCallBack)finished {
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:kFaceInfo parametes:nil finished:finished];
+}
+
+- (void)deleteFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
             NSDictionary *dict = @{
@@ -556,10 +564,11 @@
     }
     
     NSDictionary *parameters = @{
-                                 @"faceid": faceid,
+                                 @"faceid": @([faceid integerValue]),
+                                 @"facesnum": @(5),
                                  };
     
-    NSString *urlString = [self requestURLString:kFaceInfo];
+    NSString *urlString = [self requestURLString:kFaceDataSet];
     [[self facesRequestSessionManager] POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFileData:faceDataSet name:@"metadata" fileName:[@"FaceDataSet-" stringByAppendingString:faceid] mimeType:@"multipart/form-data"];
     } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -583,7 +592,7 @@
     }];
 }
 
-- (void)getFaceDataSet:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+- (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
             NSDictionary *dict = @{
@@ -598,7 +607,7 @@
     NSDictionary *parameters = @{
                                  @"faceid": faceid,
                                  };
-    NSString *urlString = [self requestURLString:kFaceInfo];
+    NSString *urlString = [self requestURLString:kFaceDataSet];
     
     [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error != nil) {

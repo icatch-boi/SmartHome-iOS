@@ -1862,8 +1862,8 @@
 		38BFB25422D85E5A00AA3ABC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				38BFB25522D85E5A00AA3ABC /* LivingConfigModel.m */,
 				38BFB25622D85E5A00AA3ABC /* LivingConfigModel.h */,
+				38BFB25522D85E5A00AA3ABC /* LivingConfigModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1871,8 +1871,8 @@
 		38BFB25822D85E8000AA3ABC /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				38BFB25922D85E8000AA3ABC /* ImageUtils.m */,
 				38BFB25A22D85E8000AA3ABC /* ImageUtils.h */,
+				38BFB25922D85E8000AA3ABC /* ImageUtils.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

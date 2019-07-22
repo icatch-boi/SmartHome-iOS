@@ -63,7 +63,7 @@
     [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     
     WEAK_SELF(self);
-    [self.faceImageView sd_setImageWithURL:url completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.faceImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"portrait-1"] options:SDWebImageRefreshCached completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         NSLog(@"get image: %@", image);
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -151,6 +151,7 @@
     [SVProgressHUD show];
     
     WEAK_SELF(self);
+#if 0
     [[SHNetworkManager sharedNetworkManager] deleteFacePictureWithName:self.faceInfo.name finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         [SVProgressHUD dismiss];
         
@@ -165,6 +166,22 @@
             }
         });
     }];
+#else
+    [[SHNetworkManager sharedNetworkManager] deleteFaceDataWithFaceid:self.faceInfo.faceid finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:error.error];
+                [SVProgressHUD dismissWithDelay:2.0];
+            } else {
+                [weakself.navigationController popViewControllerAnimated:YES];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadFacesInfoNotification object:nil];
+            }
+        });
+    }];
+#endif
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

@@ -66,10 +66,11 @@ typedef enum : NSUInteger {
 - (void)getAvailableFaceid:(ZJRequestCallBack)finished;
 - (void)uploadFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished;
 - (void)updateFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished;
-- (void)getFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
-- (void)deleteFaceData:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
+- (void)getFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
+- (void)getFacesInfoWithFinished:(_Nullable ZJRequestCallBack)finished;
+- (void)deleteFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
-- (void)getFaceDataSet:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
+- (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 
 @end
 

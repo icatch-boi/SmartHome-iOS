@@ -38,6 +38,7 @@
     self.firstCollect = YES;
     LivingConfigModel* model = [LivingConfigModel sharedInstance];
     [[IDLFaceLivenessManager sharedInstance] livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
+    self.navigationController.navigationBarHidden = true;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -132,7 +133,8 @@
                     UINavigationController *nav = (UINavigationController *)[sb instantiateViewControllerWithIdentifier:@"DisplayViewControllerID"];
                     DisplayViewController *vc = (DisplayViewController *)nav.topViewController;
                     vc.images = dict;
-                    [self presentViewController:nav animated:YES completion:nil];
+//                    [self presentViewController:nav animated:YES completion:nil];
+                    [self.navigationController pushViewController:vc animated:YES];
                 });
                 self.circleView.conditionStatusFit = true;
                 [self singleActionSuccess:true];
