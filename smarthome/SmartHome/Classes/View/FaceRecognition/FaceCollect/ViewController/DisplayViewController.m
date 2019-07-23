@@ -35,6 +35,12 @@ static const CGFloat kMarginTop = 140;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self updateImages:self.images];
+    [self setupGUI];
+}
+
+- (void)setupGUI {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackClick:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(exitFaceCollect)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -92,9 +98,13 @@ static const CGFloat kMarginTop = 140;
     });
 }
 
-- (IBAction)closeClick:(id)sender {
+- (IBAction)returnBackClick:(id)sender {
 //    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)exitFaceCollect {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UIImage *)recognitionFaces:(UIImage *)imageInput {
@@ -187,7 +197,7 @@ static const CGFloat kMarginTop = 140;
 - (void)showGetFaceDataFailedAlertView {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"采集的人脸图片不完整，请重新采集。" preferredStyle:UIAlertControllerStyleAlert];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self closeClick:nil];
+        [self returnBackClick:nil];
     }]];
     
     [self presentViewController:alertVC animated:YES completion:nil];
@@ -312,7 +322,8 @@ static const CGFloat kMarginTop = 140;
     
                 [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil];
                 
-                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                [self exitFaceCollect];
             }
         });
     }];

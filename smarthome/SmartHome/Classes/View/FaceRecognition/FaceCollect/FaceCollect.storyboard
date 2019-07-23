@@ -56,9 +56,10 @@
                                     <constraint firstAttribute="width" secondItem="AwK-Zg-qXL" secondAttribute="height" multiplier="1:1" id="l9U-G1-8wq"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r3-fJ-hx3">
-                                <rect key="frame" x="129" y="420" width="62" height="30"/>
-                                <state key="normal" title="添加人脸"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6r3-fJ-hx3">
+                                <rect key="frame" x="24" y="420" width="272" height="56"/>
+                                <state key="normal" title="添加人脸" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
                                 <connections>
                                     <action selector="addFaceClick:" destination="wq2-HA-Sj1" eventType="touchUpInside" id="ugs-UB-huc"/>
                                 </connections>
@@ -83,7 +84,7 @@
                     <navigationItem key="navigationItem" id="saS-nS-VSp">
                         <barButtonItem key="leftBarButtonItem" title="&lt; 返回" id="7gT-B8-qpw">
                             <connections>
-                                <action selector="closeClick:" destination="wq2-HA-Sj1" id="njl-VK-GOh"/>
+                                <action selector="returnBackClick:" destination="wq2-HA-Sj1" id="JaH-cL-hZd"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -118,4 +119,8 @@
             <point key="canvasLocation" x="1824.8" y="834.33283358320841"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="default-btn" width="272" height="56"/>
+        <image name="default-btn-pre" width="272" height="56"/>
+    </resources>
 </document>

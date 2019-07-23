@@ -36,7 +36,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFacesInfoHandler:) name:kReloadFacesInfoNotification object:nil];
     [self setupLocalizedString];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addFaceClick)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-add"] style:UIBarButtonItemStyleDone target:self action:@selector(addFaceClick)];
 }
 
 - (void)addFaceClick {
