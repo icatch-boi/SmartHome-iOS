@@ -473,3 +473,8 @@
 "kAddDeviceTips" = "暫無設備，請添加";
 "kAddDevice" = "添加設備";
 "kRecvVideoTimeoutTips" = "當前網絡狀況差，已不能正常預覽，請稍候再試！";
+
+"kEnterMySharing" = "我的分享";
+"kNoDevicesToShare" = "沒有可分享的設備";
+"kDevice" = "設備";
+"kTotalShared" = "共分享給 %d 個用戶";

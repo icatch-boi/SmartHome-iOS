@@ -475,3 +475,8 @@
 "kAddDeviceTips" = "暂无设备，请添加";
 "kAddDevice" = "添加设备";
 "kRecvVideoTimeoutTips" = "当前网络状况差，已不能正常预览，请稍后再试！";
+
+"kEnterMySharing" = "我的分享";
+"kNoDevicesToShare" = "没有可分享的设备";
+"kDevice" = "设备";
+"kTotalShared" = "共分享给 %d 个用户";
