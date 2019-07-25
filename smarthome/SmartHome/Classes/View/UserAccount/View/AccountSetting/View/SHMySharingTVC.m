@@ -93,7 +93,7 @@ static const CGFloat kDefaultRowHeight = 50.0;
     UIView *view = [[UIView alloc] initWithFrame:[self calcNoSubscriberViewFrame]];
     
     CGFloat labelH = 44.0;
-    CGFloat margin = 12;
+    CGFloat margin = 0; //12;
     UIImageView *imgView = [UIImageView imageViewWithImage:[UIImage imageNamed:@"subscribe_share"]];
     [view addSubview:imgView];
     imgView.center = CGPointMake(view.center.x, (CGRectGetHeight(view.frame) - labelH - margin) * (1 - 0.618));
