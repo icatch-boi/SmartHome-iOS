@@ -719,7 +719,8 @@
     
     if ([urlString hasPrefix:@"https:"] || [manager.baseURL.absoluteString hasPrefix:@"https:"]) {
         //设置 https 请求证书
-        [self setCertificatesWithManager:manager];
+        // The latest version of Server does not need to set a certificate.
+//        [self setCertificatesWithManager:manager];
     }
     
     if (manager == nil) {
