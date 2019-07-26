@@ -317,6 +317,9 @@
 		38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */; };
 		38F769C822E7F8BD005E56A5 /* SHGroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769C722E7F8BD005E56A5 /* SHGroupHeaderView.m */; };
 		38F769CB22E86419005E56A5 /* SHSubscriberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769CA22E86419005E56A5 /* SHSubscriberInfo.m */; };
+		38F769D122EAE1F7005E56A5 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */; };
+		38F769D522EAE34E005E56A5 /* SHMessageCenterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */; };
+		38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D822EAE67A005E56A5 /* SHMessageCell.m */; };
 		38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9B711EADF54E00F3470C /* OpenAL.framework */; };
 		38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9FE51EB1C89200F3470C /* CoreAudio.framework */; };
 		6C19E9C3F0245DBC11C5DEF3 /* libPods-SmartHomeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */; };
@@ -987,6 +990,11 @@
 		38F769C922E86419005E56A5 /* SHSubscriberInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberInfo.h; sourceTree = "<group>"; };
 		38F769CA22E86419005E56A5 /* SHSubscriberInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberInfo.m; sourceTree = "<group>"; };
 		38F769CD22E9A715005E56A5 /* SHMySharingTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMySharingTVC.h; sourceTree = "<group>"; };
+		38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MessageCenter.storyboard; sourceTree = "<group>"; };
+		38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCenterTVC.h; sourceTree = "<group>"; };
+		38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCenterTVC.m; sourceTree = "<group>"; };
+		38F769D722EAE67A005E56A5 /* SHMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCell.h; sourceTree = "<group>"; };
+		38F769D822EAE67A005E56A5 /* SHMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCell.m; sourceTree = "<group>"; };
 		38FB9B711EADF54E00F3470C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		38FB9FE51EB1C89200F3470C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1964,6 +1972,7 @@
 		38E5BFE620A3F5AE003004E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38F769CF22EAE100005E56A5 /* MessageCenter */,
 				38BB262C21DF08AB00270CE1 /* FaceRecognition */,
 				38E5C07620A3F5AE003004E0 /* UserAccount */,
 				3897E0992180743000E72417 /* Setup */,
@@ -2678,6 +2687,34 @@
 			path = GroupHeaderView;
 			sourceTree = "<group>";
 		};
+		38F769CF22EAE100005E56A5 /* MessageCenter */ = {
+			isa = PBXGroup;
+			children = (
+				38F769D222EAE234005E56A5 /* View */,
+			);
+			path = MessageCenter;
+			sourceTree = "<group>";
+		};
+		38F769D222EAE234005E56A5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				38F769D622EAE64D005E56A5 /* MessageCell */,
+				38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */,
+				38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */,
+				38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		38F769D622EAE64D005E56A5 /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				38F769D722EAE67A005E56A5 /* SHMessageCell.h */,
+				38F769D822EAE67A005E56A5 /* SHMessageCell.m */,
+			);
+			path = MessageCell;
+			sourceTree = "<group>";
+		};
 		38FED5CE22A8FFC8002FC7D5 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -2901,6 +2938,7 @@
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
 				388CCA6A22CCAE0900FC8909 /* SHAddDeviceView.xib in Resources */,
 				3897E0BF2180743100E72417 /* Setup.storyboard in Resources */,
+				38F769D122EAE1F7005E56A5 /* MessageCenter.storyboard in Resources */,
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
 				3818D66521709AB200AF846C /* PushTest.storyboard in Resources */,
@@ -3139,6 +3177,7 @@
 				38E5C30F20A3F81F003004E0 /* SHDownloadTableViewCell.m in Sources */,
 				38E5C25D20A3F66D003004E0 /* SHFileTable.m in Sources */,
 				38E5C25C20A3F66D003004E0 /* SHAVData.m in Sources */,
+				38F769D522EAE34E005E56A5 /* SHMessageCenterTVC.m in Sources */,
 				38E5C1C720A3F5AF003004E0 /* SHMainViewController.m in Sources */,
 				38E5C20A20A3F610003004E0 /* BadgeButton.m in Sources */,
 				386FAFDD20B01693007655CF /* UserAccountPortraitNavVC.m in Sources */,
@@ -3197,6 +3236,7 @@
 				389C29F21F2EEABF004C4806 /* main.m in Sources */,
 				38F769CB22E86419005E56A5 /* SHSubscriberInfo.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
+				38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */,
 				388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
