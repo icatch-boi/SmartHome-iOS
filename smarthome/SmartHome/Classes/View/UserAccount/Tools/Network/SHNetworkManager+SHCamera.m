@@ -806,4 +806,30 @@
     [self requestWithMethod:SHRequestMethodGET manager:nil urlString:urlString parameters:parameters finished:completion];
 }
 
+- (void)getDeviceMessageWithDeviceID:(NSString *)deviceID sinceid:(NSNumber * _Nullable)sinceid enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
+    if (deviceID.length < 0) {
+        if (completion) {
+            NSDictionary *dict = @{
+                                   @"error_description": @"These parameter 'deviceID' must not be `nil`.",
+                                   };
+            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    parameters[@"id"] = deviceID;
+    parameters[@"count"] = @(50);
+    
+    if (sinceid != nil) {
+        parameters[@"sinceid"] = sinceid;
+    }
+    
+    if (enddate.length > 0) {
+        parameters[@"enddate"] = enddate;
+    }
+    
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGE_PATH parameters:parameters.copy finished:completion];
+}
+
 @end

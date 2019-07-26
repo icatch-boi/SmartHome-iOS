@@ -33,6 +33,7 @@
 #import "SVProgressHUD.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHSubscriberInfo.h"
+#import <MJRefresh/MJRefresh.h>
 
 static NSString * const kSubscriberCellReuseID = @"SubscriberCell";
 static NSString * const kGroupHeaderReuseID = @"GroupHeader";
@@ -62,7 +63,7 @@ static const CGFloat kDefaultRowHeight = 50.0;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
-    [self loadData];
+//    [self loadData];
 }
 
 - (void)setupGUI {
@@ -70,10 +71,44 @@ static const CGFloat kDefaultRowHeight = 50.0;
     [self.tableView registerClass:[SHGroupHeaderView class] forHeaderFooterViewReuseIdentifier:kGroupHeaderReuseID];
     self.tableView.rowHeight = kDefaultRowHeight;
     self.tableView.tableFooterView = [[UIView alloc] init];
+    
+    [self setupRefreshView];
+}
+
+- (void)setupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakself loadData];
+    }];
+    
+    // 设置文字
+    [header setTitle:@"Pull down to refresh" forState:MJRefreshStateIdle];
+    [header setTitle:@"Release to refresh" forState:MJRefreshStatePulling];
+    [header setTitle:@"Loading ..." forState:MJRefreshStateRefreshing];
+    
+    // 设置字体
+    header.stateLabel.font = [UIFont systemFontOfSize:15];
+    header.lastUpdatedTimeLabel.font = [UIFont systemFontOfSize:14];
+    
+    // 设置颜色
+    header.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    header.lastUpdatedTimeLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+    
+    header.automaticallyChangeAlpha = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置刷新控件
+    self.tableView.mj_header = header;
 }
 
 - (void)loadData {
+    WEAK_SELF(self);
     [SHSubscriberGroup loadSubscriberGroupData:^(NSArray<SHSubscriberGroup *> * _Nonnull subscriberGroups) {
+        STRONG_SELF(self);
+        [self.tableView.mj_header endRefreshing];
+
         if (subscriberGroups.count > 0) {
             [self removeNoSubscriberView];
 
