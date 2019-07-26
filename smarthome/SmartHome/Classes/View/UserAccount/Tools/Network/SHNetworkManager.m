@@ -642,10 +642,7 @@
 - (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion {
     if (request == nil) {
         if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"This parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"This parameter must not be `nil`."]);
         }
         
         return;
@@ -761,11 +758,6 @@
     [manager.requestSerializer setValue:token forHTTPHeaderField:@"Authorization"];
     
     return manager;
-}
-
-#pragma mark - Error Handle
-- (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
-    return [ZJRequestError requestErrorWithDict:dict];
 }
 
 #pragma mark - Certificate Handle

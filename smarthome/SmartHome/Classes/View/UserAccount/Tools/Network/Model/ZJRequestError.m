@@ -41,6 +41,15 @@
     return [[self alloc] initWithDict:dict];
 }
 
++ (instancetype)requestErrorWithDescription:(NSString *)description {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    dict[@"error_code"] = @(ZJRequestErrorCodeInvalidParameters).stringValue;
+    dict[@"error_description"] = (description.length > 0) ? description : @"Unknown Error";
+    
+    return [ZJRequestError requestErrorWithDict:dict];
+}
+
 - (instancetype)initWithDict:(NSDictionary *)dict
 {
     self = [super init];

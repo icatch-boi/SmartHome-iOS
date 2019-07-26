@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString * const DEVICE_COVERS_PATH = @"v1/devices/covers";
 static NSString * const DEVICE_UPGRADESINFO_PATH = @"v1/devices/upgrades/info";
 static NSString * const DEVICE_MESSAGE_PATH = @"v1/devices/messages";
+static NSString * const DEVICE_MESSAGEFILE_PATH = @"v1/devices/messagefile";
 
 @interface SHNetworkManager (SHCamera)
 
@@ -45,7 +46,11 @@ static NSString * const DEVICE_MESSAGE_PATH = @"v1/devices/messages";
 //- (void)getImgCoverWithFullURL:(NSString *)url completion:(RequestCompletionBlock)completion;
 - (void)getDeviceUpgradesInfoWithCameraID:(NSString *)cameraID completion:(RequestCompletionBlock)completion;
 
+#pragma mark - Message
 - (void)getDeviceMessageWithDeviceID:(NSString *)deviceID sinceid:(NSNumber * _Nullable)sinceid enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion;
+- (void)deleteDeviceMessageWithDeviceID:(NSString *)deviceID startdate:(NSString * _Nullable)startdate enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion;
+- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(RequestCompletionBlock)completion;
+- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID filetime:(NSString *)filetime elasticsecond:(NSNumber *)elasticsecond completion:(RequestCompletionBlock)completion;
 
 @end
 
