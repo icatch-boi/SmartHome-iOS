@@ -584,8 +584,26 @@
 - (void)cacheUserExtensionsInfo {
     [self getUserExtensionsInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess) {
+            if (result == nil) {
+                [self bgWakeupDefaultSet];
+                return;
+            }
+            
             self.userAccount.userExtensionsInfo = result;
             [self.userAccount saveUserAccount];
+        }
+    }];
+}
+
+- (void)bgWakeupDefaultSet {
+    NSDictionary *info = @{
+                           @"bgWakeup": @(1),
+                           };
+    
+    [[SHNetworkManager sharedNetworkManager] setUserExtensionsInfo:info completion:^(BOOL isSuccess, id  _Nullable result) {
+        
+        if (isSuccess == NO) {
+            SHLogError(SHLogTagAPP, @"setUserExtensionsInfo failed, error: %@", result);
         }
     }];
 }
