@@ -27,18 +27,26 @@
 
 #import "SHMessageCenterTVC.h"
 #import "SHMessageCell.h"
+#import <MJRefresh/MJRefresh.h>
+#import "SHMessageListViewModel.h"
 
 static NSString * const kMessageCellID = @"MessageCellID";
 
 @interface SHMessageCenterTVC ()
 
+@property (nonatomic, strong) SHMessageListViewModel *listViewModel;
+@property (nonatomic, assign, getter=isPullup) BOOL pullup;
+@property (nonatomic, strong) SHCamera *camera;
+
 @end
 
 @implementation SHMessageCenterTVC
 
-+ (instancetype)messageCenterTVC {
++ (instancetype)messageCenterTVCWithCamera:(SHCamera *)camera {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:nil];
-    return [sb instantiateInitialViewController];
+    SHMessageCenterTVC *vc = [sb instantiateInitialViewController];
+    vc.camera = camera;
+    return vc;
 }
 
 - (void)viewDidLoad {
@@ -55,6 +63,56 @@ static NSString * const kMessageCellID = @"MessageCellID";
 - (void)setupGUI {
     self.tableView.backgroundColor = [UIColor ic_colorWithHex:kBackgroundThemeColor];
     self.tableView.rowHeight = 100;
+    
+    [self setupRefreshView];
+}
+
+- (void)setupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakself loadData];
+    }];
+    
+    // 设置文字
+    [header setTitle:@"Pull down to refresh" forState:MJRefreshStateIdle];
+    [header setTitle:@"Release to refresh" forState:MJRefreshStatePulling];
+    [header setTitle:@"Loading ..." forState:MJRefreshStateRefreshing];
+    
+    // 设置字体
+    header.stateLabel.font = [UIFont systemFontOfSize:15];
+    header.lastUpdatedTimeLabel.font = [UIFont systemFontOfSize:14];
+    
+    // 设置颜色
+    header.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    header.lastUpdatedTimeLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+    
+    header.automaticallyChangeAlpha = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置刷新控件
+    self.tableView.mj_header = header;
+}
+
+- (void)loadData {
+    [self.listViewModel loadMessageWithCamera:self.camera pullup:self.isPullup completion:^(BOOL isSuccess, BOOL shouldRefresh) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView.mj_header endRefreshing];
+
+            if (shouldRefresh) {
+                [self.tableView reloadData];
+            }
+        });
+    }];
+}
+
+- (SHMessageListViewModel *)listViewModel {
+    if (_listViewModel == nil) {
+        _listViewModel = [SHMessageListViewModel new];
+    }
+    
+    return _listViewModel;
 }
 
 #pragma mark - Table view data source
@@ -64,7 +122,7 @@ static NSString * const kMessageCellID = @"MessageCellID";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return self.listViewModel.messageList.count;
 }
 
 

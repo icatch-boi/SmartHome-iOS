@@ -320,6 +320,8 @@
 		38F769D122EAE1F7005E56A5 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */; };
 		38F769D522EAE34E005E56A5 /* SHMessageCenterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */; };
 		38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D822EAE67A005E56A5 /* SHMessageCell.m */; };
+		38F769DD22EAF63C005E56A5 /* SHMessageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */; };
+		38F769E122EAF8B2005E56A5 /* SHMessageListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */; };
 		38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9B711EADF54E00F3470C /* OpenAL.framework */; };
 		38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9FE51EB1C89200F3470C /* CoreAudio.framework */; };
 		6C19E9C3F0245DBC11C5DEF3 /* libPods-SmartHomeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */; };
@@ -995,6 +997,10 @@
 		38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCenterTVC.m; sourceTree = "<group>"; };
 		38F769D722EAE67A005E56A5 /* SHMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCell.h; sourceTree = "<group>"; };
 		38F769D822EAE67A005E56A5 /* SHMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCell.m; sourceTree = "<group>"; };
+		38F769DB22EAF63C005E56A5 /* SHMessageInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageInfo.h; sourceTree = "<group>"; };
+		38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageInfo.m; sourceTree = "<group>"; };
+		38F769DF22EAF8B2005E56A5 /* SHMessageListViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageListViewModel.h; sourceTree = "<group>"; };
+		38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageListViewModel.m; sourceTree = "<group>"; };
 		38FB9B711EADF54E00F3470C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		38FB9FE51EB1C89200F3470C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -2698,6 +2704,8 @@
 		38F769D222EAE234005E56A5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38F769DE22EAF828005E56A5 /* ViewModel */,
+				38F769DA22EAF601005E56A5 /* Model */,
 				38F769D622EAE64D005E56A5 /* MessageCell */,
 				38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */,
 				38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */,
@@ -2713,6 +2721,24 @@
 				38F769D822EAE67A005E56A5 /* SHMessageCell.m */,
 			);
 			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		38F769DA22EAF601005E56A5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38F769DB22EAF63C005E56A5 /* SHMessageInfo.h */,
+				38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		38F769DE22EAF828005E56A5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				38F769DF22EAF8B2005E56A5 /* SHMessageListViewModel.h */,
+				38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		38FED5CE22A8FFC8002FC7D5 /* Recovered References */ = {
@@ -3269,9 +3295,11 @@
 				38BB265721DF08EE00270CE1 /* FRDFaceDetectionVC.m in Sources */,
 				38E5C23C20A3F650003004E0 /* SHGettingSupportedProperty.m in Sources */,
 				3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */,
+				38F769E122EAF8B2005E56A5 /* SHMessageListViewModel.m in Sources */,
 				38E5C36C20A40FFC003004E0 /* NSDate+Convert.m in Sources */,
 				38E5C36D20A40FFC003004E0 /* UIScreen+Addition.m in Sources */,
 				38E5C28E20A3F698003004E0 /* SHLocalCamerasHelper.m in Sources */,
+				38F769DD22EAF63C005E56A5 /* SHMessageInfo.m in Sources */,
 				38802F1C20B51580006274AE /* UnderLineTextField.m in Sources */,
 				38E5C22120A3F610003004E0 /* H264Decoder.m in Sources */,
 				38E5C1B420A3F5AF003004E0 /* SHWiFiSettingCell.m in Sources */,

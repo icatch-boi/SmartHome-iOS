@@ -1,4 +1,4 @@
-// SHMessageCenterTVC.h
+// SHMessage.h
 
 /**************************************************************************
  *
@@ -22,16 +22,21 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 3:29 PM.
+ // Created by zj on 2019/7/26 4:50 PM.
     
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "SHMessage.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHMessageCenterTVC : UITableViewController
+@interface SHMessageInfo : NSObject
 
-+ (instancetype)messageCenterTVCWithCamera:(SHCamera *)camera;
+@property (nonatomic, copy, readonly) NSString *msg;
+@property (nonatomic, copy, readonly) NSString *time;
+@property (nonatomic, strong, readonly) SHMessage *message;
+
++ (instancetype)messageWithDict:(NSDictionary *)dict;
 
 @end
 

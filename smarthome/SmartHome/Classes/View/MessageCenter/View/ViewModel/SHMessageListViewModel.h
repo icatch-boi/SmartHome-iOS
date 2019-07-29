@@ -1,4 +1,4 @@
-// SHMessageCenterTVC.h
+// SHMessageListViewModel.h
 
 /**************************************************************************
  *
@@ -22,16 +22,19 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 3:29 PM.
+ // Created by zj on 2019/7/26 5:00 PM.
     
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHMessageCenterTVC : UITableViewController
+@class SHMessageInfo;
+@interface SHMessageListViewModel : NSObject
 
-+ (instancetype)messageCenterTVCWithCamera:(SHCamera *)camera;
+@property (nonatomic, strong, readonly) NSMutableArray<SHMessageInfo *> *messageList;
+
+- (void)loadMessageWithCamera:(SHCamera *)camera pullup:(BOOL)pullup completion:(void (^)(BOOL isSuccess, BOOL shouldRefresh))completion;
 
 @end
 

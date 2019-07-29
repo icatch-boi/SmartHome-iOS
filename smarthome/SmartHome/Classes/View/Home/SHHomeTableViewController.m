@@ -43,6 +43,7 @@
 #import "SDWebImageManager.h"
 #import "FRDAddFaceCollectionVC.h"
 #import "SHAddDeviceView.h"
+#import "SHMessageCenterTVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -445,6 +446,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
 
     [self.navigationController pushViewController:tvc animated:YES];
+//    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCamera:cell.viewModel.cameraObj.camera];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {
