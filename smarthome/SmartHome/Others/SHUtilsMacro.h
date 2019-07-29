@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, SHLogTag) {
 
 // SmartHome debug toggle
 #pragma mark - debug toggle
-#define SDK_DEBUG 0
+#define SDK_DEBUG 1
 #define APP_DEBUG 0
 #define SHLOG_ENABLE 1
 

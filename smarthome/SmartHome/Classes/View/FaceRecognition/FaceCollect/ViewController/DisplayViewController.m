@@ -22,6 +22,7 @@ static const CGFloat kMarginTop = 140;
 @property (weak, nonatomic) IBOutlet UIImageView *yawRightImgView;
 @property (weak, nonatomic) IBOutlet UIImageView *pitchUpImgView;
 @property (weak, nonatomic) IBOutlet UIImageView *pitchDownImgView;
+@property (weak, nonatomic) IBOutlet UIButton *addFaceButton;
 
 @property (nonatomic, strong) NSMutableDictionary *faceImages;
 @property (nonatomic, copy) NSString *faceid;
@@ -41,6 +42,7 @@ static const CGFloat kMarginTop = 140;
 - (void)setupGUI {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackClick:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(exitFaceCollect)];
+    self.addFaceButton.hidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -94,6 +96,7 @@ static const CGFloat kMarginTop = 140;
             self.yawLeftImgView.image = self.faceImages[@"yawLeft"];
             self.pitchUpImgView.image = self.faceImages[@"pitchUp"];
             self.pitchDownImgView.image = self.faceImages[@"pitchDown"];
+            self.addFaceButton.hidden = self.collectFailed;
         });
     });
 }
@@ -248,7 +251,51 @@ static const CGFloat kMarginTop = 140;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self uploadFaceDataWithName:name];
+        [self setupFaceDataToFW];
     });
+}
+
+- (void)setupFaceDataToFW {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:self.faceImages.count];
+    
+    int totalSize = 0;
+    for (NSString *key in self.faceImages.keyEnumerator) {
+        UIImage *img = [self compressImage:self.faceImages[key]];
+        if (img != nil) {
+            NSData *data = UIImagePNGRepresentation(img);
+            totalSize += data.length;
+            [temp addObject:data];
+        }
+    }
+    
+    if (temp.count <= 0) {
+        SHLogError(SHLogTagAPP, @"Face DataSet is nil.");
+        
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"Face data set length: %.2f KB", totalSize / 1024.0);
+    
+    std::vector<ICatchFrameBuffer *> faceDataSets;
+    for (NSData *data in temp) {
+        ICatchFrameBuffer *buffer = new ICatchFrameBuffer((unsigned char *)data.bytes, data.length);
+        buffer->setFrameSize(data.length);
+        faceDataSets.push_back(buffer);
+    }
+    
+    [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(SHCameraObject*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.camera.operable == 1) {
+            int ret = [obj connectCamera];
+            if (ret == ICH_SUCCEED) {
+                ret = obj.sdk.control->addFace(self.faceid.intValue, totalSize, faceDataSets);
+                if (ret != ICH_SUCCEED) {
+                    SHLogError(SHLogTagAPP, @"addFace failed, ret: %d, device name: %@", ret, obj.camera.cameraName);
+                }
+            } else {
+                SHLogError(SHLogTagAPP, @"connect device failed, ret: %d, device name: %@", ret, obj.camera.cameraName);
+            }
+        }
+    }];
 }
 
 - (void)uploadFaceDataWithName:(NSString *)name {

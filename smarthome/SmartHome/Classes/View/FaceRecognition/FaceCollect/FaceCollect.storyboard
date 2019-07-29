@@ -89,6 +89,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addFaceButton" destination="6r3-fJ-hx3" id="Vl6-O5-eVH"/>
                         <outlet property="mainFaceImgView" destination="sAA-eL-3QL" id="Z8t-Mh-mC3"/>
                         <outlet property="pitchDownImgView" destination="AwK-Zg-qXL" id="mSf-C5-cV0"/>
                         <outlet property="pitchUpImgView" destination="7cs-SY-0ot" id="Hcb-Wf-8vd"/>

@@ -40,6 +40,7 @@
 
 - (void)setupGUI {
     self.title = self.faceInfo.name;
+    self.faceImageView.backgroundColor = self.view.backgroundColor;
     
     [self displayPicture];
 }
@@ -63,7 +64,7 @@
     [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     
     WEAK_SELF(self);
-    [self.faceImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"portrait-1"] options:SDWebImageRefreshCached completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [self.faceImageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"portrait"] options:SDWebImageRefreshCached completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         NSLog(@"get image: %@", image);
         
         dispatch_async(dispatch_get_main_queue(), ^{
