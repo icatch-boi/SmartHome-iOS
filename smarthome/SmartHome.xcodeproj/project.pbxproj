@@ -34,6 +34,8 @@
 		3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69921709C6C00AF846C /* SHPushTestViewController.m */; };
 		3818D69D21709CAA00AF846C /* SHChartGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D69C21709CAA00AF846C /* SHChartGroup.m */; };
 		381DB6F81ED6E1410054D817 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */; };
+		382B670222EF185D00230D15 /* SHFaceDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 382B670122EF185D00230D15 /* SHFaceDataHandler.m */; };
+		382B670522F0358900230D15 /* SHFaceDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 382B670422F0358900230D15 /* SHFaceDataManager.m */; };
 		382B99922175950400318BB8 /* test1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 382B9991217594D200318BB8 /* test1.caf */; };
 		382CA9BD1EE69BEF0042442C /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BC1EE69BEF0042442C /* libresolv.tbd */; };
 		382CA9BF1EE69BFF0042442C /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BE1EE69BFF0042442C /* libxml2.tbd */; };
@@ -441,6 +443,10 @@
 		3818D69C21709CAA00AF846C /* SHChartGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHChartGroup.m; sourceTree = "<group>"; };
 		381DB6F71ED6E1410054D817 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		3820466E1FC7EF06005EA723 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		382B670022EF185D00230D15 /* SHFaceDataHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceDataHandler.h; sourceTree = "<group>"; };
+		382B670122EF185D00230D15 /* SHFaceDataHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFaceDataHandler.m; sourceTree = "<group>"; };
+		382B670322F0358900230D15 /* SHFaceDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceDataManager.h; sourceTree = "<group>"; };
+		382B670422F0358900230D15 /* SHFaceDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFaceDataManager.m; sourceTree = "<group>"; };
 		382B9991217594D200318BB8 /* test1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = test1.caf; sourceTree = "<group>"; };
 		382CA9BC1EE69BEF0042442C /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		382CA9BE1EE69BFF0042442C /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
@@ -1217,6 +1223,17 @@
 			path = Bar;
 			sourceTree = "<group>";
 		};
+		382B66FF22EF17B700230D15 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				382B670022EF185D00230D15 /* SHFaceDataHandler.h */,
+				382B670122EF185D00230D15 /* SHFaceDataHandler.m */,
+				382B670322F0358900230D15 /* SHFaceDataManager.h */,
+				382B670422F0358900230D15 /* SHFaceDataManager.m */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 		384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -1840,6 +1857,7 @@
 		38BFB24E22D85DC900AA3ABC /* FaceCollect */ = {
 			isa = PBXGroup;
 			children = (
+				382B66FF22EF17B700230D15 /* Tools */,
 				38BFB26F22D85F3300AA3ABC /* FaceCollect.storyboard */,
 				38BFB24F22D85E2400AA3ABC /* FaceParameterConfig.h */,
 				38BFB25C22D85E8600AA3ABC /* ViewController */,
@@ -3200,6 +3218,7 @@
 				3897E0C02180743100E72417 /* SHSetupNavVC.m in Sources */,
 				38E5C3F120A594AA003004E0 /* SHSubscribeInfoConvert.m in Sources */,
 				3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */,
+				382B670522F0358900230D15 /* SHFaceDataManager.m in Sources */,
 				384BBE4920C13A900047E152 /* ZJPhotoBrowserController.m in Sources */,
 				38AAE02B2202EB05009B37F8 /* SHWCConcernView.m in Sources */,
 				38E5C2EB20A3F7FA003004E0 /* SHGUIHandleTool.m in Sources */,
@@ -3328,6 +3347,7 @@
 				38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
 				38BFB25722D85E5A00AA3ABC /* LivingConfigModel.m in Sources */,
+				382B670222EF185D00230D15 /* SHFaceDataHandler.m in Sources */,
 				38E5C23E20A3F650003004E0 /* SHRangeItem.m in Sources */,
 				38E5C19220A3F5AF003004E0 /* SHUserAccountItem.m in Sources */,
 				38E5C34C20A40F8A003004E0 /* SHCameraViewModel.m in Sources */,

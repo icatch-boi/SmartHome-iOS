@@ -13,7 +13,7 @@
 
 @interface FRDFaceInfoViewModel ()
 
-@property (nonatomic, strong) NSArray<FRDFaceInfo *> *facesInfoArray;
+@property (nonatomic, strong) NSMutableArray<FRDFaceInfo *> *facesInfoArray;
 
 @end
 
@@ -68,7 +68,9 @@
                     [faceInfoModelMArray addObject:faceInfo];
                 }];
                 
-                weakself.facesInfoArray = faceInfoModelMArray.copy;
+//                weakself.facesInfoArray = faceInfoModelMArray.copy;
+                [weakself.facesInfoArray removeAllObjects];
+                [weakself.facesInfoArray addObjectsFromArray:faceInfoModelMArray.copy];
                 
                 [weakself saveFacesInfoToLocal:result];
                 
@@ -83,6 +85,14 @@
 
 - (void)saveFacesInfoToLocal:(NSArray *)faces {
     [[NSUserDefaults standardUserDefaults] setObject:faces forKey:kLocalFacesInfo];
+}
+
+- (NSMutableArray<FRDFaceInfo *> *)facesInfoArray {
+    if (_facesInfoArray == nil) {
+        _facesInfoArray = [[NSMutableArray alloc] init];
+    }
+    
+    return _facesInfoArray;
 }
 
 @end

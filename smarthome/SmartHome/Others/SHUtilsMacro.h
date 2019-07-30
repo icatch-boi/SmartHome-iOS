@@ -164,7 +164,7 @@ static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
 
 #pragma mark - Config Account Server
-static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/";
+static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/"; //@"http://18.221.2.61:80/";
 static NSString * const kServerClientID = @"icatch_smarthome";
 static NSString * const kServerClientSecret = @"123456";
 static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";

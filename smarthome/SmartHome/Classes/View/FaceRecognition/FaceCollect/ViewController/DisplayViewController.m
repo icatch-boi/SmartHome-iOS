@@ -10,8 +10,9 @@
 #import "SHNetworkManager+SHFaceHandle.h"
 #import "SVProgressHUD.h"
 #import "FRDCommonHeader.h"
+#import "SHFaceDataManager.h"
 
-static const CGFloat kImageWHScale = 716.0 / 512;
+static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
 static const CGFloat kUploadImageWidth = 224;
 static const CGFloat kMarginTop = 140;
 
@@ -262,7 +263,7 @@ static const CGFloat kMarginTop = 140;
     for (NSString *key in self.faceImages.keyEnumerator) {
         UIImage *img = [self compressImage:self.faceImages[key]];
         if (img != nil) {
-            NSData *data = UIImagePNGRepresentation(img);
+            NSData *data = UIImageJPEGRepresentation(img, 1.0); //UIImagePNGRepresentation(img);
             totalSize += data.length;
             [temp addObject:data];
         }
@@ -274,28 +275,9 @@ static const CGFloat kMarginTop = 140;
         return;
     }
     
-    SHLogInfo(SHLogTagAPP, @"Face data set length: %.2f KB", totalSize / 1024.0);
+    SHLogInfo(SHLogTagAPP, @"Face data set length: %d", totalSize);
     
-    std::vector<ICatchFrameBuffer *> faceDataSets;
-    for (NSData *data in temp) {
-        ICatchFrameBuffer *buffer = new ICatchFrameBuffer((unsigned char *)data.bytes, data.length);
-        buffer->setFrameSize(data.length);
-        faceDataSets.push_back(buffer);
-    }
-    
-    [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(SHCameraObject*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj.camera.operable == 1) {
-            int ret = [obj connectCamera];
-            if (ret == ICH_SUCCEED) {
-                ret = obj.sdk.control->addFace(self.faceid.intValue, totalSize, faceDataSets);
-                if (ret != ICH_SUCCEED) {
-                    SHLogError(SHLogTagAPP, @"addFace failed, ret: %d, device name: %@", ret, obj.camera.cameraName);
-                }
-            } else {
-                SHLogError(SHLogTagAPP, @"connect device failed, ret: %d, device name: %@", ret, obj.camera.cameraName);
-            }
-        }
-    }];
+    [[SHFaceDataManager sharedFaceDataManager] addFaceDataWithFaceID:self.faceid faceData:temp.copy];
 }
 
 - (void)uploadFaceDataWithName:(NSString *)name {

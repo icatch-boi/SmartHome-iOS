@@ -15,6 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "FRDFaceInfo.h"
 #import "FRDFaceInfoViewModel.h"
+#import "SHFaceDataManager.h"
 
 @interface FRDFaceDisplayVC ()
 
@@ -179,6 +180,7 @@
                 [weakself.navigationController popViewControllerAnimated:YES];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:kReloadFacesInfoNotification object:nil];
+                [[SHFaceDataManager sharedFaceDataManager] deleteFacesWithFaceIDs:@[self.faceInfo.faceid]];
             }
         });
     }];

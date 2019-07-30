@@ -14,7 +14,7 @@ typedef enum : NSInteger {
 
 @interface ZJRequestError : NSObject
 
-@property (nonatomic, copy, readonly) NSString *error_code;
+@property (nonatomic, copy, readonly) NSNumber *error_code;
 @property (nonatomic, copy, readonly) NSString *error;
 @property (nonatomic, copy, readonly) NSString *error_description;
 @property (nonatomic, copy, readonly) NSString *name;
