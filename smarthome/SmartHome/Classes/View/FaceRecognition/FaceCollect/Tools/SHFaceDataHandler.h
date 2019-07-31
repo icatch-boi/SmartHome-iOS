@@ -26,9 +26,11 @@
     
 
 #import <Foundation/Foundation.h>
+#import "SHFaceDataCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class FRDFaceInfo;
 @interface SHFaceDataHandler : NSObject
 
 - (instancetype)init __attribute__((unavailable("Disabled. Please use the 'initWithCameraObject' methods instead.")));
@@ -36,6 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addFaceWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData;
 - (void)deleteFacesWithFaceIDs:(NSArray<NSString *> *)facesIDs;
+
+- (BOOL)checkNeedSyncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray;
+- (void)syncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray completion:(FaceDataHandleCompletion)completion;
 
 @end
 

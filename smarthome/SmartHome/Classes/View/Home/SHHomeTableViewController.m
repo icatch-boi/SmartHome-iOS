@@ -43,6 +43,7 @@
 #import "SDWebImageManager.h"
 #import "FRDAddFaceCollectionVC.h"
 #import "SHAddDeviceView.h"
+#import "SHFaceDataManager.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -174,6 +175,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             [weakself.tableView.mj_header endRefreshing];
         });
     }];
+    
+    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
 }
 
 - (void)showLoadCameraListFailedTips {

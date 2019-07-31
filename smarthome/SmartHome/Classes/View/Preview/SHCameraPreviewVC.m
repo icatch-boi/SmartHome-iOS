@@ -44,6 +44,7 @@
 #import "SDWebImageManager.h"
 #import "SHUpgradesInfo.h"
 #import "SHDeviceUpgradeVC.h"
+#import "SHFaceDataManager.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -1625,7 +1626,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         }
     } else {
+#if 0
         [self connectSuccessHandler];
+#else
+        [self checkFaceDataNeedSync];
+#endif
     }
 }
 
@@ -2104,6 +2109,45 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
         }];
     });
+}
+
+- (void)checkFaceDataNeedSync {
+    if ([[SHFaceDataManager sharedFaceDataManager] needsSyncFaceDataWithCameraObject:self.shCameraObj]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showSyncFaceDataAlertView];
+        });
+    } else {
+        [self connectSuccessHandler];
+    }
+}
+
+- (void)showSyncFaceDataAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"账户中人脸数据有更新，是否要同步到设备？" preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"不同步" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakself connectSuccessHandler];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"同步" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakself syncFaceDataHandle];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)syncFaceDataHandle {
+    [self.progressHUDPreview hideProgressHUD:YES];
+    [self.progressHUD showProgressHUDWithMessage:@"同步中，请稍后..."];
+    
+    WEAK_SELF(self);
+    [[SHFaceDataManager sharedFaceDataManager] syncFaceDataWithCameraObject:self.shCameraObj completion:^{
+        [weakself connectSuccessHandler];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+        });
+    }];
 }
 
 @end

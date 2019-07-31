@@ -33,6 +33,7 @@
 @interface SHFaceDataManager ()
 
 @property (nonatomic, strong) NSMutableArray<FRDFaceInfo *> *facesInfoArray;
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
 
 @end
 
@@ -69,6 +70,7 @@
 
 - (void)singletonInit {
     self.facesInfoArray = [[NSMutableArray alloc] init];
+    self.semaphore = dispatch_semaphore_create(1);
 }
 
 #pragma mark - Base Op
@@ -86,8 +88,12 @@
     }];
 }
 
-- (void)loadFacesInfoWithCompletion:(FaceDataHandleCompletion _Nullable)completion {
+- (void)loadFacesInfoWithCompletion:(FaceDataLoadCompletion _Nullable)completion {
     WEAK_SELF(self);
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
+    if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
+        SHLogWarn(SHLogTagAPP, @"Wait time out.");
+    }
     [[SHNetworkManager sharedNetworkManager] getFacesInfoWithFinished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         
         if (error != nil) {
@@ -97,6 +103,7 @@
             }
         } else {
             NSArray *faceInfoArray = (NSArray *)result;
+            SHLogInfo(SHLogTagAPP, @"Get face info: %@", result);
             
             NSMutableArray *faceInfoModelMArray = [NSMutableArray arrayWithCapacity:faceInfoArray.count];
             [faceInfoArray enumerateObjectsUsingBlock:^(NSDictionary*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -113,11 +120,43 @@
                 completion(YES);
             }
         }
+        
+        dispatch_semaphore_signal(self.semaphore);
     }];
 }
 
 - (void)saveFacesInfoToLocal:(NSArray *)faces {
     [[NSUserDefaults standardUserDefaults] setObject:faces forKey:kLocalFacesInfo];
+}
+
+- (BOOL)needsSyncFaceDataWithCameraObject:(SHCameraObject *)shCamObj {
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
+    if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
+        SHLogWarn(SHLogTagAPP, @"Wait time out");
+    }
+    
+    SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:shCamObj];
+    BOOL need = [handle checkNeedSyncFaceDataWithRemoteFaceInfo:self.facesInfoArray];
+    
+    dispatch_semaphore_signal(self.semaphore);
+    
+    return need;
+}
+
+- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion)completion {
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
+    if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
+        SHLogWarn(SHLogTagAPP, @"Wait time out");
+    }
+    
+    SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:shCamObj];
+    [handle syncFaceDataWithRemoteFaceInfo:self.facesInfoArray completion:^{
+        dispatch_semaphore_signal(self.semaphore);
+
+        if (completion) {
+            completion();
+        }
+    }];
 }
 
 @end

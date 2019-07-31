@@ -293,7 +293,7 @@ static const CGFloat kMarginTop = 140;
         return;
     }
     
-    NSData *data = UIImagePNGRepresentation(img);
+    NSData *data = UIImageJPEGRepresentation(img, 1.0); //UIImagePNGRepresentation(img);
     [[SHNetworkManager sharedNetworkManager] uploadFaceData:data faceid:self.faceid name:name finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error != nil) {
             SHLogError(SHLogTagAPP, @"uploadFaceData failed, error: %@", error.error_description);
@@ -314,7 +314,7 @@ static const CGFloat kMarginTop = 140;
     for (NSString *key in self.faceImages.keyEnumerator) {
         UIImage *img = [self compressImage:self.faceImages[key]];
         if (img != nil) {
-            NSData *data = UIImagePNGRepresentation(img);
+            NSData *data = UIImageJPEGRepresentation(img, 1.0); //UIImagePNGRepresentation(img);
             temp[key] = [data base64EncodedStringWithOptions:0];
         }
     }

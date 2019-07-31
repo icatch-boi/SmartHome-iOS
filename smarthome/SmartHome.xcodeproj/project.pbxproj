@@ -463,6 +463,7 @@
 		384A197D22115B3B003D3042 /* SHWCServerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWCServerView.h; sourceTree = "<group>"; };
 		384A197E22115B3B003D3042 /* SHWCServerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWCServerView.m; sourceTree = "<group>"; };
 		384A198122115B82003D3042 /* SHWCServerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHWCServerView.xib; sourceTree = "<group>"; };
+		384ADD1622F19884002905DA /* SHFaceDataCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceDataCommon.h; sourceTree = "<group>"; };
 		384BBE2320C13A8F0047E152 /* ZJGridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGridCell.h; sourceTree = "<group>"; };
 		384BBE2420C13A8F0047E152 /* ZJPhotoBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPhotoBrowserController.h; sourceTree = "<group>"; };
 		384BBE2520C13A8F0047E152 /* ZJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPhoto.m; sourceTree = "<group>"; };
@@ -1230,6 +1231,7 @@
 				382B670122EF185D00230D15 /* SHFaceDataHandler.m */,
 				382B670322F0358900230D15 /* SHFaceDataManager.h */,
 				382B670422F0358900230D15 /* SHFaceDataManager.m */,
+				384ADD1622F19884002905DA /* SHFaceDataCommon.h */,
 			);
 			path = Tools;
 			sourceTree = "<group>";

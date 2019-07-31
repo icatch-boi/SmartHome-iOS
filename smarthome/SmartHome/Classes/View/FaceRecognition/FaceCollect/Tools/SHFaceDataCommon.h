@@ -1,4 +1,4 @@
-// SHFaceDataManager.h
+// SHFaceDataCommon.h
 
 /**************************************************************************
  *
@@ -22,31 +22,13 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/30 4:21 PM.
+ // Created by zj on 2019/7/31 5:36 PM.
     
 
-#import <Foundation/Foundation.h>
-#import "FRDFaceInfo.h"
-#import "SHFaceDataCommon.h"
+#ifndef SHFaceDataCommon_h
+#define SHFaceDataCommon_h
 
-NS_ASSUME_NONNULL_BEGIN
+typedef void(^FaceDataHandleCompletion)(void);
+static const int64_t kWaitTimeout = 15ull * NSEC_PER_SEC;
 
-typedef void(^FaceDataLoadCompletion)(BOOL isSuccess);
-
-@interface SHFaceDataManager : NSObject
-
-@property (nonatomic, strong, readonly) NSMutableArray<FRDFaceInfo *> *facesInfoArray;
-
-+ (instancetype)sharedFaceDataManager;
-
-- (void)loadFacesInfoWithCompletion:(FaceDataLoadCompletion _Nullable)completion;
-
-- (void)addFaceDataWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData;
-- (void)deleteFacesWithFaceIDs:(NSArray<NSString *> *)facesIDs;
-
-- (BOOL)needsSyncFaceDataWithCameraObject:(SHCameraObject *)shCamObj;
-- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion)completion;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#endif /* SHFaceDataCommon_h */
