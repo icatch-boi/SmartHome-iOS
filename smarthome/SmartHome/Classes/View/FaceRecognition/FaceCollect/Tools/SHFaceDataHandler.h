@@ -36,11 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init __attribute__((unavailable("Disabled. Please use the 'initWithCameraObject' methods instead.")));
 - (instancetype)initWithCameraObject:(SHCameraObject *)camObj;
 
-- (void)addFaceWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData;
+- (void)addFaceWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData completion:(FaceDataHandleCompletion _Nullable)completion;
 - (void)deleteFacesWithFaceIDs:(NSArray<NSString *> *)facesIDs;
 
 - (BOOL)checkNeedSyncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray;
-- (void)syncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray completion:(FaceDataHandleCompletion)completion;
+- (void)syncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray completion:(FaceDataHandleCompletion _Nullable)completion;
 
 @end
 

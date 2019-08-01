@@ -2141,7 +2141,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self.progressHUD showProgressHUDWithMessage:@"同步中，请稍后..."];
     
     WEAK_SELF(self);
-    [[SHFaceDataManager sharedFaceDataManager] syncFaceDataWithCameraObject:self.shCameraObj completion:^{
+    [[SHFaceDataManager sharedFaceDataManager] syncFaceDataWithCameraObject:self.shCameraObj completion:^(NSDictionary<NSString *,NSNumber *> * _Nullable result) {
         [weakself connectSuccessHandler];
 
         dispatch_async(dispatch_get_main_queue(), ^{

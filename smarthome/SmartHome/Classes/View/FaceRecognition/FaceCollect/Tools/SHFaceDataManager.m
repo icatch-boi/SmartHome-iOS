@@ -34,6 +34,8 @@
 
 @property (nonatomic, strong) NSMutableArray<FRDFaceInfo *> *facesInfoArray;
 @property (nonatomic, strong) dispatch_semaphore_t semaphore;
+@property (nonatomic, strong) dispatch_group_t faceHandleGroup;
+@property (nonatomic, strong) dispatch_queue_t faceHandleQueue;
 
 @end
 
@@ -71,14 +73,44 @@
 - (void)singletonInit {
     self.facesInfoArray = [[NSMutableArray alloc] init];
     self.semaphore = dispatch_semaphore_create(1);
+    self.faceHandleGroup = dispatch_group_create();
+    self.faceHandleQueue = dispatch_queue_create("com.icatchtek.FaceHandle", DISPATCH_QUEUE_CONCURRENT);
 }
 
 #pragma mark - Base Op
-- (void)addFaceDataWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData {
+- (void)addFaceDataWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData completion:(FaceDataAddCompletion _Nullable)completion {
+#if 0
     [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:obj];
-        [handle addFaceWithFaceID:faceID faceData:faceData];
+        [handle addFaceWithFaceID:faceID faceData:faceData completion:nil];
     }];
+#else
+    __block BOOL isSuccess = NO;
+    [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        dispatch_group_enter(self.faceHandleGroup);
+        dispatch_async(self.faceHandleQueue, ^{
+            SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:obj];
+            [handle addFaceWithFaceID:faceID faceData:faceData completion:^(NSDictionary<NSString *,NSNumber *> * _Nullable result) {
+                if (result != nil) {
+                    NSString *key = result.keyEnumerator.nextObject;
+                    NSNumber *value = result[key];
+                    if (value.intValue == 0) {
+                        isSuccess = YES;
+                    }
+                }
+                
+                dispatch_group_leave(self.faceHandleGroup);
+            }];
+        });
+    }];
+    
+    dispatch_group_notify(self.faceHandleGroup, dispatch_get_main_queue(), ^{
+        if (completion) {
+            completion(isSuccess);
+        }
+    });
+#endif
 }
 
 - (void)deleteFacesWithFaceIDs:(NSArray<NSString *> *)facesIDs {
@@ -143,18 +175,18 @@
     return need;
 }
 
-- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion)completion {
+- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion _Nullable)completion {
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
     if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
         SHLogWarn(SHLogTagAPP, @"Wait time out");
     }
     
     SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:shCamObj];
-    [handle syncFaceDataWithRemoteFaceInfo:self.facesInfoArray completion:^{
+    [handle syncFaceDataWithRemoteFaceInfo:self.facesInfoArray completion:^(NSDictionary<NSString *,NSNumber *> * _Nullable result) {
         dispatch_semaphore_signal(self.semaphore);
 
         if (completion) {
-            completion();
+            completion(result);
         }
     }];
 }

@@ -28,7 +28,8 @@
 #ifndef SHFaceDataCommon_h
 #define SHFaceDataCommon_h
 
-typedef void(^FaceDataHandleCompletion)(void);
+typedef void(^FaceDataHandleCompletion)(NSDictionary<NSString *, NSNumber *> * _Nullable result);
 static const int64_t kWaitTimeout = 15ull * NSEC_PER_SEC;
+static const NSTimeInterval kAddFaceMaxInterval = 120;
 
 #endif /* SHFaceDataCommon_h */

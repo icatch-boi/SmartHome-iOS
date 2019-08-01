@@ -12,6 +12,7 @@
 #import "FRDCommonHeader.h"
 #import "SHFaceDataManager.h"
 
+//#define SERIAL_WAY
 static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
 static const CGFloat kUploadImageWidth = 224;
 static const CGFloat kMarginTop = 140;
@@ -28,6 +29,11 @@ static const CGFloat kMarginTop = 140;
 @property (nonatomic, strong) NSMutableDictionary *faceImages;
 @property (nonatomic, copy) NSString *faceid;
 @property (nonatomic, assign) BOOL collectFailed;
+@property (nonatomic, strong) NSString *faceName;
+@property (nonatomic, strong) dispatch_group_t addFaceGroup;
+@property (nonatomic, strong) dispatch_queue_t addFaceQueue;
+@property (nonatomic, assign) BOOL uploadSuccess;
+@property (nonatomic, assign) BOOL setupSuccess;
 
 @end
 
@@ -199,7 +205,7 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (void)showGetFaceDataFailedAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"采集的人脸图片不完整，请重新采集。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"采集的人脸图片不完整（总共需要五个方向的数据，分别为正脸及左、右、上、下四个侧面），请重新采集。" preferredStyle:UIAlertControllerStyleAlert];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self returnBackClick:nil];
     }]];
@@ -246,14 +252,58 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (void)uploadHandlerWithName:(NSString *)name {
-//    self.userName = name;
-    [SVProgressHUD showWithStatus:@"正在上传人脸数据，请稍后..."];
+    self.faceName = name;
+    [SVProgressHUD showWithStatus:@"正在添加人脸数据，请稍后..."];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
+#ifdef SERIAL_WAY
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self uploadFaceDataWithName:name];
+//        [self setupFaceDataToFW];
+    });
+#else
+    self.uploadSuccess = false;
+    self.setupSuccess = false;
+
+    dispatch_group_enter(self.addFaceGroup);
+    dispatch_async(self.addFaceQueue, ^{
+        [self uploadFaceDataWithName:name];
+    });
+    
+    dispatch_group_enter(self.addFaceGroup);
+    dispatch_async(self.addFaceQueue, ^{
         [self setupFaceDataToFW];
     });
+    
+    dispatch_group_notify(self.addFaceGroup, dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+        
+        if (self.uploadSuccess == true && self.setupSuccess == true) {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), self.faceName]];
+            [SVProgressHUD dismissWithDelay:2.0];
+            
+            NSString *notificationName = kReloadFacesInfoNotification;
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil];
+            
+            [self exitFaceCollect];
+        } else {
+            SHLogError(SHLogTagAPP, @"addFaceData failed, uploadSuccess: %d, setupSuccess: %d", self.uploadSuccess, self.setupSuccess);
+            
+            NSString *notice = @"添加人脸数据失败";
+            if (self.setupSuccess == true) {
+                notice = @"上传人脸数据失败";
+                
+                [[SHFaceDataManager sharedFaceDataManager] deleteFacesWithFaceIDs:@[self.faceid]];
+            } else if (self.uploadSuccess == true) {
+                notice = @"添加人脸数据到设备失败";
+                
+                [self uploadFaceDataFailedHandle];
+            }
+            
+            [self showUploadFailedAlertView:notice];
+        }
+    });
+#endif
 }
 
 - (void)setupFaceDataToFW {
@@ -271,13 +321,46 @@ static const CGFloat kMarginTop = 140;
     
     if (temp.count <= 0) {
         SHLogError(SHLogTagAPP, @"Face DataSet is nil.");
+        dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef SERIAL_WAY
+            [SVProgressHUD dismiss];
+#endif
+            [self showUploadFailedAlertView:@"人脸集合数据不存在"];
+            [self uploadFaceDataFailedHandle];
+        });
         
+#ifndef SERIAL_WAY
+        dispatch_group_leave(self.addFaceGroup);
+#endif
         return;
     }
     
     SHLogInfo(SHLogTagAPP, @"Face data set length: %d", totalSize);
     
-    [[SHFaceDataManager sharedFaceDataManager] addFaceDataWithFaceID:self.faceid faceData:temp.copy];
+    [[SHFaceDataManager sharedFaceDataManager] addFaceDataWithFaceID:self.faceid faceData:temp.copy completion:^(BOOL isSuccess) {
+#ifdef SERIAL_WAY
+        [SVProgressHUD dismiss];
+        
+        if (isSuccess == NO) {
+            SHLogError(SHLogTagAPP, @"addFaceData failed");
+            
+            [self showUploadFailedAlertView:@"添加人脸数据到设备失败"];
+            [self uploadFaceDataFailedHandle];
+        } else {
+            [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), self.faceName]];
+            [SVProgressHUD dismissWithDelay:2.0];
+            
+            NSString *notificationName = kReloadFacesInfoNotification;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil];
+            
+            [self exitFaceCollect];
+        }
+#else
+        self.setupSuccess = isSuccess;
+        dispatch_group_leave(self.addFaceGroup);
+#endif
+    }];
 }
 
 - (void)uploadFaceDataWithName:(NSString *)name {
@@ -285,11 +368,15 @@ static const CGFloat kMarginTop = 140;
     if (img == nil) {
         SHLogError(SHLogTagAPP, @"Main face is nil.");
         dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef SERIAL_WAY
             [SVProgressHUD dismiss];
-            
+#endif
             [self showUploadFailedAlertView:@"人脸数据不存在"];
         });
         
+#ifndef SERIAL_WAY
+        dispatch_group_leave(self.addFaceGroup);
+#endif
         return;
     }
     
@@ -298,10 +385,14 @@ static const CGFloat kMarginTop = 140;
         if (error != nil) {
             SHLogError(SHLogTagAPP, @"uploadFaceData failed, error: %@", error.error_description);
             dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef SERIAL_WAY
                 [SVProgressHUD dismiss];
-                
+#endif
                 [self showUploadFailedAlertView:[NSString stringWithFormat:@"上传人脸数据失败, error: %@", error.error_description]];
             });
+#ifndef SERIAL_WAY
+            dispatch_group_leave(self.addFaceGroup);
+#endif
         } else {
             [self uploadFaceDataSetWithName:name];
         }
@@ -322,12 +413,16 @@ static const CGFloat kMarginTop = 140;
     if (temp.count <= 0) {
         SHLogError(SHLogTagAPP, @"Face DataSet is nil.");
         dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef SERIAL_WAY
             [SVProgressHUD dismiss];
-            
+#endif
             [self showUploadFailedAlertView:@"人脸集合数据不存在"];
             [self uploadFaceDataFailedHandle];
         });
-        
+
+#ifndef SERIAL_WAY
+        dispatch_group_leave(self.addFaceGroup);
+#endif
         return;
     }
     
@@ -335,6 +430,7 @@ static const CGFloat kMarginTop = 140;
     SHLogInfo(SHLogTagAPP, @"data length: %d", data.length);
     
     [[SHNetworkManager sharedNetworkManager] uploadFaceDataSet:data faceid:self.faceid finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+#if 0
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             
@@ -355,12 +451,36 @@ static const CGFloat kMarginTop = 140;
                 [self exitFaceCollect];
             }
         });
+#else
+        if (error != nil) {
+            SHLogError(SHLogTagAPP, @"uploadFaceDataSet failed, error: %@", error.error_description);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+#ifdef SERIAL_WAY
+                [SVProgressHUD dismiss];
+#endif
+                [self showUploadFailedAlertView:[NSString stringWithFormat:@"上传人脸集合数据失败，error: %@", error.error_description]];
+            });
+
+            [self uploadFaceDataFailedHandle];
+        } else {
+#ifdef SERIAL_WAY
+            [self setupFaceDataToFW];
+#else
+            self.uploadSuccess = true;
+#endif
+        }
+        
+#ifndef SERIAL_WAY
+        dispatch_group_leave(self.addFaceGroup);
+#endif
+#endif
     }];
 }
 
 - (void)uploadFaceDataFailedHandle {
+    SHLogTRACE();
     [[SHNetworkManager sharedNetworkManager] deleteFaceDataWithFaceid:self.faceid finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
-        [SVProgressHUD dismiss];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
@@ -443,6 +563,22 @@ static const CGFloat kMarginTop = 140;
     }
     
     return _faceImages;
+}
+
+- (dispatch_group_t)addFaceGroup {
+    if (_addFaceGroup == nil) {
+        _addFaceGroup = dispatch_group_create();
+    }
+    
+    return _addFaceGroup;
+}
+
+- (dispatch_queue_t)addFaceQueue {
+    if (_addFaceQueue == nil) {
+        _addFaceQueue = dispatch_queue_create("com.icatchtek.AddFace", DISPATCH_QUEUE_CONCURRENT);
+    }
+    
+    return _addFaceQueue;
 }
 
 @end

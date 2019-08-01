@@ -32,6 +32,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^FaceDataLoadCompletion)(BOOL isSuccess);
+typedef void(^FaceDataAddCompletion)(BOOL isSuccess);
 
 @interface SHFaceDataManager : NSObject
 
@@ -41,11 +42,11 @@ typedef void(^FaceDataLoadCompletion)(BOOL isSuccess);
 
 - (void)loadFacesInfoWithCompletion:(FaceDataLoadCompletion _Nullable)completion;
 
-- (void)addFaceDataWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData;
+- (void)addFaceDataWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData completion:(FaceDataAddCompletion _Nullable)completion;
 - (void)deleteFacesWithFaceIDs:(NSArray<NSString *> *)facesIDs;
 
 - (BOOL)needsSyncFaceDataWithCameraObject:(SHCameraObject *)shCamObj;
-- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion)completion;
+- (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion _Nullable)completion;
 
 @end
 

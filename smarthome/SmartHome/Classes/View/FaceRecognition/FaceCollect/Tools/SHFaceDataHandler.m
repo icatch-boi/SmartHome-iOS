@@ -38,6 +38,8 @@
 @property (nonatomic, strong) NSMutableArray<FRDFaceInfo *> *faceidToAdd;
 @property (nonatomic, assign, getter=isSyncFaceData) BOOL syncFaceData;
 @property (nonatomic, copy) FaceDataHandleCompletion completion;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *addFaceResult;
+@property (nonatomic, strong) NSTimer *timeoutTimer;
 
 @end
 
@@ -47,13 +49,17 @@
     self = [super init];
     if (self) {
         self.shCamObj = camObj;
+        self.syncFaceData = NO;
     }
     return self;
 }
 
-- (void)addFaceWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData {
+- (void)addFaceWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData completion:(FaceDataHandleCompletion _Nullable)completion {
     if (self.shCamObj.camera.operable != 1) {
         SHLogWarn(SHLogTagAPP, @"You do not have permission to operate this device, device name: %@", self.shCamObj.camera.cameraName);
+        if (completion) {
+            completion(nil);
+        }
         return;
     }
     
@@ -66,15 +72,32 @@
         totalSize += data.length;
     }
     
+    if (faceDataSets.size() == 0) {
+        SHLogError(SHLogTagAPP, @"Input face data is empty, device name: %@", self.shCamObj.camera.cameraName);
+        if (completion) {
+            completion(nil);
+        }
+        return;
+    }
+    
+    self.completion = completion;
+    
     int ret = [self.shCamObj.sdk initializeSHSDK:self.shCamObj.camera.cameraUid devicePassword:self.shCamObj.camera.devicePassword];
     if (ret == ICH_SUCCEED) {
         [self addSetupFaceDataObserver];
+        [self.addFaceResult removeAllObjects];
         ret = self.shCamObj.sdk.control->addFace(faceID.intValue, totalSize, faceDataSets, true);
         if (ret != ICH_SUCCEED) {
             SHLogError(SHLogTagAPP, @"addFace failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
+            if (completion) {
+                completion(nil);
+            }
         }
     } else {
         SHLogError(SHLogTagAPP, @"connect device failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
+        if (completion) {
+            completion(nil);
+        }
     }
 }
 
@@ -83,6 +106,8 @@
     self.addFaceDataObserver = [SHObserver cameraObserverWithListener:startDownloadlListener eventType:ICATCH_EVENT_ADD_FACE_RESULT isCustomized:NO isGlobal:NO];
     
     [self.shCamObj.sdk addObserver:self.addFaceDataObserver];
+    
+    [self timeoutTimer];
 }
 
 - (void)removeSetupFaceDataObserver {
@@ -96,21 +121,28 @@
         
         self.addFaceDataObserver = nil;
     }
+    
+    [self releaseTimeoutTimer];
 }
 
 - (void)addFaceResultHandle:(SHICatchEvent *)event {
     int faceid = event.intValue1;
     int ret = event.intValue2;
     
+    self.addFaceResult[@(faceid).stringValue] = @(ret);
+    
     if (ret == 0) {
         SHLogInfo(SHLogTagAPP, @"add face success, face id: %d", faceid);
     } else {
-        SHLogError(SHLogTagAPP, @"add face failed, face id: %d", faceid);
+        SHLogError(SHLogTagAPP, @"add face failed, face id: %d, ret: %d", faceid, ret);
     }
     
     if (self.syncFaceData == NO) {
         [self removeSetupFaceDataObserver];
         [self.shCamObj.sdk destroySHSDK];
+        if (self.completion) {
+            self.completion(self.addFaceResult.copy);
+        }
     } else {
         __block NSUInteger index;
         [self.faceidToAdd enumerateObjectsUsingBlock:^(FRDFaceInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -125,9 +157,22 @@
             self.syncFaceData = NO;
             [self removeSetupFaceDataObserver];
             if (self.completion) {
-                self.completion();
+                self.completion(self.addFaceResult.copy);
             }
         }
+    }
+}
+
+- (void)timeoutHandle {
+    if (self.syncFaceData == NO) {
+        [self.shCamObj.sdk destroySHSDK];
+    } else {
+        self.syncFaceData = NO;
+    }
+    
+    [self removeSetupFaceDataObserver];
+    if (self.completion) {
+        self.completion(self.addFaceResult.copy);
     }
 }
 
@@ -177,11 +222,11 @@
     return need;
 }
 
-- (void)syncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray completion:(FaceDataHandleCompletion)completion {
+- (void)syncFaceDataWithRemoteFaceInfo:(NSArray<FRDFaceInfo *> *)facesInfoArray completion:(FaceDataHandleCompletion _Nullable)completion {
     if (self.shCamObj.camera.operable != 1) {
         SHLogWarn(SHLogTagAPP, @"You do not have permission to operate this device, device name: %@", self.shCamObj.camera.cameraName);
         if (completion) {
-            completion();
+            completion(nil);
         }
         return;
     }
@@ -190,7 +235,7 @@
     if (localFaceID == nil) {
         SHLogError(SHLogTagAPP, @"Get face id failed.");
         if (completion) {
-            completion();
+            completion(nil);
         }
         return;
     }
@@ -200,7 +245,7 @@
         [self deleteFacesHandleWithFacesID:localFaceID];
         
         if (completion) {
-            completion();
+            completion(nil);
         }
         return;
     }
@@ -237,6 +282,7 @@
     [self.faceidToAdd removeAllObjects];
     [self.faceidToAdd addObjectsFromArray:faceInfoArray];
     [self addSetupFaceDataObserver];
+    [self.addFaceResult removeAllObjects];
     
     [faceInfoArray enumerateObjectsUsingBlock:^(FRDFaceInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addFaceDataToFWWithFaceInfo:obj];
@@ -378,6 +424,29 @@
     }
     
     return _faceidToAdd;
+}
+
+- (NSMutableDictionary<NSString *,NSNumber *> *)addFaceResult {
+    if (_addFaceResult == nil) {
+        _addFaceResult = [[NSMutableDictionary alloc] init];
+    }
+    
+    return _addFaceResult;
+}
+
+- (NSTimer *)timeoutTimer {
+    if (_timeoutTimer == nil) {
+        _timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:kAddFaceMaxInterval target:self selector:@selector(timeoutHandle) userInfo:nil repeats:NO];
+    }
+    
+    return _timeoutTimer;
+}
+
+- (void)releaseTimeoutTimer {
+    if ([_timeoutTimer isValid]) {
+        [_timeoutTimer invalidate];
+        _timeoutTimer = nil;
+    }
 }
 
 @end
