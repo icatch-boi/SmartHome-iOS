@@ -14,6 +14,7 @@
 @property (nonatomic, copy, readonly) NSString *url;
 @property (nonatomic, copy, readonly) NSString *faceid;
 @property (nonatomic, strong) id faceDataSet;
+@property (nonatomic, strong) UIImage *faceImage;
 
 - (instancetype)initWithDict:(NSDictionary *)dict;
 + (instancetype)faceInfoWithDict:(NSDictionary *)dict;

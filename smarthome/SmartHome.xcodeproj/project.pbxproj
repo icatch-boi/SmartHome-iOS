@@ -49,6 +49,7 @@
 		38470A2120CA779A00C8DEC7 /* XJLocalAssetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38470A2020CA779A00C8DEC7 /* XJLocalAssetHelper.m */; };
 		384A197F22115B3B003D3042 /* SHWCServerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 384A197E22115B3B003D3042 /* SHWCServerView.m */; };
 		384A198222115B82003D3042 /* SHWCServerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 384A198122115B82003D3042 /* SHWCServerView.xib */; };
+		384ADD1E22F2C14B002905DA /* SHFaceShowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384ADD1D22F2C14B002905DA /* SHFaceShowCell.m */; };
 		384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE2520C13A8F0047E152 /* ZJPhoto.m */; };
 		384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 384BBE2720C13A8F0047E152 /* ZJPhotoBrowser.bundle */; };
 		384BBE4020C13A900047E152 /* ZJPhotoViewerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE2820C13A8F0047E152 /* ZJPhotoViewerController.m */; };
@@ -464,6 +465,8 @@
 		384A197E22115B3B003D3042 /* SHWCServerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWCServerView.m; sourceTree = "<group>"; };
 		384A198122115B82003D3042 /* SHWCServerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHWCServerView.xib; sourceTree = "<group>"; };
 		384ADD1622F19884002905DA /* SHFaceDataCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceDataCommon.h; sourceTree = "<group>"; };
+		384ADD1C22F2C14B002905DA /* SHFaceShowCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceShowCell.h; sourceTree = "<group>"; };
+		384ADD1D22F2C14B002905DA /* SHFaceShowCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFaceShowCell.m; sourceTree = "<group>"; };
 		384BBE2320C13A8F0047E152 /* ZJGridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJGridCell.h; sourceTree = "<group>"; };
 		384BBE2420C13A8F0047E152 /* ZJPhotoBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJPhotoBrowserController.h; sourceTree = "<group>"; };
 		384BBE2520C13A8F0047E152 /* ZJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJPhoto.m; sourceTree = "<group>"; };
@@ -1236,6 +1239,15 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
+		384ADD1B22F2C11C002905DA /* FaceShowCell */ = {
+			isa = PBXGroup;
+			children = (
+				384ADD1C22F2C14B002905DA /* SHFaceShowCell.h */,
+				384ADD1D22F2C14B002905DA /* SHFaceShowCell.m */,
+			);
+			path = FaceShowCell;
+			sourceTree = "<group>";
+		};
 		384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -1737,6 +1749,7 @@
 		38BB264421DF08EE00270CE1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				384ADD1B22F2C11C002905DA /* FaceShowCell */,
 				3875AC0921E7439100481AE9 /* FaceReusableView */,
 				38BB266821DF408900270CE1 /* FaceCollectionCell */,
 				38BB264D21DF08EE00270CE1 /* FRDHomeViewController.h */,
@@ -3346,6 +3359,7 @@
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
 				38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */,
 				38E5C15C20A3F5AF003004E0 /* SHMessageAlertView.m in Sources */,
+				384ADD1E22F2C14B002905DA /* SHFaceShowCell.m in Sources */,
 				38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
 				38BFB25722D85E5A00AA3ABC /* LivingConfigModel.m in Sources */,

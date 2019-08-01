@@ -56,6 +56,10 @@
 }
 
 - (void)displayPicture {
+    if (self.faceInfo.faceImage != nil) {
+        self.faceImageView.image = self.faceInfo.faceImage;
+        return;
+    }
     NSURL *url = [NSURL URLWithString:self.faceInfo.url];
 //    NSLog(@"urlString: %@", self.faceInfo.url);
     
@@ -73,6 +77,8 @@
             
             if (image == nil) {
                 [weakself getImageFailedHandler];
+            } else {
+                self.faceInfo.faceImage = image;
             }
         });
     }];
@@ -116,9 +122,9 @@
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kReset", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self resetHandler];
-    }]];
+//    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kReset", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self resetHandler];
+//    }]];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self sureDeleteFacePictureTips];

@@ -19,6 +19,7 @@
 #import "IDLFaceSDK/IDLFaceSDK.h"
 #import "FaceParameterConfig.h"
 #import "SHFaceDataManager.h"
+#import "SHFaceShowCell.h"
 
 static NSString * const ReuseIdentifier = @"faceCellID";
 
@@ -100,10 +101,11 @@ static NSString * const ReuseIdentifier = @"faceCellID";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ReuseIdentifier forIndexPath:indexPath];
+    SHFaceShowCell *cell = [tableView dequeueReusableCellWithIdentifier:ReuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.textLabel.text = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+//    cell.textLabel.text = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+    cell.faceInfo = self.faceInfoViewModel.facesInfoArray[indexPath.row];
     
     return cell;
 }
