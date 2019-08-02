@@ -504,6 +504,7 @@
                                  };
     NSString *urlString = [self requestURLString:kFaceInfo];
 
+#if 0
     [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error != nil) {
             if (finished) {
@@ -525,6 +526,9 @@
             }
         }
     }];
+#else
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:finished];
+#endif
 }
 
 - (void)getFacesInfoWithFinished:(_Nullable ZJRequestCallBack)finished {

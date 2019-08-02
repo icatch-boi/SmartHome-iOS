@@ -36,6 +36,7 @@
 @property (nonatomic, strong) dispatch_semaphore_t semaphore;
 @property (nonatomic, strong) dispatch_group_t faceHandleGroup;
 @property (nonatomic, strong) dispatch_queue_t faceHandleQueue;
+@property (nonatomic, assign) BOOL alreadyLoad;
 
 @end
 
@@ -75,6 +76,7 @@
     self.semaphore = dispatch_semaphore_create(1);
     self.faceHandleGroup = dispatch_group_create();
     self.faceHandleQueue = dispatch_queue_create("com.icatchtek.FaceHandle", DISPATCH_QUEUE_CONCURRENT);
+    self.alreadyLoad = NO;
 }
 
 #pragma mark - Base Op
@@ -155,6 +157,8 @@
         
         dispatch_semaphore_signal(self.semaphore);
     }];
+    
+    self.alreadyLoad = YES;
 }
 
 - (void)saveFacesInfoToLocal:(NSArray *)faces {
@@ -162,6 +166,7 @@
 }
 
 - (BOOL)needsSyncFaceDataWithCameraObject:(SHCameraObject *)shCamObj {
+    self.alreadyLoad ? void() : [self loadFacesInfoWithCompletion:nil];
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
     if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
         SHLogWarn(SHLogTagAPP, @"Wait time out");
@@ -176,6 +181,7 @@
 }
 
 - (void)syncFaceDataWithCameraObject:(SHCameraObject *)shCamObj completion:(FaceDataHandleCompletion _Nullable)completion {
+    self.alreadyLoad ? void() : [self loadFacesInfoWithCompletion:nil];
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, kWaitTimeout);
     if (dispatch_semaphore_wait(self.semaphore, time) != 0) {
         SHLogWarn(SHLogTagAPP, @"Wait time out");
