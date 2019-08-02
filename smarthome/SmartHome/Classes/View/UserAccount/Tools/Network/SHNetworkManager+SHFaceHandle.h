@@ -38,6 +38,7 @@ static NSString * const FACE_RECOGNITION_PATH = @"v1/devices/facerecognition";
 static NSString * const kGetFaceID = @"v1/users/faces/faceid";
 static NSString * const kFaceInfo = @"v1/users/faces/info";
 static NSString * const kFaceDataSet = @"v1/users/faces/metadata";
+static NSString * const kFaceimagePath = @"v1/devices/faceimage";
 
 typedef void (^ZJRequestCallBack)(_Nullable id result, ZJRequestError * _Nullable error);
 typedef enum : NSUInteger {
@@ -71,6 +72,7 @@ typedef enum : NSUInteger {
 - (void)deleteFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
+- (void)getStrangerFaceDataWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished;
 
 @end
 

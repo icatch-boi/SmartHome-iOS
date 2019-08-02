@@ -689,4 +689,23 @@
     }] resume];
 }
 
+- (void)getStrangerFaceDataWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished {
+    if (deviceid.length == 0) {
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"id": deviceid,
+                                 };
+    
+    [self tokenRequestWithMethod:ZJRequestMethodGET opertionType:ZJOperationTypeFaces urlString:kFaceimagePath parametes:parameters finished:finished];
+}
+
 @end

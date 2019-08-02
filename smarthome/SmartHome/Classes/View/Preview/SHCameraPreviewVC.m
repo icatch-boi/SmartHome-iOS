@@ -1369,6 +1369,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), @"陌生人", self.shCameraObj.camera.cameraName];
                 });
+                [self strangerHandle];
                 break;
             }
                 
@@ -1383,6 +1384,18 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 break;
         }
     }
+}
+
+- (void)strangerHandle {
+    WEAK_SELF(self);
+
+    [[SHNetworkManager sharedNetworkManager] getStrangerFaceDataWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        if (error == nil) {
+            FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
+            
+            [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
+        }
+    }];
 }
 
 - (void)recognitionSuccessHandle {
