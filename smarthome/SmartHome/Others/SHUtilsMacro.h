@@ -110,6 +110,7 @@ static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kLocalAlbumName = @"SmartHome";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 static NSString * const kReconfigureDevice = @"ReconfigureDevice";
+static NSString * const kUserAccount = @"UserAccount";
 
 #pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";
@@ -162,6 +163,7 @@ static const float kMaxZoomScale = 5.0;
 static const NSInteger kQRCodeValidDuration = 24; //hours
 static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
+static const NSTimeInterval kTimeoutInterval = 15.0; // Network request
 
 #pragma mark - Config Account Server
 static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/"; //@"http://18.221.2.61:80/";
@@ -174,5 +176,18 @@ static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 
 #define WEAK_SELF(obj) __weak typeof(obj) weak##obj = obj;
 #define STRONG_SELF(obj) __strong typeof(obj) obj = weak##obj;
+
+typedef enum : NSUInteger {
+    PushMessageTypePir = 100,
+    PushMessageTypeLowPower = 102,
+    PushMessageTypeSDCardFull = 103,
+    PushMessageTypeSDCardError = 104,
+    PushMessageTypeTamperAlarm = 105,
+    PushMessageTypeRing = 201,
+    PushMessageTypeFDHit = 202,
+    PushMessageTypeFDMiss = 203,
+    PushMessageTypePushTest = 204,
+    PushMessageTypeFaceRecognition = 301,
+} PushMessageType;
 
 #endif /* SHUtilsMacro_h */

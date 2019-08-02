@@ -13,17 +13,17 @@
 #define kWidth  kBounds.size.width
 #define kAlertViewWidth 44
 
-typedef enum : NSUInteger {
-    PushMessageTypePir = 100,
-    PushMessageTypeLowPower = 102,
-    PushMessageTypeSDCardFull = 103,
-    PushMessageTypeSDCardError = 104,
-    PushMessageTypeTamperAlarm = 105,
-    PushMessageTypeRing = 201,
-    PushMessageTypeFDHit = 202,
-    PushMessageTypeFDMiss = 203,
-    PushMessageTypePushTest = 204,
-} PushMessageType;
+//typedef enum : NSUInteger {
+//    PushMessageTypePir = 100,
+//    PushMessageTypeLowPower = 102,
+//    PushMessageTypeSDCardFull = 103,
+//    PushMessageTypeSDCardError = 104,
+//    PushMessageTypeTamperAlarm = 105,
+//    PushMessageTypeRing = 201,
+//    PushMessageTypeFDHit = 202,
+//    PushMessageTypeFDMiss = 203,
+//    PushMessageTypePushTest = 204,
+//} PushMessageType;
 
 @class SHMessage;
 @interface SHMessageAlertView : UIView

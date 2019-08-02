@@ -62,6 +62,7 @@
 		384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3720C13A8F0047E152 /* UIImage+ZJPhotoBrowser.m */; };
 		384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3920C13A900047E152 /* ZJGridCell.m */; };
 		384BBE4920C13A900047E152 /* ZJPhotoBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 384BBE3B20C13A900047E152 /* ZJPhotoBrowserController.m */; };
+		38503D3722F4178600B5226F /* SHFaceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38503D3622F4178600B5226F /* SHFaceInfo.m */; };
 		385584EB201EE94A009F0D7D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 389C29F81F2EEAF5004C4806 /* Localizable.strings */; };
 		38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */; };
 		386FAF6B20AD2BD9007655CF /* ZJSlidingDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 386FAF6A20AD2BD9007655CF /* ZJSlidingDrawerViewController.m */; };
@@ -499,6 +500,8 @@
 		384EF4CB2264765F0027C7AB /* SHAccountSettingItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingItem.m; sourceTree = "<group>"; };
 		384EF4CD226484680027C7AB /* AccountSettingItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AccountSettingItems.json; sourceTree = "<group>"; };
 		384EF4D02264A6FE0027C7AB /* SHAccountSettingCommonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAccountSettingCommonCell.m; sourceTree = "<group>"; };
+		38503D3522F4178600B5226F /* SHFaceInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFaceInfo.h; sourceTree = "<group>"; };
+		38503D3622F4178600B5226F /* SHFaceInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFaceInfo.m; sourceTree = "<group>"; };
 		38656B3021F9904500C5A65B /* SHQRCodeSetupDeviceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHQRCodeSetupDeviceVC.h; sourceTree = "<group>"; };
 		38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHQRCodeSetupDeviceVC.m; sourceTree = "<group>"; };
 		386FAF6920AD2BD9007655CF /* ZJSlidingDrawerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJSlidingDrawerViewController.h; sourceTree = "<group>"; };
@@ -2660,6 +2663,8 @@
 				38F4424B1FAC079A00BDA6DF /* NotificationService.h */,
 				38F4424C1FAC079A00BDA6DF /* NotificationService.m */,
 				38F4424E1FAC079A00BDA6DF /* Info.plist */,
+				38503D3522F4178600B5226F /* SHFaceInfo.h */,
+				38503D3622F4178600B5226F /* SHFaceInfo.m */,
 			);
 			path = NotificationServiceExtension;
 			sourceTree = "<group>";
@@ -3453,6 +3458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */,
+				38503D3722F4178600B5226F /* SHFaceInfo.m in Sources */,
 				38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -572,6 +572,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self lowBatteryHandleWithUID:aps[@"devID"] disconnect:YES];
             break;
             
+        case PushMessageTypeRing:
+        case PushMessageTypeFDHit:
+        case PushMessageTypeFaceRecognition:
+            [self ringNotificationHandleWithInfo:userInfo];
+            break;
+            
         default:
             break;
     }
@@ -647,6 +653,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
     } else {
         _loaded = NO;
+    }
+}
+
+- (void)ringNotificationHandleWithInfo:(NSDictionary *)userInfo {
+    if (![self checkNotificationWhetherOverdue:[self parseNotification:userInfo]]) {
+        [self presentSinglePreview:userInfo];
     }
 }
 
