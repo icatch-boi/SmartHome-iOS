@@ -56,7 +56,7 @@
             [weakSelf.remindView setHidden:true];
             [weakSelf.remindDetailLabel setHidden:false];
             weakSelf.remindDetailLabel.text = warning;
-            weakSelf.remindLabel.text = @"脸部有遮挡";
+            weakSelf.remindLabel.text = NSLocalizedString(@"kFaceHasOcclusion", nil);
         }else {
             [weakSelf.remindLabel setHidden:false];
             [weakSelf.remindView setHidden:true];
@@ -120,10 +120,11 @@
     [self.view addSubview:closeButton];
     
     // 提示框
-    self.remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, circleRect.origin.y-70, ScreenWidth, 30)];
+    self.remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, circleRect.origin.y-70, ScreenWidth, 60)];
     self.remindLabel.textAlignment = NSTextAlignmentCenter;
     self.remindLabel.textColor = OutSideColor;
     self.remindLabel.font = [UIFont boldSystemFontOfSize:22.0];
+    self.remindLabel.numberOfLines = 0;
     [self.view addSubview:self.remindLabel];
     
     self.remindView = [[RemindView alloc]initWithFrame:CGRectMake((ScreenWidth-200)/2.0, CGRectGetMinY(self.remindLabel.frame), 200, 45)];
@@ -134,7 +135,7 @@
     self.remindDetailLabel.font = [UIFont systemFontOfSize:20];
     self.remindDetailLabel.textColor = [UIColor whiteColor];
     self.remindDetailLabel.textAlignment = NSTextAlignmentCenter;
-    self.remindDetailLabel.text = @"建议略微抬头";
+    self.remindDetailLabel.text = NSLocalizedString(@"kRaiseSlightly", nil);
     [self.view addSubview:self.remindDetailLabel];
     [self.remindDetailLabel setHidden:true];
     
@@ -226,15 +227,15 @@
 }
 
 - (void)captureError {
-    NSString *errorStr = @"出现未知错误，请检查相机设置";
+    NSString *errorStr = NSLocalizedString(@"kCheckCameraSetting", nil);
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
-        errorStr = @"相机权限受限,请在设置中启用";
+        errorStr = NSLocalizedString(@"kCameraPermissionsLimited", nil);
     }
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:errorStr preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction* action = [UIAlertAction actionWithTitle:@"知道啦" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             NSLog(@"知道啦");
         }];
         [alert addAction:action];

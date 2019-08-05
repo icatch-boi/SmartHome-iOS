@@ -83,7 +83,7 @@
             case LivenessRemindCodeOK: {
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:images];
                 weakSelf.hasFinished = YES;
-                [self warningStatus:CommonStatus warning:@"非常好"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kGood", nil)];
                 if (images[@"bestImage"] != nil && [images[@"bestImage"] count] != 0) {
 
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:[images[@"bestImage"] lastObject] options:NSDataBase64DecodingIgnoreUnknownCharacters];
@@ -141,135 +141,135 @@
                 break;
             }
             case LivenessRemindCodePitchOutofDownRange:
-                [self warningStatus:PoseStatus warning:@"建议略微抬头" conditionMeet:false];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kRaiseSlightly", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodePitchOutofUpRange:
-                [self warningStatus:PoseStatus warning:@"建议略微低头" conditionMeet:false];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kBowSlightly", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeYawOutofLeftRange:
-                [self warningStatus:PoseStatus warning:@"建议略微向右转头" conditionMeet:false];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kSlightlyToTheRight", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeYawOutofRightRange:
-                [self warningStatus:PoseStatus warning:@"建议略微向左转头" conditionMeet:false];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kSlightlyToTheLeft", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodePoorIllumination:
-                [self warningStatus:CommonStatus warning:@"光线再亮些" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kLightAgain", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeNoFaceDetected:
-                [self warningStatus:CommonStatus warning:@"把脸移入框内" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kMoveIntoTheBox", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeImageBlured:
-                [self warningStatus:CommonStatus warning:@"请保持不动" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kPleaseStayStill", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionLeftEye:
-                [self warningStatus:occlusionStatus warning:@"左眼有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLeftEyeHasOcclusion", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionRightEye:
-                [self warningStatus:occlusionStatus warning:@"右眼有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kRightEyeHasOcclusion", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionNose:
-                [self warningStatus:occlusionStatus warning:@"鼻子有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kNoisyNose", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionMouth:
-                [self warningStatus:occlusionStatus warning:@"嘴巴有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kMouthBlocked", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionLeftContour:
-                [self warningStatus:occlusionStatus warning:@"左脸颊有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLeftCheekHasOcclusion", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionRightContour:
-                [self warningStatus:occlusionStatus warning:@"右脸颊有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kRightCheekHasOcclusion", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeOcclusionChinCoutour:
-                [self warningStatus:occlusionStatus warning:@"下颚有遮挡" conditionMeet:false];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLowerJawHasOcclusion", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeTooClose:
-                [self warningStatus:CommonStatus warning:@"手机拿远一点" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kTakeLonger", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeTooFar:
-                [self warningStatus:CommonStatus warning:@"手机拿近一点" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kTakeCloser", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeBeyondPreviewFrame:
-                [self warningStatus:CommonStatus warning:@"把脸移入框内" conditionMeet:false];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kMoveIntoTheBox", nil) conditionMeet:false];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLiveEye:
-                [self warningStatus:CommonStatus warning:@"眨眨眼" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kBlink", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLiveMouth:
-                [self warningStatus:CommonStatus warning:@"张张嘴" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kOpenMouth", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLiveYawRight:
-                [self warningStatus:CommonStatus warning:@"向右缓慢转头" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kHeadSlowlyRight", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLiveYawLeft:
-                [self warningStatus:CommonStatus warning:@"向左缓慢转头" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kHeadSlowlyLeft", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLivePitchUp:
-                [self warningStatus:CommonStatus warning:@"缓慢抬头" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kSlowlyLookingup", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLivePitchDown:
-                [self warningStatus:CommonStatus warning:@"缓慢低头" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kSlowlybowing", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeLiveYaw:
-                [self warningStatus:CommonStatus warning:@"摇摇头" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kShakingHisHead", nil) conditionMeet:true];
                 [self singleActionSuccess:false];
                 break;
             case LivenessRemindCodeSingleLivenessFinished:
             {
-                [self warningStatus:CommonStatus warning:@"非常好" conditionMeet:true];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kGood", nil) conditionMeet:true];
                 [self singleActionSuccess:true];
             }
                 break;
             case LivenessRemindCodeVerifyInitError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyDecryptError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyInfoFormatError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyExpired:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyMissRequiredInfo:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyInfoCheckError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyLocalFileError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeVerifyRemoteDataError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeTimeout: {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"remind" message:@"超时" preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction* action = [UIAlertAction actionWithTitle:@"知道啦" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"ActionTimeOut", nil) preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                         NSLog(@"知道啦");
                     }];
                     [alert addAction:action];
@@ -298,7 +298,7 @@
             case DetectRemindCodeOK: {
                 //                    weakSelf.hasFinished = YES;
                 self.firstCollect = NO;
-                [self warningStatus:CommonStatus warning:@"非常好"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kGood", nil)];
                 [self singleActionSuccess:true];
                 if (images[@"bestImage"] != nil && [images[@"bestImage"] count] != 0) {
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:[images[@"bestImage"] lastObject] options:NSDataBase64DecodingIgnoreUnknownCharacters];
@@ -311,96 +311,96 @@
             }
                 
             case DetectRemindCodePitchOutofDownRange:
-                [self warningStatus:PoseStatus warning:@"建议略微抬头"];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kRaiseSlightly", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodePitchOutofUpRange:
-                [self warningStatus:PoseStatus warning:@"建议略微低头"];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kBowSlightly", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeYawOutofLeftRange:
-                [self warningStatus:PoseStatus warning:@"建议略微向右转头"];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kSlightlyToTheRight", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeYawOutofRightRange:
-                [self warningStatus:PoseStatus warning:@"建议略微向左转头"];
+                [self warningStatus:PoseStatus warning:NSLocalizedString(@"kSlightlyToTheLeft", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodePoorIllumination:
-                [self warningStatus:CommonStatus warning:@"光线再亮些"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kLightAgain", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeNoFaceDetected:
-                [self warningStatus:CommonStatus warning:@"把脸移入框内"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kMoveIntoTheBox", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeImageBlured:
-                [self warningStatus:CommonStatus warning:@"请保持不动"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kPleaseStayStill", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionLeftEye:
-                [self warningStatus:occlusionStatus warning:@"左眼有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLeftEyeHasOcclusion", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionRightEye:
-                [self warningStatus:occlusionStatus warning:@"右眼有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kRightEyeHasOcclusion", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionNose:
-                [self warningStatus:occlusionStatus warning:@"鼻子有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kNoisyNose", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionMouth:
-                [self warningStatus:occlusionStatus warning:@"嘴巴有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kMouthBlocked", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionLeftContour:
-                [self warningStatus:occlusionStatus warning:@"左脸颊有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLeftCheekHasOcclusion", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionRightContour:
-                [self warningStatus:occlusionStatus warning:@"右脸颊有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kRightCheekHasOcclusion", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeOcclusionChinCoutour:
-                [self warningStatus:occlusionStatus warning:@"下颚有遮挡"];
+                [self warningStatus:occlusionStatus warning:NSLocalizedString(@"kLowerJawHasOcclusion", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeTooClose:
-                [self warningStatus:CommonStatus warning:@"手机拿远一点"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kTakeLonger", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeTooFar:
-                [self warningStatus:CommonStatus warning:@"手机拿近一点"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kTakeCloser", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeBeyondPreviewFrame:
-                [self warningStatus:CommonStatus warning:@"把脸移入框内"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kMoveIntoTheBox", nil)];
                 [self singleActionSuccess:false];
                 break;
             case DetectRemindCodeVerifyInitError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyDecryptError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyInfoFormatError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyExpired:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyMissRequiredInfo:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyInfoCheckError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyLocalFileError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeVerifyRemoteDataError:
-                [self warningStatus:CommonStatus warning:@"验证失败"];
+                [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeTimeout: {
 //                dispatch_async(dispatch_get_main_queue(), ^{

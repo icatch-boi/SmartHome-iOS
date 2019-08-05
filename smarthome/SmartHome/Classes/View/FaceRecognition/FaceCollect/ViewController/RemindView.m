@@ -26,7 +26,7 @@
         UILabel * remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(remindImage.frame)+15, CGRectGetMinY(remindImage.frame), 120, CGRectGetHeight(remindImage.frame))];
         remindLabel.textColor = OutSideColor;
         remindLabel.font = [UIFont systemFontOfSize:22];
-        remindLabel.text = @"请正对手机";
+        remindLabel.text = NSLocalizedString(@"kPleaseFaceThePhone", nil);
         [self addSubview:remindLabel];
     }
     return self;

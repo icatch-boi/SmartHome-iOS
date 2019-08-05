@@ -228,7 +228,7 @@
 }
 
 - (void)refreshToken:(RequestCompletionBlock)completion {
-    if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
+    if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil || self.userAccount.id == nil) {
         if (completion) {
             Error *error = [[Error alloc] initWithErrorCode:-1024 andName:@"refreshToken error" andError:@"refreshToken parameter invalid" andErrorDescription:@"access_token or refresh_token is nil."];
             completion(NO, error);

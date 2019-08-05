@@ -173,7 +173,7 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     int result = [info[@"result"] intValue];
     switch (result) {
         case 0:
-            self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), @"陌生人", deviceName];
+            self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), deviceName];
             [self strangerHandleWithInfo:info deviceName:deviceName];
             break;
             

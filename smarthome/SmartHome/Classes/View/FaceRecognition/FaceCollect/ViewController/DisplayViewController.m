@@ -50,6 +50,8 @@ static const CGFloat kMarginTop = 140;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackClick:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(exitFaceCollect)];
     self.addFaceButton.hidden = YES;
+    [self.addFaceButton setTitle:NSLocalizedString(@"kAddFaces", nil) forState:UIControlStateNormal];
+    [self.addFaceButton setTitle:NSLocalizedString(@"kAddFaces", nil) forState:UIControlStateHighlighted];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +83,7 @@ static const CGFloat kMarginTop = 140;
 //    }
     
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
-    [SVProgressHUD showWithStatus:@"正在裁剪人脸图片，请稍后..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kCropFaceimage", nil)];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSString *key in self.images.keyEnumerator) {
@@ -205,7 +207,7 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (void)showGetFaceDataFailedAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"采集的人脸图片不完整（总共需要五个方向的数据，分别为正脸及左、右、上、下四个侧面），请重新采集。" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kFaceimageisIncompleteDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self returnBackClick:nil];
     }]];
@@ -215,7 +217,7 @@ static const CGFloat kMarginTop = 140;
 
 - (IBAction)addFaceClick:(id)sender {
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
-    [SVProgressHUD showWithStatus:@"正在获取可用faceid，请稍后..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kGetFaceID", nil)];
     
     WEAK_SELF(self);
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
@@ -228,12 +230,12 @@ static const CGFloat kMarginTop = 140;
                 if (error != nil) {
                     SHLogError(SHLogTagAPP, @"getAvailableFaceid failed, error: %@", error);
                     
-                    [self showUploadFailedAlertView:[NSString stringWithFormat:@"获取faceid失败, error: %@", error.error_description]];
+                    [self showUploadFailedAlertView:[NSString stringWithFormat:NSLocalizedString(@"kGetFaceIDFailed", nil), error.error_description]];
                 } else {
                     SHLogInfo(SHLogTagAPP, @"result: %@", result);
                     NSString *faceid = [result[@"faceid"] stringValue];
                     if (faceid == nil) {
-                        [self showUploadFailedAlertView:@"faceid为空"];
+                        [self showUploadFailedAlertView:NSLocalizedString(@"kFaceIDEmpty", nil)];
                     } else {
                         self.faceid = faceid;
                         [self showSetNameAlertView];
@@ -253,7 +255,7 @@ static const CGFloat kMarginTop = 140;
 
 - (void)uploadHandlerWithName:(NSString *)name {
     self.faceName = name;
-    [SVProgressHUD showWithStatus:@"正在添加人脸数据，请稍后..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kAddingFaceData", nil)];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
 #ifdef SERIAL_WAY
@@ -289,13 +291,13 @@ static const CGFloat kMarginTop = 140;
         } else {
             SHLogError(SHLogTagAPP, @"addFaceData failed, uploadSuccess: %d, setupSuccess: %d", self.uploadSuccess, self.setupSuccess);
             
-            NSString *notice = @"添加人脸数据失败";
+            NSString *notice = NSLocalizedString(@"kAddFaceDataFailed", nil);
             if (self.setupSuccess == true) {
-                notice = @"上传人脸数据失败";
+                notice = NSLocalizedString(@"kUploadFaceDataFailed", nil);
                 
                 [[SHFaceDataManager sharedFaceDataManager] deleteFacesWithFaceIDs:@[self.faceid]];
             } else if (self.uploadSuccess == true) {
-                notice = @"添加人脸数据到设备失败";
+                notice = NSLocalizedString(@"kAddFaceDataToFWFailed", nil);
                 
                 [self uploadFaceDataFailedHandle];
             }
@@ -325,7 +327,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
             [SVProgressHUD dismiss];
 #endif
-            [self showUploadFailedAlertView:@"人脸集合数据不存在"];
+            [self showUploadFailedAlertView:NSLocalizedString(@"kFaceDataSetNotExist", nil)];
             [self uploadFaceDataFailedHandle];
         });
         
@@ -344,7 +346,7 @@ static const CGFloat kMarginTop = 140;
         if (isSuccess == NO) {
             SHLogError(SHLogTagAPP, @"addFaceData failed");
             
-            [self showUploadFailedAlertView:@"添加人脸数据到设备失败"];
+            [self showUploadFailedAlertView:NSLocalizedString(@"kAddFaceDataToFWFailed", nil)];
             [self uploadFaceDataFailedHandle];
         } else {
             [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), self.faceName]];
@@ -371,7 +373,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
             [SVProgressHUD dismiss];
 #endif
-            [self showUploadFailedAlertView:@"人脸数据不存在"];
+            [self showUploadFailedAlertView:NSLocalizedString(@"kFaceDataNotExist", nil)];
         });
         
 #ifndef SERIAL_WAY
@@ -388,7 +390,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
                 [SVProgressHUD dismiss];
 #endif
-                [self showUploadFailedAlertView:[NSString stringWithFormat:@"上传人脸数据失败, error: %@", error.error_description]];
+                [self showUploadFailedAlertView:[NSString stringWithFormat:NSLocalizedString(@"kUploadFaceDataFailedDes", nil), error.error_description]];
             });
 #ifndef SERIAL_WAY
             dispatch_group_leave(self.addFaceGroup);
@@ -416,7 +418,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
             [SVProgressHUD dismiss];
 #endif
-            [self showUploadFailedAlertView:@"人脸集合数据不存在"];
+            [self showUploadFailedAlertView:NSLocalizedString(@"kFaceDataSetNotExist", nil)];
             [self uploadFaceDataFailedHandle];
         });
 
@@ -437,7 +439,7 @@ static const CGFloat kMarginTop = 140;
             if (error != nil) {
                 SHLogError(SHLogTagAPP, @"uploadFaceDataSet failed, error: %@", error.error_description);
                 
-                [self showUploadFailedAlertView:[NSString stringWithFormat:@"上传人脸集合数据失败，error: %@", error.error_description]];
+                [self showUploadFailedAlertView:[NSString stringWithFormat:NSLocalizedString(@"kUplaodFaceDataSetFailedDes", nil), error.error_description]];
                 [self uploadFaceDataFailedHandle];
             } else {
                 [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:NSLocalizedString(@"kAddFacePictureSuccess", nil), name]];
@@ -459,7 +461,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
                 [SVProgressHUD dismiss];
 #endif
-                [self showUploadFailedAlertView:[NSString stringWithFormat:@"上传人脸集合数据失败，error: %@", error.error_description]];
+                [self showUploadFailedAlertView:[NSString stringWithFormat:NSLocalizedString(@"kUplaodFaceDataSetFailedDes", nil), error.error_description]];
             });
 
             [self uploadFaceDataFailedHandle];

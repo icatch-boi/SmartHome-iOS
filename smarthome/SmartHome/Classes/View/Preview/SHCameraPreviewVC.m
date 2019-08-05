@@ -1367,7 +1367,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         switch (result) {
             case 0: {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), @"陌生人", self.shCameraObj.camera.cameraName];
+                    _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
                 });
                 [self strangerHandle];
                 break;
@@ -1721,7 +1721,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         }
     } else {
-#if 0
+#if 1
         [self connectSuccessHandler];
 #else
         _notification ? [self connectSuccessHandler] : [self checkFaceDataNeedSync];
