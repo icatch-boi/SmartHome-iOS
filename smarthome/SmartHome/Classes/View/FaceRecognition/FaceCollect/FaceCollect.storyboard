@@ -101,6 +101,52 @@
             </objects>
             <point key="canvasLocation" x="2764" y="834.33283358320841"/>
         </scene>
+        <!--Stranger View Controller-->
+        <scene sceneID="RB7-GX-ooC">
+            <objects>
+                <viewController storyboardIdentifier="SHStrangerViewController" id="wPP-Jy-Mn6" customClass="SHStrangerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pdZ-7T-vd6"/>
+                        <viewControllerLayoutGuide type="bottom" id="1e6-qF-ETZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LCQ-0g-aqq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FJk-BT-Eyg">
+                                <rect key="frame" x="80" y="103.5" width="160" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="FJk-BT-Eyg" secondAttribute="height" multiplier="1:1" id="AQx-Tf-b3b"/>
+                                    <constraint firstAttribute="width" constant="160" id="pYh-uG-4Ak"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fOU-7Z-b1B">
+                                <rect key="frame" x="24" y="394" width="272" height="56"/>
+                                <state key="normal" title="添加人脸" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
+                                <connections>
+                                    <action selector="addFaceClick:" destination="wq2-HA-Sj1" eventType="touchUpInside" id="6Ln-BD-dOh"/>
+                                    <action selector="addFaceClick:" destination="wPP-Jy-Mn6" eventType="touchUpInside" id="lnT-Cd-7jL"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="1e6-qF-ETZ" firstAttribute="top" secondItem="fOU-7Z-b1B" secondAttribute="bottom" constant="30" id="VI2-eI-Vui"/>
+                            <constraint firstItem="fOU-7Z-b1B" firstAttribute="centerX" secondItem="LCQ-0g-aqq" secondAttribute="centerX" id="W0C-Ud-dzK"/>
+                            <constraint firstItem="FJk-BT-Eyg" firstAttribute="centerX" secondItem="LCQ-0g-aqq" secondAttribute="centerX" id="WhV-ZW-jXw"/>
+                            <constraint firstItem="FJk-BT-Eyg" firstAttribute="centerY" secondItem="LCQ-0g-aqq" secondAttribute="centerY" multiplier="0.764:1" id="lFJ-hF-Lki"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addFaceButton" destination="fOU-7Z-b1B" id="X8e-Iz-AEg"/>
+                        <outlet property="faceImageView" destination="FJk-BT-Eyg" id="jKj-lq-Nxp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gQc-08-eN7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2764" y="1566"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ric-xK-cPl">
             <objects>

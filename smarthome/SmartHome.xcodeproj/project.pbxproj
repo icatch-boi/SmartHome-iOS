@@ -180,6 +180,7 @@
 		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */; };
+		38DA5D9B22F83C5C00BF30AB /* SHStrangerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38DA5D9A22F83C5C00BF30AB /* SHStrangerViewController.m */; };
 		38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */; };
 		38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFEA20A3F5AE003004E0 /* SHCameraObjManager.m */; };
 		38E5C14F20A3F5AF003004E0 /* SHCamera.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFED20A3F5AE003004E0 /* SHCamera.xcdatamodeld */; };
@@ -736,6 +737,9 @@
 		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
+		38DA5D9922F83C5C00BF30AB /* SHStrangerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHStrangerViewController.h; sourceTree = "<group>"; };
+		38DA5D9A22F83C5C00BF30AB /* SHStrangerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHStrangerViewController.m; sourceTree = "<group>"; };
+		38DA5DE622FA6F5900BF30AB /* FaceCollectCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceCollectCommon.h; sourceTree = "<group>"; };
 		38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHHomeTableViewController.m; sourceTree = "<group>"; };
 		38E5BFEA20A3F5AE003004E0 /* SHCameraObjManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHCameraObjManager.m; sourceTree = "<group>"; };
 		38E5BFEB20A3F5AE003004E0 /* SHShareCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHShareCamera.h; sourceTree = "<group>"; };
@@ -1882,6 +1886,7 @@
 				38BFB25822D85E8000AA3ABC /* Utils */,
 				38BFB25022D85E4900AA3ABC /* Core */,
 				38BFB25422D85E5A00AA3ABC /* Model */,
+				38DA5DE622FA6F5900BF30AB /* FaceCollectCommon.h */,
 			);
 			path = FaceCollect;
 			sourceTree = "<group>";
@@ -1926,6 +1931,8 @@
 				38BFB26522D85EE700AA3ABC /* LivenessViewController.m */,
 				38BFB25E22D85EE700AA3ABC /* DisplayViewController.h */,
 				38BFB26622D85EE700AA3ABC /* DisplayViewController.m */,
+				38DA5D9922F83C5C00BF30AB /* SHStrangerViewController.h */,
+				38DA5D9A22F83C5C00BF30AB /* SHStrangerViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -3376,6 +3383,7 @@
 				38BFB25B22D85E8000AA3ABC /* ImageUtils.m in Sources */,
 				38E5C2EA20A3F7FA003004E0 /* SHFile.m in Sources */,
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
+				38DA5D9B22F83C5C00BF30AB /* SHStrangerViewController.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
 				38A38FA722C0CE7100E831E3 /* SHAccountSettingViewModelItem.m in Sources */,
 				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,

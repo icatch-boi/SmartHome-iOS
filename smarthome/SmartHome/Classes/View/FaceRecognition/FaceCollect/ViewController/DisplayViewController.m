@@ -11,12 +11,13 @@
 #import "SVProgressHUD.h"
 #import "FRDCommonHeader.h"
 #import "SHFaceDataManager.h"
+#import "FaceCollectCommon.h"
 
 //#define SERIAL_WAY
 // sensor 0237: 716*512 --> 224*224
 // sensor 4689: 684*512 --> 224*224
-static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
-static const CGFloat kUploadImageWidth = 224;
+//static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
+//static const CGFloat kUploadImageWidth = 224;
 static const CGFloat kMarginTop = 140;
 
 @interface DisplayViewController ()
@@ -31,7 +32,7 @@ static const CGFloat kMarginTop = 140;
 @property (nonatomic, strong) NSMutableDictionary *faceImages;
 @property (nonatomic, copy) NSString *faceid;
 @property (nonatomic, assign) BOOL collectFailed;
-@property (nonatomic, strong) NSString *faceName;
+@property (nonatomic, copy) NSString *faceName;
 @property (nonatomic, strong) dispatch_group_t addFaceGroup;
 @property (nonatomic, strong) dispatch_queue_t addFaceQueue;
 @property (nonatomic, assign) BOOL uploadSuccess;
@@ -46,12 +47,20 @@ static const CGFloat kMarginTop = 140;
     // Do any additional setup after loading the view.
     [self updateImages:self.images];
     [self setupGUI];
+    [self setupLocalizedString];
 }
 
 - (void)setupGUI {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackClick:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(exitFaceCollect)];
     self.addFaceButton.hidden = YES;
+    
+    [SHTool configureAppThemeWithController:self.navigationController];
+}
+
+- (void)setupLocalizedString {
+    self.title = NSLocalizedString(@"kAddFaces", nil);
+    
     [self.addFaceButton setTitle:NSLocalizedString(@"kAddFaces", nil) forState:UIControlStateNormal];
     [self.addFaceButton setTitle:NSLocalizedString(@"kAddFaces", nil) forState:UIControlStateHighlighted];
 }
@@ -195,7 +204,7 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (UIImage *)compressImage:(UIImage *)image {
-    CGSize size = CGSizeMake(kUploadImageWidth, kUploadImageWidth);
+    CGSize size = CGSizeMake(kCompressImageWidth, kCompressImageWidth);
     
     UIGraphicsBeginImageContext(size);
     

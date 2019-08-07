@@ -1394,8 +1394,18 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
             
             [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
+            [weakself setupStrangerURLWithFaceInfo:faceInfo];
         }
     }];
+}
+
+- (void)setupStrangerURLWithFaceInfo:(FRDFaceInfo *)faceInfo {
+    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+    
+    if (faceInfo.url.length > 0) {
+        temp[@"attachment"] = faceInfo.url;
+        _notification = temp.copy;
+    }
 }
 
 - (void)recognitionSuccessHandle {
@@ -1443,8 +1453,20 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
                 });
+                [weakself setupNotificationImage:image];
             }
         }];
+    }
+}
+
+- (void)setupNotificationImage:(UIImage *)image {
+    if ([_notification.allKeys containsObject:@"result"]) {
+        int result = [_notification[@"result"] intValue];
+        if (result == 0) {
+            NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+            temp[@"image"] = UIImageJPEGRepresentation(image, 1.0);
+            _notification = temp.copy;
+        }
     }
 }
 

@@ -141,6 +141,7 @@ static NSString * const kAlbumStoryboardName = @"Album";
 static NSString * const kMainStoryboardName = @"XJMain";
 static NSString * const kMessageCenterStoryboardName = @"MessageCenter";
 static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
+static NSString * const kFaceCollect = @"FaceCollect";
 
 #pragma mark - RegularExpression
 static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";

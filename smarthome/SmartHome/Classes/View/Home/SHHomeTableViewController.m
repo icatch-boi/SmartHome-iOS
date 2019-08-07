@@ -44,6 +44,7 @@
 #import "FRDAddFaceCollectionVC.h"
 #import "SHAddDeviceView.h"
 #import "SHFaceDataManager.h"
+#import "SHStrangerViewController.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -769,6 +770,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
     NSArray *temp = [self parseFacesRect:notification[@"faces"]];
     
+#if 0
     if (notification && [notification.allKeys containsObject:@"attachment"]) {
         NSString *urlStr = notification[@"attachment"];
         NSURL *url = [[NSURL alloc] initWithString:urlStr];
@@ -790,6 +792,42 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             }];
         }
     }
+#else
+    if (notification == nil) {
+        SHLogError(SHLogTagAPP, @"Recv notification is empty.");
+        return;
+    }
+    
+    if ([notification.allKeys containsObject:@"image"]) {
+        NSData *data = notification[@"image"];
+        UIImage *image = [[UIImage alloc] initWithData:data];
+            
+        if (image != nil) {
+            SHLogInfo(SHLogTagAPP, @"Face image: %@", image);
+            [self enterAddFaceViewWithFaceImage:image facesRect:temp];
+        }
+    } else if ([notification.allKeys containsObject:@"attachment"]) {
+        NSString *urlStr = notification[@"attachment"];
+        NSURL *url = [[NSURL alloc] initWithString:urlStr];
+        
+        if (url) {
+            WEAK_SELF(self);
+            [self.progressHUD showProgressHUDWithMessage:nil];
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                
+                STRONG_SELF(self);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressHUD hideProgressHUD:YES];
+                    
+                    if (image) {
+                        SHLogInfo(SHLogTagAPP, @"Face image: %@", image);
+                        [self enterAddFaceViewWithFaceImage:image facesRect:temp];
+                    }
+                });
+            }];
+        }
+    }
+#endif
 }
 
 - (NSArray *)parseFacesRect:(NSArray *)facesRectArray {
@@ -813,11 +851,16 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterAddFaceViewWithFaceImage:(UIImage *)image facesRect:(NSArray *)facesRectArray {
+#if 0
     FRDAddFaceCollectionVC *vc = [FRDAddFaceCollectionVC addFaceCollectionVC];
     vc.originalImage = image;
     vc.facesRectArray = facesRectArray;
 
     [self.navigationController pushViewController:vc animated:YES];
+#else
+    SHStrangerViewController *vc = [SHStrangerViewController strangerViewControllerWithFaceImage:image];
+    [self.navigationController pushViewController:vc animated:YES];
+#endif
 }
 
 - (NSDictionary *)getFaceNotification {
