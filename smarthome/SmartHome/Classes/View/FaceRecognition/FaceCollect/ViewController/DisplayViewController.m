@@ -131,6 +131,13 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (UIImage *)recognitionFaces:(UIImage *)imageInput {
+    if (imageInput == nil) {
+        self.collectFailed = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showGetFaceDataFailedAlertView];
+        });
+    }
     UIImage *outputImg = nil;
     CIContext * context = [CIContext contextWithOptions:nil];
     
@@ -181,13 +188,13 @@ static const CGFloat kMarginTop = 140;
     }
     
     NSLog(@"output image: %@", outputImg);
-    if (outputImg == nil) {
-        self.collectFailed = YES;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showGetFaceDataFailedAlertView];
-        });
-    }
+//    if (outputImg == nil) {
+//        self.collectFailed = YES;
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self showGetFaceDataFailedAlertView];
+//        });
+//    }
     
     return outputImg;
 }

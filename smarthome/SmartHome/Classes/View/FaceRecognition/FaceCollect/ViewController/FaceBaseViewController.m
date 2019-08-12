@@ -12,7 +12,7 @@
 #import "ImageUtils.h"
 #import "RemindView.h"
 
-#define scaleValue 0.85
+#define scaleValue 0.75
 
 #define ScreenRect [UIScreen mainScreen].bounds
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
@@ -159,7 +159,7 @@
     [[FaceSDKManager sharedInstance] setBlurThreshold:0.4];
     
     // 设置头部姿态角度
-    [[FaceSDKManager sharedInstance] setEulurAngleThrPitch:10 yaw:10 roll:0];
+    [[FaceSDKManager sharedInstance] setEulurAngleThrPitch:5 yaw:10 roll:10];
     
     // 设置是否进行人脸图片质量检测
     [[FaceSDKManager sharedInstance] setIsCheckQuality:YES];

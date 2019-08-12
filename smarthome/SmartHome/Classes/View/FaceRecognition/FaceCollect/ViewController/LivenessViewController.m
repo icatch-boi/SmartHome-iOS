@@ -33,17 +33,21 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     [[IDLFaceLivenessManager sharedInstance] startInitial];
     self.firstCollect = YES;
     LivingConfigModel* model = [LivingConfigModel sharedInstance];
     [[IDLFaceLivenessManager sharedInstance] livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
     self.navigationController.navigationBarHidden = true;
+    [[IDLFaceDetectionManager sharedInstance] startInitial];
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [IDLFaceLivenessManager.sharedInstance reset];
+    [IDLFaceDetectionManager.sharedInstance reset];
+
+    self.mainImage = nil;
 }
 
 - (void)onAppBecomeActive {
@@ -54,6 +58,7 @@
 - (void)onAppWillResignAction {
     [super onAppWillResignAction];
     [IDLFaceLivenessManager.sharedInstance reset];
+    [IDLFaceDetectionManager.sharedInstance reset];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,6 +86,7 @@
     [[IDLFaceLivenessManager sharedInstance] livenessStratrgyWithImage:image previewRect:self.previewRect detectRect:self.detectRect completionHandler:^(NSDictionary *images, LivenessRemindCode remindCode) {
         switch (remindCode) {
             case LivenessRemindCodeOK: {
+                NSLog(@"faceProcesss ok!");
                 NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:images];
                 weakSelf.hasFinished = YES;
                 [self warningStatus:CommonStatus warning:NSLocalizedString(@"kGood", nil)];
@@ -90,7 +96,13 @@
                     UIImage* bestImage = [UIImage imageWithData:data];
                     NSLog(@"bestImage = %@",bestImage);
 //                    dict[@"bestImage"] = @[[weakSelf imageFromImage:weakSelf.mainImage inRect:CGRectMake(0, 0, weakSelf.mainImage.size.height, weakSelf.mainImage.size.height * kImageWHScale)]];
-                    dict[@"bestImage"] = weakSelf.mainImage;
+                    if (weakSelf.mainImage != nil) {
+                        dict[@"bestImage"] = weakSelf.mainImage;
+                    }
+                } else {
+                    if (weakSelf.mainImage != nil) {
+                        dict[@"bestImage"] = weakSelf.mainImage;
+                    }
                 }
                 if (images[@"liveEye"] != nil) {
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:images[@"liveEye"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
@@ -106,25 +118,33 @@
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:images[@"yawRight"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                     UIImage* yawRight = [UIImage imageWithData:data];
                     NSLog(@"yawRight = %@",yawRight);
-                    dict[@"yawRight"] = yawRight;
+                    if (yawRight != nil) {
+                        dict[@"yawRight"] = yawRight;
+                    }
                 }
                 if (images[@"yawLeft"] != nil) {
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:images[@"yawLeft"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                     UIImage* yawLeft = [UIImage imageWithData:data];
                     NSLog(@"yawLeft = %@",yawLeft);
-                    dict[@"yawLeft"] = yawLeft;
+                    if (yawLeft != nil) {
+                        dict[@"yawLeft"] = yawLeft;
+                    }
                 }
                 if (images[@"pitchUp"] != nil) {
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:images[@"pitchUp"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                     UIImage* pitchUp = [UIImage imageWithData:data];
                     NSLog(@"pitchUp = %@",pitchUp);
-                    dict[@"pitchUp"] = pitchUp;
+                    if (pitchUp != nil) {
+                        dict[@"pitchUp"] = pitchUp;
+                    }
                 }
                 if (images[@"pitchDown"] != nil) {
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:images[@"pitchDown"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                     UIImage* pitchDown = [UIImage imageWithData:data];
                     NSLog(@"pitchDown = %@",pitchDown);
-                    dict[@"pitchDown"] = pitchDown;
+                    if (pitchDown != nil) {
+                        dict[@"pitchDown"] = pitchDown;
+                    }
                 }
 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -132,7 +152,7 @@
                     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"FaceCollect" bundle:nil];
                     UINavigationController *nav = (UINavigationController *)[sb instantiateViewControllerWithIdentifier:@"DisplayViewControllerID"];
                     DisplayViewController *vc = (DisplayViewController *)nav.topViewController;
-                    vc.images = dict;
+                    vc.images = dict.copy;
 //                    [self presentViewController:nav animated:YES completion:nil];
                     [self.navigationController pushViewController:vc animated:YES];
                 });
@@ -267,17 +287,18 @@
                 [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case LivenessRemindCodeTimeout: {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"ActionTimeOut", nil) preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                        NSLog(@"知道啦");
-                    }];
-                    [alert addAction:action];
-                    UIViewController* fatherViewController = weakSelf.presentingViewController;
-                    [weakSelf dismissViewControllerAnimated:YES completion:^{
-                        [fatherViewController presentViewController:alert animated:YES completion:nil];
-                    }];
-                });
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"ActionTimeOut", nil) preferredStyle:UIAlertControllerStyleAlert];
+//                    UIAlertAction* action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                        NSLog(@"知道啦");
+//                    }];
+//                    [alert addAction:action];
+//                    UIViewController* fatherViewController = weakSelf.presentingViewController;
+//                    [weakSelf dismissViewControllerAnimated:YES completion:^{
+//                        [fatherViewController presentViewController:alert animated:YES completion:nil];
+//                    }];
+//                });
+                NSLog(@"超时啦 %d", __LINE__);
                 break;
             }
             case LivenessRemindCodeConditionMeet: {
@@ -297,6 +318,7 @@
         switch (remindCode) {
             case DetectRemindCodeOK: {
                 //                    weakSelf.hasFinished = YES;
+                NSLog(@"faceDetect ok!");
                 self.firstCollect = NO;
                 [self warningStatus:CommonStatus warning:NSLocalizedString(@"kGood", nil)];
                 [self singleActionSuccess:true];
