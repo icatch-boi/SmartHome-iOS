@@ -56,6 +56,7 @@
 }
 
 - (void)displayPicture {
+#if 0
     if (self.faceInfo.faceImage != nil) {
         self.faceImageView.image = self.faceInfo.faceImage;
         return;
@@ -82,6 +83,26 @@
             }
         });
     }];
+#else
+    self.faceImageView.image = [UIImage imageNamed:@"portrait"];
+    
+    [SVProgressHUD show];
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
+    
+    WEAK_SELF(self);
+    [self.faceInfo getFaceImageWithCompletion:^(UIImage * _Nullable faceImage) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+
+            if (faceImage == nil) {
+                [weakself getImageFailedHandler];
+            } else {
+                self.faceImageView.image = faceImage;
+            }
+        });
+    }];
+#endif
 }
 
 - (void)getImageFailedHandler {

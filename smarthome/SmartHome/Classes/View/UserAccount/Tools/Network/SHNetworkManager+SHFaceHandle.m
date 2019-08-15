@@ -28,6 +28,7 @@
 #import "SHNetworkManager+SHFaceHandle.h"
 #import "SHUserAccount.h"
 #import <AFNetworking/AFNetworking.h>
+#import "FaceCollectCommon.h"
 
 #define kBOUNDARY @"abc123"
 
@@ -553,6 +554,7 @@
     NSString *urlString = [self requestURLString:kFaceInfo];
     
     [self tokenRequestWithMethod:ZJRequestMethodDELETE opertionType:ZJOperationTypeFaces urlString:urlString parametes:parameters finished:finished];
+    [[ZJImageCache sharedImageCache] removeImageForKey:FaceCollectImageKey(self.userAccount.id, faceid) completion:nil];
 }
 
 - (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {

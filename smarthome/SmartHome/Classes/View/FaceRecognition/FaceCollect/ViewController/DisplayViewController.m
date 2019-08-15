@@ -305,6 +305,7 @@ static const CGFloat kMarginTop = 140;
             NSString *notificationName = kReloadFacesInfoNotification;
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil];
             
+            [[ZJImageCache sharedImageCache] storeImage:self.images[@"bestImage"] forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, self.faceid) completion:nil];
             [self exitFaceCollect];
         } else {
             SHLogError(SHLogTagAPP, @"addFaceData failed, uploadSuccess: %d, setupSuccess: %d", self.uploadSuccess, self.setupSuccess);

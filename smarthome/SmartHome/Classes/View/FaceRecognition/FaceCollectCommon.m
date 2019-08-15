@@ -1,4 +1,4 @@
-// FaceCollectCommon.h
+// NSObject+FaceCollectCommon.m
 
 /**************************************************************************
  *
@@ -22,20 +22,15 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/8/7 10:30 AM.
+ // Created by zj on 2019/8/14 3:42 PM.
     
 
-#ifndef FaceCollectCommon_h
-#define FaceCollectCommon_h
+#import "FaceCollectCommon.h"
 
-#import <UIKit/UIKit.h>
-// sensor 0237: 716*512 --> 224*224
-// sensor 4689: 684*512 --> 224*224
-static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
-static const CGFloat kCompressImageWidth = 224;
-
-#import "SHUserAccount.h"
-
-FOUNDATION_EXPORT NSString * _Nullable FaceCollectImageKey(NSString * _Nonnull userID, NSString * _Nonnull faceID);
-
-#endif /* FaceCollectCommon_h */
+NSString * _Nullable FaceCollectImageKey(NSString * _Nonnull userID, NSString * _Nonnull faceID) {
+    if (userID == nil || faceID == nil) {
+        return nil;
+    }
+    
+    return [userID stringByAppendingFormat:@"_%@.jpg", faceID];
+}

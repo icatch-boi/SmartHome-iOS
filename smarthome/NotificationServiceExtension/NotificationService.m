@@ -309,8 +309,33 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), name, deviceName];
     }
     
+#if 0
     [self loadAttachmentForUrlString:faceInfo.url completionHandle:^{
         self.contentHandler(self.bestAttemptContent);
+    }];
+#else
+    [self loacAttachmentWithFaceInfo:faceInfo completionHandle:^{
+        self.contentHandler(self.bestAttemptContent);
+    }];
+#endif
+}
+
+- (void)loacAttachmentWithFaceInfo:(SHFaceInfo *)faceInfo completionHandle:(void(^)(void))completionHandler {
+    
+    [faceInfo getFaceImageWithCompletion:^(NSString * _Nullable faceImagePath) {
+        if (faceImagePath != nil) {
+            NSError *attachmentError = nil;
+            UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:@"myAttachment" URL:[NSURL fileURLWithPath:faceImagePath] options:nil error:&attachmentError];
+            
+            if (attachmentError) {
+                NSLog(@"%@", attachmentError.localizedDescription);
+            } else {
+                self.bestAttemptContent.attachments = @[attachment];
+                self.bestAttemptContent.launchImageName = faceImagePath.lastPathComponent;
+            }
+        }
+        
+        completionHandler();
     }];
 }
 

@@ -79,7 +79,7 @@ NSLog((@"sdk %@: " fmt @" => [ %@ ]"), _level, ##__VA_ARGS__, info); \
 #define kAppCleanSpaceAlertTag (kAppAlertTag + 2)
 #define kAppFactoryResetAlertTag (kAppAlertTag + 3)
 
-const int UNDEFINED_NUM = 0xffff;
+//const int UNDEFINED_NUM = 0xffff;
 
 #define HW_DECODE_H264
 #define USE_SYSTEM_IOS7_IMPLEMENTATION 0

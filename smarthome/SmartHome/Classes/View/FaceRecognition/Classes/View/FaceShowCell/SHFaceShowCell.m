@@ -49,7 +49,7 @@ static const CGFloat kMagin = 2;
     _faceInfo = faceInfo;
     
     self.textLabel.text = faceInfo.name;
-    
+#if 0
     UIImage *icon = faceInfo.faceImage;
     CGFloat iconH = CGRectGetHeight(self.frame) - 2 * kMagin;
     CGSize iconSize = CGSizeMake(iconH, iconH);
@@ -69,6 +69,19 @@ static const CGFloat kMagin = 2;
             }
         }];
     }
+#else
+    self.imageView.image = [UIImage imageNamed:@"portrait"];
+    
+    CGFloat iconH = CGRectGetHeight(self.frame) - 2 * kMagin;
+    CGSize iconSize = CGSizeMake(iconH, iconH);
+    [faceInfo getFaceImageWithCompletion:^(UIImage * _Nullable faceImage) {
+        if (faceImage) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.imageView.image = [faceImage ic_cornerImageWithSize:iconSize backColor:self.backgroundColor radius:iconH * 0.5];
+            });
+        }
+    }];
+#endif
 }
 
 - (void)layoutSubviews {

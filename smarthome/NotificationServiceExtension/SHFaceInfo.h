@@ -29,6 +29,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^FaceInfoGetFaceImageCompletionBlock)(NSString * _Nullable faceImagePath);
+
 @interface SHFaceInfo : NSObject
 
 @property (nonatomic, copy, readonly) NSString *name;
@@ -37,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDict:(NSDictionary *)dict;
 + (instancetype)faceInfoWithDict:(NSDictionary *)dict;
+
+- (void)getFaceImageWithCompletion:(FaceInfoGetFaceImageCompletionBlock)completion;
 
 @end
 

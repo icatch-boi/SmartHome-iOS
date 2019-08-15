@@ -1443,6 +1443,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)setupPresentViewPortraitWithFaceInfo:(FRDFaceInfo *)faceInfo {
+#if 0
     NSURL *url = [[NSURL alloc] initWithString:faceInfo.url];
     
     if (url) {
@@ -1457,6 +1458,18 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         }];
     }
+#else
+    WEAK_SELF(self);
+
+    [faceInfo getFaceImageWithCompletion:^(UIImage * _Nullable faceImage) {
+        if (faceImage != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:faceImage rangeRect:weakself.presentView.portraitImageView.bounds];
+            });
+            [weakself setupNotificationImage:faceImage];
+        }
+    }];
+#endif
 }
 
 - (void)setupNotificationImage:(UIImage *)image {
