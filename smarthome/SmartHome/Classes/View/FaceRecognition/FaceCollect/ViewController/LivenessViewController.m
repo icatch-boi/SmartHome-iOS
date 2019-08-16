@@ -326,7 +326,7 @@
                     NSData* data = [[NSData alloc] initWithBase64EncodedString:[images[@"bestImage"] lastObject] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                     UIImage* bestImage = [UIImage imageWithData:data];
                     NSLog(@"**** bestImage = %@",bestImage);
-                    weakSelf.mainImage = bestImage;
+                    weakSelf.mainImage = image; //bestImage;
                 }
 
                 break;
@@ -425,17 +425,17 @@
                 [self warningStatus:CommonStatus warning:NSLocalizedString(@"kVerificationFailed", nil)];
                 break;
             case DetectRemindCodeTimeout: {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"remind" message:@"超时" preferredStyle:UIAlertControllerStyleAlert];
-//                    UIAlertAction* action = [UIAlertAction actionWithTitle:@"知道啦" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//                        NSLog(@"知道啦 %d", __LINE__);
-//                    }];
-//                    [alert addAction:action];
-//                    UIViewController* fatherViewController = weakSelf.presentingViewController;
-//                    [weakSelf dismissViewControllerAnimated:YES completion:^{
-//                        [fatherViewController presentViewController:alert animated:YES completion:nil];
-//                    }];
-//                });
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"remind" message:@"超时" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction* action = [UIAlertAction actionWithTitle:@"知道啦" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        NSLog(@"知道啦 %d", __LINE__);
+                    }];
+                    [alert addAction:action];
+                    UIViewController* fatherViewController = weakSelf.presentingViewController;
+                    [weakSelf dismissViewControllerAnimated:YES completion:^{
+                        [fatherViewController presentViewController:alert animated:YES completion:nil];
+                    }];
+                });
                 NSLog(@"超时啦 %d", __LINE__);
                 break;
             }

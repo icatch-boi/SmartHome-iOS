@@ -12,11 +12,13 @@
 #import "ImageUtils.h"
 #import "RemindView.h"
 
-#define scaleValue 0.75
+#define scaleValue 0.9
 
 #define ScreenRect [UIScreen mainScreen].bounds
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
+
+static const CGFloat kBlurThreshold = 0.0000016;
 
 @interface FaceBaseViewController () <CaptureDataOutputProtocol>
 @property (nonatomic, readwrite, retain) VideoCaptureDevice *videoCapture;
@@ -156,7 +158,7 @@
     [[FaceSDKManager sharedInstance] setIllumThreshold:40];
     
     // 设置图像模糊阀值
-    [[FaceSDKManager sharedInstance] setBlurThreshold:0.4];
+    [[FaceSDKManager sharedInstance] setBlurThreshold:kBlurThreshold];
     
     // 设置头部姿态角度
     [[FaceSDKManager sharedInstance] setEulurAngleThrPitch:5 yaw:10 roll:10];
@@ -165,7 +167,7 @@
     [[FaceSDKManager sharedInstance] setIsCheckQuality:YES];
     
     // 设置超时时间
-    [[FaceSDKManager sharedInstance] setConditionTimeout:10];
+    [[FaceSDKManager sharedInstance] setConditionTimeout:30];
     
     // 设置人脸检测精度阀值
     [[FaceSDKManager sharedInstance] setNotFaceThreshold:0.6];

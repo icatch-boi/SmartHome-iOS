@@ -94,7 +94,7 @@
         dispatch_async(self.faceHandleQueue, ^{
             SHFaceDataHandler *handle = [[SHFaceDataHandler alloc] initWithCameraObject:obj];
             [handle addFaceWithFaceID:faceID faceData:faceData completion:^(NSDictionary<NSString *,NSNumber *> * _Nullable result) {
-                if (result != nil) {
+                if (result.count > 0) {
                     NSString *key = result.keyEnumerator.nextObject;
                     NSNumber *value = result[key];
                     if (value.intValue == 0) {

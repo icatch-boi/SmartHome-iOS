@@ -37,6 +37,7 @@ static const CGFloat kMagin = 2;
     [super awakeFromNib];
     // Initialization code
 
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

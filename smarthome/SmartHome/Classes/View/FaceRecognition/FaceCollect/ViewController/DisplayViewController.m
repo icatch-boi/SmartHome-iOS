@@ -12,6 +12,7 @@
 #import "FRDCommonHeader.h"
 #import "SHFaceDataManager.h"
 #import "FaceCollectCommon.h"
+#import <IDLFaceSDK/FaceSDKManager.h>
 
 //#define SERIAL_WAY
 // sensor 0237: 716*512 --> 224*224
@@ -37,6 +38,7 @@ static const CGFloat kMarginTop = 140;
 @property (nonatomic, strong) dispatch_queue_t addFaceQueue;
 @property (nonatomic, assign) BOOL uploadSuccess;
 @property (nonatomic, assign) BOOL setupSuccess;
+@property (nonatomic, strong) dispatch_queue_t imageHandleQ;
 
 @end
 
@@ -71,6 +73,12 @@ static const CGFloat kMarginTop = 140;
     self.navigationController.navigationBarHidden = false;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [SVProgressHUD dismiss];
+}
+
 - (void)updateImages:(NSDictionary *)images {
 //    if (images[@"bestImage"] != nil) {
 //        NSLog(@"-- bestImage: %@", images[@"bestImage"]);
@@ -96,8 +104,9 @@ static const CGFloat kMarginTop = 140;
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD showWithStatus:NSLocalizedString(@"kCropFaceimage", nil)];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSString *key in self.images.keyEnumerator) {
+#if 0
             UIImage *img = [self recognitionFaces:self.images[key]];
             if (img != nil) {
                 self.faceImages[key] = img;
@@ -106,7 +115,32 @@ static const CGFloat kMarginTop = 140;
             if (self.collectFailed == true) {
                 break;
             }
+#else
+            UIImage *tempImg = self.images[key];
+            NSLog(@"Original: %@ - %@", key, tempImg);
+            tempImg = [self cropFaceHandleWithImage:tempImg];
+            SHLogInfo(SHLogTagAPP, @"Crop: %@ - %@", key, tempImg);
+            if (tempImg != nil) {
+                self.faceImages[key] = tempImg;
+            } /*else {
+                if ([key isEqualToString:@"bestImage"]) {
+                    self.faceImages[key] = self.images[key];
+                }
+            }*/
+            
+            if (self.collectFailed == true) {
+                break;
+            }
+#endif
         }
+    
+    if (!((self.faceImages.count >= 1) && [self.faceImages.allKeys containsObject:@"bestImage"])) {
+        self.collectFailed = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showGetFaceDataFailedAlertView];
+        });
+    }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
@@ -118,7 +152,50 @@ static const CGFloat kMarginTop = 140;
             self.pitchDownImgView.image = self.faceImages[@"pitchDown"];
             self.addFaceButton.hidden = self.collectFailed;
         });
+//    });
+}
+
+- (UIImage *)cropFaceHandleWithImage:(UIImage *)originImg {
+    __block UIImage *cropImage;
+    
+    if (originImg == nil) {
+        self.collectFailed = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showGetFaceDataFailedAlertView];
+        });
+        
+        return cropImage;
+    }
+    
+    dispatch_sync(self.imageHandleQ, ^{
+        [[FaceSDKManager sharedInstance] detectWithImage:originImg completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
+            SHLogInfo(SHLogTagAPP, @"Face rect: %@, result: %d", NSStringFromCGRect(faceinfo.faceRect), resultCode);
+            
+            if (resultCode == ResultCodeOK) {
+                cropImage = [self imageFromImage:originImg inRect:[self adjustFaceRect:faceinfo.faceRect imageWidth:originImg.size.width]];
+                
+            }
+        }];
     });
+    
+    return cropImage;
+}
+
+- (CGRect)adjustFaceRect:(CGRect)faceRect imageWidth:(CGFloat)imageWidth {
+    NSLog(@"Orginal face rect: %@", NSStringFromCGRect(faceRect));
+    
+    CGFloat marginLeft = CGRectGetWidth(faceRect) * 0.8;
+    CGFloat width = CGRectGetWidth(faceRect) + marginLeft * 2;
+    width = MIN(width, imageWidth);
+    CGFloat height = width / kImageWHScale;
+    CGFloat marginTop = (height - CGRectGetHeight(faceRect)) * 0.8;
+    CGFloat x = CGRectGetMinX(faceRect) - marginLeft;
+    CGFloat y = CGRectGetMinY(faceRect) - marginTop;
+    CGRect rect = CGRectMake(MAX(0, x), MAX(0, y), width, height);
+    NSLog(@"Adjust face rect: %@", NSStringFromCGRect(rect));
+    
+    return rect;
 }
 
 - (IBAction)returnBackClick:(id)sender {
@@ -137,6 +214,8 @@ static const CGFloat kMarginTop = 140;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showGetFaceDataFailedAlertView];
         });
+        
+        return nil;
     }
     UIImage *outputImg = nil;
     CIContext * context = [CIContext contextWithOptions:nil];
@@ -305,7 +384,7 @@ static const CGFloat kMarginTop = 140;
             NSString *notificationName = kReloadFacesInfoNotification;
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil];
             
-            [[ZJImageCache sharedImageCache] storeImage:self.images[@"bestImage"] forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, self.faceid) completion:nil];
+            [[ZJImageCache sharedImageCache] storeImage:self.faceImages[@"bestImage"] /*self.images[@"bestImage"]*/ forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, self.faceid) completion:nil];
             [self exitFaceCollect];
         } else {
             SHLogError(SHLogTagAPP, @"addFaceData failed, uploadSuccess: %d, setupSuccess: %d", self.uploadSuccess, self.setupSuccess);
@@ -359,6 +438,7 @@ static const CGFloat kMarginTop = 140;
     SHLogInfo(SHLogTagAPP, @"Face data set length: %d", totalSize);
     
     [[SHFaceDataManager sharedFaceDataManager] addFaceDataWithFaceID:self.faceid faceData:temp.copy completion:^(BOOL isSuccess) {
+        SHLogInfo(SHLogTagAPP, @"addFaceDataToFW is success: %d", isSuccess);
 #ifdef SERIAL_WAY
         [SVProgressHUD dismiss];
         
@@ -385,7 +465,7 @@ static const CGFloat kMarginTop = 140;
 }
 
 - (void)uploadFaceDataWithName:(NSString *)name {
-    UIImage *img = self.images[@"bestImage"]; //[self compressImage:self.images[@"bestImage"]];
+    UIImage *img = self.faceImages[@"bestImage"]; //self.images[@"bestImage"]; //[self compressImage:self.images[@"bestImage"]];
     if (img == nil) {
         SHLogError(SHLogTagAPP, @"Main face is nil.");
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -415,6 +495,7 @@ static const CGFloat kMarginTop = 140;
             dispatch_group_leave(self.addFaceGroup);
 #endif
         } else {
+            SHLogInfo(SHLogTagAPP, @"uploadFaceData success.");
             [self uploadFaceDataSetWithName:name];
         }
     }];
@@ -488,6 +569,7 @@ static const CGFloat kMarginTop = 140;
 #ifdef SERIAL_WAY
             [self setupFaceDataToFW];
 #else
+            SHLogInfo(SHLogTagAPP, @"uploadFaceDataSet success.");
             self.uploadSuccess = true;
 #endif
         }
@@ -600,6 +682,14 @@ static const CGFloat kMarginTop = 140;
     }
     
     return _addFaceQueue;
+}
+
+- (dispatch_queue_t)imageHandleQ {
+    if (_imageHandleQ == nil) {
+        _imageHandleQ = dispatch_queue_create("com.icatchtek.FaceImageHandle", DISPATCH_QUEUE_SERIAL);
+    }
+    
+    return _imageHandleQ;
 }
 
 @end

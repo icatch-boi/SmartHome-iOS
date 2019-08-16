@@ -42,6 +42,7 @@
 - (void)setupGUI {
     self.title = self.faceInfo.name;
     self.faceImageView.backgroundColor = self.view.backgroundColor;
+    self.faceImageView.contentMode = UIViewContentModeScaleAspectFit;
     
     [self displayPicture];
 }

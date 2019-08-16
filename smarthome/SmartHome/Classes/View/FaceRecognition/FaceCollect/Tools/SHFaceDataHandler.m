@@ -40,6 +40,8 @@
 @property (nonatomic, copy) FaceDataHandleCompletion completion;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *addFaceResult;
 @property (nonatomic, strong) NSTimer *timeoutTimer;
+@property (nonatomic, strong) dispatch_group_t addFaceGroup;
+@property (nonatomic, strong) dispatch_queue_t addFaceQueue;
 
 @end
 
@@ -89,6 +91,7 @@
         ret = self.shCamObj.sdk.control->addFace(faceID.intValue, totalSize, faceDataSets, true);
         if (ret != ICH_SUCCEED) {
             SHLogError(SHLogTagAPP, @"addFace failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
+            [self removeSetupFaceDataObserver];
             if (completion) {
                 completion(nil);
             }
@@ -107,7 +110,9 @@
     
     [self.shCamObj.sdk addObserver:self.addFaceDataObserver];
     
-    [self timeoutTimer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self timeoutTimer];
+    });
 }
 
 - (void)removeSetupFaceDataObserver {
@@ -139,7 +144,7 @@
     
     if (self.syncFaceData == NO) {
         [self removeSetupFaceDataObserver];
-        [self.shCamObj.sdk destroySHSDK];
+        [self destroySDKSource];
         if (self.completion) {
             self.completion(self.addFaceResult.copy);
         }
@@ -163,9 +168,15 @@
     }
 }
 
+- (void)destroySDKSource {
+    [self.shCamObj.sdk disableTutk];
+    [self.shCamObj.sdk destroySHSDK];
+}
+
 - (void)timeoutHandle {
+    SHLogTRACE();
     if (self.syncFaceData == NO) {
-        [self.shCamObj.sdk destroySHSDK];
+        [self destroySDKSource];
     } else {
         self.syncFaceData = NO;
     }
@@ -199,7 +210,7 @@
             SHLogError(SHLogTagAPP, @"delete face failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
         }
         
-        [self.shCamObj.sdk destroySHSDK];
+        [self destroySDKSource];
     } else {
         SHLogError(SHLogTagAPP, @"connect device failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
     }
@@ -280,17 +291,24 @@
 
 - (void)addFacesToFWWithFacesInfo:(NSArray<FRDFaceInfo *> *)faceInfoArray {
     [self.faceidToAdd removeAllObjects];
-    [self.faceidToAdd addObjectsFromArray:faceInfoArray];
+//    [self.faceidToAdd addObjectsFromArray:faceInfoArray];
     [self addSetupFaceDataObserver];
     [self.addFaceResult removeAllObjects];
     
     [faceInfoArray enumerateObjectsUsingBlock:^(FRDFaceInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addFaceDataToFWWithFaceInfo:obj];
     }];
+    
+    dispatch_group_notify(self.addFaceGroup, dispatch_get_main_queue(), ^{
+        if (self.faceidToAdd.count == 0) {
+            [self timeoutHandle];
+        }
+    });
 }
 
 - (void)addFaceDataToFWWithFaceInfo:(FRDFaceInfo *)faceinfo {
     WEAK_SELF(self);
+#if 0
     [self getFaceDataSetWithFaceInfo:faceinfo completion:^(NSDictionary *result) {
         STRONG_SELF(self);
         
@@ -310,6 +328,33 @@
             }
         }
     }];
+#else
+    dispatch_group_enter(self.addFaceGroup);
+    dispatch_async(self.addFaceQueue, ^{
+        [self getFaceDataSetWithFaceInfo:faceinfo completion:^(NSDictionary *result) {
+            STRONG_SELF(self);
+            
+            if (result != nil) {
+                NSMutableArray *temp = [NSMutableArray arrayWithCapacity:result.count];
+                
+                for (NSString *key in result.keyEnumerator) {
+                    NSData *data = [[NSData alloc] initWithBase64EncodedString:result[key] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                    
+                    if (data != nil) {
+                        [temp addObject:data];
+                    }
+                }
+                
+                if (temp.count > 0) {
+                    BOOL isSuccess = [self addFaceHandleWithFaceID:faceinfo.faceid faceData:temp.copy];
+                    isSuccess ? [self.faceidToAdd addObject:faceinfo] : void();
+                }
+            }
+            
+            dispatch_group_leave(self.addFaceGroup);
+        }];
+    });
+#endif
 }
 
 - (void)getFaceDataSetWithFaceInfo:(FRDFaceInfo *)info completion:(void (^)(NSDictionary *result))completion {
@@ -374,10 +419,10 @@
     return temp.copy;
 }
 
-- (void)addFaceHandleWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData {
+- (BOOL)addFaceHandleWithFaceID:(NSString *)faceID faceData:(NSArray<NSData *> *)faceData {
     if (self.shCamObj.camera.operable != 1) {
         SHLogWarn(SHLogTagAPP, @"You do not have permission to operate this device, device name: %@", self.shCamObj.camera.cameraName);
-        return;
+        return NO;
     }
     
     int totalSize = 0;
@@ -392,6 +437,9 @@
     int ret = self.shCamObj.sdk.control->addFace(faceID.intValue, totalSize, faceDataSets, true);
     if (ret != ICH_SUCCEED) {
         SHLogError(SHLogTagAPP, @"addFace failed, ret: %d, device name: %@", ret, self.shCamObj.camera.cameraName);
+        return NO;
+    } else {
+        return YES;
     }
 }
 
@@ -447,6 +495,22 @@
         [_timeoutTimer invalidate];
         _timeoutTimer = nil;
     }
+}
+
+- (dispatch_group_t)addFaceGroup {
+    if (_addFaceGroup == nil) {
+        _addFaceGroup = dispatch_group_create();
+    }
+    
+    return _addFaceGroup;
+}
+
+- (dispatch_queue_t)addFaceQueue {
+    if (_addFaceQueue == nil) {
+        _addFaceQueue = dispatch_queue_create("com.icatchtek.AddFaceHandle", DISPATCH_QUEUE_CONCURRENT);
+    }
+    
+    return _addFaceQueue;
 }
 
 @end
