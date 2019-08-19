@@ -29,6 +29,7 @@
 #import "SHQRManager.h"
 #import "CoreDataHandlerHeader.h"
 #import "ZJSlidingDrawerViewController.h"
+#import "ZJDataCache.h"
 
 #endif
 

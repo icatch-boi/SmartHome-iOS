@@ -10,7 +10,7 @@
 
 @interface ZJRequestError ()
 
-@property (nonatomic, copy) NSString *error_code;
+@property (nonatomic, copy) NSNumber *error_code;
 @property (nonatomic, copy) NSString *error;
 @property (nonatomic, copy) NSString *error_description;
 @property (nonatomic, copy) NSString *name;

@@ -12,6 +12,9 @@
 
 #import "SHShareCamera.h"
 #import "SHUtilsMacro.h"
+#import "SHFaceInfo.h"
+static NSString * const kFaceInfoPath = @"v1/users/faces/info";
+static NSString * const kFaceimagePath = @"v1/devices/faceimage";
 @interface NotificationService ()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -27,6 +30,7 @@
     
     // Modify the notification content here...
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
+    self.bestAttemptContent.title = NSLocalizedString(@"kNotificationInfoTitle", nil);
 
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
         NSDictionary *userInfo = self.bestAttemptContent.userInfo;
@@ -44,6 +48,12 @@
         }
     } else {
         [self test];
+        
+        NSDictionary *aps = [self parseNotification:self.bestAttemptContent.userInfo];
+        int msgType = [aps[@"msgType"] intValue];
+        if (msgType == PushMessageTypeFaceRecognition) {
+            return;
+        }
         self.contentHandler(self.bestAttemptContent);
     }
 }
@@ -138,11 +148,195 @@
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kFWUpgradeSuccess", nil), devID];
     }  else if ([msgType isEqualToString:@"109"]) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kFWUpgradeFailed", nil), devID];
+    } else if ([msgType isEqualToString:@"301"]) {
+        self.bestAttemptContent.sound = [UNNotificationSound soundNamed:@"test1.caf"];
+        self.bestAttemptContent.body = [NSString stringWithFormat:@"%@ %@", devID, NSLocalizedString(@"kDoorbellTips", nil)];
+        
+        [self recognitionResultHandleWithInfo:aps deviceName:devID];
     }
     
     if (str != nil) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kNotificationContentInfo", nil), devID, time, str];
     }
+}
+
+- (void)handleCompletion {
+    self.contentHandler(self.bestAttemptContent);
+}
+
+- (void)recognitionResultHandleWithInfo:(NSDictionary *)info deviceName:(NSString *)deviceName {
+    if (![info.allKeys containsObject:@"result"]) {
+        [self handleCompletion];
+        return;
+    }
+    
+    int result = [info[@"result"] intValue];
+    switch (result) {
+        case 0:
+            self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), deviceName];
+            [self strangerHandleWithInfo:info deviceName:deviceName];
+            break;
+            
+        case 1:
+            [self recognitionSuccessHandleWithInfo:info deviceName:deviceName];
+            break;
+            
+        case 2:
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (result != 1) {
+        [self handleCompletion];
+    }
+}
+
+- (void)recognitionSuccessHandleWithInfo:(NSDictionary *)info deviceName:(NSString *)deviceName {
+    if (![info.allKeys containsObject:@"faceId"]) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSArray *faceIDArr = info[@"faceId"];
+    if (faceIDArr.count == 0) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSLog(@"dict: %@", dict);
+    
+    if (![dict.allKeys containsObject:@"access_token"]) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSString *token = [@"Bearer " stringByAppendingString:dict[@"access_token"]];
+    
+    NSURL *url = [NSURL URLWithString:[kServerBaseURL stringByAppendingString:[NSString stringWithFormat:@"%@?faceid=%@", kFaceInfoPath, faceIDArr.firstObject]]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:0 timeoutInterval:kTimeoutInterval];
+    request.HTTPMethod = @"get";
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            [self handleCompletion];
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            
+            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            SHFaceInfo *faceInfo = [SHFaceInfo faceInfoWithDict:json];
+            [self faceInfoHandleWithInfo:faceInfo deviceName:deviceName];
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            [self handleCompletion];
+        }
+        
+    }] resume];
+}
+
+- (void)strangerHandleWithInfo:(NSDictionary *)info deviceName:(NSString *)deviceName {
+    NSString *devID = [self getDeviceID:info[@"devID"]];
+    if (devID.length == 0) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSLog(@"dict: %@", dict);
+    
+    if (![dict.allKeys containsObject:@"access_token"]) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSString *token = [@"Bearer " stringByAppendingString:dict[@"access_token"]];
+    
+    NSURL *url = [NSURL URLWithString:[kServerBaseURL stringByAppendingString:[NSString stringWithFormat:@"%@?id=%@", kFaceimagePath, devID]]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:0 timeoutInterval:kTimeoutInterval];
+    request.HTTPMethod = @"get";
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            [self handleCompletion];
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            
+            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            SHFaceInfo *faceInfo = [SHFaceInfo faceInfoWithDict:json];
+            [self faceInfoHandleWithInfo:faceInfo deviceName:deviceName];
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            [self handleCompletion];
+        }
+        
+    }] resume];
+}
+
+- (void)faceInfoHandleWithInfo:(SHFaceInfo *)faceInfo deviceName:(NSString *)deviceName {
+    if (faceInfo == nil) {
+        [self handleCompletion];
+        return;
+    }
+    
+    NSString *name = faceInfo.name;
+    if (name.length > 0) {
+        self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), name, deviceName];
+    }
+    
+#if 0
+    [self loadAttachmentForUrlString:faceInfo.url completionHandle:^{
+        self.contentHandler(self.bestAttemptContent);
+    }];
+#else
+    [self loacAttachmentWithFaceInfo:faceInfo completionHandle:^{
+        self.contentHandler(self.bestAttemptContent);
+    }];
+#endif
+}
+
+- (void)loacAttachmentWithFaceInfo:(SHFaceInfo *)faceInfo completionHandle:(void(^)(void))completionHandler {
+    
+    [faceInfo getFaceImageWithCompletion:^(NSString * _Nullable faceImagePath) {
+        if (faceImagePath != nil) {
+            NSError *attachmentError = nil;
+            UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:@"myAttachment" URL:[NSURL fileURLWithPath:faceImagePath] options:nil error:&attachmentError];
+            
+            if (attachmentError) {
+                NSLog(@"%@", attachmentError.localizedDescription);
+            } else {
+                self.bestAttemptContent.attachments = @[attachment];
+                self.bestAttemptContent.launchImageName = faceImagePath.lastPathComponent;
+            }
+        }
+        
+        completionHandler();
+    }];
 }
 
 - (NSDictionary *)parseNotification:(NSDictionary *)userInfo {
@@ -197,6 +391,27 @@
     
     NSLog(@"cameraName: %@", cameraName);
     return cameraName;
+}
+
+- (NSString *)getDeviceID:(NSString *)cameraUid {
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSData *data  = [userDefault objectForKey:kShareCameraInfoKey];
+    NSArray *camerasArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    if (userDefault == nil || data == nil || camerasArray == nil || camerasArray.count == 0) {
+        return nil;
+    }
+    
+    __block NSString *deviceID = nil;
+    
+    [camerasArray enumerateObjectsUsingBlock:^(SHShareCamera *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.cameraUid isEqualToString:cameraUid]) {
+            deviceID = obj.deviceID;
+            *stop = YES;
+        }
+    }];
+    
+    return deviceID;
 }
 
 - (void)updateBadgeNumber {

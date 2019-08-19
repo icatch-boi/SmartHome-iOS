@@ -44,6 +44,8 @@
 #import "SDWebImageManager.h"
 #import "SHUpgradesInfo.h"
 #import "SHDeviceUpgradeVC.h"
+#import "SHFaceDataManager.h"
+#import "SHNetworkManager+SHFaceHandle.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -117,7 +119,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     [self setupCallView];
     [self updateResolutionButton:_shCameraObj.streamQuality];
 
-    BOOL isRing = _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
+    BOOL isRing = [self isRing]; //_managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
     if (!isRing) {
         [self connectAndPreview];
     }
@@ -1292,7 +1294,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 #pragma mark - CallView
 - (void)setupCallView {
     NSString *msgType = [NSString stringWithFormat:@"%@", _notification[@"msgType"]];
-    if (_managedObjectContext && ([msgType isEqualToString:@"201"] || [msgType isEqualToString:@"202"]) && _presentView == nil) {
+    if (_managedObjectContext && ([msgType isEqualToString:@"201"] || [msgType isEqualToString:@"202"] || [msgType isEqualToString:@"301"]) && _presentView == nil) {
         RTCView *presentView = [[RTCView alloc] initWithIsVideo:NO isCallee:YES inView:self.navigationController.view];
         self.presentView = presentView;
         
@@ -1309,13 +1311,16 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)setPresentViewTitle {
     dispatch_async(dispatch_get_main_queue(), ^{
         _presentView.portraitImageView.image = [UIImage imageNamed:@"caller ID display-logo"/*@"portrait-1.jpg"*/];
-        _presentView.nickName = _shCameraObj.camera.cameraName;
+        _presentView.nickName = [NSString stringWithFormat:@"[%@] %@", _shCameraObj.camera.cameraName, NSLocalizedString(@"kDoorbellTips", nil)]; //_shCameraObj.camera.cameraName;
         _presentView.connectText = @"等待连接...";
         _presentView.netTipText = @"当前网络良好";
     });
-    
+#if 0
     [self setupPresentViewNickName];
     [self setupPresentViewPortrait];
+#else
+    [self setupPresentViewHandle];
+#endif
 }
 
 - (void)setupPresentViewNickName {
@@ -1348,6 +1353,132 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                     }
                 });
             }];
+        }
+    }
+}
+
+- (void)setupPresentViewHandle {
+    if (_notification == nil) {
+        return;
+    }
+    
+    if ([_notification.allKeys containsObject:@"result"]) {
+        int result = [_notification[@"result"] intValue];
+        switch (result) {
+            case 0: {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
+                });
+                [self strangerHandle];
+                break;
+            }
+                
+            case 1:
+                [self recognitionSuccessHandle];
+                break;
+                
+            case 2:
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (void)strangerHandle {
+    WEAK_SELF(self);
+
+    [[SHNetworkManager sharedNetworkManager] getStrangerFaceDataWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        if (error == nil) {
+            FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
+            
+            [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
+            [weakself setupStrangerURLWithFaceInfo:faceInfo];
+        }
+    }];
+}
+
+- (void)setupStrangerURLWithFaceInfo:(FRDFaceInfo *)faceInfo {
+    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+    
+    if (faceInfo.url.length > 0) {
+        temp[@"attachment"] = faceInfo.url;
+        _notification = temp.copy;
+    }
+}
+
+- (void)recognitionSuccessHandle {
+    if (_notification && [_notification.allKeys containsObject:@"faceId"]) {
+        NSArray *faceIDArr = _notification[@"faceId"];
+        if (faceIDArr.count == 0) {
+            return;
+        }
+        
+        WEAK_SELF(self);
+        [[SHNetworkManager sharedNetworkManager] getFaceDataWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+            if (error == nil) {
+                FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
+                
+                [weakself setupPresentViewNickNameWithFaceInfo:faceInfo];
+                [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
+            }
+        }];
+    }
+}
+
+- (void)setupPresentViewNickNameWithFaceInfo:(FRDFaceInfo *)faceInfo {
+    NSString *nameString = [NSString stringWithFormat:@"[%@] %@", _shCameraObj.camera.cameraName, NSLocalizedString(@"kDoorbellTips", nil)];
+    
+    if (faceInfo != nil) {
+        NSString *name = faceInfo.name;
+        if (name.length > 0) {
+            nameString = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), name, self.shCameraObj.camera.cameraName];
+        }
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _presentView.nickName = nameString;
+    });
+}
+
+- (void)setupPresentViewPortraitWithFaceInfo:(FRDFaceInfo *)faceInfo {
+#if 0
+    NSURL *url = [[NSURL alloc] initWithString:faceInfo.url];
+    
+    if (url) {
+        WEAK_SELF(self);
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:SDWebImageRefreshCached progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            
+            if (image != nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
+                });
+                [weakself setupNotificationImage:image];
+            }
+        }];
+    }
+#else
+    WEAK_SELF(self);
+
+    [faceInfo getFaceImageWithCompletion:^(UIImage * _Nullable faceImage) {
+        if (faceImage != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:faceImage rangeRect:weakself.presentView.portraitImageView.bounds];
+            });
+            [weakself setupNotificationImage:faceImage];
+        }
+    }];
+#endif
+}
+
+- (void)setupNotificationImage:(UIImage *)image {
+    if ([_notification.allKeys containsObject:@"result"]) {
+        int result = [_notification[@"result"] intValue];
+        if (result == 0) {
+            NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+            temp[@"image"] = UIImageJPEGRepresentation(image, 1.0);
+            _notification = temp.copy;
         }
     }
 }
@@ -1526,7 +1657,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (BOOL)isRing {
-    return _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"]);
+    return _managedObjectContext && ([[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"201"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"202"] || [[NSString stringWithFormat:@"%@", _notification[@"msgType"]] isEqualToString:@"301"]);
 }
 
 #pragma mark - Ring Timer
@@ -1625,7 +1756,11 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             }
         }
     } else {
+#if 1
         [self connectSuccessHandler];
+#else
+        _notification ? [self connectSuccessHandler] : [self checkFaceDataNeedSync];
+#endif
     }
 }
 
@@ -2104,6 +2239,45 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             SHLogInfo(SHLogTagAPP, @"stopMediaStream success.");
         }];
     });
+}
+
+- (void)checkFaceDataNeedSync {
+    if ([[SHFaceDataManager sharedFaceDataManager] needsSyncFaceDataWithCameraObject:self.shCameraObj]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showSyncFaceDataAlertView];
+        });
+    } else {
+        [self connectSuccessHandler];
+    }
+}
+
+- (void)showSyncFaceDataAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"账户中人脸数据有更新，是否要同步到设备？" preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"不同步" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakself connectSuccessHandler];
+    }]];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"同步" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakself syncFaceDataHandle];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)syncFaceDataHandle {
+    [self.progressHUDPreview hideProgressHUD:YES];
+    [self.progressHUD showProgressHUDWithMessage:@"同步中，请稍后..."];
+    
+    WEAK_SELF(self);
+    [[SHFaceDataManager sharedFaceDataManager] syncFaceDataWithCameraObject:self.shCameraObj completion:^(NSDictionary<NSString *,NSNumber *> * _Nullable result) {
+        [weakself connectSuccessHandler];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+        });
+    }];
 }
 
 @end

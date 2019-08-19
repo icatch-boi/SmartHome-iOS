@@ -14,6 +14,13 @@
 #import "FRDFaceInfo.h"
 #import "FRDFaceInfoViewModel.h"
 
+#import "LivenessViewController.h"
+#import "LivingConfigModel.h"
+#import "IDLFaceSDK/IDLFaceSDK.h"
+#import "FaceParameterConfig.h"
+#import "SHFaceDataManager.h"
+#import "SHFaceShowCell.h"
+
 static NSString * const ReuseIdentifier = @"faceCellID";
 
 @interface FRDFacesViewController ()
@@ -31,6 +38,26 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFacesInfoHandler:) name:kReloadFacesInfoNotification object:nil];
     [self setupLocalizedString];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-add"] style:UIBarButtonItemStyleDone target:self action:@selector(addFaceClick)];
+}
+
+- (void)addFaceClick {
+    if ([[FaceSDKManager sharedInstance] canWork]) {
+        NSString* licensePath = [[NSBundle mainBundle] pathForResource:FACE_LICENSE_NAME ofType:FACE_LICENSE_SUFFIX];
+        [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath];
+    }
+    LivenessViewController* lvc = [[LivenessViewController alloc] init];
+    LivingConfigModel* model = [LivingConfigModel sharedInstance];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLiveYawLeft)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLiveYawRight)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLivePitchUp)];
+    [model.liveActionArray addObject:@(FaceLivenessActionTypeLivePitchDown)];
+    model.isByOrder = YES;
+    
+    [lvc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:lvc];
+    navi.navigationBarHidden = true;
+    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (void)setupLocalizedString {
@@ -74,10 +101,11 @@ static NSString * const ReuseIdentifier = @"faceCellID";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ReuseIdentifier forIndexPath:indexPath];
+    SHFaceShowCell *cell = [tableView dequeueReusableCellWithIdentifier:ReuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.textLabel.text = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+//    cell.textLabel.text = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+    cell.faceInfo = self.faceInfoViewModel.facesInfoArray[indexPath.row];
     
     return cell;
 }
@@ -91,7 +119,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *faceName = self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
+        NSString *faceName = self.faceInfoViewModel.facesInfoArray[indexPath.row].faceid; //self.faceInfoViewModel.facesInfoArray[indexPath.row].name;
         faceName != nil ? [self showDeleteFacePictureTipsWithFaceName:faceName] : void();
     }
 }
@@ -113,6 +141,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD show];
     
+#if 0
     [[SHNetworkManager sharedNetworkManager] deleteFacePictureWithName:faceName finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         [SVProgressHUD dismiss];
         
@@ -125,6 +154,21 @@ static NSString * const ReuseIdentifier = @"faceCellID";
             }
         });
     }];
+#else
+    [[SHNetworkManager sharedNetworkManager] deleteFaceDataWithFaceid:faceName finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [SVProgressHUD dismiss];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:error.error];
+                [SVProgressHUD dismissWithDelay:2.0];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kReloadFacesInfoNotification object:nil];
+                [[SHFaceDataManager sharedFaceDataManager] deleteFacesWithFaceIDs:@[faceName]];
+            }
+        });
+    }];
+#endif
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

@@ -42,6 +42,7 @@
 	obj.cameraProperty = [[SHCameraProperty alloc] init];
 	obj.camera = camera;
     obj.streamQuality = VIDEO_QUALITY_SMOOTH;
+    obj.sdk = [[SHSDK alloc] init];
 
 	return obj;
 }
@@ -209,7 +210,7 @@
 
 - (int)connectCamera {
     SHLogTRACE();
-	SHSDK *sdk = [[SHSDK alloc] init];
+//    SHSDK *sdk = [[SHSDK alloc] init];
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
 		SHLogInfo(SHLogTagAPP, @" to connect camera,camera name is : %@",self.camera.cameraName);
@@ -222,16 +223,16 @@
 
         return ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER;
     }
-        if ((retValue = [sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword]) == ICH_SUCCEED) {
+        if ((retValue = [self.sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword]) == ICH_SUCCEED) {
             
             self.streamOper = [[SHStreamOperate alloc] initWithCameraObject:self];
             self.controler.actCtrl.shCamObj = self;
             self.controler.fileCtrl.shCamObj = self;
             self.gallery.shCamObj = self;
-            self.sdk = sdk;
+//            self.sdk = sdk;
             self.cameraProperty.previewMode = 0;
             
-            if ([sdk isSHSDKInitialized]) {
+            if ([self.sdk isSHSDKInitialized]) {
                 self.isConnect = YES;
                 [self addCameraPropertyObserver];
             } else {
@@ -264,7 +265,7 @@
     [self.cameraProperty cleanCurrentCameraAllProperty];
     
     _curResult = nil;
-    _sdk = nil;
+//    _sdk = nil;
     _streamOper = nil;
     
     [self.gallery cleanDateInfo];

@@ -59,11 +59,15 @@ static NSString * const kSHUserAccount = @"kSHUserAccount";
     [tempMDict removeObjectForKey:@"expires_in"];
     
     [[NSUserDefaults standardUserDefaults] setObject:tempMDict.copy forKey:kSHUserAccount];
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    [userDefault setObject:tempMDict.copy forKey:kUserAccount];
     SHLogInfo(SHLogTagAPP, @"用户账户保存成功 %@", NSHomeDirectory());
 }
 
 - (void)deleteUserAccount {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kSHUserAccount];
+    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    [userDefault setObject:nil forKey:kUserAccount];
 }
 
 - (void)setExpires_in:(NSTimeInterval)expires_in {
@@ -77,6 +81,8 @@ static NSString * const kSHUserAccount = @"kSHUserAccount";
 
     if (access_token == nil) {
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kSHUserAccount];
+        NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+        [userDefault setObject:nil forKey:kUserAccount];
     }
 }
 

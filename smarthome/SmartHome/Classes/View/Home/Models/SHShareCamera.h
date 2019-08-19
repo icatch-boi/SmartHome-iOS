@@ -12,5 +12,6 @@
 
 @property (nonatomic, copy) NSString *cameraUid;
 @property (nonatomic, copy) NSString *cameraName;
+@property (nonatomic, copy) NSString *deviceID;
 
 @end
