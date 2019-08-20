@@ -66,8 +66,11 @@ static NSString * const kMessageCellID = @"MessageCellID";
     self.tableView.rowHeight = 100;
     
     [self setupRefreshView];
+    [self setupPullupRefreshView];
     
     self.title = @"消息中心";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(backTopAndRefresh)];
 }
 
 - (void)setupRefreshView {
@@ -98,11 +101,48 @@ static NSString * const kMessageCellID = @"MessageCellID";
     self.tableView.mj_header = header;
 }
 
+- (void)setupPullupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        weakself.pullup = YES;
+        [weakself loadData];
+    }];
+    
+    // 设置文字
+    [footer setTitle:@"Click or drag up to refresh" forState:MJRefreshStateIdle];
+    [footer setTitle:@"Loading more ..." forState:MJRefreshStateRefreshing];
+    [footer setTitle:@"No more data" forState:MJRefreshStateNoMoreData];
+    
+    // 设置字体
+    footer.stateLabel.font = [UIFont systemFontOfSize:15];
+    
+    // 设置颜色
+    footer.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    
+    // 设置footer
+    self.tableView.mj_footer = footer;
+}
+
+- (void)backTopAndRefresh {
+    //!< 说明 section不能为NSNotFound row可以为NSNotFound，避免无数据时，引起崩溃😖
+    if (self.tableView.numberOfSections) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+    
+    [self.tableView.mj_header beginRefreshing];
+}
+
 - (void)loadData {
     [self.listViewModel loadMessageWithCamera:self.camera pullup:self.isPullup completion:^(BOOL isSuccess, BOOL shouldRefresh) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView.mj_header endRefreshing];
+            if (self.isPullup) {
+                [self.tableView.mj_footer endRefreshing];
+            } else {
+                [self.tableView.mj_header endRefreshing];
+            }
 
+            self.pullup = NO;
+            
             if (shouldRefresh) {
                 [self.tableView reloadData];
             }

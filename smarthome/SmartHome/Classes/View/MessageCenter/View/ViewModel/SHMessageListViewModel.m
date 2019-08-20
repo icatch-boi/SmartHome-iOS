@@ -64,6 +64,10 @@ static const NSInteger maxPullupTryTimes = 3;
         }
         
         NSDictionary *dict = result;
+        if ([dict.allKeys containsObject:@"lastquerykey"]) {
+            self.lastquerykey = result[@"lastquerykey"];
+        }
+        
         if (![dict.allKeys containsObject:@"messages"]) {
             if (completion) {
                 completion(isSuccess, NO);
@@ -90,15 +94,8 @@ static const NSInteger maxPullupTryTimes = 3;
             if (pullup) {
                 [self.messageList addObjectsFromArray:temp.copy];
             } else {
-                if ([result containsObject:@"lastquerykey"]) {
-                    [self.messageList removeAllObjects];
-                    [self.messageList addObjectsFromArray:temp.copy];
-                    
-                    self.lastquerykey = result[@"lastquerykey"];
-                } else {
-                    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, temp.count)];
-                    [self.messageList insertObjects:temp.copy atIndexes:idxSet];
-                }
+                NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, temp.count)];
+                [self.messageList insertObjects:temp.copy atIndexes:idxSet];
             }
             
             if (pullup && temp.count == 0) {
