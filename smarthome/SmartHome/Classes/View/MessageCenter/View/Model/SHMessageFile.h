@@ -25,7 +25,7 @@
  // Created by zj on 2019/8/19 2:59 PM.
     
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,7 +37,7 @@ typedef void(^MessageFileGetFileCompletion)(SHMessageFile * _Nullable messageFil
 @property (nonatomic, copy, readonly) NSString *filename;
 @property (nonatomic, copy, readonly) NSString *url;
 @property (nonatomic, copy, readonly) NSNumber *expires;
-@property (nonatomic, strong) UIImage *messageImage;
+//@property (nonatomic, strong) UIImage *messageImage;
 
 + (instancetype)messageFileWithDict:(NSDictionary *)dict;
 - (instancetype)initWithDict:(NSDictionary *)dict;

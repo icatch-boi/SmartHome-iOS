@@ -28,6 +28,7 @@
 #import "SHMessageInfo.h"
 #import "SHNetworkManager.h"
 #import "SHUserAccountCommon.h"
+#import "ZJDataCache.h"
 
 @interface SHMessageInfo ()
 
@@ -35,6 +36,7 @@
 @property (nonatomic, copy) NSString *time;
 @property (nonatomic, strong) SHMessage *message;
 @property (nonatomic, strong) SHMessageFile *messageFile;
+@property (nonatomic, strong) dispatch_semaphore_t downloadSemaphore;
 
 @end
 
@@ -67,6 +69,18 @@
 
 - (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_semaphore_wait(self.downloadSemaphore, DISPATCH_TIME_FOREVER);
+        
+        UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:[self makeCacheKey]];
+        if (image != nil) {
+            if (completion) {
+                completion(image);
+            }
+            
+            dispatch_semaphore_signal(self.downloadSemaphore);
+            return;
+        }
+        
         if (_messageFile != nil) {
             [self downloadMessageFileWithCompletion:completion];
         } else {
@@ -78,6 +92,8 @@
                     if (completion) {
                         completion(nil);
                     }
+                    
+                    dispatch_semaphore_signal(self.downloadSemaphore);
                 }
             }];
         }
@@ -85,29 +101,25 @@
 }
 
 - (void)downloadMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion {
-    if (_messageFile.messageImage != nil) {
-        if (completion) {
-            completion(_messageFile.messageImage);
+    [[SHNetworkManager sharedNetworkManager] downloadFileWithURLString:_messageFile.url finished:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"download Message file is success: %d", isSuccess);
+        
+        UIImage *image;
+        
+        if (isSuccess) {
+            image = [[UIImage alloc] initWithData:result];
+            
+            if (image != nil) {
+                [[ZJImageCache sharedImageCache] storeImage:image forKey:[self makeCacheKey] completion:nil];
+            }
         }
-    } else {
-        [[SHNetworkManager sharedNetworkManager] downloadFileWithURLString:_messageFile.url finished:^(BOOL isSuccess, id  _Nullable result) {
-            SHLogInfo(SHLogTagAPP, @"download Message file is success: %d", isSuccess);
-            
-            UIImage *image;
-            
-            if (isSuccess) {
-                image = [[UIImage alloc] initWithData:result];
-                
-                if (image != nil) {
-                    _messageFile.messageImage = image;
-                }
-            }
-            
-            if (completion) {
-                completion(image);
-            }
-        }];
-    }
+        
+        if (completion) {
+            completion(image);
+        }
+        
+        dispatch_semaphore_signal(self.downloadSemaphore);
+    }];
 }
 
 - (NSString *)createFileName {
@@ -121,6 +133,18 @@
 
 - (NSString *)localTimeString {
     return _time != nil ? [SHUserAccountCommon dateTransformFromString:_time] : @"";
+}
+
+- (NSString *)makeCacheKey {
+    return _deviceID ? [NSString stringWithFormat:@"%@_%@", _deviceID, [self createFileName]] : nil;
+}
+
+- (dispatch_semaphore_t)downloadSemaphore {
+    if (_downloadSemaphore == nil) {
+        _downloadSemaphore = dispatch_semaphore_create(1);
+    }
+    
+    return _downloadSemaphore;
 }
 
 @end

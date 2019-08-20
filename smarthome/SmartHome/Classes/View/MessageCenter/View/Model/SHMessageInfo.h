@@ -39,7 +39,7 @@ typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
 @property (nonatomic, copy, readonly) NSString *time;
 @property (nonatomic, strong, readonly) SHMessage *message;
 @property (nonatomic, strong) NSString *deviceID;
-@property (nonatomic, strong, readonly) SHMessageFile *messageFile;
+//@property (nonatomic, strong, readonly) SHMessageFile *messageFile;
 
 @property (nonatomic, copy, readonly) NSString *localTimeString;
 
