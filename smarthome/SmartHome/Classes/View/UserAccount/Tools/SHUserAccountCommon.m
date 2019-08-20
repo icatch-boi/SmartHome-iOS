@@ -15,7 +15,11 @@
     
     [formatter setDateFormat:kOriginalDateFormat];
     NSDate *originalDate = [formatter dateFromString:originalDateStr];
-    originalDate = [NSDate dateWithTimeIntervalSince1970:originalDate.timeIntervalSince1970 + 8.0 * 3600];
+    
+    // 获取当前时区与0时区的间隔秒数
+    NSTimeZone *localZone = [NSTimeZone localTimeZone];
+    NSInteger seconds= [localZone secondsFromGMT];
+    originalDate = [NSDate dateWithTimeIntervalSince1970:originalDate.timeIntervalSince1970 + seconds/*8.0 * 3600*/];
     
     [formatter setDateFormat:kCurrentDateFormat];
     

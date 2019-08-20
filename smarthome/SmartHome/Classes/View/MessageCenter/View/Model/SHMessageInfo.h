@@ -27,16 +27,23 @@
 
 #import <Foundation/Foundation.h>
 #import "SHMessage.h"
+#import "SHMessageFile.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
 
 @interface SHMessageInfo : NSObject
 
 @property (nonatomic, copy, readonly) NSString *msg;
 @property (nonatomic, copy, readonly) NSString *time;
 @property (nonatomic, strong, readonly) SHMessage *message;
+@property (nonatomic, strong) NSString *deviceID;
+@property (nonatomic, strong, readonly) SHMessageFile *messageFile;
 
-+ (instancetype)messageWithDict:(NSDictionary *)dict;
++ (instancetype)messageInfoWithDict:(NSDictionary *)dict;
+
+- (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion;
 
 @end
 

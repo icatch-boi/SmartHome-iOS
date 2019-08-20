@@ -175,4 +175,17 @@ static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 #define WEAK_SELF(obj) __weak typeof(obj) weak##obj = obj;
 #define STRONG_SELF(obj) __strong typeof(obj) obj = weak##obj;
 
+typedef enum : NSUInteger {
+    PushMessageTypePir = 100,
+    PushMessageTypeLowPower = 102,
+    PushMessageTypeSDCardFull = 103,
+    PushMessageTypeSDCardError = 104,
+    PushMessageTypeTamperAlarm = 105,
+    PushMessageTypeRing = 201,
+    PushMessageTypeFDHit = 202,
+    PushMessageTypeFDMiss = 203,
+    PushMessageTypePushTest = 204,
+    PushMessageTypeFaceRecognition = 301,
+} PushMessageType;
+
 #endif /* SHUtilsMacro_h */

@@ -130,9 +130,7 @@ static NSString * const kMessageCellID = @"MessageCellID";
     SHMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:kMessageCellID forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.iconImgView.image = [UIImage imageNamed:@"portrait"];
-    cell.titleLabel.text = @(indexPath.section).stringValue;
-    cell.timeLabel.text = @(indexPath.row).stringValue;
+    cell.messageInfo = self.listViewModel.messageList[indexPath.row];
     
     return cell;
 }

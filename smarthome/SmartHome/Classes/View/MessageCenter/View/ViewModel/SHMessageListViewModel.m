@@ -72,7 +72,8 @@ static const NSInteger maxPullupTryTimes = 3;
             NSArray *recv = result[@"messages"];
             NSMutableArray *temp = [NSMutableArray arrayWithCapacity:10];
             [recv enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                SHMessageInfo *msgInfo = [SHMessageInfo messageWithDict:obj];
+                SHMessageInfo *msgInfo = [SHMessageInfo messageInfoWithDict:obj];
+                msgInfo.deviceID = camera.id;
                 [temp addObject:msgInfo];
             }];
             
@@ -95,7 +96,7 @@ static const NSInteger maxPullupTryTimes = 3;
                     
                     self.lastquerykey = result[@"lastquerykey"];
                 } else {
-                    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndex:0];
+                    NSIndexSet *idxSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, temp.count)];
                     [self.messageList insertObjects:temp.copy atIndexes:idxSet];
                 }
             }

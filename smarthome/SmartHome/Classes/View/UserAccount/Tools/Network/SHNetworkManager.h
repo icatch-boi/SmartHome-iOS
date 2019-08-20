@@ -64,6 +64,8 @@ static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 - (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
 - (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
 
+- (void)downloadFileWithURLString:(NSString *)urlString finished:(RequestCompletionBlock)finished;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -26,18 +26,20 @@
     
 
 #import "SHMessageInfo.h"
+#import "SHNetworkManager.h"
 
 @interface SHMessageInfo ()
 
 @property (nonatomic, copy) NSString *msg;
 @property (nonatomic, copy) NSString *time;
 @property (nonatomic, strong) SHMessage *message;
+@property (nonatomic, strong) SHMessageFile *messageFile;
 
 @end
 
 @implementation SHMessageInfo
 
-+ (instancetype)messageWithDict:(NSDictionary *)dict {
++ (instancetype)messageInfoWithDict:(NSDictionary *)dict {
     return [[self alloc] initWithDict:dict];
 }
 
@@ -61,5 +63,59 @@
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
+
+- (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (_messageFile != nil) {
+            [self downloadMessageFileWithCompletion:completion];
+        } else {
+            [SHMessageFile getMessageFileWithDeviceID:_deviceID fileName:[self createFileName] completion:^(SHMessageFile * _Nullable messageFile) {
+                if (messageFile != nil) {
+                    _messageFile = messageFile;
+                    [self downloadMessageFileWithCompletion:completion];
+                } else {
+                    if (completion) {
+                        completion(nil);
+                    }
+                }
+            }];
+        }
+    });
+}
+
+- (void)downloadMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion {
+    if (_messageFile.messageImage != nil) {
+        if (completion) {
+            completion(_messageFile.messageImage);
+        }
+    } else {
+        [[SHNetworkManager sharedNetworkManager] downloadFileWithURLString:_messageFile.url finished:^(BOOL isSuccess, id  _Nullable result) {
+            SHLogInfo(SHLogTagAPP, @"download Message file is success: %d", isSuccess);
+            
+            UIImage *image;
+            
+            if (isSuccess) {
+                image = [[UIImage alloc] initWithData:result];
+                
+                if (image != nil) {
+                    _messageFile.messageImage = image;
+                }
+            }
+            
+            if (completion) {
+                completion(image);
+            }
+        }];
+    }
+}
+
+- (NSString *)createFileName {
+    NSString *fileName;
+    if (_message.timeInSecs != nil) {
+        fileName = [NSString stringWithFormat:@"%@.jpg", _message.timeInSecs];
+    }
+    
+    return fileName;
+}
 
 @end

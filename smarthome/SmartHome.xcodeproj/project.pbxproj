@@ -293,6 +293,7 @@
 		38E5C3DC20A419E0003004E0 /* SHAccountInfoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E5C3CE20A419E0003004E0 /* SHAccountInfoHeaderView.xib */; };
 		38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFF120A3F5AE003004E0 /* SHShareCamera.m */; };
 		38E5C3F120A594AA003004E0 /* SHSubscribeInfoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5C3EE20A594AA003004E0 /* SHSubscribeInfoConvert.m */; };
+		38F03C24230A804C0089EC15 /* SHMessageFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F03C23230A804C0089EC15 /* SHMessageFile.m */; };
 		38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4424C1FAC079A00BDA6DF /* NotificationService.m */; };
 		38F442521FAC079A00BDA6DF /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		38F442571FAC125600BDA6DF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9C41EE69C270042442C /* libz.tbd */; };
@@ -951,6 +952,8 @@
 		38E5C3EE20A594AA003004E0 /* SHSubscribeInfoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHSubscribeInfoConvert.m; sourceTree = "<group>"; };
 		38E5C3EF20A594AA003004E0 /* SubscribeStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeStatus.h; sourceTree = "<group>"; };
 		38E5C3F020A594AA003004E0 /* SHSubscribeInfoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSubscribeInfoConvert.h; sourceTree = "<group>"; };
+		38F03C22230A804C0089EC15 /* SHMessageFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageFile.h; sourceTree = "<group>"; };
+		38F03C23230A804C0089EC15 /* SHMessageFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageFile.m; sourceTree = "<group>"; };
 		38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F4424B1FAC079A00BDA6DF /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		38F4424C1FAC079A00BDA6DF /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
@@ -2728,6 +2731,8 @@
 			children = (
 				38F769DB22EAF63C005E56A5 /* SHMessageInfo.h */,
 				38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */,
+				38F03C22230A804C0089EC15 /* SHMessageFile.h */,
+				38F03C23230A804C0089EC15 /* SHMessageFile.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3162,6 +3167,7 @@
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
 				38E5C25E20A3F66D003004E0 /* SHCameraProperty.m in Sources */,
 				38E5C26020A3F66D003004E0 /* SHMessage.m in Sources */,
+				38F03C24230A804C0089EC15 /* SHMessageFile.m in Sources */,
 				38A38FAD22C0CE7100E831E3 /* SHAccountSettingCommonCell.m in Sources */,
 				3897E0C72180743100E72417 /* XJSetupDeviceSSIDVC.m in Sources */,
 				38E5C36E20A40FFC003004E0 /* UIView+Layout.m in Sources */,

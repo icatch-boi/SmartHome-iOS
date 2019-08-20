@@ -608,6 +608,59 @@
     }];
 }
 
+- (void)downloadFileWithURLString:(NSString *)urlString finished:(RequestCompletionBlock)finished {
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:TIME_OUT_INTERVAL];
+    
+    if (urlString == nil || url == nil || request == nil) {
+        SHLogError(SHLogTagAPP, @"Download failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(NO, [ZJRequestError requestErrorWithDict:dict]);
+        }
+        
+        return;
+    }
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            if (finished) {
+                finished(NO, [ZJRequestError requestErrorWithNSError:error]);
+            }
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+//            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+//
+//            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            if (finished) {
+                finished(YES, data);
+            }
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            NSDictionary *dict = @{
+                                   @"error_description": @"Unknown Error",
+                                   };
+            if (finished) {
+                finished(NO, [ZJRequestError requestErrorWithDict:dict]);
+            }
+        }
+        
+    }] resume];
+}
+
 #pragma mark - Init
 - (Token *)createToken {
     if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
@@ -666,8 +719,12 @@
         return;
     }
     
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html",@"text/plain", @"application/xml", nil];
+
     [[manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (error != nil) {
             ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];

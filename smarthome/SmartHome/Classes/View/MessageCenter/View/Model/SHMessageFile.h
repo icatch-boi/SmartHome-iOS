@@ -1,4 +1,4 @@
-// SHMessageCell.h
+// SHMessageFile.h
 
 /**************************************************************************
  *
@@ -22,17 +22,27 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 3:42 PM.
+ // Created by zj on 2019/8/19 2:59 PM.
     
 
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SHMessageInfo;
-@interface SHMessageCell : UITableViewCell
+@class SHMessageFile;
+typedef void(^MessageFileGetFileCompletion)(SHMessageFile * _Nullable messageFile);
 
-@property (nonatomic, strong) SHMessageInfo *messageInfo;
+@interface SHMessageFile : NSObject
+
+@property (nonatomic, copy, readonly) NSString *filename;
+@property (nonatomic, copy, readonly) NSString *url;
+@property (nonatomic, copy, readonly) NSNumber *expires;
+@property (nonatomic, strong) UIImage *messageImage;
+
++ (instancetype)messageFileWithDict:(NSDictionary *)dict;
+- (instancetype)initWithDict:(NSDictionary *)dict;
+
++ (void)getMessageFileWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(nullable MessageFileGetFileCompletion)completion;
 
 @end
 

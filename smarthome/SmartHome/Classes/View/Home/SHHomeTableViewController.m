@@ -440,14 +440,17 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
+#if 0
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
     tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
 
     [self.navigationController pushViewController:tvc animated:YES];
-//    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCamera:cell.viewModel.cameraObj.camera];
-//    [self.navigationController pushViewController:vc animated:YES];
+#else
+    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCamera:cell.viewModel.cameraObj.camera];
+    [self.navigationController pushViewController:vc animated:YES];
+#endif
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {

@@ -26,18 +26,101 @@
     
 
 #import "SHMessageCell.h"
+#import "SHMessageInfo.h"
+#import "SHUserAccountCommon.h"
+
+@interface SHMessageCell ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *iconImgView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+
+@end
 
 @implementation SHMessageCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    [self setupGUI];
+}
+
+- (void)setupGUI {
+    _timeLabel.numberOfLines = 0;
+    _timeLabel.font = [UIFont systemFontOfSize:14.0];
+    _timeLabel.textColor = [UIColor ic_colorWithHex:kTextColor];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setMessageInfo:(SHMessageInfo *)messageInfo {
+    _messageInfo = messageInfo;
+    
+    _titleLabel.text = [self translateMessageType:messageInfo.message.msgType.unsignedIntegerValue];
+    _timeLabel.text = [SHUserAccountCommon dateTransformFromString:messageInfo.time];
+    _iconImgView.image = [[UIImage imageNamed:@"empty_photo"] ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
+
+    
+    WEAK_SELF(self);
+    [messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+        if (image != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.iconImgView.image = [image ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
+            });
+        }
+    }];
+}
+
+- (NSString *)translateMessageType:(int)type {
+    NSString *str = nil;
+    
+    switch (type) {
+        case PushMessageTypePir:
+            str = NSLocalizedString(@"kMonitorTypePir", nil);
+            break;
+        case PushMessageTypeRing:
+            str = NSLocalizedString(@"kMonitorTypeRing", nil);
+            break;
+            
+        case PushMessageTypeLowPower:
+            str = @"LowPower";
+            break;
+            
+        case PushMessageTypeSDCardFull:
+            str = @"SDCardFull";
+            break;
+            
+        case PushMessageTypeSDCardError:
+            str = @"SDCardError";
+            break;
+            
+        case PushMessageTypeFDHit:
+            str = @"FD Hit";
+            break;
+            
+        case PushMessageTypeFDMiss:
+            str = @"FD Miss";
+            break;
+            
+        case PushMessageTypePushTest:
+            str = @"PushTest";
+            break;
+            
+        case PushMessageTypeTamperAlarm:
+            str = @"Demolish";
+            break;
+            
+        default:
+            str = @"unknown";
+            break;
+    }
+    
+    return str;
 }
 
 @end
