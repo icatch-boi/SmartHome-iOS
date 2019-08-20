@@ -16,6 +16,7 @@
 		38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */; };
 		3810273B20622E4200B0B806 /* XJMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3810273A20622E4200B0B806 /* XJMain.storyboard */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
+		3817C173230B924000033E20 /* SHSingleImageDisplayVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
 		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
@@ -402,6 +403,8 @@
 		3809230020B7DAC0002E502B /* LoginCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginCommonHeader.h; sourceTree = "<group>"; };
 		3810273A20622E4200B0B806 /* XJMain.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = XJMain.storyboard; sourceTree = "<group>"; };
 		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
+		3817C171230B924000033E20 /* SHSingleImageDisplayVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSingleImageDisplayVC.h; sourceTree = "<group>"; };
+		3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSingleImageDisplayVC.m; sourceTree = "<group>"; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
 		3818D66421709AB200AF846C /* PushTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PushTest.storyboard; sourceTree = "<group>"; };
@@ -2713,6 +2716,8 @@
 				38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */,
 				38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */,
 				38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */,
+				3817C171230B924000033E20 /* SHSingleImageDisplayVC.h */,
+				3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3322,6 +3327,7 @@
 				38E5C19220A3F5AF003004E0 /* SHUserAccountItem.m in Sources */,
 				38E5C34C20A40F8A003004E0 /* SHCameraViewModel.m in Sources */,
 				38E5C23D20A3F650003004E0 /* SHSettingProperty.m in Sources */,
+				3817C173230B924000033E20 /* SHSingleImageDisplayVC.m in Sources */,
 				38E5C2EA20A3F7FA003004E0 /* SHFile.m in Sources */,
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,

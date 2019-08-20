@@ -26,4 +26,55 @@
     return [[self alloc] initMessageWithDict:dict];
 }
 
+- (NSString *)msgTypeString {
+    return [self translateMessageType:_msgType.unsignedIntegerValue];
+}
+
+- (NSString *)translateMessageType:(int)type {
+    NSString *str = nil;
+    
+    switch (type) {
+        case PushMessageTypePir:
+            str = NSLocalizedString(@"kMonitorTypePir", nil);
+            break;
+        case PushMessageTypeRing:
+            str = NSLocalizedString(@"kMonitorTypeRing", nil);
+            break;
+            
+        case PushMessageTypeLowPower:
+            str = @"LowPower";
+            break;
+            
+        case PushMessageTypeSDCardFull:
+            str = @"SDCardFull";
+            break;
+            
+        case PushMessageTypeSDCardError:
+            str = @"SDCardError";
+            break;
+            
+        case PushMessageTypeFDHit:
+            str = @"FD Hit";
+            break;
+            
+        case PushMessageTypeFDMiss:
+            str = @"FD Miss";
+            break;
+            
+        case PushMessageTypePushTest:
+            str = @"PushTest";
+            break;
+            
+        case PushMessageTypeTamperAlarm:
+            str = @"Demolish";
+            break;
+            
+        default:
+            str = @"unknown";
+            break;
+    }
+    
+    return str;
+}
+
 @end

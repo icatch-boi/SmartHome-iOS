@@ -27,6 +27,7 @@
 
 #import "SHMessageInfo.h"
 #import "SHNetworkManager.h"
+#import "SHUserAccountCommon.h"
 
 @interface SHMessageInfo ()
 
@@ -116,6 +117,10 @@
     }
     
     return fileName;
+}
+
+- (NSString *)localTimeString {
+    return _time != nil ? [SHUserAccountCommon dateTransformFromString:_time] : @"";
 }
 
 @end

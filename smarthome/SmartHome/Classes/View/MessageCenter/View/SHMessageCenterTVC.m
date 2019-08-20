@@ -29,6 +29,7 @@
 #import "SHMessageCell.h"
 #import <MJRefresh/MJRefresh.h>
 #import "SHMessageListViewModel.h"
+#import "SHSingleImageDisplayVC.h"
 
 static NSString * const kMessageCellID = @"MessageCellID";
 
@@ -43,7 +44,7 @@ static NSString * const kMessageCellID = @"MessageCellID";
 @implementation SHMessageCenterTVC
 
 + (instancetype)messageCenterTVCWithCamera:(SHCamera *)camera {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MessageCenter" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:kMessageCenterStoryboardName bundle:nil];
     SHMessageCenterTVC *vc = [sb instantiateInitialViewController];
     vc.camera = camera;
     return vc;
@@ -65,6 +66,8 @@ static NSString * const kMessageCellID = @"MessageCellID";
     self.tableView.rowHeight = 100;
     
     [self setupRefreshView];
+    
+    self.title = @"消息中心";
 }
 
 - (void)setupRefreshView {
@@ -135,6 +138,13 @@ static NSString * const kMessageCellID = @"MessageCellID";
     return cell;
 }
 
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SHMessageInfo *messageInfo = self.listViewModel.messageList[indexPath.row];
+    SHSingleImageDisplayVC *vc = [SHSingleImageDisplayVC singleImageDisplayVCWithMessageInfo:messageInfo];
+    
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 @end

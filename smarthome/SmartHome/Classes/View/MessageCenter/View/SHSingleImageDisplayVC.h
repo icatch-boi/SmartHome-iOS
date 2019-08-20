@@ -1,4 +1,4 @@
-// SHMessage.h
+// SHSingleImageDisplayVC.h
 
 /**************************************************************************
  *
@@ -22,30 +22,17 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 4:50 PM.
+ // Created by zj on 2019/8/20 10:28 AM.
     
 
-#import <Foundation/Foundation.h>
-#import "SHMessage.h"
-#import "SHMessageFile.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
+@class SHMessageInfo;
+@interface SHSingleImageDisplayVC : UIViewController
 
-@interface SHMessageInfo : NSObject
-
-@property (nonatomic, copy, readonly) NSString *msg;
-@property (nonatomic, copy, readonly) NSString *time;
-@property (nonatomic, strong, readonly) SHMessage *message;
-@property (nonatomic, strong) NSString *deviceID;
-@property (nonatomic, strong, readonly) SHMessageFile *messageFile;
-
-@property (nonatomic, copy, readonly) NSString *localTimeString;
-
-+ (instancetype)messageInfoWithDict:(NSDictionary *)dict;
-
-- (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion;
++ (instancetype)singleImageDisplayVCWithMessageInfo:(SHMessageInfo *)messageInfo;
 
 @end
 

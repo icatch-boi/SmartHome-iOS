@@ -27,7 +27,6 @@
 
 #import "SHMessageCell.h"
 #import "SHMessageInfo.h"
-#import "SHUserAccountCommon.h"
 
 @interface SHMessageCell ()
 
@@ -50,6 +49,7 @@
     _timeLabel.numberOfLines = 0;
     _timeLabel.font = [UIFont systemFontOfSize:14.0];
     _timeLabel.textColor = [UIColor ic_colorWithHex:kTextColor];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -61,8 +61,8 @@
 - (void)setMessageInfo:(SHMessageInfo *)messageInfo {
     _messageInfo = messageInfo;
     
-    _titleLabel.text = [self translateMessageType:messageInfo.message.msgType.unsignedIntegerValue];
-    _timeLabel.text = [SHUserAccountCommon dateTransformFromString:messageInfo.time];
+    _titleLabel.text = messageInfo.message.msgTypeString;
+    _timeLabel.text = messageInfo.localTimeString;
     _iconImgView.image = [[UIImage imageNamed:@"empty_photo"] ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
 
     
@@ -74,53 +74,6 @@
             });
         }
     }];
-}
-
-- (NSString *)translateMessageType:(int)type {
-    NSString *str = nil;
-    
-    switch (type) {
-        case PushMessageTypePir:
-            str = NSLocalizedString(@"kMonitorTypePir", nil);
-            break;
-        case PushMessageTypeRing:
-            str = NSLocalizedString(@"kMonitorTypeRing", nil);
-            break;
-            
-        case PushMessageTypeLowPower:
-            str = @"LowPower";
-            break;
-            
-        case PushMessageTypeSDCardFull:
-            str = @"SDCardFull";
-            break;
-            
-        case PushMessageTypeSDCardError:
-            str = @"SDCardError";
-            break;
-            
-        case PushMessageTypeFDHit:
-            str = @"FD Hit";
-            break;
-            
-        case PushMessageTypeFDMiss:
-            str = @"FD Miss";
-            break;
-            
-        case PushMessageTypePushTest:
-            str = @"PushTest";
-            break;
-            
-        case PushMessageTypeTamperAlarm:
-            str = @"Demolish";
-            break;
-            
-        default:
-            str = @"unknown";
-            break;
-    }
-    
-    return str;
 }
 
 @end

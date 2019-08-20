@@ -17,6 +17,8 @@
 @property (nonatomic, copy) NSNumber *msgType;
 @property (nonatomic, copy) NSNumber *timeInSecs;
 
+@property (nonatomic, copy, readonly) NSString *msgTypeString;
+
 - (instancetype)initMessageWithDict:(NSDictionary *)dict;
 + (instancetype)messageWithDict:(NSDictionary *)dict;
 

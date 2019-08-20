@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -72,6 +73,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vZQ-GG-2zv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="20.625" y="144.71830985915494"/>
+        </scene>
+        <!--Single Image DisplayVC-->
+        <scene sceneID="tz3-Kj-S6G">
+            <objects>
+                <viewController storyboardIdentifier="SHSingleImageDisplayVC" id="Jnn-d3-qw2" customClass="SHSingleImageDisplayVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3uC-Sx-r97">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NCc-Qs-udK">
+                                <rect key="frame" x="5" y="197" width="310" height="174"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="NCc-Qs-udK" secondAttribute="height" multiplier="16:9" id="nfI-m8-N0e"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jbp-HE-VJG">
+                                <rect key="frame" x="20" y="391" width="280" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Jbp-HE-VJG" firstAttribute="leading" secondItem="9Nx-co-Y2M" secondAttribute="leading" constant="20" id="3CR-wZ-lJT"/>
+                            <constraint firstItem="Jbp-HE-VJG" firstAttribute="centerX" secondItem="3uC-Sx-r97" secondAttribute="centerX" id="ACe-pL-7V0"/>
+                            <constraint firstItem="NCc-Qs-udK" firstAttribute="centerX" secondItem="3uC-Sx-r97" secondAttribute="centerX" id="DDq-Kd-uDn"/>
+                            <constraint firstItem="Jbp-HE-VJG" firstAttribute="top" secondItem="NCc-Qs-udK" secondAttribute="bottom" constant="20" id="QJY-yV-VPz"/>
+                            <constraint firstItem="NCc-Qs-udK" firstAttribute="centerY" secondItem="3uC-Sx-r97" secondAttribute="centerY" id="Sdh-DS-gXx"/>
+                            <constraint firstItem="9Nx-co-Y2M" firstAttribute="trailing" secondItem="NCc-Qs-udK" secondAttribute="trailing" constant="5" id="Z6k-or-9Ni"/>
+                            <constraint firstItem="9Nx-co-Y2M" firstAttribute="trailing" secondItem="Jbp-HE-VJG" secondAttribute="trailing" constant="20" id="gCA-cH-x6A"/>
+                            <constraint firstItem="NCc-Qs-udK" firstAttribute="leading" secondItem="9Nx-co-Y2M" secondAttribute="leading" constant="5" id="nwh-gy-uiJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="9Nx-co-Y2M"/>
+                    </view>
+                    <connections>
+                        <outlet property="bigImageView" destination="NCc-Qs-udK" id="dBC-Ga-EKo"/>
+                        <outlet property="detailLabel" destination="Jbp-HE-VJG" id="O4Z-Pi-mFK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eFi-28-YO5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="21" y="859"/>
         </scene>
     </scenes>
 </document>
