@@ -560,6 +560,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             break;
     }
     
+    [self updateMessageCountithCameraUID:aps[@"devID"]];
+
     if (msgType != 106) {
         if (completionHandler == nil) {
             return;
@@ -567,6 +569,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         
         completionHandler(UNNotificationPresentationOptionAlert/*|UNNotificationPresentationOptionBadge*/); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     }
+}
+
+- (void)updateMessageCountithCameraUID:(NSString *)uid {
+    SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:uid];
+    camObj.newMessageCount ++;
 }
 
 - (BOOL)upgradingWithCameraUID:(NSString *)uid {

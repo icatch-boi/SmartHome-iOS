@@ -1,4 +1,4 @@
-// SHMessageCenterTVC.h
+// SHMsgBadgeButton.m
 
 /**************************************************************************
  *
@@ -22,17 +22,25 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 3:29 PM.
+ // Created by zj on 2019/8/21 10:58 AM.
     
 
-#import <UIKit/UIKit.h>
+#import "SHMsgBadgeButton.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation SHMsgBadgeButton
 
-@interface SHMessageCenterTVC : UITableViewController
-
-+ (instancetype)messageCenterTVCWithCameraObj:(SHCameraObject *)cameraObj;
+- (void)setSubFrame {
+    [super setSubFrame];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.imageView.image) {
+            CGPoint center = CGPointMake(CGRectGetMaxX(self.imageView.frame) - CGRectGetWidth(self.badgeLab.bounds), self.imageView.frame.origin.y + CGRectGetHeight(self.badgeLab.bounds));
+            self.badgeLab.center = center;
+        } else {
+            CGPoint center = CGPointMake(self.bounds.size.width, self.bounds.origin.y);
+            self.badgeLab.center = center;
+        }
+    });
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

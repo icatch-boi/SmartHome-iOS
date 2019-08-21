@@ -30,23 +30,26 @@
 #import <MJRefresh/MJRefresh.h>
 #import "SHMessageListViewModel.h"
 #import "SHSingleImageDisplayVC.h"
+#import "UIButton+Badge.h"
 
 static NSString * const kMessageCellID = @"MessageCellID";
+static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
 
 @interface SHMessageCenterTVC ()
 
 @property (nonatomic, strong) SHMessageListViewModel *listViewModel;
 @property (nonatomic, assign, getter=isPullup) BOOL pullup;
-@property (nonatomic, strong) SHCamera *camera;
+@property (nonatomic, strong) SHCameraObject *cameraObj;
+@property (nonatomic, weak) UIButton *badgeButton;
 
 @end
 
 @implementation SHMessageCenterTVC
 
-+ (instancetype)messageCenterTVCWithCamera:(SHCamera *)camera {
++ (instancetype)messageCenterTVCWithCameraObj:(SHCameraObject *)cameraObj {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:kMessageCenterStoryboardName bundle:nil];
     SHMessageCenterTVC *vc = [sb instantiateInitialViewController];
-    vc.camera = camera;
+    vc.cameraObj = cameraObj;
     return vc;
 }
 
@@ -61,6 +64,10 @@ static NSString * const kMessageCellID = @"MessageCellID";
     [self setupGUI];
 }
 
+- (void)dealloc {
+    [_cameraObj removeObserver:self forKeyPath:kNewMessageCountKeyPath];
+}
+
 - (void)setupGUI {
     self.tableView.backgroundColor = [UIColor ic_colorWithHex:kBackgroundThemeColor];
     self.tableView.rowHeight = 100;
@@ -70,7 +77,22 @@ static NSString * const kMessageCellID = @"MessageCellID";
     
     self.title = @"消息中心";
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(backTopAndRefresh)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(backTopAndRefresh)];
+    [self setupNavigationItem];
+    [_cameraObj addObserver:self forKeyPath:kNewMessageCountKeyPath options:0 context:SHMessageCenterTVCContext];
+}
+
+- (void)setupNavigationItem {
+    UIButton *button = [[UIButton alloc] init];
+    self.badgeButton = button;
+
+    [button setImage:[UIImage imageNamed:@"nav-btn-refresh"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(backTopAndRefresh) forControlEvents:UIControlEventTouchUpInside];
+    [button sizeToFit];
+    button.shouldHideBadgeAtZero = YES;
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [self updateBadgeDisplay];
 }
 
 - (void)setupRefreshView {
@@ -124,6 +146,7 @@ static NSString * const kMessageCellID = @"MessageCellID";
 }
 
 - (void)backTopAndRefresh {
+    _cameraObj.newMessageCount = 0;
     //!< 说明 section不能为NSNotFound row可以为NSNotFound，避免无数据时，引起崩溃😖
     if (self.tableView.numberOfSections) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -133,7 +156,7 @@ static NSString * const kMessageCellID = @"MessageCellID";
 }
 
 - (void)loadData {
-    [self.listViewModel loadMessageWithCamera:self.camera pullup:self.isPullup completion:^(BOOL isSuccess, BOOL shouldRefresh) {
+    [self.listViewModel loadMessageWithCamera:self.cameraObj.camera pullup:self.isPullup completion:^(BOOL isSuccess, BOOL shouldRefresh) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.isPullup) {
                 [self.tableView.mj_footer endRefreshing];
@@ -185,6 +208,20 @@ static NSString * const kMessageCellID = @"MessageCellID";
     SHSingleImageDisplayVC *vc = [SHSingleImageDisplayVC singleImageDisplayVCWithMessageInfo:messageInfo];
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == SHMessageCenterTVCContext) {
+        if ([keyPath isEqualToString:kNewMessageCountKeyPath]) {
+            [self updateBadgeDisplay];
+        }
+    }
+}
+
+- (void)updateBadgeDisplay {
+    _badgeButton.badgeValue = [NSString stringWithFormat:@"%d", _cameraObj.newMessageCount];
+    _badgeButton.badgeBGColor = [UIColor orangeColor];
+    _badgeButton.badgeOriginX = CGRectGetWidth(_badgeButton.bounds) - _badgeButton.badge.frame.size.width/2 - _badgeButton.badgePadding * 0.5;
 }
 
 @end

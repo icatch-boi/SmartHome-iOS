@@ -27,6 +27,7 @@
 
 @property (nonatomic, strong) SHStreamOperate *streamOper;
 @property (nonatomic, assign) NSInteger newFilesCount;
+@property (nonatomic, assign) NSUInteger newMessageCount;
 
 @property (nonatomic) BOOL isConnect;
 @property (nonatomic) dispatch_semaphore_t semaphore;

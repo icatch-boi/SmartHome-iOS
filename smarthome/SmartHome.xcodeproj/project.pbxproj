@@ -26,6 +26,9 @@
 		3817C198230BC10500033E20 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */; };
 		3817C199230BC10500033E20 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18D230BC10500033E20 /* NSData+ImageContentType.m */; };
 		3817C19A230BC10500033E20 /* UIImage+MemoryCacheCost.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */; };
+		3817C19E230CEADA00033E20 /* SHMsgBadgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */; };
+		3817C1A4230D131C00033E20 /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A2230D131C00033E20 /* UIButton+Badge.m */; };
+		3817C1A5230D131C00033E20 /* UIBarButtonItem+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
 		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
@@ -435,6 +438,12 @@
 		3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MemoryCacheCost.m"; sourceTree = "<group>"; };
 		3817C18F230BC10500033E20 /* UIImage+MultiFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MultiFormat.h"; sourceTree = "<group>"; };
 		3817C190230BC10500033E20 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
+		3817C19C230CEADA00033E20 /* SHMsgBadgeButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMsgBadgeButton.h; sourceTree = "<group>"; };
+		3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMsgBadgeButton.m; sourceTree = "<group>"; };
+		3817C1A0230D131C00033E20 /* UIBarButtonItem+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Badge.h"; sourceTree = "<group>"; };
+		3817C1A1230D131C00033E20 /* UIButton+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Badge.h"; sourceTree = "<group>"; };
+		3817C1A2230D131C00033E20 /* UIButton+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Badge.m"; sourceTree = "<group>"; };
+		3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Badge.m"; sourceTree = "<group>"; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
 		3818D66421709AB200AF846C /* PushTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PushTest.storyboard; sourceTree = "<group>"; };
@@ -1220,6 +1229,26 @@
 				3817C18B230BC10500033E20 /* UIImage+GIF.m */,
 			);
 			path = Categories;
+			sourceTree = "<group>";
+		};
+		3817C19B230CEA9500033E20 /* BadgeButton */ = {
+			isa = PBXGroup;
+			children = (
+				3817C19C230CEADA00033E20 /* SHMsgBadgeButton.h */,
+				3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */,
+			);
+			path = BadgeButton;
+			sourceTree = "<group>";
+		};
+		3817C19F230D130400033E20 /* BadgeButton */ = {
+			isa = PBXGroup;
+			children = (
+				3817C1A0230D131C00033E20 /* UIBarButtonItem+Badge.h */,
+				3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */,
+				3817C1A1230D131C00033E20 /* UIButton+Badge.h */,
+				3817C1A2230D131C00033E20 /* UIButton+Badge.m */,
+			);
+			path = BadgeButton;
 			sourceTree = "<group>";
 		};
 		3818D66321709A8C00AF846C /* PushTest */ = {
@@ -2140,6 +2169,7 @@
 		38E5BFFE20A3F5AE003004E0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3817C19B230CEA9500033E20 /* BadgeButton */,
 				388CCA6422CCADC000FC8909 /* AddDeviceView */,
 				38E5C00320A3F5AE003004E0 /* CameraCell */,
 				38E5C00020A3F5AE003004E0 /* SHLocalAlbumCell.h */,
@@ -2655,6 +2685,7 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3817C19F230D130400033E20 /* BadgeButton */,
 				3817C176230BC10500033E20 /* ZJDataCache */,
 				38F604A421DC86EA00B0F6D0 /* XDSDropDownMenu */,
 				38C7940321C2279600E55F96 /* MJRefresh.framework */,
@@ -3272,6 +3303,7 @@
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
 				38E5C25E20A3F66D003004E0 /* SHCameraProperty.m in Sources */,
 				38E5C26020A3F66D003004E0 /* SHMessage.m in Sources */,
+				3817C19E230CEADA00033E20 /* SHMsgBadgeButton.m in Sources */,
 				38F03C24230A804C0089EC15 /* SHMessageFile.m in Sources */,
 				38A38FAD22C0CE7100E831E3 /* SHAccountSettingCommonCell.m in Sources */,
 				3897E0C72180743100E72417 /* XJSetupDeviceSSIDVC.m in Sources */,
@@ -3331,6 +3363,7 @@
 				38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */,
 				3817C197230BC10500033E20 /* UIImage+GIF.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
+				3817C1A4230D131C00033E20 /* UIButton+Badge.m in Sources */,
 				38E5C1C420A3F5AF003004E0 /* SH_XJ_SettingTVC.m in Sources */,
 				38E5C31020A3F81F003004E0 /* SHDownloadProgressView.m in Sources */,
 				3897E0BA2180743100E72417 /* QBTools.m in Sources */,
@@ -3380,6 +3413,7 @@
 				38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */,
 				388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
+				3817C1A5230D131C00033E20 /* UIBarButtonItem+Badge.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */,

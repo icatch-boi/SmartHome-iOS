@@ -1,4 +1,4 @@
-// SHMessageCenterTVC.h
+// SHMsgBadgeButton.h
 
 /**************************************************************************
  *
@@ -22,16 +22,14 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 3:29 PM.
+ // Created by zj on 2019/8/21 10:58 AM.
     
 
-#import <UIKit/UIKit.h>
+#import "BadgeButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHMessageCenterTVC : UITableViewController
-
-+ (instancetype)messageCenterTVCWithCameraObj:(SHCameraObject *)cameraObj;
+@interface SHMsgBadgeButton : BadgeButton
 
 @end
 

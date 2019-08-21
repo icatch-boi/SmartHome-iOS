@@ -26,18 +26,20 @@
     
 
 #import "SHCameraViewCell.h"
+#import "SHMsgBadgeButton.h"
 
 static UIColor * const kDefaultBackgroundColor = [UIColor ic_colorWithHex:0xF2F2F2];
 static UIColor * const kSelectedBackgroundColor = [UIColor ic_colorWithHex:0x9b9b9b alpha:0.65];
 static UIColor * const kButtonDefaultBackgroundColor = [UIColor ic_colorWithHex:0xF2F2F2];
 static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 
 @interface SHCameraViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *cameraNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *cameraThumbnail;
 @property (weak, nonatomic) IBOutlet UIView *footBarView;
-@property (weak, nonatomic) IBOutlet UIButton *messageBtn;
+@property (weak, nonatomic) IBOutlet SHMsgBadgeButton *messageBtn;
 @property (weak, nonatomic) IBOutlet UIButton *albumBtn;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
 @property (weak, nonatomic) IBOutlet UILabel *lastPreviewTime;
@@ -48,6 +50,10 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 @end
 
 @implementation SHCameraViewCell
+
+- (void)dealloc {
+    [_viewModel.cameraObj removeObserver:self forKeyPath:kNewMessageCountKeyPath];
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -118,6 +124,9 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
     (viewModel.cameraObj.camera.operable == 1) ? [self removeShareDescriptionLabel] : [self addShareDescriptionLabel];
+    
+    [_viewModel.cameraObj addObserver:self forKeyPath:kNewMessageCountKeyPath options:NSKeyValueObservingOptionNew context:SHCameraViewCellContext];
+    _messageBtn.badgeValue = viewModel.cameraObj.newMessageCount;
 }
 
 - (UILabel *)sharedLabel {
@@ -208,6 +217,9 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     if ([self.delegate respondsToSelector:@selector(enterMessageCenterWithCell:)]) {
         [self.delegate enterMessageCenterWithCell:self];
     }
+    
+    // After click clear
+    _viewModel.cameraObj.newMessageCount = 0;
 }
 
 - (IBAction)localAlbumAction:(id)sender {
@@ -259,6 +271,14 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     _cameraThumbnail.highlighted = NO;
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == SHCameraViewCellContext) {
+        if ([keyPath isEqualToString:kNewMessageCountKeyPath]) {
+            _messageBtn.badgeValue = _viewModel.cameraObj.newMessageCount;
+        }
+    }
 }
 
 @end
