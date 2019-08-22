@@ -29,6 +29,7 @@
 #import "SHCameraHelper.h"
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
 #import "XJLocalAssetHelper.h"
+#import "SHMessageCountManager.h"
 
 @implementation CoreDataHandler (SHCamera)
 
@@ -172,6 +173,8 @@
     [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
         SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
     }];
+    
+    [SHMessageCountManager removeMessageCountCacheWithCameraUID:cameraUid];
 }
 
 - (void)removeCacheThumbnailWithUid:(NSString *)cameraUid {

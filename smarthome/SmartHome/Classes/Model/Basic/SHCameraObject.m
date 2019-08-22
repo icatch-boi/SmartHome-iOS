@@ -12,6 +12,7 @@
 #import "SHDownloadManager.h"
 #import "SHNetworkManager.h"
 #import "SHNetworkManager+SHCamera.h"
+#import "SHMessageCountManager.h"
 
 #define kChannelsPerFrame   1
 #define kBitsPerChannel     16
@@ -29,6 +30,7 @@
 @property (nonatomic, strong) SHObserver *clientCountObserver;
 @property (nonatomic, strong) SHObserver *noTalkingObserver;
 @property (nonatomic, strong) SHObserver *recvVideoTimeoutObserver;
+@property (nonatomic, assign) NSUInteger newMessageCount;
 
 @end
 
@@ -42,6 +44,7 @@
 	obj.cameraProperty = [[SHCameraProperty alloc] init];
 	obj.camera = camera;
     obj.streamQuality = VIDEO_QUALITY_SMOOTH;
+    obj.newMessageCount = 0;
 
 	return obj;
 }
@@ -582,6 +585,23 @@
         
         self.bitRateObserver = nil;
     }
+}
+
+#pragma mark - NewMessageCount Ops
+- (void)incrementNewMessageCount {
+    [self incrementNewMessageCountBy:1];
+}
+
+- (void)incrementNewMessageCountBy:(NSUInteger)amount {
+    self.newMessageCount += amount;
+    
+    [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
+}
+
+- (void)resetNewMessageCount {
+    self.newMessageCount = 0;
+    
+    [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
 }
 
 @end

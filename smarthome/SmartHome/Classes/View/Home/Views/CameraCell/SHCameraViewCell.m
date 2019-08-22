@@ -217,9 +217,6 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     if ([self.delegate respondsToSelector:@selector(enterMessageCenterWithCell:)]) {
         [self.delegate enterMessageCenterWithCell:self];
     }
-    
-    // After click clear
-    _viewModel.cameraObj.newMessageCount = 0;
 }
 
 - (IBAction)localAlbumAction:(id)sender {

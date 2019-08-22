@@ -62,6 +62,7 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
+    [_cameraObj resetNewMessageCount];
 }
 
 - (void)dealloc {
@@ -146,7 +147,7 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
 }
 
 - (void)backTopAndRefresh {
-    _cameraObj.newMessageCount = 0;
+    [_cameraObj resetNewMessageCount];
     //!< 说明 section不能为NSNotFound row可以为NSNotFound，避免无数据时，引起崩溃😖
     if (self.tableView.numberOfSections) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];

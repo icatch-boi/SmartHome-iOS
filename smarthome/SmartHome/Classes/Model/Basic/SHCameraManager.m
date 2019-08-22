@@ -28,6 +28,7 @@
 - (void)addSHCameraObject:(SHCamera *)shCamera {
     if ([self containsObject:shCamera.cameraUid] == -1) {
         SHCameraObject *cameraObj = [SHCameraObject cameraObjectWithCamera:shCamera];
+        [cameraObj incrementNewMessageCountBy:[self getMessageCountWithCameraUID:shCamera.cameraUid]];
         [self.smarthomeCams addObject:cameraObj];
     }
 }
@@ -104,6 +105,20 @@
             [obj disConnectWithSuccessBlock:nil failedBlock:nil];
         }
     }];
+}
+
+- (NSUInteger)getMessageCountWithCameraUID:(NSString *)uid {
+    NSUInteger messageCount = 0;
+    
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSDictionary *local = [defaults objectForKey:kRecvNotificationCount];
+    if (local != nil) {
+        if ([local.allKeys containsObject:uid]) {
+            messageCount = [local[uid] unsignedIntegerValue];
+        }
+    }
+    
+    return messageCount;
 }
 
 @end

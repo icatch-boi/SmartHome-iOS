@@ -560,7 +560,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             break;
     }
     
-    [self updateMessageCountithCameraUID:aps[@"devID"]];
+    [self updateMessageCountWithCameraUID:aps[@"devID"]];
 
     if (msgType != 106) {
         if (completionHandler == nil) {
@@ -571,9 +571,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
 }
 
-- (void)updateMessageCountithCameraUID:(NSString *)uid {
+- (void)updateMessageCountWithCameraUID:(NSString *)uid {
     SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:uid];
-    camObj.newMessageCount ++;
+    [camObj incrementNewMessageCount];
 }
 
 - (BOOL)upgradingWithCameraUID:(NSString *)uid {

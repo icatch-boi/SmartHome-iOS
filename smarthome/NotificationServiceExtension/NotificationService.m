@@ -42,6 +42,8 @@
         } else {
             self.contentHandler(self.bestAttemptContent);
         }
+        
+        [self updateMessageCountWithCameraUID:userInfo[@"devID"]];
     } else {
         [self test];
         self.contentHandler(self.bestAttemptContent);
@@ -143,6 +145,8 @@
     if (str != nil) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kNotificationContentInfo", nil), devID, time, str];
     }
+    
+    [self updateMessageCountWithCameraUID:aps[@"devID"]];
 }
 
 - (NSDictionary *)parseNotification:(NSDictionary *)userInfo {
@@ -207,6 +211,33 @@
     currentCount += count.integerValue;
     
     [defaults setObject:@(currentCount) forKey:kRecvNotificationCount];
+}
+
+- (void)updateMessageCountWithCameraUID:(NSString *)uid {
+    if (uid.length == 0) {
+        NSLog(@"uid is nil.");
+        return;
+    }
+    
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSDictionary *local = [defaults objectForKey:kRecvNotificationCount];
+    
+    NSMutableDictionary *current;
+    if (local == nil) {
+        current = [[NSMutableDictionary alloc] init];
+        [current setObject:@(1) forKey:uid];
+    } else {
+        current = [[NSMutableDictionary alloc] initWithDictionary:local];
+        
+        NSUInteger currentCount = 1;
+        if ([current.allKeys containsObject:uid]) {
+            currentCount += [current[uid] unsignedIntegerValue];
+        }
+        
+        current[uid] = @(currentCount);
+    }
+    
+    [defaults setObject:current.copy forKey:kRecvNotificationCount];
 }
 
 - (NSString *)checkRecvTime:(NSString *)timeStr {

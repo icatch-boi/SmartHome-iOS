@@ -27,7 +27,7 @@
 
 @property (nonatomic, strong) SHStreamOperate *streamOper;
 @property (nonatomic, assign) NSInteger newFilesCount;
-@property (nonatomic, assign) NSUInteger newMessageCount;
+@property (nonatomic, assign, readonly) NSUInteger newMessageCount;
 
 @property (nonatomic) BOOL isConnect;
 @property (nonatomic) dispatch_semaphore_t semaphore;
@@ -45,5 +45,10 @@
 - (void)updatePreviewThumbnailWithPvTime: (NSString *)tempPVTime;
 - (void)initCamera;
 - (void)openAudioServer;
+
+#pragma mark - NewMessageCount Ops
+- (void)incrementNewMessageCount;
+- (void)incrementNewMessageCountBy:(NSUInteger)amount;
+- (void)resetNewMessageCount;
 
 @end
