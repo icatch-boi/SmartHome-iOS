@@ -30,6 +30,15 @@
 		3817C1A4230D131C00033E20 /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A2230D131C00033E20 /* UIButton+Badge.m */; };
 		3817C1A5230D131C00033E20 /* UIBarButtonItem+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */; };
 		3817C1AB230E790500033E20 /* SHMessageCountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1AA230E790500033E20 /* SHMessageCountManager.m */; };
+		3817C1B2230F97A900033E20 /* ZJImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17A230BC10500033E20 /* ZJImageCache.m */; };
+		3817C1B3230F97A900033E20 /* ZJImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C183230BC10500033E20 /* ZJImageCoderHelper.m */; };
+		3817C1B4230F97A900033E20 /* UIImage+MemoryCacheCost.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */; };
+		3817C1B5230F97A900033E20 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */; };
+		3817C1B6230F97A900033E20 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18D230BC10500033E20 /* NSData+ImageContentType.m */; };
+		3817C1B7230F97A900033E20 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18B230BC10500033E20 /* UIImage+GIF.m */; };
+		3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */; };
+		3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17E230BC10500033E20 /* ZJDiskCache.m */; };
+		3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17F230BC10500033E20 /* ZJMemoryCache.m */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
 		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
@@ -3556,6 +3565,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3817C1B2230F97A900033E20 /* ZJImageCache.m in Sources */,
+				3817C1B3230F97A900033E20 /* ZJImageCoderHelper.m in Sources */,
+				3817C1B4230F97A900033E20 /* UIImage+MemoryCacheCost.m in Sources */,
+				3817C1B5230F97A900033E20 /* UIImage+MultiFormat.m in Sources */,
+				3817C1B6230F97A900033E20 /* NSData+ImageContentType.m in Sources */,
+				3817C1B7230F97A900033E20 /* UIImage+GIF.m in Sources */,
+				3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */,
+				3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */,
+				3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */,
 				38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */,
 				38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */,
 			);
