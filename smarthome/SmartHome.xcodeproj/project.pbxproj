@@ -39,6 +39,7 @@
 		3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */; };
 		3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17E230BC10500033E20 /* ZJDiskCache.m */; };
 		3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17F230BC10500033E20 /* ZJMemoryCache.m */; };
+		3817C1BE230FE43800033E20 /* SHMessageFileHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
 		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
@@ -456,6 +457,8 @@
 		3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Badge.m"; sourceTree = "<group>"; };
 		3817C1A9230E790500033E20 /* SHMessageCountManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCountManager.h; sourceTree = "<group>"; };
 		3817C1AA230E790500033E20 /* SHMessageCountManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCountManager.m; sourceTree = "<group>"; };
+		3817C1BC230FE43800033E20 /* SHMessageFileHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageFileHelper.h; sourceTree = "<group>"; };
+		3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageFileHelper.m; sourceTree = "<group>"; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
 		3818D66421709AB200AF846C /* PushTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PushTest.storyboard; sourceTree = "<group>"; };
@@ -2690,6 +2693,8 @@
 				38F4424B1FAC079A00BDA6DF /* NotificationService.h */,
 				38F4424C1FAC079A00BDA6DF /* NotificationService.m */,
 				38F4424E1FAC079A00BDA6DF /* Info.plist */,
+				3817C1BC230FE43800033E20 /* SHMessageFileHelper.h */,
+				3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */,
 			);
 			path = NotificationServiceExtension;
 			sourceTree = "<group>";
@@ -3573,6 +3578,7 @@
 				3817C1B7230F97A900033E20 /* UIImage+GIF.m in Sources */,
 				3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */,
 				3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */,
+				3817C1BE230FE43800033E20 /* SHMessageFileHelper.m in Sources */,
 				3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */,
 				38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */,
 				38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */,
