@@ -30,6 +30,7 @@
     // Modify the notification content here...
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
     self.bestAttemptContent.title = NSLocalizedString(@"kNotificationInfoTitle", nil);
+    self.bestAttemptContent.body = NSLocalizedString(@"kNotificationContentBasicBody", nil);
 
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
         NSDictionary *userInfo = self.bestAttemptContent.userInfo;

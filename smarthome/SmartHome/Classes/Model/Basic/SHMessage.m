@@ -30,7 +30,7 @@
     return [self translateMessageType:_msgType.unsignedIntegerValue];
 }
 
-- (NSString *)translateMessageType:(int)type {
+- (NSString *)translateMessageType:(NSUInteger)type {
     NSString *str = nil;
     
     switch (type) {
@@ -42,15 +42,15 @@
             break;
             
         case PushMessageTypeLowPower:
-            str = @"LowPower";
+            str = NSLocalizedString(@"kPushMessageTypeLowPower", nil);
             break;
             
         case PushMessageTypeSDCardFull:
-            str = @"SDCardFull";
+            str = NSLocalizedString(@"kPushMessageTypeSDCardFull", nil);
             break;
             
         case PushMessageTypeSDCardError:
-            str = @"SDCardError";
+            str = NSLocalizedString(@"kPushMessageTypeSDCardError", nil);
             break;
             
         case PushMessageTypeFDHit:
@@ -66,11 +66,15 @@
             break;
             
         case PushMessageTypeTamperAlarm:
-            str = @"Demolish";
+            str = NSLocalizedString(@"kPushMessageTypeTamperAlarm", nil);
+            break;
+            
+        case PushMessageTypeFaceRecognition:
+            str = NSLocalizedString(@"kPushMessageTypeFaceRecognition", nil);
             break;
             
         default:
-            str = @"unknown";
+            str = NSLocalizedString(@"kPushMessageTypeUnknown", nil);
             break;
     }
     

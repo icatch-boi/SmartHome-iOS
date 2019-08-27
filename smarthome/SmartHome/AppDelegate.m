@@ -30,6 +30,7 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SHDeviceUpgradeVC.h"
+#import "SHMessageCenterTVC.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -120,6 +121,7 @@
     homeVC.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext;
     
     if (launchOptions != nil) {
+#if 0
         NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
@@ -128,6 +130,9 @@
         if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             homeVC.notRequiredLogin = YES;
         }
+#else
+        homeVC.notRequiredLogin = YES;
+#endif
     }
 }
 
@@ -189,6 +194,7 @@
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
+#if 0
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
         if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
@@ -206,6 +212,49 @@
         
             [mainVC pushViewController:vc animated:NO];
         }
+#else
+        if (aps == nil) {
+            SHLogError(SHLogTagAPP, @"Notification is nil.");
+            return;
+        }
+        
+        NSString *cameraUID = aps[@"devID"];
+        if (cameraUID == nil) {
+            SHLogError(SHLogTagAPP, @"Notification not contain `devID'.");
+            return;
+        }
+        
+        [[[CoreDataHandler sharedCoreDataHander] fetchedCamera] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [[SHCameraManager sharedCameraManger] addSHCameraObject:obj];
+        }];
+        
+        UIViewController *dstVC = nil;
+        
+        NSUInteger msgType = [aps[@"msgType"] unsignedIntegerValue];
+        if ((msgType == PushMessageTypeRing
+             || msgType == PushMessageTypeFDHit
+             || msgType == PushMessageTypeFaceRecognition) && ![self checkNotificationWhetherOverdue:aps]) {
+            SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
+            
+            vc.cameraUid = cameraUID;
+            vc.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext;
+            vc.notification = aps;
+            
+            dstVC = vc;
+        } else {
+            SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:cameraUID];
+            if (camObj != nil) {
+                dstVC = [SHMessageCenterTVC messageCenterTVCWithCameraObj:camObj];
+            }
+        }
+        
+        if (dstVC != nil) {
+            ZJSlidingDrawerViewController *slidingVC = (ZJSlidingDrawerViewController *)self.window.rootViewController;
+            UINavigationController *mainVC = (UINavigationController *)slidingVC.mainVC;
+            
+            [mainVC pushViewController:dstVC animated:NO];
+        }
+#endif
     } else {
     }
 }

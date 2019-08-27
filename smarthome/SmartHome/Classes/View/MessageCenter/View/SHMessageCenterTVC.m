@@ -76,7 +76,7 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
     [self setupRefreshView];
     [self setupPullupRefreshView];
     
-    self.title = @"消息中心";
+    self.title = NSLocalizedString(@"kMessageCenter", nil);
     
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(backTopAndRefresh)];
     [self setupNavigationItem];
@@ -220,7 +220,7 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
 }
 
 - (void)updateBadgeDisplay {
-    _badgeButton.badgeValue = [NSString stringWithFormat:@"%d", _cameraObj.newMessageCount];
+    _badgeButton.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)_cameraObj.newMessageCount];
     _badgeButton.badgeBGColor = [UIColor orangeColor];
     _badgeButton.badgeOriginX = CGRectGetWidth(_badgeButton.bounds) - _badgeButton.badge.frame.size.width/2 - _badgeButton.badgePadding * 0.5;
 }

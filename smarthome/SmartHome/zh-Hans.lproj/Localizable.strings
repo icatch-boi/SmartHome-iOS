@@ -480,3 +480,12 @@
 "kNoDevicesToShare" = "没有可分享的设备";
 "kDevice" = "设备";
 "kTotalShared" = "共分享给 %d 个用户";
+
+"kNotificationContentBasicBody" = "刚刚收到一条新的门铃通知，点击查看详情";
+"kMessageCenter" = "消息中心";
+"kPushMessageTypeLowPower" = "低电量";
+"kPushMessageTypeSDCardFull" = "SD卡满";
+"kPushMessageTypeSDCardError" = "SD卡出错";
+"kPushMessageTypeTamperAlarm" = "防拆报警";
+"kPushMessageTypeFaceRecognition" = "门铃（带AI）";
+"kPushMessageTypeUnknown" = "未知类型";
