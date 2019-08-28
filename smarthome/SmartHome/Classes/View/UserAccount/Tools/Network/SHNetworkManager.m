@@ -591,6 +591,11 @@
             
             self.userAccount.userExtensionsInfo = result;
             [self.userAccount saveUserAccount];
+        } else {
+            ZJRequestError *error = result;
+            if (error.error_code.intValue == 40009) {
+                [self bgWakeupDefaultSet];
+            }
         }
     }];
 }

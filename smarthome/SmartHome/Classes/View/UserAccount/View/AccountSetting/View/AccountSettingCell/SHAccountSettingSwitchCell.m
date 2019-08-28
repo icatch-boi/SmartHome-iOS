@@ -105,7 +105,7 @@
 
 - (void)updateBackgroundWakeupStatus {
     NSDictionary *info = @{
-                           @"bgWakeup": @(self.switchButton.isOn),
+                           @"bgWakeup": @((int)self.switchButton.isOn),
                            };
     
     WEAK_SELF(self);
