@@ -28,6 +28,7 @@
 #import "SHSingleImageDisplayVC.h"
 #import "SHMessageInfo.h"
 #import "SVProgressHUD.h"
+#import "UIImageView+ZJWebCache.h"
 
 @interface SHSingleImageDisplayVC ()
 
@@ -77,7 +78,7 @@
     WEAK_SELF(self);
     [_messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
         [SVProgressHUD dismiss];
-        
+#if 0
         if (image) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakself.bigImageView.image = image;
@@ -85,6 +86,9 @@
                 [weakself setupRightBarButtonItem];
             });
         }
+#else
+        [weakself.bigImageView setImageURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier];
+#endif
     }];
 }
 

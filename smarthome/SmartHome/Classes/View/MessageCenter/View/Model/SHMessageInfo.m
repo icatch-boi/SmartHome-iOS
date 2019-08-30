@@ -37,6 +37,7 @@
 @property (nonatomic, strong) SHMessage *message;
 @property (nonatomic, strong) SHMessageFile *messageFile;
 @property (nonatomic, strong) dispatch_semaphore_t downloadSemaphore;
+@property (nonatomic, copy) NSString *fileIdentifier;
 
 @end
 
@@ -71,6 +72,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_semaphore_wait(self.downloadSemaphore, DISPATCH_TIME_FOREVER);
         
+#if 0
         UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:[self makeCacheKey]];
         if (image != nil) {
             if (completion) {
@@ -97,6 +99,25 @@
                 }
             }];
         }
+#else
+        if (_messageFile != nil) {
+            if (completion) {
+                completion(nil);
+            };
+            
+            dispatch_semaphore_signal(self.downloadSemaphore);
+        } else {
+            [SHMessageFile getMessageFileWithDeviceID:_deviceID fileName:[self createFileName] completion:^(SHMessageFile * _Nullable messageFile) {
+                _messageFile = messageFile;
+
+                if (completion) {
+                    completion(nil);
+                }
+                    
+                dispatch_semaphore_signal(self.downloadSemaphore);
+            }];
+        }
+#endif
     });
 }
 
@@ -145,6 +166,14 @@
     }
     
     return _downloadSemaphore;
+}
+
+- (NSString *)fileIdentifier {
+    if (_fileIdentifier == nil) {
+        _fileIdentifier = [self makeCacheKey];
+    }
+    
+    return _fileIdentifier;
 }
 
 @end

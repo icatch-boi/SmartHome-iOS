@@ -1,4 +1,4 @@
-// SHMessage.h
+// ZJDownloaderOperationManager.h
 
 /**************************************************************************
  *
@@ -22,30 +22,21 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/7/26 4:50 PM.
+ // Created by zj on 2019/8/29 3:45 PM.
     
 
 #import <Foundation/Foundation.h>
-#import "SHMessage.h"
-#import "SHMessageFile.h"
+#import "ZJDownloaderCommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
+@interface ZJDownloaderOperationManager : NSObject
 
-@interface SHMessageInfo : NSObject
++ (instancetype)sharedDownloader;
+- (instancetype)init NS_UNAVAILABLE;
 
-@property (nonatomic, copy, readonly) NSString *msg;
-@property (nonatomic, copy, readonly) NSString *time;
-@property (nonatomic, strong, readonly) SHMessage *message;
-@property (nonatomic, strong) NSString *deviceID;
-@property (nonatomic, strong, readonly) SHMessageFile *messageFile;
-@property (nonatomic, copy, readonly) NSString *fileIdentifier;
-@property (nonatomic, copy, readonly) NSString *localTimeString;
-
-+ (instancetype)messageInfoWithDict:(NSDictionary *)dict;
-
-- (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion;
+- (void)downloadWithURLString:(NSString *)urlString cacheKey:(NSString * _Nullable)cacheKey finishedBlock:(nullable DownloadFinishedBlock)finishedBlock;
+- (void)cancelOperation:(NSString *)urlString;
 
 @end
 

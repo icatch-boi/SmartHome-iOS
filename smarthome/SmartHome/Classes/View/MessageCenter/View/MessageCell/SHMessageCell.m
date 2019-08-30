@@ -27,6 +27,7 @@
 
 #import "SHMessageCell.h"
 #import "SHMessageInfo.h"
+#import "ZJDownloaderOperationManager.h"
 
 @interface SHMessageCell ()
 
@@ -68,11 +69,22 @@
     
     WEAK_SELF(self);
     [messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+#if 0
         if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakself.iconImgView.image = [image ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
             });
         }
+#else
+        [[ZJDownloaderOperationManager sharedDownloader] downloadWithURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier finishedBlock:^(NSString * _Nullable url, UIImage * _Nullable image) {
+            
+            if (image != nil && [url isEqualToString:weakself.messageInfo.messageFile.url]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakself.iconImgView.image = [image ic_cornerImageWithSize:weakself.iconImgView.bounds.size radius:kImageCornerRadius];
+                });
+            }
+        }];
+#endif
     }];
 }
 
