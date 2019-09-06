@@ -29,6 +29,7 @@
 #import "SHAccountSettingViewModel.h"
 #import "SHNetworkManagerHeader.h"
 #import "SHAccountSettingItem.h"
+#import "SHMySharingTVC.h"
 
 @interface SHAccountSettingTVC ()
 
@@ -152,6 +153,15 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:kFaceRecognitionStoryboardName bundle:nil];
     UINavigationController *nav = [sb instantiateInitialViewController];
     [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)enterMySharing:(NSIndexPath *)indexPath {
+    SHAccountSettingItem *item = [self.viewModel.viewModelItems[indexPath.section] items][indexPath.row];
+
+    SHMySharingTVC *vc = [SHMySharingTVC mySharingTVC];
+    vc.title = NSLocalizedString(item.title, nil);
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Display AlertView

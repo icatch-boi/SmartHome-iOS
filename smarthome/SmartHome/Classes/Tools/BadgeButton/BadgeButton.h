@@ -12,5 +12,6 @@
 
 @property (nonatomic) NSInteger badgeValue;
 @property (nonatomic, assign) BOOL isRedBall;
-
+@property (nonatomic, strong, readonly) UILabel *badgeLab;
+- (void)setSubFrame;
 @end

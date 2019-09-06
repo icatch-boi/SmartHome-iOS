@@ -16,6 +16,30 @@
 		38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */; };
 		3810273B20622E4200B0B806 /* XJMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3810273A20622E4200B0B806 /* XJMain.storyboard */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
+		3817C173230B924000033E20 /* SHSingleImageDisplayVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */; };
+		3817C192230BC10500033E20 /* ZJImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17A230BC10500033E20 /* ZJImageCache.m */; };
+		3817C193230BC10500033E20 /* ZJDataCacheConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */; };
+		3817C194230BC10500033E20 /* ZJDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17E230BC10500033E20 /* ZJDiskCache.m */; };
+		3817C195230BC10500033E20 /* ZJMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17F230BC10500033E20 /* ZJMemoryCache.m */; };
+		3817C196230BC10500033E20 /* ZJImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C183230BC10500033E20 /* ZJImageCoderHelper.m */; };
+		3817C197230BC10500033E20 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18B230BC10500033E20 /* UIImage+GIF.m */; };
+		3817C198230BC10500033E20 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */; };
+		3817C199230BC10500033E20 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18D230BC10500033E20 /* NSData+ImageContentType.m */; };
+		3817C19A230BC10500033E20 /* UIImage+MemoryCacheCost.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */; };
+		3817C19E230CEADA00033E20 /* SHMsgBadgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */; };
+		3817C1A4230D131C00033E20 /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A2230D131C00033E20 /* UIButton+Badge.m */; };
+		3817C1A5230D131C00033E20 /* UIBarButtonItem+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */; };
+		3817C1AB230E790500033E20 /* SHMessageCountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1AA230E790500033E20 /* SHMessageCountManager.m */; };
+		3817C1B2230F97A900033E20 /* ZJImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17A230BC10500033E20 /* ZJImageCache.m */; };
+		3817C1B3230F97A900033E20 /* ZJImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C183230BC10500033E20 /* ZJImageCoderHelper.m */; };
+		3817C1B4230F97A900033E20 /* UIImage+MemoryCacheCost.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */; };
+		3817C1B5230F97A900033E20 /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */; };
+		3817C1B6230F97A900033E20 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18D230BC10500033E20 /* NSData+ImageContentType.m */; };
+		3817C1B7230F97A900033E20 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C18B230BC10500033E20 /* UIImage+GIF.m */; };
+		3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */; };
+		3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17E230BC10500033E20 /* ZJDiskCache.m */; };
+		3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C17F230BC10500033E20 /* ZJMemoryCache.m */; };
+		3817C1BE230FE43800033E20 /* SHMessageFileHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
 		3818D66821709AF100AF846C /* SHPushTestNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D66721709AF100AF846C /* SHPushTestNavController.m */; };
@@ -44,6 +68,9 @@
 		382CAA921EE6A0F70042442C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA911EE6A0F70042442C /* CoreTelephony.framework */; };
 		382CAA941EE6A1270042442C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA931EE6A1270042442C /* UserNotifications.framework */; };
 		382CAA961EE6A1A60042442C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA951EE6A1A60042442C /* Security.framework */; };
+		3839409C2317B2BD00C7D4E1 /* ZJDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3839409B2317B2BD00C7D4E1 /* ZJDownloaderOperation.m */; };
+		383940A12317BA1100C7D4E1 /* ZJDownloaderOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 383940A02317BA1100C7D4E1 /* ZJDownloaderOperationManager.m */; };
+		383940A42317CF1600C7D4E1 /* UIImageView+ZJWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 383940A32317CF1600C7D4E1 /* UIImageView+ZJWebCache.m */; };
 		38470A2120CA779A00C8DEC7 /* XJLocalAssetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38470A2020CA779A00C8DEC7 /* XJLocalAssetHelper.m */; };
 		384A197F22115B3B003D3042 /* SHWCServerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 384A197E22115B3B003D3042 /* SHWCServerView.m */; };
 		384A198222115B82003D3042 /* SHWCServerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 384A198122115B82003D3042 /* SHWCServerView.xib */; };
@@ -293,6 +320,7 @@
 		38E5C3DC20A419E0003004E0 /* SHAccountInfoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38E5C3CE20A419E0003004E0 /* SHAccountInfoHeaderView.xib */; };
 		38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFF120A3F5AE003004E0 /* SHShareCamera.m */; };
 		38E5C3F120A594AA003004E0 /* SHSubscribeInfoConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5C3EE20A594AA003004E0 /* SHSubscribeInfoConvert.m */; };
+		38F03C24230A804C0089EC15 /* SHMessageFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F03C23230A804C0089EC15 /* SHMessageFile.m */; };
 		38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4424C1FAC079A00BDA6DF /* NotificationService.m */; };
 		38F442521FAC079A00BDA6DF /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		38F442571FAC125600BDA6DF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9C41EE69C270042442C /* libz.tbd */; };
@@ -312,6 +340,16 @@
 		38F525C31F2F041E00F5A5A2 /* libMWPhotoBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38F525C01F2F03F800F5A5A2 /* libMWPhotoBrowser.a */; };
 		38F525C71F2F04F000F5A5A2 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */; };
 		38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */; };
+		38F769B622E70C76005E56A5 /* SHMySharingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B522E70C76005E56A5 /* SHMySharingTVC.m */; };
+		38F769BA22E71023005E56A5 /* SHSubscriberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B922E71023005E56A5 /* SHSubscriberCell.m */; };
+		38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */; };
+		38F769C822E7F8BD005E56A5 /* SHGroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769C722E7F8BD005E56A5 /* SHGroupHeaderView.m */; };
+		38F769CB22E86419005E56A5 /* SHSubscriberInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769CA22E86419005E56A5 /* SHSubscriberInfo.m */; };
+		38F769D122EAE1F7005E56A5 /* MessageCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */; };
+		38F769D522EAE34E005E56A5 /* SHMessageCenterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */; };
+		38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769D822EAE67A005E56A5 /* SHMessageCell.m */; };
+		38F769DD22EAF63C005E56A5 /* SHMessageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */; };
+		38F769E122EAF8B2005E56A5 /* SHMessageListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */; };
 		38FB9B721EADF54E00F3470C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9B711EADF54E00F3470C /* OpenAL.framework */; };
 		38FB9FE61EB1C89200F3470C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38FB9FE51EB1C89200F3470C /* CoreAudio.framework */; };
 		6C19E9C3F0245DBC11C5DEF3 /* libPods-SmartHomeUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 655ABE1EB989EECE2D4AAE43 /* libPods-SmartHomeUITests.a */; };
@@ -391,6 +429,39 @@
 		3809230020B7DAC0002E502B /* LoginCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginCommonHeader.h; sourceTree = "<group>"; };
 		3810273A20622E4200B0B806 /* XJMain.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = XJMain.storyboard; sourceTree = "<group>"; };
 		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
+		3817C171230B924000033E20 /* SHSingleImageDisplayVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSingleImageDisplayVC.h; sourceTree = "<group>"; };
+		3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSingleImageDisplayVC.m; sourceTree = "<group>"; };
+		3817C178230BC10500033E20 /* ZJImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJImageCache.h; sourceTree = "<group>"; };
+		3817C179230BC10500033E20 /* ZJImageCacheCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJImageCacheCommon.h; sourceTree = "<group>"; };
+		3817C17A230BC10500033E20 /* ZJImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJImageCache.m; sourceTree = "<group>"; };
+		3817C17C230BC10500033E20 /* ZJMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJMemoryCache.h; sourceTree = "<group>"; };
+		3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDataCacheConfig.m; sourceTree = "<group>"; };
+		3817C17E230BC10500033E20 /* ZJDiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDiskCache.m; sourceTree = "<group>"; };
+		3817C17F230BC10500033E20 /* ZJMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJMemoryCache.m; sourceTree = "<group>"; };
+		3817C180230BC10500033E20 /* ZJDiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDiskCache.h; sourceTree = "<group>"; };
+		3817C181230BC10500033E20 /* ZJDataCacheConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDataCacheConfig.h; sourceTree = "<group>"; };
+		3817C183230BC10500033E20 /* ZJImageCoderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJImageCoderHelper.m; sourceTree = "<group>"; };
+		3817C184230BC10500033E20 /* ZJImageCoderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJImageCoderHelper.h; sourceTree = "<group>"; };
+		3817C185230BC10500033E20 /* ZJDataCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJDataCache.h; sourceTree = "<group>"; };
+		3817C187230BC10500033E20 /* ZJInternalMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZJInternalMacros.h; sourceTree = "<group>"; };
+		3817C189230BC10500033E20 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
+		3817C18A230BC10500033E20 /* UIImage+MemoryCacheCost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MemoryCacheCost.h"; sourceTree = "<group>"; };
+		3817C18B230BC10500033E20 /* UIImage+GIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+GIF.m"; sourceTree = "<group>"; };
+		3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MultiFormat.m"; sourceTree = "<group>"; };
+		3817C18D230BC10500033E20 /* NSData+ImageContentType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ImageContentType.m"; sourceTree = "<group>"; };
+		3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MemoryCacheCost.m"; sourceTree = "<group>"; };
+		3817C18F230BC10500033E20 /* UIImage+MultiFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MultiFormat.h"; sourceTree = "<group>"; };
+		3817C190230BC10500033E20 /* UIImage+GIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GIF.h"; sourceTree = "<group>"; };
+		3817C19C230CEADA00033E20 /* SHMsgBadgeButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMsgBadgeButton.h; sourceTree = "<group>"; };
+		3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMsgBadgeButton.m; sourceTree = "<group>"; };
+		3817C1A0230D131C00033E20 /* UIBarButtonItem+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Badge.h"; sourceTree = "<group>"; };
+		3817C1A1230D131C00033E20 /* UIButton+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Badge.h"; sourceTree = "<group>"; };
+		3817C1A2230D131C00033E20 /* UIButton+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Badge.m"; sourceTree = "<group>"; };
+		3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Badge.m"; sourceTree = "<group>"; };
+		3817C1A9230E790500033E20 /* SHMessageCountManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCountManager.h; sourceTree = "<group>"; };
+		3817C1AA230E790500033E20 /* SHMessageCountManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCountManager.m; sourceTree = "<group>"; };
+		3817C1BC230FE43800033E20 /* SHMessageFileHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageFileHelper.h; sourceTree = "<group>"; };
+		3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageFileHelper.m; sourceTree = "<group>"; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
 		3818D66421709AB200AF846C /* PushTest.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PushTest.storyboard; sourceTree = "<group>"; };
@@ -439,6 +510,13 @@
 		382CAA911EE6A0F70042442C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		382CAA931EE6A1270042442C /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		382CAA951EE6A1A60042442C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3839409A2317B2BD00C7D4E1 /* ZJDownloaderOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloaderOperation.h; sourceTree = "<group>"; };
+		3839409B2317B2BD00C7D4E1 /* ZJDownloaderOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloaderOperation.m; sourceTree = "<group>"; };
+		3839409E2317B38000C7D4E1 /* ZJDownloaderCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloaderCommon.h; sourceTree = "<group>"; };
+		3839409F2317BA1100C7D4E1 /* ZJDownloaderOperationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJDownloaderOperationManager.h; sourceTree = "<group>"; };
+		383940A02317BA1100C7D4E1 /* ZJDownloaderOperationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJDownloaderOperationManager.m; sourceTree = "<group>"; };
+		383940A22317CF1600C7D4E1 /* UIImageView+ZJWebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+ZJWebCache.h"; sourceTree = "<group>"; };
+		383940A32317CF1600C7D4E1 /* UIImageView+ZJWebCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+ZJWebCache.m"; sourceTree = "<group>"; };
 		38470A1F20CA779A00C8DEC7 /* XJLocalAssetHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XJLocalAssetHelper.h; sourceTree = "<group>"; };
 		38470A2020CA779A00C8DEC7 /* XJLocalAssetHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XJLocalAssetHelper.m; sourceTree = "<group>"; };
 		384A197D22115B3B003D3042 /* SHWCServerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWCServerView.h; sourceTree = "<group>"; };
@@ -941,6 +1019,8 @@
 		38E5C3EE20A594AA003004E0 /* SHSubscribeInfoConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHSubscribeInfoConvert.m; sourceTree = "<group>"; };
 		38E5C3EF20A594AA003004E0 /* SubscribeStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeStatus.h; sourceTree = "<group>"; };
 		38E5C3F020A594AA003004E0 /* SHSubscribeInfoConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHSubscribeInfoConvert.h; sourceTree = "<group>"; };
+		38F03C22230A804C0089EC15 /* SHMessageFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageFile.h; sourceTree = "<group>"; };
+		38F03C23230A804C0089EC15 /* SHMessageFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageFile.m; sourceTree = "<group>"; };
 		38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F4424B1FAC079A00BDA6DF /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		38F4424C1FAC079A00BDA6DF /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
@@ -972,6 +1052,25 @@
 		38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MWPhotoBrowser.bundle; path = Libraries/MWPhotoBrowser/MWPhotoBrowser.bundle; sourceTree = "<group>"; };
 		38F604A521DC86EA00B0F6D0 /* XDSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSDropDownMenu.h; sourceTree = "<group>"; };
 		38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDSDropDownMenu.m; sourceTree = "<group>"; };
+		38F769B522E70C76005E56A5 /* SHMySharingTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMySharingTVC.m; sourceTree = "<group>"; };
+		38F769B822E71023005E56A5 /* SHSubscriberCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberCell.h; sourceTree = "<group>"; };
+		38F769B922E71023005E56A5 /* SHSubscriberCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberCell.m; sourceTree = "<group>"; };
+		38F769BB22E71360005E56A5 /* SHSubscriberGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberGroup.h; sourceTree = "<group>"; };
+		38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberGroup.m; sourceTree = "<group>"; };
+		38F769C622E7F8BD005E56A5 /* SHGroupHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHGroupHeaderView.h; sourceTree = "<group>"; };
+		38F769C722E7F8BD005E56A5 /* SHGroupHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHGroupHeaderView.m; sourceTree = "<group>"; };
+		38F769C922E86419005E56A5 /* SHSubscriberInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberInfo.h; sourceTree = "<group>"; };
+		38F769CA22E86419005E56A5 /* SHSubscriberInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberInfo.m; sourceTree = "<group>"; };
+		38F769CD22E9A715005E56A5 /* SHMySharingTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMySharingTVC.h; sourceTree = "<group>"; };
+		38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MessageCenter.storyboard; sourceTree = "<group>"; };
+		38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCenterTVC.h; sourceTree = "<group>"; };
+		38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCenterTVC.m; sourceTree = "<group>"; };
+		38F769D722EAE67A005E56A5 /* SHMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageCell.h; sourceTree = "<group>"; };
+		38F769D822EAE67A005E56A5 /* SHMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageCell.m; sourceTree = "<group>"; };
+		38F769DB22EAF63C005E56A5 /* SHMessageInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageInfo.h; sourceTree = "<group>"; };
+		38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageInfo.m; sourceTree = "<group>"; };
+		38F769DF22EAF8B2005E56A5 /* SHMessageListViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMessageListViewModel.h; sourceTree = "<group>"; };
+		38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMessageListViewModel.m; sourceTree = "<group>"; };
 		38FB9B711EADF54E00F3470C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		38FB9FE51EB1C89200F3470C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		469CC6ECFE2DE9E46FB1331E /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1089,6 +1188,94 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3817C176230BC10500033E20 /* ZJDataCache */ = {
+			isa = PBXGroup;
+			children = (
+				3817C185230BC10500033E20 /* ZJDataCache.h */,
+				3817C177230BC10500033E20 /* ImageCache */,
+				3817C182230BC10500033E20 /* Decoder */,
+				3817C188230BC10500033E20 /* Categories */,
+				3817C17B230BC10500033E20 /* DataCache */,
+				3817C186230BC10500033E20 /* Private */,
+			);
+			path = ZJDataCache;
+			sourceTree = "<group>";
+		};
+		3817C177230BC10500033E20 /* ImageCache */ = {
+			isa = PBXGroup;
+			children = (
+				3817C178230BC10500033E20 /* ZJImageCache.h */,
+				3817C17A230BC10500033E20 /* ZJImageCache.m */,
+				3817C179230BC10500033E20 /* ZJImageCacheCommon.h */,
+			);
+			path = ImageCache;
+			sourceTree = "<group>";
+		};
+		3817C17B230BC10500033E20 /* DataCache */ = {
+			isa = PBXGroup;
+			children = (
+				3817C181230BC10500033E20 /* ZJDataCacheConfig.h */,
+				3817C17D230BC10500033E20 /* ZJDataCacheConfig.m */,
+				3817C180230BC10500033E20 /* ZJDiskCache.h */,
+				3817C17E230BC10500033E20 /* ZJDiskCache.m */,
+				3817C17C230BC10500033E20 /* ZJMemoryCache.h */,
+				3817C17F230BC10500033E20 /* ZJMemoryCache.m */,
+			);
+			path = DataCache;
+			sourceTree = "<group>";
+		};
+		3817C182230BC10500033E20 /* Decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3817C184230BC10500033E20 /* ZJImageCoderHelper.h */,
+				3817C183230BC10500033E20 /* ZJImageCoderHelper.m */,
+			);
+			path = Decoder;
+			sourceTree = "<group>";
+		};
+		3817C186230BC10500033E20 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				3817C187230BC10500033E20 /* ZJInternalMacros.h */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
+		3817C188230BC10500033E20 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				3817C18A230BC10500033E20 /* UIImage+MemoryCacheCost.h */,
+				3817C18E230BC10500033E20 /* UIImage+MemoryCacheCost.m */,
+				3817C18F230BC10500033E20 /* UIImage+MultiFormat.h */,
+				3817C18C230BC10500033E20 /* UIImage+MultiFormat.m */,
+				3817C189230BC10500033E20 /* NSData+ImageContentType.h */,
+				3817C18D230BC10500033E20 /* NSData+ImageContentType.m */,
+				3817C190230BC10500033E20 /* UIImage+GIF.h */,
+				3817C18B230BC10500033E20 /* UIImage+GIF.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		3817C19B230CEA9500033E20 /* BadgeButton */ = {
+			isa = PBXGroup;
+			children = (
+				3817C19C230CEADA00033E20 /* SHMsgBadgeButton.h */,
+				3817C19D230CEADA00033E20 /* SHMsgBadgeButton.m */,
+			);
+			path = BadgeButton;
+			sourceTree = "<group>";
+		};
+		3817C19F230D130400033E20 /* BadgeButton */ = {
+			isa = PBXGroup;
+			children = (
+				3817C1A0230D131C00033E20 /* UIBarButtonItem+Badge.h */,
+				3817C1A3230D131C00033E20 /* UIBarButtonItem+Badge.m */,
+				3817C1A1230D131C00033E20 /* UIButton+Badge.h */,
+				3817C1A2230D131C00033E20 /* UIButton+Badge.m */,
+			);
+			path = BadgeButton;
+			sourceTree = "<group>";
+		};
 		3818D66321709A8C00AF846C /* PushTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -1175,6 +1362,20 @@
 				3818D68821709BA100AF846C /* XYBarChart.m */,
 			);
 			path = Bar;
+			sourceTree = "<group>";
+		};
+		383940982317AFD800C7D4E1 /* ZJDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				3839409E2317B38000C7D4E1 /* ZJDownloaderCommon.h */,
+				3839409A2317B2BD00C7D4E1 /* ZJDownloaderOperation.h */,
+				3839409B2317B2BD00C7D4E1 /* ZJDownloaderOperation.m */,
+				3839409F2317BA1100C7D4E1 /* ZJDownloaderOperationManager.h */,
+				383940A02317BA1100C7D4E1 /* ZJDownloaderOperationManager.m */,
+				383940A22317CF1600C7D4E1 /* UIImageView+ZJWebCache.h */,
+				383940A32317CF1600C7D4E1 /* UIImageView+ZJWebCache.m */,
+			);
+			path = ZJDownloader;
 			sourceTree = "<group>";
 		};
 		384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */ = {
@@ -1463,10 +1664,10 @@
 		38A38F9022C0CE7100E831E3 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				38A38F9122C0CE7100E831E3 /* SHAccountSettingViewModelItem.h */,
-				38A38F9222C0CE7100E831E3 /* SHAccountSettingViewModel.m */,
-				38A38F9322C0CE7100E831E3 /* SHAccountSettingViewModelItem.m */,
 				38A38F9422C0CE7100E831E3 /* SHAccountSettingViewModel.h */,
+				38A38F9222C0CE7100E831E3 /* SHAccountSettingViewModel.m */,
+				38A38F9122C0CE7100E831E3 /* SHAccountSettingViewModelItem.h */,
+				38A38F9322C0CE7100E831E3 /* SHAccountSettingViewModelItem.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1476,6 +1677,10 @@
 			children = (
 				38A38F9722C0CE7100E831E3 /* SHAccountSettingItem.h */,
 				38A38F9822C0CE7100E831E3 /* SHAccountSettingItem.m */,
+				38F769BB22E71360005E56A5 /* SHSubscriberGroup.h */,
+				38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */,
+				38F769C922E86419005E56A5 /* SHSubscriberInfo.h */,
+				38F769CA22E86419005E56A5 /* SHSubscriberInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1483,9 +1688,13 @@
 		38A38F9922C0CE7100E831E3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				38A38F9A22C0CE7100E831E3 /* SHAccountSettingTVC.h */,
+				38F769C422E7F8A4005E56A5 /* GroupHeaderView */,
+				38F769B722E71008005E56A5 /* SubscriberCell */,
 				38A38F9B22C0CE7100E831E3 /* AccountSettingCell */,
+				38A38F9A22C0CE7100E831E3 /* SHAccountSettingTVC.h */,
 				38A38FA422C0CE7100E831E3 /* SHAccountSettingTVC.m */,
+				38F769CD22E9A715005E56A5 /* SHMySharingTVC.h */,
+				38F769B522E70C76005E56A5 /* SHMySharingTVC.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1493,14 +1702,14 @@
 		38A38F9B22C0CE7100E831E3 /* AccountSettingCell */ = {
 			isa = PBXGroup;
 			children = (
-				38A38F9C22C0CE7100E831E3 /* SHAccountSettingSwitchCell.m */,
-				38A38F9D22C0CE7100E831E3 /* SHAccountSettingAvatarCell.m */,
 				38A38F9E22C0CE7100E831E3 /* SHAccountSettingBaseCell.h */,
-				38A38F9F22C0CE7100E831E3 /* SHAccountSettingCommonCell.h */,
-				38A38FA022C0CE7100E831E3 /* SHAccountSettingSwitchCell.h */,
-				38A38FA122C0CE7100E831E3 /* SHAccountSettingAvatarCell.h */,
 				38A38FA222C0CE7100E831E3 /* SHAccountSettingBaseCell.m */,
+				38A38F9F22C0CE7100E831E3 /* SHAccountSettingCommonCell.h */,
 				38A38FA322C0CE7100E831E3 /* SHAccountSettingCommonCell.m */,
+				38A38FA022C0CE7100E831E3 /* SHAccountSettingSwitchCell.h */,
+				38A38F9C22C0CE7100E831E3 /* SHAccountSettingSwitchCell.m */,
+				38A38FA122C0CE7100E831E3 /* SHAccountSettingAvatarCell.h */,
+				38A38F9D22C0CE7100E831E3 /* SHAccountSettingAvatarCell.m */,
 			);
 			path = AccountSettingCell;
 			sourceTree = "<group>";
@@ -1941,6 +2150,7 @@
 		38E5BFE620A3F5AE003004E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38F769CF22EAE100005E56A5 /* MessageCenter */,
 				38BB262C21DF08AB00270CE1 /* FaceRecognition */,
 				38E5C07620A3F5AE003004E0 /* UserAccount */,
 				3897E0992180743000E72417 /* Setup */,
@@ -1998,6 +2208,7 @@
 		38E5BFFE20A3F5AE003004E0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3817C19B230CEA9500033E20 /* BadgeButton */,
 				388CCA6422CCADC000FC8909 /* AddDeviceView */,
 				38E5C00320A3F5AE003004E0 /* CameraCell */,
 				38E5C00020A3F5AE003004E0 /* SHLocalAlbumCell.h */,
@@ -2506,6 +2717,8 @@
 				38F4424B1FAC079A00BDA6DF /* NotificationService.h */,
 				38F4424C1FAC079A00BDA6DF /* NotificationService.m */,
 				38F4424E1FAC079A00BDA6DF /* Info.plist */,
+				3817C1BC230FE43800033E20 /* SHMessageFileHelper.h */,
+				3817C1BD230FE43800033E20 /* SHMessageFileHelper.m */,
 			);
 			path = NotificationServiceExtension;
 			sourceTree = "<group>";
@@ -2513,6 +2726,9 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				383940982317AFD800C7D4E1 /* ZJDownloader */,
+				3817C19F230D130400033E20 /* BadgeButton */,
+				3817C176230BC10500033E20 /* ZJDataCache */,
 				38F604A421DC86EA00B0F6D0 /* XDSDropDownMenu */,
 				38C7940321C2279600E55F96 /* MJRefresh.framework */,
 				384BBE2220C13A8F0047E152 /* ZJPhotoBrowser */,
@@ -2635,6 +2851,78 @@
 				38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */,
 			);
 			path = XDSDropDownMenu;
+			sourceTree = "<group>";
+		};
+		38F769B722E71008005E56A5 /* SubscriberCell */ = {
+			isa = PBXGroup;
+			children = (
+				38F769B822E71023005E56A5 /* SHSubscriberCell.h */,
+				38F769B922E71023005E56A5 /* SHSubscriberCell.m */,
+			);
+			path = SubscriberCell;
+			sourceTree = "<group>";
+		};
+		38F769C422E7F8A4005E56A5 /* GroupHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				38F769C622E7F8BD005E56A5 /* SHGroupHeaderView.h */,
+				38F769C722E7F8BD005E56A5 /* SHGroupHeaderView.m */,
+			);
+			path = GroupHeaderView;
+			sourceTree = "<group>";
+		};
+		38F769CF22EAE100005E56A5 /* MessageCenter */ = {
+			isa = PBXGroup;
+			children = (
+				38F769D222EAE234005E56A5 /* View */,
+			);
+			path = MessageCenter;
+			sourceTree = "<group>";
+		};
+		38F769D222EAE234005E56A5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				38F769DE22EAF828005E56A5 /* ViewModel */,
+				38F769DA22EAF601005E56A5 /* Model */,
+				38F769D622EAE64D005E56A5 /* MessageCell */,
+				38F769D022EAE1F7005E56A5 /* MessageCenter.storyboard */,
+				38F769D322EAE34E005E56A5 /* SHMessageCenterTVC.h */,
+				38F769D422EAE34E005E56A5 /* SHMessageCenterTVC.m */,
+				3817C171230B924000033E20 /* SHSingleImageDisplayVC.h */,
+				3817C172230B924000033E20 /* SHSingleImageDisplayVC.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		38F769D622EAE64D005E56A5 /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				38F769D722EAE67A005E56A5 /* SHMessageCell.h */,
+				38F769D822EAE67A005E56A5 /* SHMessageCell.m */,
+			);
+			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		38F769DA22EAF601005E56A5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38F769DB22EAF63C005E56A5 /* SHMessageInfo.h */,
+				38F769DC22EAF63C005E56A5 /* SHMessageInfo.m */,
+				38F03C22230A804C0089EC15 /* SHMessageFile.h */,
+				38F03C23230A804C0089EC15 /* SHMessageFile.m */,
+				3817C1A9230E790500033E20 /* SHMessageCountManager.h */,
+				3817C1AA230E790500033E20 /* SHMessageCountManager.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		38F769DE22EAF828005E56A5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				38F769DF22EAF8B2005E56A5 /* SHMessageListViewModel.h */,
+				38F769E022EAF8B2005E56A5 /* SHMessageListViewModel.m */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		38FED5CE22A8FFC8002FC7D5 /* Recovered References */ = {
@@ -2860,6 +3148,7 @@
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
 				388CCA6A22CCAE0900FC8909 /* SHAddDeviceView.xib in Resources */,
 				3897E0BF2180743100E72417 /* Setup.storyboard in Resources */,
+				38F769D122EAE1F7005E56A5 /* MessageCenter.storyboard in Resources */,
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
 				3818D66521709AB200AF846C /* PushTest.storyboard in Resources */,
@@ -3054,19 +3343,24 @@
 				384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */,
 				38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */,
 				38E5C2E520A3F7FA003004E0 /* SHDownloadManager.m in Sources */,
+				3817C196230BC10500033E20 /* ZJImageCoderHelper.m in Sources */,
 				38E5C24120A3F650003004E0 /* SHGettingProperty.m in Sources */,
 				38E5C25E20A3F66D003004E0 /* SHCameraProperty.m in Sources */,
 				38E5C26020A3F66D003004E0 /* SHMessage.m in Sources */,
+				3817C19E230CEADA00033E20 /* SHMsgBadgeButton.m in Sources */,
+				38F03C24230A804C0089EC15 /* SHMessageFile.m in Sources */,
 				38A38FAD22C0CE7100E831E3 /* SHAccountSettingCommonCell.m in Sources */,
 				3897E0C72180743100E72417 /* XJSetupDeviceSSIDVC.m in Sources */,
 				38E5C36E20A40FFC003004E0 /* UIView+Layout.m in Sources */,
 				384BBE4120C13A900047E152 /* SVRadialGradientLayer.m in Sources */,
+				3817C199230BC10500033E20 /* NSData+ImageContentType.m in Sources */,
 				3818D68B21709BA100AF846C /* UIColor+XYChart.m in Sources */,
 				38E5C15420A3F5AF003004E0 /* SHAppInfoVC.m in Sources */,
 				386FAFD220AFB701007655CF /* SHLoginFirstView.m in Sources */,
 				38E5C21020A3F610003004E0 /* DiskSpaceTool.m in Sources */,
 				3818D68921709BA100AF846C /* XYChart.m in Sources */,
 				38E5C3DB20A419E0003004E0 /* SHAccountInfoHeaderView.m in Sources */,
+				38F769BA22E71023005E56A5 /* SHSubscriberCell.m in Sources */,
 				3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */,
 				384BBE4620C13A900047E152 /* ZJGridViewController.m in Sources */,
 				38A0C56920EDF12F00AE7B7F /* UIImageView+ZJAddition.m in Sources */,
@@ -3080,6 +3374,7 @@
 				38E5C30B20A3F81F003004E0 /* SHMpbHeaderView.m in Sources */,
 				38E5C2ED20A3F7FA003004E0 /* SHTableViewSelectedCellTable.m in Sources */,
 				3875AC0C21E743C500481AE9 /* FaceCollectionReusableView.m in Sources */,
+				3839409C2317B2BD00C7D4E1 /* ZJDownloaderOperation.m in Sources */,
 				38E5C2E920A3F7FA003004E0 /* HWOptionButton.m in Sources */,
 				38E5C37320A40FFC003004E0 /* UIImage+ICAddition.m in Sources */,
 				38E5C26720A3F66D003004E0 /* SHSDKEventListener.cpp in Sources */,
@@ -3089,6 +3384,8 @@
 				38E5C15E20A3F5AF003004E0 /* SHSinglePreviewVC.m in Sources */,
 				38F525B11F2F020400F5A5A2 /* SGQRCodeConst.m in Sources */,
 				38E5C34B20A40F8A003004E0 /* SHCameraListViewModel.m in Sources */,
+				383940A12317BA1100C7D4E1 /* ZJDownloaderOperationManager.m in Sources */,
+				3817C192230BC10500033E20 /* ZJImageCache.m in Sources */,
 				38E5C30D20A3F81F003004E0 /* VideoPlaybackBufferingView.m in Sources */,
 				38E5C19120A3F5AF003004E0 /* SHUserAccount.m in Sources */,
 				38E5C29F20A3F6C3003004E0 /* SHSDK.m in Sources */,
@@ -3097,10 +3394,12 @@
 				38E5C30F20A3F81F003004E0 /* SHDownloadTableViewCell.m in Sources */,
 				38E5C25D20A3F66D003004E0 /* SHFileTable.m in Sources */,
 				38E5C25C20A3F66D003004E0 /* SHAVData.m in Sources */,
+				38F769D522EAE34E005E56A5 /* SHMessageCenterTVC.m in Sources */,
 				38E5C1C720A3F5AF003004E0 /* SHMainViewController.m in Sources */,
 				38E5C20A20A3F610003004E0 /* BadgeButton.m in Sources */,
 				386FAFDD20B01693007655CF /* UserAccountPortraitNavVC.m in Sources */,
 				38E5C15F20A3F5AF003004E0 /* RTCView.m in Sources */,
+				3817C195230BC10500033E20 /* ZJMemoryCache.m in Sources */,
 				38E5C34E20A40F8A003004E0 /* SHFileControl.m in Sources */,
 				38E5C30E20A3F81F003004E0 /* SHFilterTableViewCell.m in Sources */,
 				38E5C34D20A40F8A003004E0 /* SHActionControl.m in Sources */,
@@ -3108,7 +3407,9 @@
 				3818D69421709BA100AF846C /* XYBarChart.m in Sources */,
 				38E5C3D520A419E0003004E0 /* SHAccountTableViewCell.m in Sources */,
 				38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */,
+				3817C197230BC10500033E20 /* UIImage+GIF.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
+				3817C1A4230D131C00033E20 /* UIButton+Badge.m in Sources */,
 				38E5C1C420A3F5AF003004E0 /* SH_XJ_SettingTVC.m in Sources */,
 				38E5C31020A3F81F003004E0 /* SHDownloadProgressView.m in Sources */,
 				3897E0BA2180743100E72417 /* QBTools.m in Sources */,
@@ -3153,9 +3454,12 @@
 				38E5C36A20A40FFC003004E0 /* GCDiscreetNotificationView+Addition.m in Sources */,
 				38E5C34F20A40F8A003004E0 /* SHPlaybackControl.m in Sources */,
 				389C29F21F2EEABF004C4806 /* main.m in Sources */,
+				38F769CB22E86419005E56A5 /* SHSubscriberInfo.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
+				38F769D922EAE67A005E56A5 /* SHMessageCell.m in Sources */,
 				388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
+				3817C1A5230D131C00033E20 /* UIBarButtonItem+Badge.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */,
@@ -3186,9 +3490,11 @@
 				38BB265721DF08EE00270CE1 /* FRDFaceDetectionVC.m in Sources */,
 				38E5C23C20A3F650003004E0 /* SHGettingSupportedProperty.m in Sources */,
 				3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */,
+				38F769E122EAF8B2005E56A5 /* SHMessageListViewModel.m in Sources */,
 				38E5C36C20A40FFC003004E0 /* NSDate+Convert.m in Sources */,
 				38E5C36D20A40FFC003004E0 /* UIScreen+Addition.m in Sources */,
 				38E5C28E20A3F698003004E0 /* SHLocalCamerasHelper.m in Sources */,
+				38F769DD22EAF63C005E56A5 /* SHMessageInfo.m in Sources */,
 				38802F1C20B51580006274AE /* UnderLineTextField.m in Sources */,
 				38E5C22120A3F610003004E0 /* H264Decoder.m in Sources */,
 				38E5C1B420A3F5AF003004E0 /* SHWiFiSettingCell.m in Sources */,
@@ -3201,11 +3507,14 @@
 				38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
 				38E5C23E20A3F650003004E0 /* SHRangeItem.m in Sources */,
+				38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */,
 				38E5C19220A3F5AF003004E0 /* SHUserAccountItem.m in Sources */,
 				38E5C34C20A40F8A003004E0 /* SHCameraViewModel.m in Sources */,
 				38E5C23D20A3F650003004E0 /* SHSettingProperty.m in Sources */,
+				3817C173230B924000033E20 /* SHSingleImageDisplayVC.m in Sources */,
 				38E5C2EA20A3F7FA003004E0 /* SHFile.m in Sources */,
 				38F525AE1F2F020400F5A5A2 /* UIImage+SGHelper.m in Sources */,
+				3817C193230BC10500033E20 /* ZJDataCacheConfig.m in Sources */,
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
 				38A38FA722C0CE7100E831E3 /* SHAccountSettingViewModelItem.m in Sources */,
 				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,
@@ -3223,15 +3532,19 @@
 				38A38FA622C0CE7100E831E3 /* SHAccountSettingViewModel.m in Sources */,
 				38BB266E21DF5E2900270CE1 /* FRDFaceData.m in Sources */,
 				38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */,
+				3817C1AB230E790500033E20 /* SHMessageCountManager.m in Sources */,
 				3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */,
 				38E5C37E20A41027003004E0 /* SHCameraHelper.m in Sources */,
 				386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */,
 				38E5C33020A40F49003004E0 /* SHSettingData.m in Sources */,
+				38F769C822E7F8BD005E56A5 /* SHGroupHeaderView.m in Sources */,
 				38E5C28D20A3F698003004E0 /* SHLocalWithRemoteHelper.m in Sources */,
 				38E5C26620A3F66D003004E0 /* SHDatabase.m in Sources */,
 				3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */,
 				3818D69021709BA100AF846C /* XYChartItem.m in Sources */,
 				38E5C20C20A3F610003004E0 /* SHAudioUnitRecord.m in Sources */,
+				3817C194230BC10500033E20 /* ZJDiskCache.m in Sources */,
+				38F769B622E70C76005E56A5 /* SHMySharingTVC.m in Sources */,
 				38E5C2FA20A3F80B003004E0 /* VideoPlaybackSlideController.m in Sources */,
 				384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */,
 				38E5C2E820A3F7FA003004E0 /* HWCalendar.m in Sources */,
@@ -3255,9 +3568,12 @@
 				3897E0C12180743100E72417 /* XJSetupTipsView.m in Sources */,
 				38E5C23F20A3F650003004E0 /* SHPropertyQueryResult.m in Sources */,
 				38AAE01F2202C78E009B37F8 /* SHWechatServerVC.m in Sources */,
+				3817C19A230BC10500033E20 /* UIImage+MemoryCacheCost.m in Sources */,
 				38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */,
+				383940A42317CF1600C7D4E1 /* UIImageView+ZJWebCache.m in Sources */,
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
 				38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */,
+				3817C198230BC10500033E20 /* UIImage+MultiFormat.m in Sources */,
 				38757834223A27F5006A4052 /* SHDeviceUpgradeVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3282,6 +3598,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3817C1B2230F97A900033E20 /* ZJImageCache.m in Sources */,
+				3817C1B3230F97A900033E20 /* ZJImageCoderHelper.m in Sources */,
+				3817C1B4230F97A900033E20 /* UIImage+MemoryCacheCost.m in Sources */,
+				3817C1B5230F97A900033E20 /* UIImage+MultiFormat.m in Sources */,
+				3817C1B6230F97A900033E20 /* NSData+ImageContentType.m in Sources */,
+				3817C1B7230F97A900033E20 /* UIImage+GIF.m in Sources */,
+				3817C1B8230F97A900033E20 /* ZJDataCacheConfig.m in Sources */,
+				3817C1B9230F97A900033E20 /* ZJDiskCache.m in Sources */,
+				3817C1BE230FE43800033E20 /* SHMessageFileHelper.m in Sources */,
+				3817C1BA230F97A900033E20 /* ZJMemoryCache.m in Sources */,
 				38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */,
 				38E5C3ED20A57B61003004E0 /* SHShareCamera.m in Sources */,
 			);

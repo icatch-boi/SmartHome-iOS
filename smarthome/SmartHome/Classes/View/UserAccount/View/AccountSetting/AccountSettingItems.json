@@ -30,6 +30,11 @@
                 "methodName" : "",
                 "identifier" : "SHAccountSettingSwitchCell",
             },
+            {
+                "title" : "kEnterMySharing",
+                "methodName" : "enterMySharing:",
+                "identifier" : "SHAccountSettingCommonCell",
+            },
         ],
     }
 }

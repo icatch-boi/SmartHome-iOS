@@ -79,7 +79,7 @@ NSLog((@"sdk %@: " fmt @" => [ %@ ]"), _level, ##__VA_ARGS__, info); \
 #define kAppCleanSpaceAlertTag (kAppAlertTag + 2)
 #define kAppFactoryResetAlertTag (kAppAlertTag + 3)
 
-const int UNDEFINED_NUM = 0xffff;
+//const int UNDEFINED_NUM = 0xffff;
 
 #define HW_DECODE_H264
 #define USE_SYSTEM_IOS7_IMPLEMENTATION 0
@@ -110,6 +110,8 @@ static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kLocalAlbumName = @"SmartHome";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 static NSString * const kReconfigureDevice = @"ReconfigureDevice";
+static NSString * const kNewMessageCountKeyPath = @"newMessageCount";
+static NSString * const kUserAccount = @"UserAccount";
 
 #pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";
@@ -164,7 +166,7 @@ static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
 
 #pragma mark - Config Account Server
-static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/";
+static NSString * const kServerBaseURL = @"https://account.smarthome.icatchtek.com:3026/";
 static NSString * const kServerClientID = @"icatch_smarthome";
 static NSString * const kServerClientSecret = @"123456";
 static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
@@ -174,5 +176,18 @@ static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 
 #define WEAK_SELF(obj) __weak typeof(obj) weak##obj = obj;
 #define STRONG_SELF(obj) __strong typeof(obj) obj = weak##obj;
+
+typedef enum : NSUInteger {
+    PushMessageTypePir = 100,
+    PushMessageTypeLowPower = 102,
+    PushMessageTypeSDCardFull = 103,
+    PushMessageTypeSDCardError = 104,
+    PushMessageTypeTamperAlarm = 105,
+    PushMessageTypeRing = 201,
+    PushMessageTypeFDHit = 202,
+    PushMessageTypeFDMiss = 203,
+    PushMessageTypePushTest = 204,
+    PushMessageTypeFaceRecognition = 301,
+} PushMessageType;
 
 #endif /* SHUtilsMacro_h */

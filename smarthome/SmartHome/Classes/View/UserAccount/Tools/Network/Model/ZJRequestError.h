@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum : NSInteger {
     ZJRequestErrorCodeInvalidParameters = -10041,
 } ZJRequestErrorCode;
@@ -22,5 +24,8 @@ typedef enum : NSInteger {
 - (instancetype)initWithDict:(NSDictionary *)dict;
 + (instancetype)requestErrorWithDict:(NSDictionary *)dict;
 + (instancetype)requestErrorWithNSError:(NSError *)error;
++ (instancetype)requestErrorWithDescription:(NSString *)description;
 
 @end
+
+NS_ASSUME_NONNULL_END

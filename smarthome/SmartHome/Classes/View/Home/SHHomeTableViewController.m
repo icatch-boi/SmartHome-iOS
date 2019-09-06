@@ -43,6 +43,7 @@
 #import "SDWebImageManager.h"
 #import "FRDAddFaceCollectionVC.h"
 #import "SHAddDeviceView.h"
+#import "SHMessageCenterTVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -435,7 +436,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterMessageCenterWithCell:(SHCameraViewCell *)cell {
-
+    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCameraObj:cell.viewModel.cameraObj];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
