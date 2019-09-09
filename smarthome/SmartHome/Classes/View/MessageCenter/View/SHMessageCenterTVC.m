@@ -62,11 +62,6 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
-    [_cameraObj resetNewMessageCount];
-}
-
-- (void)dealloc {
-    [_cameraObj removeObserver:self forKeyPath:kNewMessageCountKeyPath];
 }
 
 - (void)setupGUI {
@@ -80,7 +75,15 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
     
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(backTopAndRefresh)];
     [self setupNavigationItem];
-    [_cameraObj addObserver:self forKeyPath:kNewMessageCountKeyPath options:0 context:SHMessageCenterTVCContext];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    WEAK_SELF(self);
+    [_cameraObj setUpdateNewMessageCount:^{
+        [weakself updateBadgeDisplay];
+    }];
 }
 
 - (void)setupNavigationItem {
@@ -209,14 +212,6 @@ static void *SHMessageCenterTVCContext = &SHMessageCenterTVCContext;
     SHSingleImageDisplayVC *vc = [SHSingleImageDisplayVC singleImageDisplayVCWithMessageInfo:messageInfo];
     
     [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if (context == SHMessageCenterTVCContext) {
-        if ([keyPath isEqualToString:kNewMessageCountKeyPath]) {
-            [self updateBadgeDisplay];
-        }
-    }
 }
 
 - (void)updateBadgeDisplay {
