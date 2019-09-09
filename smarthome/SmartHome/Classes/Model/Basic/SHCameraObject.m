@@ -36,6 +36,10 @@
 
 @implementation SHCameraObject
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 + (instancetype)cameraObjectWithCamera:(SHCamera *)camera {
 	SHCameraObject *obj = [[self alloc] init];
 	
@@ -596,12 +600,18 @@
     self.newMessageCount += amount;
     
     [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
+    if (self.updateNewMessageCount) {
+        self.updateNewMessageCount();
+    }
 }
 
 - (void)resetNewMessageCount {
     self.newMessageCount = 0;
     
     [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
+    if (self.updateNewMessageCount) {
+        self.updateNewMessageCount();
+    }
 }
 
 @end

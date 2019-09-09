@@ -51,10 +51,6 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 
 @implementation SHCameraViewCell
 
-- (void)dealloc {
-    [_viewModel.cameraObj removeObserver:self forKeyPath:kNewMessageCountKeyPath];
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -124,9 +120,28 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     _cameraInfoLabel.text = viewModel.cameraObj.camera.operable ? @"" : @"From sharing";
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
     (viewModel.cameraObj.camera.operable == 1) ? [self removeShareDescriptionLabel] : [self addShareDescriptionLabel];
+}
+
+- (void)willMoveToWindow:(UIWindow *)newWindow {
+    [super willMoveToWindow:newWindow];
     
-    [_viewModel.cameraObj addObserver:self forKeyPath:kNewMessageCountKeyPath options:NSKeyValueObservingOptionNew context:SHCameraViewCellContext];
-    _messageBtn.badgeValue = viewModel.cameraObj.newMessageCount;
+    SHLogInfo(SHLogTagAPP, @"newWindow: %@", newWindow);
+    SHLogInfo(SHLogTagAPP, @"newSuperview: %@", self.superview);
+
+    if (newWindow == nil) {
+        return;
+    }
+    
+    if (_viewModel == nil) {
+        return;
+    }
+    
+    _messageBtn.badgeValue = _viewModel.cameraObj.newMessageCount;
+
+    WEAK_SELF(self);
+    [_viewModel.cameraObj setUpdateNewMessageCount:^{
+        weakself.messageBtn.badgeValue = weakself.viewModel.cameraObj.newMessageCount;
+    }];
 }
 
 - (UILabel *)sharedLabel {
@@ -214,6 +229,8 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 }
 
 - (IBAction)messageCenterAction:(id)sender {
+    [_viewModel.cameraObj resetNewMessageCount];
+
     if ([self.delegate respondsToSelector:@selector(enterMessageCenterWithCell:)]) {
         [self.delegate enterMessageCenterWithCell:self];
     }
@@ -268,14 +285,6 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     _cameraThumbnail.highlighted = NO;
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if (context == SHCameraViewCellContext) {
-        if ([keyPath isEqualToString:kNewMessageCountKeyPath]) {
-            _messageBtn.badgeValue = _viewModel.cameraObj.newMessageCount;
-        }
-    }
 }
 
 @end

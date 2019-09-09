@@ -12,6 +12,8 @@
 #import "SHControlCenter.h"
 #import "SHStreamOperate.h"
 
+typedef void(^UpdateNewMessageCountBlock)(void);
+
 @class SHCamera;
 @interface SHCameraObject : NSObject
 
@@ -28,6 +30,7 @@
 @property (nonatomic, strong) SHStreamOperate *streamOper;
 @property (nonatomic, assign) NSInteger newFilesCount;
 @property (nonatomic, assign, readonly) NSUInteger newMessageCount;
+@property (nonatomic, copy) UpdateNewMessageCountBlock updateNewMessageCount;
 
 @property (nonatomic) BOOL isConnect;
 @property (nonatomic) dispatch_semaphore_t semaphore;
