@@ -340,6 +340,8 @@
 		38F525C31F2F041E00F5A5A2 /* libMWPhotoBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38F525C01F2F03F800F5A5A2 /* libMWPhotoBrowser.a */; };
 		38F525C71F2F04F000F5A5A2 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */; };
 		38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */; };
+		38F66097232752B6002A82DD /* SHENetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F66096232752B6002A82DD /* SHENetworkManager.m */; };
+		38F6609A23277F8A002A82DD /* SHENetworkManager+AWSS3.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */; };
 		38F769B622E70C76005E56A5 /* SHMySharingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B522E70C76005E56A5 /* SHMySharingTVC.m */; };
 		38F769BA22E71023005E56A5 /* SHSubscriberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B922E71023005E56A5 /* SHSubscriberCell.m */; };
 		38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */; };
@@ -1052,6 +1054,10 @@
 		38F525C61F2F04F000F5A5A2 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = MWPhotoBrowser.bundle; path = Libraries/MWPhotoBrowser/MWPhotoBrowser.bundle; sourceTree = "<group>"; };
 		38F604A521DC86EA00B0F6D0 /* XDSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDSDropDownMenu.h; sourceTree = "<group>"; };
 		38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDSDropDownMenu.m; sourceTree = "<group>"; };
+		38F66095232752B6002A82DD /* SHENetworkManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHENetworkManager.h; sourceTree = "<group>"; };
+		38F66096232752B6002A82DD /* SHENetworkManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHENetworkManager.m; sourceTree = "<group>"; };
+		38F6609823277F8A002A82DD /* SHENetworkManager+AWSS3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHENetworkManager+AWSS3.h"; sourceTree = "<group>"; };
+		38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHENetworkManager+AWSS3.m"; sourceTree = "<group>"; };
 		38F769B522E70C76005E56A5 /* SHMySharingTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMySharingTVC.m; sourceTree = "<group>"; };
 		38F769B822E71023005E56A5 /* SHSubscriberCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberCell.h; sourceTree = "<group>"; };
 		38F769B922E71023005E56A5 /* SHSubscriberCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberCell.m; sourceTree = "<group>"; };
@@ -2027,6 +2033,7 @@
 		38E5BF4420A3F5AE003004E0 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				38F660922327515C002A82DD /* Network */,
 				38802F1920B5157F006274AE /* UnderLineTextField */,
 				38E5C1D020A3F60E003004E0 /* CoreData */,
 				38E5C1DE20A3F60F003004E0 /* Additions */,
@@ -2853,6 +2860,25 @@
 			path = XDSDropDownMenu;
 			sourceTree = "<group>";
 		};
+		38F660922327515C002A82DD /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				38F6609423275177002A82DD /* Model */,
+				38F66095232752B6002A82DD /* SHENetworkManager.h */,
+				38F66096232752B6002A82DD /* SHENetworkManager.m */,
+				38F6609823277F8A002A82DD /* SHENetworkManager+AWSS3.h */,
+				38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		38F6609423275177002A82DD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		38F769B722E71008005E56A5 /* SubscriberCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -3507,6 +3533,7 @@
 				38A53CAC22DF411F003D7C1B /* SHWiFiInfoHelper.m in Sources */,
 				384BBE4220C13A900047E152 /* SVProgressAnimatedView.m in Sources */,
 				38E5C23E20A3F650003004E0 /* SHRangeItem.m in Sources */,
+				38F66097232752B6002A82DD /* SHENetworkManager.m in Sources */,
 				38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */,
 				38E5C19220A3F5AF003004E0 /* SHUserAccountItem.m in Sources */,
 				38E5C34C20A40F8A003004E0 /* SHCameraViewModel.m in Sources */,
@@ -3554,6 +3581,7 @@
 				38E5C1C520A3F5AF003004E0 /* SHDeleteCameraCell.m in Sources */,
 				38A38FAC22C0CE7100E831E3 /* SHAccountSettingBaseCell.m in Sources */,
 				38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */,
+				38F6609A23277F8A002A82DD /* SHENetworkManager+AWSS3.m in Sources */,
 				38E5C25F20A3F66D003004E0 /* SHICatchEvent.m in Sources */,
 				38A38FA922C0CE7100E831E3 /* SHAccountSettingItem.m in Sources */,
 				38E5C26820A3F66D003004E0 /* SHCameraManager.m in Sources */,

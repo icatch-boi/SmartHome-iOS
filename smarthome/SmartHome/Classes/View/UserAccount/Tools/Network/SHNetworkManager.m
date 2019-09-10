@@ -14,6 +14,8 @@
 
 @interface SHNetworkManager ()
 
+@property (nonatomic, strong) CameraOperate *cameraOperate;
+@property (nonatomic, strong) SHUserAccount *userAccount;
 @property (nonatomic, strong) TokenOperate *tokenOperate;
 @property (nonatomic, strong) AccountOperate *accountOperate;
 

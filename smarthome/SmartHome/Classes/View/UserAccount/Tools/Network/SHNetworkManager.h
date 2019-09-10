@@ -29,8 +29,8 @@ static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 @interface SHNetworkManager : NSObject
 
 @property (nonatomic, assign, readonly) BOOL userLogin;
-@property (nonatomic, strong) CameraOperate *cameraOperate;
-@property (nonatomic, strong) SHUserAccount *userAccount;
+@property (nonatomic, strong, readonly) CameraOperate *cameraOperate;
+@property (nonatomic, strong, readonly) SHUserAccount *userAccount;
 
 + (instancetype)sharedNetworkManager;
 - (void)getVerifyCodeWithEmail:(NSString *)email completion:(RequestCompletionBlock)completion;
