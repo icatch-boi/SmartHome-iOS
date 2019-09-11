@@ -29,6 +29,8 @@
 #import <AFNetworking/AFNetworking.h>
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
+#import "SHIdentityInfo.h"
+#import "SHDeveloperAuthenticatedIdentityProvider.h"
 
 @interface SHENetworkManager ()
 
@@ -38,6 +40,8 @@
 @end
 
 @implementation SHENetworkManager
+
+@synthesize userIdentityInfo = _userIdentityInfo;
 
 #pragma mark - Init
 + (instancetype)sharedManager {
@@ -62,6 +66,7 @@
         self.tokenSessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         [self configAuthorization];
+        [self configAWSService];
     }
     return self;
 }
@@ -85,6 +90,43 @@
 
 - (NSString *)access_token {
     return [SHNetworkManager sharedNetworkManager].userAccount.access_token;
+}
+
+- (void)configAWSService {
+    if (self.userIdentityInfo != nil) {
+        SHDeveloperAuthenticatedIdentityProvider *devAuth = [[SHDeveloperAuthenticatedIdentityProvider alloc] initWithRegionType:AWSRegionCNNorth1 identityPoolId:self.userIdentityInfo.IdentityPoolId useEnhancedFlow:YES identityProviderManager:nil];
+        AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc]
+                                                              initWithRegionType:AWSRegionCNNorth1
+                                                              identityProvider:devAuth];
+        
+        AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionCNNorthWest1 credentialsProvider:credentialsProvider];
+        
+        [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
+    }
+}
+
+- (SHIdentityInfo *)userIdentityInfo {
+    if (_userIdentityInfo == nil) {
+        NSString *key = [SHNetworkManager sharedNetworkManager].userAccount.id;
+        NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        if (dict != nil) {
+            _userIdentityInfo = [SHIdentityInfo identityInfoWithDict:dict];
+        }
+    }
+    
+    return _userIdentityInfo;
+}
+
+- (void)setUserIdentityInfo:(SHIdentityInfo *)userIdentityInfo {
+    _userIdentityInfo = userIdentityInfo;
+    
+    if (userIdentityInfo != nil) {
+        [self configAWSService];
+        
+        NSString *key = [SHNetworkManager sharedNetworkManager].userAccount.id;
+        [[NSUserDefaults standardUserDefaults] setObject:[userIdentityInfo conversionToDictionary] forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 #pragma mark - Request method

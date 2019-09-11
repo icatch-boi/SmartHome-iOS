@@ -1,4 +1,4 @@
-// SHENetworkManager+AWSS3.h
+// SHDeveloperAuthenticatedIdentityProvider.m
 
 /**************************************************************************
  *
@@ -22,21 +22,29 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 2:51 PM.
+ // Created by zj on 2019/9/10 3:07 PM.
     
 
-#import "SHENetworkManager.h"
+#import "SHDeveloperAuthenticatedIdentityProvider.h"
+#import "SHIdentityInfo.h"
+#import "SHENetworkManager+AWSS3.h"
 
-NS_ASSUME_NONNULL_BEGIN
+static NSString * const kIdentityProviderName = @"cognito-identity.cn-north-1.amazonaws.com.cn";
 
-static NSString * const kAwsauth = @"v1/users/awsauth";
+@implementation SHDeveloperAuthenticatedIdentityProvider
 
-@class SHIdentityInfo;
-@interface SHENetworkManager (AWSS3)
-
-- (SHIdentityInfo *)getIdentityInfo;
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion;
+- (AWSTask<NSDictionary<NSString *,NSString *> *> *)logins {
+    if (self.isAuthenticated) {
+        return [super logins];
+    }
+    
+    SHIdentityInfo *info = [[SHENetworkManager sharedManager] getIdentityInfo];
+    if (info == nil) {
+        return [super logins];
+    }
+    
+    self.identityId = info.IdentityId;
+    return [AWSTask taskWithResult: @{kIdentityProviderName: info.Token}];
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

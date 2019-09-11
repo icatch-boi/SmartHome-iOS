@@ -342,6 +342,8 @@
 		38F604A721DC86EA00B0F6D0 /* XDSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F604A621DC86EA00B0F6D0 /* XDSDropDownMenu.m */; };
 		38F66097232752B6002A82DD /* SHENetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F66096232752B6002A82DD /* SHENetworkManager.m */; };
 		38F6609A23277F8A002A82DD /* SHENetworkManager+AWSS3.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */; };
+		38F6609D23278142002A82DD /* SHIdentityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F6609C23278142002A82DD /* SHIdentityInfo.m */; };
+		38F660A123278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F660A023278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.m */; };
 		38F769B622E70C76005E56A5 /* SHMySharingTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B522E70C76005E56A5 /* SHMySharingTVC.m */; };
 		38F769BA22E71023005E56A5 /* SHSubscriberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769B922E71023005E56A5 /* SHSubscriberCell.m */; };
 		38F769BD22E71360005E56A5 /* SHSubscriberGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F769BC22E71360005E56A5 /* SHSubscriberGroup.m */; };
@@ -1058,6 +1060,11 @@
 		38F66096232752B6002A82DD /* SHENetworkManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHENetworkManager.m; sourceTree = "<group>"; };
 		38F6609823277F8A002A82DD /* SHENetworkManager+AWSS3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHENetworkManager+AWSS3.h"; sourceTree = "<group>"; };
 		38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHENetworkManager+AWSS3.m"; sourceTree = "<group>"; };
+		38F6609B23278142002A82DD /* SHIdentityInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHIdentityInfo.h; sourceTree = "<group>"; };
+		38F6609C23278142002A82DD /* SHIdentityInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHIdentityInfo.m; sourceTree = "<group>"; };
+		38F6609F23278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDeveloperAuthenticatedIdentityProvider.h; sourceTree = "<group>"; };
+		38F660A023278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDeveloperAuthenticatedIdentityProvider.m; sourceTree = "<group>"; };
+		38F660A3232788BC002A82DD /* SHENetworkManagerCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHENetworkManagerCommon.h; sourceTree = "<group>"; };
 		38F769B522E70C76005E56A5 /* SHMySharingTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMySharingTVC.m; sourceTree = "<group>"; };
 		38F769B822E71023005E56A5 /* SHSubscriberCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSubscriberCell.h; sourceTree = "<group>"; };
 		38F769B922E71023005E56A5 /* SHSubscriberCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSubscriberCell.m; sourceTree = "<group>"; };
@@ -2868,6 +2875,7 @@
 				38F66096232752B6002A82DD /* SHENetworkManager.m */,
 				38F6609823277F8A002A82DD /* SHENetworkManager+AWSS3.h */,
 				38F6609923277F8A002A82DD /* SHENetworkManager+AWSS3.m */,
+				38F660A3232788BC002A82DD /* SHENetworkManagerCommon.h */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2875,6 +2883,10 @@
 		38F6609423275177002A82DD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				38F6609B23278142002A82DD /* SHIdentityInfo.h */,
+				38F6609C23278142002A82DD /* SHIdentityInfo.m */,
+				38F6609F23278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.h */,
+				38F660A023278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3518,6 +3530,7 @@
 				3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */,
 				38F769E122EAF8B2005E56A5 /* SHMessageListViewModel.m in Sources */,
 				38E5C36C20A40FFC003004E0 /* NSDate+Convert.m in Sources */,
+				38F6609D23278142002A82DD /* SHIdentityInfo.m in Sources */,
 				38E5C36D20A40FFC003004E0 /* UIScreen+Addition.m in Sources */,
 				38E5C28E20A3F698003004E0 /* SHLocalCamerasHelper.m in Sources */,
 				38F769DD22EAF63C005E56A5 /* SHMessageInfo.m in Sources */,
@@ -3592,6 +3605,7 @@
 				3818D69321709BA100AF846C /* XYBarCell.m in Sources */,
 				38E5C14E20A3F5AF003004E0 /* SHCameraObjManager.m in Sources */,
 				38E5C26220A3F66D003004E0 /* SHPhotoGallery.m in Sources */,
+				38F660A123278320002A82DD /* SHDeveloperAuthenticatedIdentityProvider.m in Sources */,
 				38AAE0262202CAA0009B37F8 /* SHWCQRCodeView.m in Sources */,
 				3897E0C12180743100E72417 /* XJSetupTipsView.m in Sources */,
 				38E5C23F20A3F650003004E0 /* SHPropertyQueryResult.m in Sources */,

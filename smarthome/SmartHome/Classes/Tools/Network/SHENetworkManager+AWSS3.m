@@ -26,7 +26,86 @@
     
 
 #import "SHENetworkManager+AWSS3.h"
+#import "SHIdentityInfo.h"
+#import <AWSS3/AWSS3.h>
 
 @implementation SHENetworkManager (AWSS3)
+
+- (SHIdentityInfo *)getIdentityInfo {
+    NSString *urlString = [kServerBaseURL stringByAppendingString:kAwsauth];
+
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    __block SHIdentityInfo *info = nil;
+    [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            info = [SHIdentityInfo identityInfoWithDict:result];
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    return info;
+}
+
+- (void)getIdentityInfoWithCompletion:(SHERequestCompletionBlock)completion {
+    NSString *urlString = [kServerBaseURL stringByAppendingString:kAwsauth];
+
+    [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess == YES && result != nil) {
+            self.userIdentityInfo = [SHIdentityInfo identityInfoWithDict:result];
+            
+            if (completion) {
+                completion(YES, result);
+            }
+        } else {
+            if (completion) {
+                completion(NO, result);
+            }
+        }
+    }];
+}
+
+- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion {
+    if (self.userIdentityInfo == nil) {
+        WEAK_SELF(self);
+        [self getIdentityInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess) {
+                [weakself getObjectFromS3HandleWithCompletion:completion];
+            } else {
+                if (completion) {
+                    completion(isSuccess, result);
+                }
+            }
+        }];
+    } else {
+        [self getObjectFromS3HandleWithCompletion:completion];
+    }
+}
+
+- (void)getObjectFromS3HandleWithCompletion:(SHERequestCompletionBlock)completion {
+    NSString *S3BucketName = @"smarthome-stable-server";
+    NSString *S3DownloadKeyName = @"timg.jpeg";
+    
+    AWSS3GetObjectRequest *request = [[AWSS3GetObjectRequest alloc] init];
+    request.bucket = S3BucketName;
+    NSString *filePath = [NSString stringWithFormat:@"user_material/%@/portrait/%@", self.userIdentityInfo.IdentityId, S3DownloadKeyName];
+    //    user_material/cn-north-1:7203f692-418e-4dfe-a2c9-8f2aad617c1b/image2.jpg
+    NSLog(@"filePath: %@", filePath);
+    request.key = filePath;
+    [[AWSS3 defaultS3] getObject:request completionHandler:^(AWSS3GetObjectOutput * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            if (completion) {
+                completion(NO, error);
+            }
+        } else {
+            if (completion) {
+                completion(YES, response.body);
+            }
+        }
+    }];
+}
 
 @end

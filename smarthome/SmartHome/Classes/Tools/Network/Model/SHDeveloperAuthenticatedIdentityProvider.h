@@ -1,4 +1,4 @@
-// SHENetworkManager+AWSS3.h
+// SHDeveloperAuthenticatedIdentityProvider.h
 
 /**************************************************************************
  *
@@ -22,20 +22,15 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 2:51 PM.
+ // Created by zj on 2019/9/10 3:07 PM.
     
 
-#import "SHENetworkManager.h"
+#import "AWSIdentityProvider.h"
+#import <AWSCore/AWSCore.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const kAwsauth = @"v1/users/awsauth";
-
-@class SHIdentityInfo;
-@interface SHENetworkManager (AWSS3)
-
-- (SHIdentityInfo *)getIdentityInfo;
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion;
+@interface SHDeveloperAuthenticatedIdentityProvider : AWSCognitoCredentialsProviderHelper
 
 @end
 

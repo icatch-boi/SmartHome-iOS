@@ -26,6 +26,7 @@
     
 
 #import <Foundation/Foundation.h>
+#import "SHIdentityInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,6 +40,8 @@ typedef enum : NSUInteger {
 typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
 @interface SHENetworkManager : NSObject
+
+@property (nonatomic, strong) SHIdentityInfo *userIdentityInfo;
 
 + (instancetype)sharedManager;
 

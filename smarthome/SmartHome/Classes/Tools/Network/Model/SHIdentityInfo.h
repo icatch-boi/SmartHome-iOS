@@ -1,4 +1,4 @@
-// SHENetworkManager+AWSS3.h
+// SHIdentityInfo.h
 
 /**************************************************************************
  *
@@ -22,20 +22,21 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 2:51 PM.
+ // Created by zj on 2019/9/10 2:59 PM.
     
 
-#import "SHENetworkManager.h"
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const kAwsauth = @"v1/users/awsauth";
+@interface SHIdentityInfo : NSObject
 
-@class SHIdentityInfo;
-@interface SHENetworkManager (AWSS3)
+@property (nonatomic, copy, readonly) NSString *IdentityId;
+@property (nonatomic, copy, readonly) NSString *IdentityPoolId;
+@property (nonatomic, copy, readonly) NSString *Token;
 
-- (SHIdentityInfo *)getIdentityInfo;
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion;
++ (instancetype)identityInfoWithDict:(NSDictionary *)dict;
+- (NSDictionary *)conversionToDictionary;
 
 @end
 

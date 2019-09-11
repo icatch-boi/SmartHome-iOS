@@ -1,4 +1,4 @@
-// SHENetworkManager+AWSS3.h
+// SHENetworkManagerCommon.h
 
 /**************************************************************************
  *
@@ -22,21 +22,13 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 2:51 PM.
+ // Created by zj on 2019/9/10 3:31 PM.
     
 
+#ifndef SHENetworkManagerCommon_h
+#define SHENetworkManagerCommon_h
+
 #import "SHENetworkManager.h"
+#import "SHENetworkManager+AWSS3.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
-static NSString * const kAwsauth = @"v1/users/awsauth";
-
-@class SHIdentityInfo;
-@interface SHENetworkManager (AWSS3)
-
-- (SHIdentityInfo *)getIdentityInfo;
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#endif /* SHENetworkManagerCommon_h */
