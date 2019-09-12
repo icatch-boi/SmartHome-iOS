@@ -68,12 +68,12 @@
     }];
 }
 
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion {
+- (void)getObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
     if (self.userIdentityInfo == nil) {
         WEAK_SELF(self);
         [self getIdentityInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
             if (isSuccess) {
-                [weakself getObjectFromS3HandleWithCompletion:completion];
+                [weakself getObjectHandleWithBucketName:bucketName filePath:filePath completion:completion];
             } else {
                 if (completion) {
                     completion(isSuccess, result);
@@ -81,17 +81,21 @@
             }
         }];
     } else {
-        [self getObjectFromS3HandleWithCompletion:completion];
+        [self getObjectHandleWithBucketName:bucketName filePath:filePath completion:completion];
     }
 }
 
-- (void)getObjectFromS3HandleWithCompletion:(SHERequestCompletionBlock)completion {
-    NSString *S3BucketName = @"smarthome-stable-server";
-    NSString *S3DownloadKeyName = @"timg.jpeg";
+- (void)getObjectHandleWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
+    if (bucketName.length == 0 || filePath.length == 0) {
+        if (completion) {
+            completion(NO, @"Parameter is invalid");
+        }
+        
+        return;
+    }
     
     AWSS3GetObjectRequest *request = [[AWSS3GetObjectRequest alloc] init];
-    request.bucket = S3BucketName;
-    NSString *filePath = [NSString stringWithFormat:@"user_material/%@/portrait/%@", self.userIdentityInfo.IdentityId, S3DownloadKeyName];
+    request.bucket = bucketName;
     //    user_material/cn-north-1:7203f692-418e-4dfe-a2c9-8f2aad617c1b/image2.jpg
     NSLog(@"filePath: %@", filePath);
     request.key = filePath;
@@ -103,6 +107,69 @@
         } else {
             if (completion) {
                 completion(YES, response.body);
+            }
+        }
+    }];
+}
+
+- (void)getUserPortrait:(SHERequestCompletionBlock)completion {
+    [self getUserDataWithType:SHEUserDataTypePortrait completion:completion];
+}
+
+- (void)getUserDataWithType:(SHEUserDataType)type completion:(SHERequestCompletionBlock)completion {
+    if (self.userDirectoryInfo == nil) {
+        WEAK_SELF(self);
+        [self getS3DirectoryInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess) {
+                [weakself getUserDataHandleWithType:type completion:completion];
+            } else {
+                if (completion) {
+                    completion(isSuccess, result);
+                }
+            }
+
+        }];
+    } else {
+        [self getUserDataHandleWithType:type completion:completion];
+    }
+}
+
+- (void)getUserDataHandleWithType:(SHEUserDataType)type completion:(SHERequestCompletionBlock)completion {
+    NSString *bucketName = self.userDirectoryInfo.bucket;
+    NSString *filePath = nil;
+    
+    switch (type) {
+        case SHEUserDataTypePortrait:
+            filePath = self.userDirectoryInfo.portrait;
+            break;
+            
+        case SHEUserDataTypeFaces:
+            filePath = self.userDirectoryInfo.faces;
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (filePath != nil) {
+        [self getObjectWithBucketName:bucketName filePath:filePath completion:completion];
+    }
+}
+
+- (void)getS3DirectoryInfoWithCompletion:(SHERequestCompletionBlock)completion {
+    NSString *urlString = [kServerBaseURL stringByAppendingString:kUserS3Path];
+    
+    [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess == YES && result != nil) {
+            self.userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:result];
+            SHLogInfo(SHLogTagAPP, @"User dir: %@", self.userDirectoryInfo);
+            
+            if (completion) {
+                completion(YES, result);
+            }
+        } else {
+            if (completion) {
+                completion(NO, result);
             }
         }
     }];

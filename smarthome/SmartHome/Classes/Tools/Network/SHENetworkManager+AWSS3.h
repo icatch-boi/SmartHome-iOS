@@ -30,12 +30,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kAwsauth = @"v1/users/awsauth";
+static NSString * const kUserS3Path = @"v1/users/s3path";
+
+typedef enum : NSUInteger {
+    SHEUserDataTypePortrait,
+    SHEUserDataTypeFaces,
+} SHEUserDataType;
 
 @class SHIdentityInfo;
 @interface SHENetworkManager (AWSS3)
 
 - (SHIdentityInfo *)getIdentityInfo;
-- (void)getObjectFromS3WithCompletion:(SHERequestCompletionBlock)completion;
+- (void)getObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
+
+- (void)getUserPortrait:(SHERequestCompletionBlock)completion;
 
 @end
 

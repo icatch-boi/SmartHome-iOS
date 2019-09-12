@@ -22,6 +22,8 @@ typedef enum : NSUInteger {
 static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
+static NSString * const USERS_PORTRAIT_PATH = @"v1/users/portrait";
+static const NSUInteger PORTRAIT_MAX_SZIE = 60 * 1024;
 
 @class SHUserAccount;
 @class AFHTTPSessionManager;

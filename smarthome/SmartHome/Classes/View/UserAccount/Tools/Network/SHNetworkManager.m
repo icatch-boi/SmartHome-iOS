@@ -329,6 +329,7 @@
 
 - (void)setUserAvatorWithData:(NSData *)avatorData completion:(RequestCompletionBlock)completion {
     if (self.userAccount.access_tokenHasEffective) {
+#if 0
         [self.accountOperate setAvatorWithToken:[self createToken] andAvatorData:avatorData success:^(NSString * _Nonnull url) {
             if (completion) {
                 completion(YES, url);
@@ -340,9 +341,13 @@
                 completion(NO, error);
             }
         }];
+#else
+        [self uploadUserPortraitWithData:avatorData completion:completion];
+#endif
     } else {
         [self refreshToken:^(BOOL isSuccess, id result) {
             if (isSuccess) {
+#if 0
                 [self.accountOperate setAvatorWithToken:[self createToken] andAvatorData:avatorData success:^(NSString * _Nonnull url) {
                     if (completion) {
                         completion(YES, url);
@@ -354,6 +359,9 @@
                         completion(NO, error);
                     }
                 }];
+#else
+                [self uploadUserPortraitWithData:avatorData completion:completion];
+#endif
             }
         }];
     }
@@ -869,6 +877,43 @@
     }
     
     return YES;
+}
+
+- (void)uploadUserPortraitWithData:(NSData *)data completion:(RequestCompletionBlock)completion {
+    if (data.length == 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
+        }
+        
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"Upload portrait data length : %.2f K", data.length / 1024.0);
+    if (data.length > PORTRAIT_MAX_SZIE) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"Image is too big (The largest size is 60K)."]);
+        }
+        
+        return;
+    }
+    
+    NSString *urlString = [self requestURLString:USERS_PORTRAIT_PATH];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"post" URLString:urlString parameters:nil error:nil];
+    request.timeoutInterval = TIME_OUT_INTERVAL;
+    
+    [request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    NSString *len = [NSString stringWithFormat:@"%d", (int)data.length];
+    [request setValue:len forHTTPHeaderField:@"Content-Length"];
+    
+    // 设置body
+    [request setHTTPBody:data];
+    
+    [self dataTaskWithRequest:request completion:completion];
 }
 
 @end

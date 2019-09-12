@@ -1,4 +1,4 @@
-// SHENetworkManager.h
+// SHS3DirectoryInfo.h
 
 /**************************************************************************
  *
@@ -22,33 +22,24 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 11:40 AM.
+ // Created by zj on 2019/9/11 4:44 PM.
     
 
 #import <Foundation/Foundation.h>
-#import "SHIdentityInfo.h"
-#import "SHS3DirectoryInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef enum : NSUInteger {
-    SHERequestMethodGET,
-    SHERequestMethodPOST,
-    SHERequestMethodPUT,
-    SHERequestMethodDELETE,
-} SHERequestMethod;
+@interface SHS3DirectoryInfo : NSObject
 
-typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
+@property (nonatomic, copy, readonly) NSString *bucket;
+@property (nonatomic, copy, readonly) NSString *path;
+@property (nonatomic, copy, readonly) NSString *portrait;
+@property (nonatomic, copy, readonly) NSString *faces;
+@property (nonatomic, copy, readonly) NSString *cover;
+@property (nonatomic, copy, readonly) NSString *messages;
+@property (nonatomic, copy, readonly) NSString *files;
 
-@interface SHENetworkManager : NSObject
-
-@property (nonatomic, strong) SHIdentityInfo *userIdentityInfo;
-@property (nonatomic, strong) SHS3DirectoryInfo *userDirectoryInfo;
-
-+ (instancetype)sharedManager;
-
-- (void)tokenRequestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion;
-- (void)requestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion;
++ (instancetype)s3DirectoryInfoWithDict:(NSDictionary *)dict;
 
 @end
 

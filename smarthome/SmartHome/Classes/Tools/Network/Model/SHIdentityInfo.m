@@ -53,6 +53,16 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
+- (NSString *)description {
+    NSMutableArray *tempMDict = [NSMutableArray array];
+    
+    for (NSString *property in [self propertiesWithClass:[self class]]) {
+        [tempMDict addObject:property];
+    }
+    
+    return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, [self dictionaryWithValuesForKeys:tempMDict.copy].description];
+}
+
 - (NSDictionary *)conversionToDictionary {
     NSMutableDictionary *tempMDict = [NSMutableDictionary dictionary];
     
