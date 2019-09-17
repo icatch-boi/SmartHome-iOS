@@ -42,6 +42,7 @@
 @implementation SHENetworkManager
 
 @synthesize userIdentityInfo = _userIdentityInfo;
+@synthesize userDirectoryInfo = _userDirectoryInfo;
 
 #pragma mark - Init
 + (instancetype)sharedManager {
@@ -107,7 +108,7 @@
 
 - (SHIdentityInfo *)userIdentityInfo {
     if (_userIdentityInfo == nil) {
-        NSString *key = [SHNetworkManager sharedNetworkManager].userAccount.id;
+        NSString *key = [self createUserIdentityInfoLocalKey];
         NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         if (dict != nil) {
             _userIdentityInfo = [SHIdentityInfo identityInfoWithDict:dict];
@@ -123,10 +124,42 @@
     if (userIdentityInfo != nil) {
         [self configAWSService];
         
-        NSString *key = [SHNetworkManager sharedNetworkManager].userAccount.id;
+        NSString *key = [self createUserIdentityInfoLocalKey];
         [[NSUserDefaults standardUserDefaults] setObject:[userIdentityInfo conversionToDictionary] forKey:key];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+}
+
+- (NSString *)createUserIdentityInfoLocalKey {
+    NSString *mainKey = [SHNetworkManager sharedNetworkManager].userAccount.id;
+    return [NSString stringWithFormat:@"%@_%@", mainKey, NSStringFromClass([SHIdentityInfo class])];
+}
+
+- (SHS3DirectoryInfo *)userDirectoryInfo {
+    if (_userDirectoryInfo == nil) {
+        NSString *key = [self createUserDirInfoLocalKey];
+        NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        if (dict != nil) {
+            _userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:dict];
+        }
+    }
+    
+    return _userDirectoryInfo;
+}
+
+- (void)setUserDirectoryInfo:(SHS3DirectoryInfo *)userDirectoryInfo {
+    _userDirectoryInfo = userDirectoryInfo;
+    
+    if (userDirectoryInfo != nil) {
+        NSString *key = [self createUserDirInfoLocalKey];
+        [[NSUserDefaults standardUserDefaults] setObject:[userDirectoryInfo conversionToDictionary] forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (NSString *)createUserDirInfoLocalKey {
+    NSString *mainKey = [SHNetworkManager sharedNetworkManager].userAccount.id;
+    return [NSString stringWithFormat:@"%@_%@", mainKey, NSStringFromClass([SHS3DirectoryInfo class])];
 }
 
 #pragma mark - Request method

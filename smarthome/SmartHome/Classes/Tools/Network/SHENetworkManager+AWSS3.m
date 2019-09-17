@@ -31,6 +31,7 @@
 
 @implementation SHENetworkManager (AWSS3)
 
+#pragma mark - IdentityInfo
 - (SHIdentityInfo *)getIdentityInfo {
     NSString *urlString = [kServerBaseURL stringByAppendingString:kAwsauth];
 
@@ -68,6 +69,7 @@
     }];
 }
 
+#pragma mark - Get Object
 - (void)getObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
     if (self.userIdentityInfo == nil) {
         WEAK_SELF(self);
@@ -96,9 +98,8 @@
     
     AWSS3GetObjectRequest *request = [[AWSS3GetObjectRequest alloc] init];
     request.bucket = bucketName;
-    //    user_material/cn-north-1:7203f692-418e-4dfe-a2c9-8f2aad617c1b/image2.jpg
-    NSLog(@"filePath: %@", filePath);
     request.key = filePath;
+    
     [[AWSS3 defaultS3] getObject:request completionHandler:^(AWSS3GetObjectOutput * _Nullable response, NSError * _Nullable error) {
         if (error) {
             if (completion) {
@@ -112,16 +113,64 @@
     }];
 }
 
+#pragma mark - Portrait
 - (void)getUserPortrait:(SHERequestCompletionBlock)completion {
-    [self getUserDataWithType:SHEUserDataTypePortrait completion:completion];
+    [self getUserDataWithType:SHEUserDataTypePortrait parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            UIImage *image = [[UIImage alloc] initWithData:result];
+            if (completion) {
+                completion(isSuccess, image);
+            }
+        } else {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+        }
+    }];
 }
 
-- (void)getUserDataWithType:(SHEUserDataType)type completion:(SHERequestCompletionBlock)completion {
+- (void)getFaceImageWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion {
+    if (faceid.length == 0) {
+        if (completion) {
+            completion(NO, @"Paramete `faceid` can't be nil.");
+        }
+        
+        return;
+    }
+    
+    [self getUserDataWithType:SHEUserDataTypeFaceImage parametes:faceid completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            UIImage *image = [[UIImage alloc] initWithData:result];
+            if (completion) {
+                completion(isSuccess, image);
+            }
+        } else {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+        }
+    }];
+}
+
+- (void)getFaceSetDataWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion {
+    if (faceid.length == 0) {
+        if (completion) {
+            completion(NO, @"Paramete `faceid` can't be nil.");
+        }
+        
+        return;
+    }
+    
+    [self getUserDataWithType:SHEUserDataTypeFaceSet parametes:faceid completion:completion];
+}
+
+#pragma mark - User Data
+- (void)getUserDataWithType:(SHEUserDataType)type parametes:(nullable id)parametes completion:(SHERequestCompletionBlock)completion {
     if (self.userDirectoryInfo == nil) {
         WEAK_SELF(self);
         [self getS3DirectoryInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
             if (isSuccess) {
-                [weakself getUserDataHandleWithType:type completion:completion];
+                [weakself getUserDataHandleWithType:type parametes:parametes completion:completion];
             } else {
                 if (completion) {
                     completion(isSuccess, result);
@@ -130,11 +179,11 @@
 
         }];
     } else {
-        [self getUserDataHandleWithType:type completion:completion];
+        [self getUserDataHandleWithType:type parametes:parametes completion:completion];
     }
 }
 
-- (void)getUserDataHandleWithType:(SHEUserDataType)type completion:(SHERequestCompletionBlock)completion {
+- (void)getUserDataHandleWithType:(SHEUserDataType)type parametes:(nullable id)parametes completion:(SHERequestCompletionBlock)completion {
     NSString *bucketName = self.userDirectoryInfo.bucket;
     NSString *filePath = nil;
     
@@ -143,8 +192,21 @@
             filePath = self.userDirectoryInfo.portrait;
             break;
             
-        case SHEUserDataTypeFaces:
+        case SHEUserDataTypeFaceImage:
             filePath = self.userDirectoryInfo.faces;
+            if (parametes != nil) {
+                NSString *fileName = [NSString stringWithFormat:@"%@.jpg", parametes];
+                filePath = [filePath stringByAppendingPathComponent:fileName];
+            }
+            
+            break;
+            
+        case SHEUserDataTypeFaceSet:
+            filePath = self.userDirectoryInfo.faces;
+            if (parametes != nil) {
+                filePath = [filePath stringByAppendingPathComponent:parametes];
+            }
+            
             break;
             
         default:
@@ -156,6 +218,7 @@
     }
 }
 
+#pragma mark - S3DirectoryInfo
 - (void)getS3DirectoryInfoWithCompletion:(SHERequestCompletionBlock)completion {
     NSString *urlString = [kServerBaseURL stringByAppendingString:kUserS3Path];
     

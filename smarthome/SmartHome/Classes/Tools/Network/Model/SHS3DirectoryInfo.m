@@ -66,4 +66,19 @@
     return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, [self dictionaryWithValuesForKeys:tempMDict.copy].description];
 }
 
+- (NSDictionary *)conversionToDictionary {
+    NSMutableDictionary *tempMDict = [NSMutableDictionary dictionary];
+    
+    for (NSString *property in [SHTool propertiesWithClass:[self class]]) {
+        id value = [self valueForKey:property];
+        if (value) {
+            [tempMDict setObject:value forKey:property];
+        } /*else {
+           [tempMDict setObject:[NSNull null] forKey:property];
+           }*/
+    }
+    
+    return tempMDict.copy;
+}
+
 @end

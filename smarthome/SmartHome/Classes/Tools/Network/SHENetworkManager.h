@@ -38,6 +38,12 @@ typedef enum : NSUInteger {
     SHERequestMethodDELETE,
 } SHERequestMethod;
 
+/**
+ Request completion callback
+
+ @param isSuccess Whether the request was successful
+ @param result If request success return the requested data, Otherwise return error info.
+ */
 typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
 @interface SHENetworkManager : NSObject

@@ -34,7 +34,8 @@ static NSString * const kUserS3Path = @"v1/users/s3path";
 
 typedef enum : NSUInteger {
     SHEUserDataTypePortrait,
-    SHEUserDataTypeFaces,
+    SHEUserDataTypeFaceImage,
+    SHEUserDataTypeFaceSet,
 } SHEUserDataType;
 
 @class SHIdentityInfo;
@@ -43,7 +44,16 @@ typedef enum : NSUInteger {
 - (SHIdentityInfo *)getIdentityInfo;
 - (void)getObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
 
+/**
+ Get user portrait data
+
+ @param completion Request completion result, If success return `portrait' image,
+ Otherwise return error info.
+ */
 - (void)getUserPortrait:(SHERequestCompletionBlock)completion;
+
+- (void)getFaceImageWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion;
+- (void)getFaceSetDataWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion;
 
 @end
 

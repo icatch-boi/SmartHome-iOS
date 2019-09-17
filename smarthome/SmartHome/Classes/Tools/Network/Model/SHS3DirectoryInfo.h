@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *files;
 
 + (instancetype)s3DirectoryInfoWithDict:(NSDictionary *)dict;
+- (NSDictionary *)conversionToDictionary;
 
 @end
 
