@@ -37,10 +37,7 @@
 - (void)faceRecognitionWithPicture:(NSData *)data deviceID:(NSString *)deviceID finished:(_Nullable ZJRequestCallBack)finished {
     if (data == nil || data.length == 0 || deviceID == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -65,18 +62,10 @@
     [self requestWithMethod:ZJRequestMethodPOST opertionType:ZJOperationTypeDevice urlString:FACE_RECOGNITION_PATH parametes:parameters finished:finished];
 }
 
-- (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
-    //    return [[NSError alloc] initWithDomain:NSItemProviderErrorDomain code:code userInfo:dict];
-    return [ZJRequestError requestErrorWithDict:dict];
-}
-
 - (void)uploadFacePicture:(NSData *)data name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished {
     if (data == nil || data.length == 0 || name == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -97,10 +86,7 @@
 - (void)deleteFacePictureWithName:(NSString *)name finished:(ZJRequestCallBack)finished {
     if (name == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
             
             return;
         }
@@ -128,10 +114,7 @@
 - (void)replaceFacePicture:(NSData *)data name:(NSString *)name finished:(ZJRequestCallBack)finished {
     if (data == nil || data.length == 0 || name == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -321,10 +304,7 @@
 - (void)uploadFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished {
     if (faceData == nil || faceData.length == 0 || faceid == nil || [faceid isEqualToString:@""] || name == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -362,10 +342,7 @@
 - (void)updateFaceData:(NSData *)faceData faceid:(NSString *)faceid name:(NSString *)name finished:(_Nullable ZJRequestCallBack)finished {
     if (faceData == nil || faceData.length == 0 || faceid == nil || [faceid isEqualToString:@""] || name == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -385,10 +362,7 @@
     NSURL *url = [NSURL URLWithString:urlString];
     if (urlString == nil || url == nil) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -491,10 +465,7 @@
 - (void)getFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -539,10 +510,7 @@
 - (void)deleteFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -560,10 +528,7 @@
 - (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceDataSet == nil || faceDataSet.length == 0 || faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -601,10 +566,7 @@
 - (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -645,10 +607,7 @@
     if (urlString == nil || url == nil || request == nil) {
         SHLogError(SHLogTagAPP, @"Download failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;
@@ -694,10 +653,7 @@
 - (void)getStrangerFaceDataWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished {
     if (deviceid.length == 0) {
         if (finished) {
-            NSDictionary *dict = @{
-                                   NSLocalizedDescriptionKey: @"invalid parameter.",
-                                   };
-            finished(nil, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
         }
         
         return;

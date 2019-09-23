@@ -22,6 +22,8 @@ typedef enum : NSUInteger {
 static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
+static NSString * const USERS_PORTRAIT_PATH = @"v1/users/portrait";
+static const NSUInteger PORTRAIT_MAX_SZIE = 60 * 1024;
 
 @class SHUserAccount;
 @class AFHTTPSessionManager;
@@ -29,8 +31,8 @@ static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 @interface SHNetworkManager : NSObject
 
 @property (nonatomic, assign, readonly) BOOL userLogin;
-@property (nonatomic, strong) CameraOperate *cameraOperate;
-@property (nonatomic, strong) SHUserAccount *userAccount;
+@property (nonatomic, strong, readonly) CameraOperate *cameraOperate;
+@property (nonatomic, strong, readonly) SHUserAccount *userAccount;
 
 + (instancetype)sharedNetworkManager;
 - (void)getVerifyCodeWithEmail:(NSString *)email completion:(RequestCompletionBlock)completion;
@@ -63,6 +65,8 @@ static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 - (void)setUserExtensionsInfo:(NSDictionary *)info completion:(RequestCompletionBlock)completion;
 - (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
 - (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
+
+- (void)downloadFileWithURLString:(NSString *)urlString finished:(RequestCompletionBlock)finished;
 
 @end
 

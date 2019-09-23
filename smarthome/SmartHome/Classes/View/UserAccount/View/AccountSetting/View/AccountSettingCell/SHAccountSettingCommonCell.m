@@ -54,6 +54,9 @@
 - (void)setItem:(SHAccountSettingItem *)item {
     [super setItem:item];
     
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.selectionStyle = UITableViewCellSelectionStyleDefault;
+    
     _titleLabel.text = NSLocalizedString(item.title, nil);
     
     if ([item.title isEqualToString:@"kBiometricsRecognition"]) {

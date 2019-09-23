@@ -1,16 +1,24 @@
 PODS:
+  - AWSCore (2.10.3)
+  - AWSS3 (2.10.3):
+    - AWSCore (= 2.10.3)
   - Masonry (1.1.0)
 
 DEPENDENCIES:
+  - AWSS3 (~> 2.10.0)
   - Masonry
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AWSCore
+    - AWSS3
     - Masonry
 
 SPEC CHECKSUMS:
+  AWSCore: f9b8a30d9e8ec07d1a6dd8f0ec5fe84b6a215041
+  AWSS3: c6f0f7a49a74384b9d0fe055c822d1fa5c633905
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: e80428760d43715b31985816b817ca1333f64019
+PODFILE CHECKSUM: 5c37903413e8e2a49dce58885fe0e4b90b5de936
 
 COCOAPODS: 1.5.3

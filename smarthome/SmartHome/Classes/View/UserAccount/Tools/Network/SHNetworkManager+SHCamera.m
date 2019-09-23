@@ -718,10 +718,7 @@
 - (void)getDeviceCoverWithCameraID:(NSString *)cameraId completion:(RequestCompletionBlock)completion {
     if (cameraId == nil) {
         if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"This parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"This parameter must not be `nil`."]);
         }
         
         return;
@@ -738,10 +735,7 @@
 - (void)uploadDeviceCoverWithCameraID:(NSString *)cameraId data:(NSData *)data completion:(RequestCompletionBlock)completion {
     if (data == nil || data.length == 0 || cameraId == nil) {
         if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"These parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
         }
         
         return;
@@ -780,19 +774,11 @@
     return [kServerBaseURL stringByAppendingString:urlString];
 }
 
-#pragma mark - Error Handle
-- (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
-    return [ZJRequestError requestErrorWithDict:dict];
-}
-
 #pragma mark - CameraVersion Handle
 - (void)getDeviceUpgradesInfoWithCameraID:(NSString *)cameraID completion:(RequestCompletionBlock)completion {
     if (cameraID == nil || cameraID.length <= 0) {
         if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"These parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
         }
         
         return;
@@ -804,6 +790,85 @@
     
     NSString *urlString = [self requestURLString:DEVICE_UPGRADESINFO_PATH];
     [self requestWithMethod:SHRequestMethodGET manager:nil urlString:urlString parameters:parameters finished:completion];
+}
+
+#pragma mark - Message
+- (void)getDeviceMessageWithDeviceID:(NSString *)deviceID sinceid:(NSNumber * _Nullable)sinceid enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
+    if (deviceID.length < 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' must not be `nil`."]);
+        }
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    parameters[@"id"] = deviceID;
+    parameters[@"count"] = @(50);
+    
+    if (sinceid != nil) {
+        parameters[@"sinceid"] = sinceid;
+    }
+    
+    if (enddate.length > 0) {
+        parameters[@"enddate"] = enddate;
+    }
+    
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGE_PATH parameters:parameters.copy finished:completion];
+}
+
+- (void)deleteDeviceMessageWithDeviceID:(NSString *)deviceID startdate:(NSString * _Nullable)startdate enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
+    if (deviceID.length < 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' must not be `nil`."]);
+        }
+    }
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    parameters[@"id"] = deviceID;
+
+    if (startdate.length > 0) {
+        parameters[@"startdate"] = startdate;
+    }
+    
+    if (enddate.length > 0) {
+        parameters[@"enddate"] = enddate;
+    }
+    
+    [self requestWithMethod:SHRequestMethodDELETE manager:nil urlString:DEVICE_MESSAGE_PATH parameters:parameters finished:completion];
+}
+
+- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(RequestCompletionBlock)completion {
+    if (deviceID.length < 0 || fileName.length < 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' or 'fileName' must not be `nil`."]);
+        }
+    }
+    
+    NSDictionary *parameters = @{
+                           @"id": deviceID,
+                           @"filename": fileName,
+                           };
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGEFILE_PATH parameters:parameters finished:completion];
+}
+
+- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID filetime:(NSString *)filetime elasticsecond:(NSNumber *)elasticsecond completion:(RequestCompletionBlock)completion {
+    if (deviceID.length < 0 || filetime.length < 0 || elasticsecond == nil) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' or 'filetime' or 'elasticsecond' must not be `nil`."]);
+        }
+    }
+    
+    if (elasticsecond.intValue < 0 || elasticsecond.intValue > 10) {
+        elasticsecond = @(0);
+    }
+    
+    NSDictionary *parameters = @{
+                                 @"id": deviceID,
+                                 @"filetime": filetime,
+                                 @"elasticsecond": elasticsecond,
+                                 };
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGEFILE_PATH parameters:parameters finished:completion];
 }
 
 @end

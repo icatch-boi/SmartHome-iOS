@@ -511,3 +511,17 @@
 "kUploadFaceDataFailedDes" = "Uploading face data failed, error: %@";
 "kUplaodFaceDataSetFailedDes" = "Uploading face collection data failed, error: %@";
 "kStranger" = "Stranger";
+
+"kEnterMySharing" = "My sharing";
+"kNoDevicesToShare" = "No devices to share";
+"kDevice" = "Device";
+"kTotalShared" = "Shared to %d users";
+
+"kNotificationContentBasicBody" = "Just received a new doorbell notification, click to view details";
+"kMessageCenter" = "Message Center";
+"kPushMessageTypeLowPower" = "Low Power";
+"kPushMessageTypeSDCardFull" = "SDCard Full";
+"kPushMessageTypeSDCardError" = "SDCard Error";
+"kPushMessageTypeTamperAlarm" = "Tamper Alarm";
+"kPushMessageTypeFaceRecognition" = "Ring(AI)";
+"kPushMessageTypeUnknown" = "Unknown";

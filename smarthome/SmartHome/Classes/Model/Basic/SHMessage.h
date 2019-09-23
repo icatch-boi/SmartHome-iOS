@@ -13,8 +13,11 @@
 @property (nonatomic, copy) NSString *devID;
 @property (nonatomic, copy) NSString *time;
 @property (nonatomic, copy) NSString *msgParam;
-@property (nonatomic, assign) NSInteger msgID;
-@property (nonatomic, assign) NSInteger msgType;
+@property (nonatomic, copy) NSNumber *msgID;
+@property (nonatomic, copy) NSNumber *msgType;
+@property (nonatomic, copy) NSNumber *timeInSecs;
+
+@property (nonatomic, copy, readonly) NSString *msgTypeString;
 
 - (instancetype)initMessageWithDict:(NSDictionary *)dict;
 + (instancetype)messageWithDict:(NSDictionary *)dict;

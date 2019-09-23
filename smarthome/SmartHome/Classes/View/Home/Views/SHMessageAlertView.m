@@ -66,7 +66,7 @@
     NSString *str = nil;
     NSString *cameraName = [self prepareCameraName:msg cameras:cameras];
     
-    switch (msg.msgType) {
+    switch (msg.msgType.unsignedIntegerValue) {
         case PushMessageTypePir:
             str = @"PIR";
             break;
