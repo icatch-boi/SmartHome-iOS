@@ -166,6 +166,8 @@ static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
 static const NSTimeInterval kTimeoutInterval = 15.0; // Network request
 
+#define KUSE_S3_SERVICE
+
 #pragma mark - Config Account Server
 static NSString * const kServerBaseURL = @"https://account.smarthome.icatchtek.com:3028/";
 static NSString * const kServerClientID = @"icatch_smarthome";

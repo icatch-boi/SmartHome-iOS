@@ -46,7 +46,6 @@
 #import "SHFaceDataManager.h"
 #import "SHStrangerViewController.h"
 #import "SHMessageCenterTVC.h"
-#import "SHENetworkManagerCommon.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -446,19 +445,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
-#if 0
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
     tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
 
     [self.navigationController pushViewController:tvc animated:YES];
-#else
-    [[SHENetworkManager sharedManager] getUserPortrait:^(BOOL isSuccess, id  _Nullable result) {
-        SHLogInfo(SHLogTagAPP, @"getUserPortrait is success: %d", isSuccess);
-        SHLogInfo(SHLogTagAPP, @"result: %@", result);
-    }];
-#endif
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {

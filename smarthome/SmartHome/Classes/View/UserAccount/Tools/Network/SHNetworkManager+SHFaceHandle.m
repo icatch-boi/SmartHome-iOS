@@ -462,7 +462,7 @@
     return mData.copy;
 }
 
-- (void)getFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+- (void)getFaceInfoWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
             finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
@@ -564,6 +564,8 @@
 }
 
 - (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished {
+#ifndef KUSE_S3_SERVICE
+    
     if (faceid == nil || [faceid isEqualToString:@""]) {
         if (finished) {
             finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);
@@ -598,6 +600,14 @@
             }
         }
     }];
+#else
+    [[SHENetworkManager sharedManager] getFaceSetDataWithFaceid:faceid completion:^(BOOL isSuccess, id  _Nullable result) {
+        
+        if (finished) {
+            isSuccess ? finished(result, nil) : finished(nil, result);
+        }
+    }];
+#endif
 }
 
 - (void)downloadWithURLString:(NSString *)urlString finished:(ZJRequestCallBack)finished {

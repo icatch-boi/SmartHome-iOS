@@ -1416,7 +1416,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         }
         
         WEAK_SELF(self);
-        [[SHNetworkManager sharedNetworkManager] getFaceDataWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [[SHNetworkManager sharedNetworkManager] getFaceInfoWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
             if (error == nil) {
                 FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
                 

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
+#ifdef KUSE_S3_SERVICE
+#import "SHENetworkManagerCommon.h"
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
