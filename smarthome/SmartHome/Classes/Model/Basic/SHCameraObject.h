@@ -11,6 +11,9 @@
 #import "SHPhotoGallery.h"
 #import "SHControlCenter.h"
 #import "SHStreamOperate.h"
+#ifdef KUSE_S3_SERVICE
+#import "SHDeviceAWSS3Helper.h"
+#endif
 
 typedef void(^UpdateNewMessageCountBlock)(void);
 
@@ -40,6 +43,10 @@ typedef void(^UpdateNewMessageCountBlock)(void);
 
 @property (nonatomic, assign) BOOL startPV;
 @property (nonatomic, assign) ICatchVideoQuality streamQuality;
+
+#ifdef KUSE_S3_SERVICE
+@property (nonatomic, strong) SHDeviceAWSS3Helper *awsS3Helper;
+#endif
 
 + (instancetype)cameraObjectWithCamera:(SHCamera *)camera;
 

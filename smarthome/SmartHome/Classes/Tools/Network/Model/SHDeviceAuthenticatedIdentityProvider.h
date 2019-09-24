@@ -1,4 +1,4 @@
-// SHDeveloperAuthenticatedIdentityProvider.m
+// SHDeviceAuthenticatedIdentityProvider.h
 
 /**************************************************************************
  *
@@ -22,29 +22,18 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 3:07 PM.
+ // Created by zj on 2019/9/23 5:52 PM.
     
 
-#import "SHDeveloperAuthenticatedIdentityProvider.h"
-#import "SHIdentityInfo.h"
-#import "SHENetworkManager+AWSS3.h"
+#import "AWSIdentityProvider.h"
+#import <AWSCore/AWSCore.h>
 
-static NSString * const kIdentityProviderName = @"cognito-identity.cn-north-1.amazonaws.com.cn";
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation SHDeveloperAuthenticatedIdentityProvider
+@interface SHDeviceAuthenticatedIdentityProvider : AWSCognitoCredentialsProviderHelper
 
-- (AWSTask<NSDictionary<NSString *,NSString *> *> *)logins {
-    if (self.isAuthenticated) {
-        return [super logins];
-    }
-    
-    SHIdentityInfo *info = [[SHENetworkManager sharedManager] getUserIdentityInfo];
-    if (info == nil) {
-        return [super logins];
-    }
-    
-    self.identityId = info.IdentityId;
-    return [AWSTask taskWithResult: @{kIdentityProviderName: info.Token}];
-}
+- (instancetype)initWithRegionType:(AWSRegionType)regionType identityPoolId:(NSString *)identityPoolId useEnhancedFlow:(BOOL)useEnhancedFlow identityProviderManager:(nullable id<AWSIdentityProviderManager>)identityProviderManager deviceID:(NSString *)deviceID;
 
 @end
+
+NS_ASSUME_NONNULL_END

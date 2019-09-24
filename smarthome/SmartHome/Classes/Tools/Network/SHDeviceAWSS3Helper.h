@@ -1,4 +1,4 @@
-// SHDeveloperAuthenticatedIdentityProvider.m
+// SHDeviceAWSS3Helper.h
 
 /**************************************************************************
  *
@@ -22,29 +22,25 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 3:07 PM.
+ // Created by zj on 2019/9/23 5:07 PM.
     
 
-#import "SHDeveloperAuthenticatedIdentityProvider.h"
-#import "SHIdentityInfo.h"
-#import "SHENetworkManager+AWSS3.h"
+#import <Foundation/Foundation.h>
+#import "SHENetworkManagerCommon.h"
 
-static NSString * const kIdentityProviderName = @"cognito-identity.cn-north-1.amazonaws.com.cn";
+NS_ASSUME_NONNULL_BEGIN
 
-@implementation SHDeveloperAuthenticatedIdentityProvider
+@interface SHDeviceAWSS3Helper : NSObject
 
-- (AWSTask<NSDictionary<NSString *,NSString *> *> *)logins {
-    if (self.isAuthenticated) {
-        return [super logins];
-    }
-    
-    SHIdentityInfo *info = [[SHENetworkManager sharedManager] getUserIdentityInfo];
-    if (info == nil) {
-        return [super logins];
-    }
-    
-    self.identityId = info.IdentityId;
-    return [AWSTask taskWithResult: @{kIdentityProviderName: info.Token}];
-}
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithDeviceid:(NSString *)deviceid;
+
++ (instancetype)deviceAWSS3HelperWithDeviceid:(NSString *)deviceid;
+
+- (void)getDeviceCoverWithCompletion:(SHERequestCompletionBlock)completion;
+- (void)getStrangerFaceImageWithCompletion:(SHERequestCompletionBlock)completion;
+- (void)getDeviceMessageFileWithFileName:(NSString *)fileName completion:(SHERequestCompletionBlock)completion;
 
 @end
+
+NS_ASSUME_NONNULL_END

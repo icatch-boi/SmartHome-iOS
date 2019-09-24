@@ -356,6 +356,8 @@
 		38F30F862338647C004F25E6 /* SHMsgBadgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F30F842338647C004F25E6 /* SHMsgBadgeButton.m */; };
 		38F30F8C233865CB004F25E6 /* UIBarButtonItem+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F30F89233865CB004F25E6 /* UIBarButtonItem+Badge.m */; };
 		38F30F8D233865CB004F25E6 /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F30F8A233865CB004F25E6 /* UIButton+Badge.m */; };
+		38F30F932338C2BE004F25E6 /* SHDeviceAWSS3Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F30F922338C2BE004F25E6 /* SHDeviceAWSS3Helper.m */; };
+		38F30F962338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F30F952338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m */; };
 		38F4424D1FAC079A00BDA6DF /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4424C1FAC079A00BDA6DF /* NotificationService.m */; };
 		38F442521FAC079A00BDA6DF /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		38F442571FAC125600BDA6DF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9C41EE69C270042442C /* libz.tbd */; };
@@ -1115,6 +1117,10 @@
 		38F30F89233865CB004F25E6 /* UIBarButtonItem+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Badge.m"; sourceTree = "<group>"; };
 		38F30F8A233865CB004F25E6 /* UIButton+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Badge.m"; sourceTree = "<group>"; };
 		38F30F8B233865CB004F25E6 /* UIBarButtonItem+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Badge.h"; sourceTree = "<group>"; };
+		38F30F912338C2BE004F25E6 /* SHDeviceAWSS3Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDeviceAWSS3Helper.h; sourceTree = "<group>"; };
+		38F30F922338C2BE004F25E6 /* SHDeviceAWSS3Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDeviceAWSS3Helper.m; sourceTree = "<group>"; };
+		38F30F942338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDeviceAuthenticatedIdentityProvider.h; sourceTree = "<group>"; };
+		38F30F952338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDeviceAuthenticatedIdentityProvider.m; sourceTree = "<group>"; };
 		38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F4424B1FAC079A00BDA6DF /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		38F4424C1FAC079A00BDA6DF /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
@@ -2870,6 +2876,8 @@
 				38F30F3A2330E9F4004F25E6 /* SHENetworkManager+AWSS3.h */,
 				38F30F3C2330E9F4004F25E6 /* SHENetworkManager+AWSS3.m */,
 				38F30F3D2330E9F4004F25E6 /* SHENetworkManagerCommon.h */,
+				38F30F912338C2BE004F25E6 /* SHDeviceAWSS3Helper.h */,
+				38F30F922338C2BE004F25E6 /* SHDeviceAWSS3Helper.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2883,6 +2891,8 @@
 				38F30F442330E9F4004F25E6 /* SHS3DirectoryInfo.m */,
 				38F30F3F2330E9F4004F25E6 /* SHDeveloperAuthenticatedIdentityProvider.h */,
 				38F30F432330E9F4004F25E6 /* SHDeveloperAuthenticatedIdentityProvider.m */,
+				38F30F942338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.h */,
+				38F30F952338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3630,6 +3640,7 @@
 				38656B3221F9904500C5A65B /* SHQRCodeSetupDeviceVC.m in Sources */,
 				38BFB26922D85EE800AA3ABC /* FaceBaseViewController.m in Sources */,
 				38E5C3A620A41983003004E0 /* SHQRCodeShareVC.m in Sources */,
+				38F30F932338C2BE004F25E6 /* SHDeviceAWSS3Helper.m in Sources */,
 				38E5C1C420A3F5AF003004E0 /* SH_XJ_SettingTVC.m in Sources */,
 				38E5C31020A3F81F003004E0 /* SHDownloadProgressView.m in Sources */,
 				3897E0BA2180743100E72417 /* QBTools.m in Sources */,
@@ -3728,6 +3739,7 @@
 				384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */,
 				38BB265921DF08EE00270CE1 /* FRDFaceDisplayVC.m in Sources */,
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
+				38F30F962338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m in Sources */,
 				38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */,
 				38E5C15C20A3F5AF003004E0 /* SHMessageAlertView.m in Sources */,
 				384ADD1E22F2C14B002905DA /* SHFaceShowCell.m in Sources */,

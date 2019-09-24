@@ -1,4 +1,4 @@
-// SHDeveloperAuthenticatedIdentityProvider.m
+// SHDeviceAuthenticatedIdentityProvider.m
 
 /**************************************************************************
  *
@@ -22,23 +22,38 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/9/10 3:07 PM.
+ // Created by zj on 2019/9/23 5:52 PM.
     
 
-#import "SHDeveloperAuthenticatedIdentityProvider.h"
+#import "SHDeviceAuthenticatedIdentityProvider.h"
 #import "SHIdentityInfo.h"
 #import "SHENetworkManager+AWSS3.h"
 
 static NSString * const kIdentityProviderName = @"cognito-identity.cn-north-1.amazonaws.com.cn";
 
-@implementation SHDeveloperAuthenticatedIdentityProvider
+@interface SHDeviceAuthenticatedIdentityProvider ()
+
+@property (nonatomic, copy) NSString *deviceID;
+
+@end
+
+@implementation SHDeviceAuthenticatedIdentityProvider
+
+- (instancetype)initWithRegionType:(AWSRegionType)regionType identityPoolId:(NSString *)identityPoolId useEnhancedFlow:(BOOL)useEnhancedFlow identityProviderManager:(nullable id<AWSIdentityProviderManager>)identityProviderManager deviceID:(NSString *)deviceID {
+    self = [super initWithRegionType:regionType identityPoolId:identityPoolId useEnhancedFlow:useEnhancedFlow identityProviderManager:identityProviderManager];
+    if (self) {
+        self.deviceID = deviceID;
+    }
+    
+    return self;
+}
 
 - (AWSTask<NSDictionary<NSString *,NSString *> *> *)logins {
     if (self.isAuthenticated) {
         return [super logins];
     }
     
-    SHIdentityInfo *info = [[SHENetworkManager sharedManager] getUserIdentityInfo];
+    SHIdentityInfo *info = [[SHENetworkManager sharedManager] getDeviceIdentityInfoWithDeviceid:self.deviceID];
     if (info == nil) {
         return [super logins];
     }

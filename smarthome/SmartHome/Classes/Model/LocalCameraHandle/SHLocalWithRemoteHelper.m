@@ -230,7 +230,9 @@
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
+#ifndef KUSE_S3_SERVICE
     [self getThumbnailWithdeviceInfo:deviceInfo];
+#endif
 }
 
 + (void)getThumbnailWithdeviceInfo:(Camera *)deviceInfo {
