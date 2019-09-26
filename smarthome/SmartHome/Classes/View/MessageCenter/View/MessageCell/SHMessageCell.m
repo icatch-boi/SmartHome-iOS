@@ -69,6 +69,7 @@
     
     WEAK_SELF(self);
     [messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+#ifndef KUSE_S3_SERVICE
 #if 0
         if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -84,6 +85,14 @@
                 });
             }
         }];
+#endif
+
+#else
+        if (image != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.iconImgView.image = [image ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
+            });
+        }
 #endif
     }];
 }

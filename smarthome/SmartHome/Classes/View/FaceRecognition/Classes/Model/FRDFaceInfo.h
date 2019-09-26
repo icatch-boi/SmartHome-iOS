@@ -24,5 +24,7 @@ typedef void(^FaceInfoGetFaceImageCompletionBlock)(UIImage * _Nullable faceImage
 
 - (void)getFaceImageWithCompletion:(FaceInfoGetFaceImageCompletionBlock)completion;
 
++ (void)getFaceImageWithFaceid:(NSString *)faceid completion:(FaceInfoGetFaceImageCompletionBlock)completion;
+
 @end
 NS_ASSUME_NONNULL_END

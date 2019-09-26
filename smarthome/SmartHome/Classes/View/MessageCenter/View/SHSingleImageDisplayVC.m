@@ -78,6 +78,7 @@
     WEAK_SELF(self);
     [_messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
         [SVProgressHUD dismiss];
+#ifndef KUSE_S3_SERVICE
 #if 0
         if (image) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -88,6 +89,15 @@
         }
 #else
         [weakself.bigImageView setImageURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier];
+#endif
+#else
+        if (image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.bigImageView.image = image;
+                
+                [weakself setupRightBarButtonItem];
+            });
+        }
 #endif
     }];
 }

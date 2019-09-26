@@ -563,6 +563,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
 	completionHandler(UIBackgroundFetchResultNewData);
     [self notificationHandleWithInfo:userInfo withCompletionHandler:nil];
+    SHLogInfo(SHLogTagAPP, @"Received notification: %@", userInfo);
 }
 
 // iOS 10收到通知

@@ -230,12 +230,11 @@
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
-#ifndef KUSE_S3_SERVICE
     [self getThumbnailWithdeviceInfo:deviceInfo];
-#endif
 }
 
 + (void)getThumbnailWithdeviceInfo:(Camera *)deviceInfo {
+#ifndef KUSE_S3_SERVICE
     [[SHNetworkManager sharedNetworkManager] getCameraCoverByCameraID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess) {
             [self downloadThumbnailWithURLString:result[@"url"] finised:^(UIImage *thumbnail) {
@@ -253,6 +252,19 @@
             SHLogError(SHLogTagAPP, @"Request failed, error: %@", result);
         }
     }];
+#else
+    [[SHENetworkManager sharedManager] getDeviceCoverWithDeviceID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getDeviceCoverWithCompletion result: %@", result);
+
+        if (isSuccess && result != nil) {
+            SHCameraHelper *camera = [[SHCameraHelper alloc] init];
+            camera.cameraUid = deviceInfo.uid;
+            camera.thumnail = result;
+            
+            [[CoreDataHandler sharedCoreDataHander] updateCameraThumbnail:camera];
+        }
+    }];
+#endif
 }
 
 + (void)downloadThumbnailWithURLString:(NSString *)urlString finised:(void (^)(UIImage *thumbnail))finised {

@@ -28,6 +28,7 @@
 #import <Foundation/Foundation.h>
 #import "SHIdentityInfo.h"
 #import "SHS3DirectoryInfo.h"
+#import <AWSS3/AWSS3.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,6 +38,11 @@ typedef enum : NSUInteger {
     SHERequestMethodPUT,
     SHERequestMethodDELETE,
 } SHERequestMethod;
+
+typedef enum : NSUInteger {
+    SHES3ProviderTypeUser,
+    SHES3ProviderTypeDevice,
+} SHES3ProviderType;
 
 /**
  Request completion callback
@@ -48,13 +54,20 @@ typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
 @interface SHENetworkManager : NSObject
 
-@property (nonatomic, strong) SHIdentityInfo *userIdentityInfo;
+//@property (nonatomic, strong) SHIdentityInfo *userIdentityInfo;
 @property (nonatomic, strong) SHS3DirectoryInfo *userDirectoryInfo;
+@property (nonatomic, copy, readonly) NSString *userIdentifier;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, SHS3DirectoryInfo *> *deviceDirectoryInfos;
 
 + (instancetype)sharedManager;
 
+#pragma mark - Request method
 - (void)tokenRequestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion;
 - (void)requestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion;
+
+#pragma mark - Common method
+- (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
+- (void)registerS3WithProviderType:(SHES3ProviderType)type identityPoolId:(NSString *)identityPoolId forKey:(NSString *)key;
 
 @end
 

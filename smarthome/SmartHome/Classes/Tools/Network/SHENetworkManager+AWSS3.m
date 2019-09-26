@@ -27,7 +27,12 @@
 
 #import "SHENetworkManager+AWSS3.h"
 #import "SHIdentityInfo.h"
-#import <AWSS3/AWSS3.h>
+
+typedef enum : NSUInteger {
+    SHEUserDataTypePortrait,
+    SHEUserDataTypeFaceImage,
+    SHEUserDataTypeFaceSet,
+} SHEUserDataType;
 
 @implementation SHENetworkManager (AWSS3)
 
@@ -56,10 +61,10 @@
 
     [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess == YES && result != nil) {
-            self.userIdentityInfo = [SHIdentityInfo identityInfoWithDict:result];
+//            self.userIdentityInfo = [SHIdentityInfo identityInfoWithDict:result];
             
             if (completion) {
-                completion(YES, result);
+                completion(YES, [SHIdentityInfo identityInfoWithDict:result]);
             }
         } else {
             if (completion) {
@@ -71,6 +76,7 @@
 
 #pragma mark - Get Object
 - (void)getUserObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
+#if 0
     if (self.userIdentityInfo == nil) {
         WEAK_SELF(self);
         [self getUserIdentityInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
@@ -85,6 +91,28 @@
     } else {
         [self getObjectHandleWithBucketName:bucketName filePath:filePath completion:completion];
     }
+#else
+    NSString *key = self.userIdentifier;
+    AWSS3 *s3 = [AWSS3 S3ForKey:key];
+    if (s3 == nil) {
+        WEAK_SELF(self);
+        [self getUserIdentityInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess) {
+                SHIdentityInfo *info = result;
+                
+                [weakself registerS3WithProviderType:SHES3ProviderTypeUser identityPoolId:info.IdentityPoolId forKey:key];
+                
+                [weakself getUserObjectWithBucketName:bucketName filePath:filePath completion:completion];
+            } else {
+                if (completion) {
+                    completion(isSuccess, result);
+                }
+            }
+        }];
+    } else {
+        [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:completion];
+    }
+#endif
 }
 
 - (void)getObjectHandleWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
@@ -113,7 +141,7 @@
     }];
 }
 
-#pragma mark - Portrait
+#pragma mark - User Resource
 - (void)getUserPortrait:(SHERequestCompletionBlock)completion {
     [self getUserDataWithDataType:SHEUserDataTypePortrait parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess) {
@@ -170,6 +198,8 @@
         WEAK_SELF(self);
         [self getUserS3DirectoryInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
             if (isSuccess) {
+                weakself.userDirectoryInfo = result;
+                
                 [weakself getUserDataHandleWithDataType:type parametes:parametes completion:completion];
             } else {
                 if (completion) {
@@ -224,87 +254,8 @@
     
     [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess == YES && result != nil) {
-            self.userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:result];
-            SHLogInfo(SHLogTagAPP, @"User dir: %@", self.userDirectoryInfo);
-            
-            if (completion) {
-                completion(YES, result);
-            }
-        } else {
-            if (completion) {
-                completion(NO, result);
-            }
-        }
-    }];
-}
-
-#pragma mark - Device IdentityInfo
-- (SHIdentityInfo *)getDeviceIdentityInfoWithDeviceid:(NSString *)deviceid {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    __block SHIdentityInfo *info = nil;
-    [self getDeviceIdentityInfoWithDeviceid:deviceid completion:^(BOOL isSuccess, id  _Nullable result) {
-        if (isSuccess) {
-            info = result;
-        }
-        
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    return info;
-}
-
-- (void)getDeviceIdentityInfoWithDeviceid:(NSString *)deviceid completion:(SHERequestCompletionBlock)completion {
-    if (deviceid.length == 0) {
-        SHLogError(SHLogTagAPP, @"Parameter `deviceid` can't be nil.");
-        if (completion) {
-            completion(NO, @"Parameter `deviceid` can't be nil.");
-        }
-        
-        return;
-    }
-    
-    NSDictionary *parametes = @{
-                                @"id": deviceid
-                                };
-    
-    NSString *urlString = [kServerBaseURL stringByAppendingString:kDeviceAWSAuth];
-    
-    [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:parametes completion:^(BOOL isSuccess, id  _Nullable result) {
-        if (isSuccess == YES && result != nil) {
-            if (completion) {
-                completion(YES, [SHIdentityInfo identityInfoWithDict:result]);
-            }
-        } else {
-            if (completion) {
-                completion(NO, result);
-            }
-        }
-    }];
-}
-
-#pragma mark - Device S3DirectoryInfo
-- (void)getDeviceS3DirectoryInfoWithDeviceid:(NSString *)deviceid completion:(SHERequestCompletionBlock)completion {
-    if (deviceid.length == 0) {
-        SHLogError(SHLogTagAPP, @"Parameter `deviceid` can't be nil.");
-        if (completion) {
-            completion(NO, @"Parameter `deviceid` can't be nil.");
-        }
-        
-        return;
-    }
-    
-    NSDictionary *parametes = @{
-                                @"id": deviceid
-                                };
-    
-    NSString *urlString = [kServerBaseURL stringByAppendingString:kDeviceS3Path];
-    
-    [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:parametes completion:^(BOOL isSuccess, id  _Nullable result) {
-        if (isSuccess == YES && result != nil) {
-            SHLogInfo(SHLogTagAPP, @"Device dir: %@", result);
+//            self.userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:result];
+            SHLogInfo(SHLogTagAPP, @"User dir: %@", result);
             
             if (completion) {
                 completion(YES, [SHS3DirectoryInfo s3DirectoryInfoWithDict:result]);

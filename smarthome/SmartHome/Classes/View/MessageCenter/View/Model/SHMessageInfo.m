@@ -72,6 +72,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_semaphore_wait(self.downloadSemaphore, DISPATCH_TIME_FOREVER);
         
+#ifndef KUSE_S3_SERVICE
 #if 0
         UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:[self makeCacheKey]];
         if (image != nil) {
@@ -117,6 +118,35 @@
                 dispatch_semaphore_signal(self.downloadSemaphore);
             }];
         }
+#endif
+        
+#else
+        UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:[self makeCacheKey]];
+        if (image != nil) {
+            if (completion) {
+                completion(image);
+            }
+            
+            dispatch_semaphore_signal(self.downloadSemaphore);
+            return;
+        }
+        
+        [[SHENetworkManager sharedManager] getDeviceMessageFileWithDeviceID:_deviceID fileName:[self createFileName] completion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess && result != nil) {
+                [[ZJImageCache sharedImageCache] storeImage:result forKey:[self makeCacheKey] completion:nil];
+
+                if (completion) {
+                    completion(result);
+                }
+            } else {
+                SHLogError(SHLogTagAPP, @"Get device message file failed, error: %@", result);
+                if (completion) {
+                    completion(nil);
+                }
+            }
+            
+            dispatch_semaphore_signal(self.downloadSemaphore);
+        }];
 #endif
     });
 }

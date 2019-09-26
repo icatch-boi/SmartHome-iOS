@@ -29,8 +29,8 @@
 #import <AFNetworking/AFNetworking.h>
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
-#import "SHIdentityInfo.h"
 #import "SHDeveloperAuthenticatedIdentityProvider.h"
+#import "SHDeviceAuthenticatedIdentityProvider.h"
 
 @interface SHENetworkManager ()
 
@@ -41,8 +41,8 @@
 
 @implementation SHENetworkManager
 
-@synthesize userIdentityInfo = _userIdentityInfo;
-@synthesize userDirectoryInfo = _userDirectoryInfo;
+//@synthesize userIdentityInfo = _userIdentityInfo;
+//@synthesize userDirectoryInfo = _userDirectoryInfo;
 
 #pragma mark - Init
 + (instancetype)sharedManager {
@@ -67,7 +67,7 @@
         self.tokenSessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         [self configAuthorization];
-        [self configAWSService];
+//        [self configAWSService];
     }
     return self;
 }
@@ -93,6 +93,19 @@
     return [SHNetworkManager sharedNetworkManager].userAccount.access_token;
 }
 
+- (NSString *)userIdentifier {
+    return [SHNetworkManager sharedNetworkManager].userAccount.id;
+}
+
+- (NSMutableDictionary<NSString *,SHS3DirectoryInfo *> *)deviceDirectoryInfos {
+    if (_deviceDirectoryInfos == nil) {
+        _deviceDirectoryInfos = [NSMutableDictionary dictionary];
+    }
+    
+    return _deviceDirectoryInfos;
+}
+
+#if 0
 - (void)configAWSService {
     if (self.userIdentityInfo != nil) {
         SHDeveloperAuthenticatedIdentityProvider *devAuth = [[SHDeveloperAuthenticatedIdentityProvider alloc] initWithRegionType:AWSRegionCNNorth1 identityPoolId:self.userIdentityInfo.IdentityPoolId useEnhancedFlow:YES identityProviderManager:nil];
@@ -161,6 +174,7 @@
     NSString *mainKey = [SHNetworkManager sharedNetworkManager].userAccount.id;
     return [NSString stringWithFormat:@"%@_%@", mainKey, NSStringFromClass([SHS3DirectoryInfo class])];
 }
+#endif
 
 #pragma mark - Request method
 - (void)tokenRequestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion {
@@ -217,7 +231,7 @@
         if (respose.statusCode == 401) {
             NSLog(@"Token invalid.");
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
         }
         
         SHLogError(SHLogTagAPP, @"网络请求错误: %@", error);
@@ -248,6 +262,59 @@
         default:
             break;
     }
+}
+
+#pragma mark - Common method
+- (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
+    if (s3client == nil || bucketName.length == 0 || filePath.length == 0) {
+        if (completion) {
+            completion(NO, @"Parameter is invalid");
+        }
+        
+        return;
+    }
+    
+    AWSS3GetObjectRequest *request = [[AWSS3GetObjectRequest alloc] init];
+    request.bucket = bucketName;
+    request.key = filePath;
+    
+    [s3client getObject:request completionHandler:^(AWSS3GetObjectOutput * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            if (completion) {
+                completion(NO, error);
+            }
+        } else {
+            if (completion) {
+                completion(YES, response.body);
+            }
+        }
+    }];
+}
+
+- (void)registerS3WithProviderType:(SHES3ProviderType)type identityPoolId:(NSString *)identityPoolId forKey:(NSString *)key {
+    AWSCognitoCredentialsProviderHelper *identityProvider = nil;
+    
+    switch (type) {
+        case SHES3ProviderTypeUser:
+            identityProvider = [[SHDeveloperAuthenticatedIdentityProvider alloc] initWithRegionType:AWSRegionCNNorth1 identityPoolId:identityPoolId useEnhancedFlow:YES identityProviderManager:nil];
+            break;
+            
+        case SHES3ProviderTypeDevice:
+            identityProvider = [[SHDeviceAuthenticatedIdentityProvider alloc] initWithRegionType:AWSRegionCNNorth1 identityPoolId:identityPoolId useEnhancedFlow:YES identityProviderManager:nil deviceID:key];
+            break;
+            
+        default:
+            break;
+    }
+    
+    AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc]
+                                                          initWithRegionType:AWSRegionCNNorth1
+                                                          identityProvider:identityProvider];
+    
+    AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionCNNorthWest1 credentialsProvider:credentialsProvider];
+    
+    
+    [AWSS3 registerS3WithConfiguration:configuration forKey:key];
 }
 
 @end

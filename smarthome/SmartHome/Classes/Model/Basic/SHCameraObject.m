@@ -50,39 +50,9 @@
     obj.streamQuality = VIDEO_QUALITY_SMOOTH;
     obj.sdk = [[SHSDK alloc] init];
     obj.newMessageCount = 0;
-#ifdef KUSE_S3_SERVICE
-    [obj getDeviceCover];
-#endif
-    
+
 	return obj;
 }
-
-#ifdef KUSE_S3_SERVICE
-
-- (void)getDeviceCover {
-    WEAK_SELF(self);
-    [self.awsS3Helper getDeviceCoverWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
-        if (isSuccess) {
-            SHCameraHelper *camera = [[SHCameraHelper alloc] init];
-            camera.cameraUid = weakself.camera.cameraUid;
-            camera.thumnail = result;
-            
-            [[CoreDataHandler sharedCoreDataHander] updateCameraThumbnail:camera];
-            
-            SHLogInfo(SHLogTagAPP, @"Device cover: %@", result);
-        }
-    }];
-}
-
-- (SHDeviceAWSS3Helper *)awsS3Helper {
-    if (_awsS3Helper == nil) {
-        _awsS3Helper = [[SHDeviceAWSS3Helper alloc] initWithDeviceid:_camera.id];
-    }
-    
-    return _awsS3Helper;
-}
-
-#endif
 
 + (SHControlCenter *)createControlCenter
 {

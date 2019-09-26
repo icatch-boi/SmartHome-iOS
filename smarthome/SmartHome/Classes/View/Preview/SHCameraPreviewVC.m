@@ -1389,6 +1389,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)strangerHandle {
     WEAK_SELF(self);
 
+#ifndef KUSE_S3_SERVICE
     [[SHNetworkManager sharedNetworkManager] getStrangerFaceDataWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error == nil) {
             FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
@@ -1397,6 +1398,24 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [weakself setupStrangerURLWithFaceInfo:faceInfo];
         }
     }];
+#else
+    [[SHENetworkManager sharedManager] getStrangerFaceImageWithDeviceID:self.shCameraObj.camera.id completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getStrangerFaceImageWithDeviceID result: %@", result);
+
+        if (isSuccess && result != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:result rangeRect:weakself.presentView.portraitImageView.bounds];
+            });
+            [weakself setupNotificationImage:result];
+        }
+    }];
+    
+    // S3 service use `deviceid` get stranger face data
+    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+    
+    temp[@"attachment"] = _shCameraObj.camera.id;
+    _notification = temp.copy;
+#endif
 }
 
 - (void)setupStrangerURLWithFaceInfo:(FRDFaceInfo *)faceInfo {
@@ -1414,7 +1433,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         if (faceIDArr.count == 0) {
             return;
         }
-        
+#ifndef KUSE_S3_SERVICE
         WEAK_SELF(self);
         [[SHNetworkManager sharedNetworkManager] getFaceInfoWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
             if (error == nil) {
@@ -1424,6 +1443,28 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
             }
         }];
+#else
+        WEAK_SELF(self);
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[SHNetworkManager sharedNetworkManager] getFaceInfoWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+                if (error == nil) {
+                    FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
+                    
+                    [weakself setupPresentViewNickNameWithFaceInfo:faceInfo];
+                }
+            }];
+            
+            [FRDFaceInfo getFaceImageWithFaceid:[faceIDArr.firstObject stringValue] completion:^(UIImage * _Nullable faceImage) {
+                if (faceImage != nil) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:faceImage rangeRect:weakself.presentView.portraitImageView.bounds];
+                    });
+                    [weakself setupNotificationImage:faceImage];
+                }
+            }];
+        });
+#endif
     }
 }
 

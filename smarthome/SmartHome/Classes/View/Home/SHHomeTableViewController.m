@@ -810,6 +810,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         }
     } else if ([notification.allKeys containsObject:@"attachment"]) {
         NSString *urlStr = notification[@"attachment"];
+        if (![urlStr hasPrefix:@"http"] && ![urlStr hasPrefix:@"https"]) {
+            [self loadStrangerFaceDataWithDeviceID:urlStr];
+            return;
+        }
         NSURL *url = [[NSURL alloc] initWithString:urlStr];
         
         if (url) {
@@ -830,6 +834,24 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         }
     }
 #endif
+}
+
+- (void)loadStrangerFaceDataWithDeviceID:(NSString *)deviceID {
+    WEAK_SELF(self);
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    
+    [[SHENetworkManager sharedManager] getStrangerFaceImageWithDeviceID:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getStrangerFaceImageWithDeviceID result: %@", result);
+
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+
+            if (isSuccess && result != nil) {
+                [self enterAddFaceViewWithFaceImage:result facesRect:nil];
+            }
+        });
+    }];
 }
 
 - (NSArray *)parseFacesRect:(NSArray *)facesRectArray {

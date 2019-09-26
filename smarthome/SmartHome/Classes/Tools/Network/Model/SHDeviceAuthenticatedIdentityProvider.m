@@ -27,7 +27,7 @@
 
 #import "SHDeviceAuthenticatedIdentityProvider.h"
 #import "SHIdentityInfo.h"
-#import "SHENetworkManager+AWSS3.h"
+#import "SHENetworkManager+DeviceAWSS3.h"
 
 static NSString * const kIdentityProviderName = @"cognito-identity.cn-north-1.amazonaws.com.cn";
 

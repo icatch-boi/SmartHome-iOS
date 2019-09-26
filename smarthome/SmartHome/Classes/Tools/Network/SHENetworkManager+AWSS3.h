@@ -31,21 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kUserAWSAuth = @"v1/users/awsauth";
 static NSString * const kUserS3Path = @"v1/users/s3path";
-static NSString * const kDeviceAWSAuth = @"v1/devices/awsauth";
-static NSString * const kDeviceS3Path = @"v1/devices/s3path";
 
-typedef enum : NSUInteger {
-    SHEUserDataTypePortrait,
-    SHEUserDataTypeFaceImage,
-    SHEUserDataTypeFaceSet,
-} SHEUserDataType;
-
-@class SHIdentityInfo;
 @interface SHENetworkManager (AWSS3)
 
-#pragma mark - User Resoure
+#pragma mark - User IdentityInfo
 - (SHIdentityInfo *)getUserIdentityInfo;
 
+#pragma mark - User Resoure
 /**
  Get user portrait data
 
@@ -56,11 +48,6 @@ typedef enum : NSUInteger {
 
 - (void)getFaceImageWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion;
 - (void)getFaceSetDataWithFaceid:(NSString *)faceid completion:(SHERequestCompletionBlock)completion;
-
-#pragma mark - Device Resoure
-- (SHIdentityInfo *)getDeviceIdentityInfoWithDeviceid:(NSString *)deviceid;
-- (void)getDeviceIdentityInfoWithDeviceid:(NSString *)deviceid completion:(SHERequestCompletionBlock)completion;
-- (void)getDeviceS3DirectoryInfoWithDeviceid:(NSString *)deviceid completion:(SHERequestCompletionBlock)completion;
 
 #pragma mark - Get Obj
 - (void)getObjectHandleWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;

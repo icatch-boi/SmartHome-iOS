@@ -103,7 +103,7 @@
         return;
     }
     
-    [self.operationCache[urlString] cancel];
+    [(ZJDownloaderOperation *)self.operationCache[urlString] cancel];
     [self.operationCache removeObjectForKey:urlString];
 }
 

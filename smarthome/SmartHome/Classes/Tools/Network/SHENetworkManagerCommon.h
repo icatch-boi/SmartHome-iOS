@@ -30,5 +30,6 @@
 
 #import "SHENetworkManager.h"
 #import "SHENetworkManager+AWSS3.h"
+#import "SHENetworkManager+DeviceAWSS3.h"
 
 #endif /* SHENetworkManagerCommon_h */

@@ -53,6 +53,7 @@
             completion(_faceImage);
         }
     } else {
+#ifndef KUSE_S3_SERVICE
         if (_faceid != nil) {
             UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, _faceid)];
             if (image != nil) {
@@ -65,7 +66,6 @@
             }
         }
         
-#ifndef KUSE_S3_SERVICE
         [[SHNetworkManager sharedNetworkManager] downloadWithURLString:_url finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
             if (error != nil) {
                 SHLogError(SHLogTagAPP, @"Get face image failed, error: %@", error.error_description);
@@ -91,26 +91,46 @@
             }
         }];
 #else
-        [[SHENetworkManager sharedManager] getFaceImageWithFaceid:_faceid completion:^(BOOL isSuccess, id  _Nullable result) {
-            if (isSuccess) {
-                UIImage *image = result;
-                
-                _faceid ? [[ZJImageCache sharedImageCache] storeImage:image forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, _faceid) completion:nil] : void();
-
-                _faceImage = image;
-                
-                if (completion) {
-                    completion(image);
-                }
-            } else {
-                SHLogError(SHLogTagAPP, @"Get face image failed, error: %@", result);
-                if (completion) {
-                    completion(nil);
-                }
+        WEAK_SELF(self);
+        [FRDFaceInfo getFaceImageWithFaceid:_faceid completion:^(UIImage * _Nullable faceImage) {
+            weakself.faceImage = faceImage;
+            
+            if (completion) {
+                completion(faceImage);
             }
         }];
 #endif
     }
+}
+
++ (void)getFaceImageWithFaceid:(NSString *)faceid completion:(FaceInfoGetFaceImageCompletionBlock)completion {
+    if (faceid != nil) {
+        UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, faceid)];
+        if (image != nil) {
+            if (completion) {
+                completion(image);
+            }
+
+            return;
+        }
+    }
+    
+    [[SHENetworkManager sharedManager] getFaceImageWithFaceid:faceid completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess && result != nil) {
+            UIImage *image = result;
+            
+            faceid ? [[ZJImageCache sharedImageCache] storeImage:image forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, faceid) completion:nil] : void();
+            
+            if (completion) {
+                completion(image);
+            }
+        } else {
+            SHLogError(SHLogTagAPP, @"Get face image failed, error: %@", result);
+            if (completion) {
+                completion(nil);
+            }
+        }
+    }];
 }
 
 @end
