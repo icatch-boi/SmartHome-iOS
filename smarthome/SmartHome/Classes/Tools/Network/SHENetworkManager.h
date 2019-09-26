@@ -54,7 +54,6 @@ typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
 @interface SHENetworkManager : NSObject
 
-//@property (nonatomic, strong) SHIdentityInfo *userIdentityInfo;
 @property (nonatomic, strong) SHS3DirectoryInfo *userDirectoryInfo;
 @property (nonatomic, copy, readonly) NSString *userIdentifier;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, SHS3DirectoryInfo *> *deviceDirectoryInfos;

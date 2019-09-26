@@ -29,6 +29,7 @@
 #import "SHMessageInfo.h"
 #import "SVProgressHUD.h"
 #import "UIImageView+ZJWebCache.h"
+#import "ZJDownloaderOperationManager.h"
 
 @interface SHSingleImageDisplayVC ()
 
@@ -88,7 +89,17 @@
             });
         }
 #else
-        [weakself.bigImageView setImageURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier];
+//        [weakself.bigImageView setImageURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier];
+        [[ZJDownloaderOperationManager sharedDownloader] downloadWithURLString:weakself.messageInfo.messageFile.url cacheKey:weakself.messageInfo.fileIdentifier finishedBlock:^(NSString * _Nullable url, UIImage * _Nullable image) {
+            
+            if (image != nil && [url isEqualToString:weakself.messageInfo.messageFile.url]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakself.bigImageView.image = image;
+                    
+                    [weakself setupRightBarButtonItem];
+                });
+            }
+        }];
 #endif
 #else
         if (image) {

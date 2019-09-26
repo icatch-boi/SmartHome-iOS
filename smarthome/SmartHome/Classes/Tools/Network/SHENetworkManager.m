@@ -41,9 +41,6 @@
 
 @implementation SHENetworkManager
 
-//@synthesize userIdentityInfo = _userIdentityInfo;
-//@synthesize userDirectoryInfo = _userDirectoryInfo;
-
 #pragma mark - Init
 + (instancetype)sharedManager {
     static id instance = nil;
@@ -67,7 +64,6 @@
         self.tokenSessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
         [self configAuthorization];
-//        [self configAWSService];
     }
     return self;
 }
@@ -104,77 +100,6 @@
     
     return _deviceDirectoryInfos;
 }
-
-#if 0
-- (void)configAWSService {
-    if (self.userIdentityInfo != nil) {
-        SHDeveloperAuthenticatedIdentityProvider *devAuth = [[SHDeveloperAuthenticatedIdentityProvider alloc] initWithRegionType:AWSRegionCNNorth1 identityPoolId:self.userIdentityInfo.IdentityPoolId useEnhancedFlow:YES identityProviderManager:nil];
-        AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc]
-                                                              initWithRegionType:AWSRegionCNNorth1
-                                                              identityProvider:devAuth];
-        
-        AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionCNNorthWest1 credentialsProvider:credentialsProvider];
-        
-        [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
-    }
-}
-
-- (SHIdentityInfo *)userIdentityInfo {
-    if (_userIdentityInfo == nil) {
-        NSString *key = [self createUserIdentityInfoLocalKey];
-        NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        if (dict != nil) {
-            _userIdentityInfo = [SHIdentityInfo identityInfoWithDict:dict];
-        }
-    }
-    
-    return _userIdentityInfo;
-}
-
-- (void)setUserIdentityInfo:(SHIdentityInfo *)userIdentityInfo {
-    _userIdentityInfo = userIdentityInfo;
-    
-    if (userIdentityInfo != nil) {
-        [self configAWSService];
-        
-        NSString *key = [self createUserIdentityInfoLocalKey];
-        [[NSUserDefaults standardUserDefaults] setObject:[userIdentityInfo conversionToDictionary] forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (NSString *)createUserIdentityInfoLocalKey {
-    NSString *mainKey = [SHNetworkManager sharedNetworkManager].userAccount.id;
-    return [NSString stringWithFormat:@"%@_%@", mainKey, NSStringFromClass([SHIdentityInfo class])];
-}
-
-- (SHS3DirectoryInfo *)userDirectoryInfo {
-    if (_userDirectoryInfo == nil) {
-        NSString *key = [self createUserDirInfoLocalKey];
-        NSDictionary *dict = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        if (dict != nil) {
-            _userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:dict];
-        }
-    }
-    
-    return _userDirectoryInfo;
-}
-
-- (void)setUserDirectoryInfo:(SHS3DirectoryInfo *)userDirectoryInfo {
-    _userDirectoryInfo = userDirectoryInfo;
-    
-    if (userDirectoryInfo != nil) {
-        NSString *key = [self createUserDirInfoLocalKey];
-        [[NSUserDefaults standardUserDefaults] setObject:[userDirectoryInfo conversionToDictionary] forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (NSString *)createUserDirInfoLocalKey {
-    NSString *mainKey = [SHNetworkManager sharedNetworkManager].userAccount.id;
-    return [NSString stringWithFormat:@"%@_%@", mainKey, NSStringFromClass([SHS3DirectoryInfo class])];
-}
-#endif
 
 #pragma mark - Request method
 - (void)tokenRequestWithMethod:(SHERequestMethod)method urlString:(NSString *)urlString parametes:(nullable id)parametes completion:(SHERequestCompletionBlock _Nullable)completion {

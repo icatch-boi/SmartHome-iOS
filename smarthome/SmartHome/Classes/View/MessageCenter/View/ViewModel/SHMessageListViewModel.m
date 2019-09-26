@@ -54,7 +54,7 @@ static const NSInteger maxPullupTryTimes = 3;
     NSNumber *sinceid = pullup ? _lastquerykey : nil;
     NSString *enddate = pullup ? [self serverDateStringFromLocal:camera.createTime] : self.messageList.firstObject.time;
     
-    [[SHNetworkManager sharedNetworkManager] getDeviceMessageWithDeviceID:camera.id sinceid:sinceid enddate:enddate completion:^(BOOL isSuccess, id  _Nullable result) {
+    [[SHNetworkManager sharedNetworkManager] getDeviceMessagesInfoWithDeviceID:camera.id sinceid:sinceid enddate:enddate completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess == NO) {
             if (completion) {
                 completion(isSuccess, NO);

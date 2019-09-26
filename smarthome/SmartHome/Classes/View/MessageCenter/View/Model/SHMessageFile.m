@@ -64,8 +64,8 @@
         return;
     }
     
-    [[SHNetworkManager sharedNetworkManager] getDeviceMessageFileWithDeviceID:deviceID fileName:fileName completion:^(BOOL isSuccess, id  _Nullable result) {
-        SHLogInfo(SHLogTagAPP, @"getDeviceMessageFileWithDeviceID is success: %d", isSuccess);
+    [[SHNetworkManager sharedNetworkManager] getDeviceMessageFileInfoWithDeviceID:deviceID fileName:fileName completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getDeviceMessageFileInfoWithDeviceID is success: %d", isSuccess);
         
         SHMessageFile *messageFile;
         if (isSuccess) {

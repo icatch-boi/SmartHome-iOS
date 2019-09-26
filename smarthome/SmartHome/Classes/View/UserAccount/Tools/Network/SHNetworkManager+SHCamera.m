@@ -793,7 +793,7 @@
 }
 
 #pragma mark - Message
-- (void)getDeviceMessageWithDeviceID:(NSString *)deviceID sinceid:(NSNumber * _Nullable)sinceid enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
+- (void)getDeviceMessagesInfoWithDeviceID:(NSString *)deviceID sinceid:(NSNumber * _Nullable)sinceid enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
     if (deviceID.length < 0) {
         if (completion) {
             completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' must not be `nil`."]);
@@ -816,7 +816,7 @@
     [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGE_PATH parameters:parameters.copy finished:completion];
 }
 
-- (void)deleteDeviceMessageWithDeviceID:(NSString *)deviceID startdate:(NSString * _Nullable)startdate enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
+- (void)deleteDeviceMessagesWithDeviceID:(NSString *)deviceID startdate:(NSString * _Nullable)startdate enddate:(NSString * _Nullable)enddate completion:(RequestCompletionBlock)completion {
     if (deviceID.length < 0) {
         if (completion) {
             completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' must not be `nil`."]);
@@ -838,7 +838,7 @@
     [self requestWithMethod:SHRequestMethodDELETE manager:nil urlString:DEVICE_MESSAGE_PATH parameters:parameters finished:completion];
 }
 
-- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(RequestCompletionBlock)completion {
+- (void)getDeviceMessageFileInfoWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(RequestCompletionBlock)completion {
     if (deviceID.length < 0 || fileName.length < 0) {
         if (completion) {
             completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' or 'fileName' must not be `nil`."]);
@@ -852,7 +852,7 @@
     [self requestWithMethod:SHRequestMethodGET manager:nil urlString:DEVICE_MESSAGEFILE_PATH parameters:parameters finished:completion];
 }
 
-- (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID filetime:(NSString *)filetime elasticsecond:(NSNumber *)elasticsecond completion:(RequestCompletionBlock)completion {
+- (void)getDeviceMessageFileInfoWithDeviceID:(NSString *)deviceID filetime:(NSString *)filetime elasticsecond:(NSNumber *)elasticsecond completion:(RequestCompletionBlock)completion {
     if (deviceID.length < 0 || filetime.length < 0 || elasticsecond == nil) {
         if (completion) {
             completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter 'deviceID' or 'filetime' or 'elasticsecond' must not be `nil`."]);

@@ -660,7 +660,7 @@
     }] resume];
 }
 
-- (void)getStrangerFaceDataWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished {
+- (void)getStrangerFaceInfoWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished {
     if (deviceid.length == 0) {
         if (finished) {
             finished(nil, [ZJRequestError requestErrorWithDescription:@"invalid parameter."]);

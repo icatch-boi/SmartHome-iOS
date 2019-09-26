@@ -1390,7 +1390,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     WEAK_SELF(self);
 
 #ifndef KUSE_S3_SERVICE
-    [[SHNetworkManager sharedNetworkManager] getStrangerFaceDataWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+    [[SHNetworkManager sharedNetworkManager] getStrangerFaceInfoWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error == nil) {
             FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
             

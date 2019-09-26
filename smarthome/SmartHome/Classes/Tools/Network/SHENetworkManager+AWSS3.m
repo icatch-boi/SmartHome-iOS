@@ -61,8 +61,6 @@ typedef enum : NSUInteger {
 
     [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess == YES && result != nil) {
-//            self.userIdentityInfo = [SHIdentityInfo identityInfoWithDict:result];
-            
             if (completion) {
                 completion(YES, [SHIdentityInfo identityInfoWithDict:result]);
             }
@@ -76,22 +74,6 @@ typedef enum : NSUInteger {
 
 #pragma mark - Get Object
 - (void)getUserObjectWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
-#if 0
-    if (self.userIdentityInfo == nil) {
-        WEAK_SELF(self);
-        [self getUserIdentityInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
-            if (isSuccess) {
-                [weakself getObjectHandleWithBucketName:bucketName filePath:filePath completion:completion];
-            } else {
-                if (completion) {
-                    completion(isSuccess, result);
-                }
-            }
-        }];
-    } else {
-        [self getObjectHandleWithBucketName:bucketName filePath:filePath completion:completion];
-    }
-#else
     NSString *key = self.userIdentifier;
     AWSS3 *s3 = [AWSS3 S3ForKey:key];
     if (s3 == nil) {
@@ -112,7 +94,6 @@ typedef enum : NSUInteger {
     } else {
         [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:completion];
     }
-#endif
 }
 
 - (void)getObjectHandleWithBucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
@@ -254,7 +235,6 @@ typedef enum : NSUInteger {
     
     [self tokenRequestWithMethod:SHERequestMethodGET urlString:urlString parametes:nil completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess == YES && result != nil) {
-//            self.userDirectoryInfo = [SHS3DirectoryInfo s3DirectoryInfoWithDict:result];
             SHLogInfo(SHLogTagAPP, @"User dir: %@", result);
             
             if (completion) {

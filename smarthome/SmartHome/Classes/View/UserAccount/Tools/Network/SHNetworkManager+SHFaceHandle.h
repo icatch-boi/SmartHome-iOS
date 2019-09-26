@@ -72,7 +72,7 @@ typedef enum : NSUInteger {
 - (void)deleteFaceDataWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)uploadFaceDataSet:(NSData *)faceDataSet faceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)getFaceDataSetWithFaceid:(NSString *)faceid finished:(_Nullable ZJRequestCallBack)finished;
-- (void)getStrangerFaceDataWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished;
+- (void)getStrangerFaceInfoWithDeviceid:(NSString *)deviceid finished:(_Nullable ZJRequestCallBack)finished;
 - (void)downloadWithURLString:(NSString *)urlString finished:(ZJRequestCallBack)finished;
 
 @end

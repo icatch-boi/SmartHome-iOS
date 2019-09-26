@@ -104,6 +104,7 @@
 }
 
 + (void)getFaceImageWithFaceid:(NSString *)faceid completion:(FaceInfoGetFaceImageCompletionBlock)completion {
+#ifdef KUSE_S3_SERVICE
     if (faceid != nil) {
         UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, faceid)];
         if (image != nil) {
@@ -131,6 +132,11 @@
             }
         }
     }];
+#else
+    if (completion) {
+        completion(nil);
+    }
+#endif
 }
 
 @end

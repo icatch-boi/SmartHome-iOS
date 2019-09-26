@@ -837,6 +837,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)loadStrangerFaceDataWithDeviceID:(NSString *)deviceID {
+#ifdef KUSE_S3_SERVICE
     WEAK_SELF(self);
     [self.progressHUD showProgressHUDWithMessage:nil];
     
@@ -852,6 +853,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             }
         });
     }];
+#endif
 }
 
 - (NSArray *)parseFacesRect:(NSArray *)facesRectArray {
