@@ -192,6 +192,8 @@
 #pragma mark - Common method
 - (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
     if (s3client == nil || bucketName.length == 0 || filePath.length == 0) {
+        SHLogError(SHLogTagAPP, @"Paramete `s3client` or `bucketName` or `filePath` can't be nil.");
+
         if (completion) {
             completion(NO, @"Parameter is invalid");
         }
@@ -210,7 +212,7 @@
             }
         } else {
             if (completion) {
-                completion(YES, response.body);
+                completion(YES, response);
             }
         }
     }];
@@ -240,6 +242,42 @@
     
     
     [AWSS3 registerS3WithConfiguration:configuration forKey:key];
+}
+
+- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion {
+    
+    if (s3client == nil || bucketName.length == 0 || prefix.length == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `s3client` or `bucketName` or `prefix` can't be nil.");
+        if (completion) {
+            completion(nil, [NSError errorWithDomain:SHEErrorDomain code:SHEErrorInvalidParameters userInfo:@{NSLocalizedDescriptionKey: @"Parameter `s3client` or `bucketName` or `prefix` can't be nil."}]);
+        }
+        
+        return;
+    }
+    
+    AWSS3ListObjectsV2Request *request = [[AWSS3ListObjectsV2Request alloc] init];
+    request.bucket = bucketName;
+    request.prefix = prefix;
+    
+    [s3client listObjectsV2:request completionHandler:^(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error) {
+
+        if (completion) {
+            completion(response, error);
+        }
+//        if (error) {
+//            if (completion) {
+//                completion(NO, error);
+//            }
+//        } else {
+//            if (completion) {
+//                completion(YES, response);
+//            }
+//        }
+    }];
+}
+
+- (NSError *)createInvalidParametersErrorWithDescription:(NSString *)description {
+    return [NSError errorWithDomain:SHEErrorDomain code:SHEErrorInvalidParameters userInfo:@{NSLocalizedDescriptionKey: description}];
 }
 
 @end

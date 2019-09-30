@@ -46,6 +46,7 @@
 #import "SHDeviceUpgradeVC.h"
 #import "SHFaceDataManager.h"
 #import "SHNetworkManager+SHFaceHandle.h"
+#import "SHMessageInfo.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -1362,28 +1363,61 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         return;
     }
     
-    if ([_notification.allKeys containsObject:@"result"]) {
-        int result = [_notification[@"result"] intValue];
-        switch (result) {
-            case 0: {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
-                });
-                [self strangerHandle];
-                break;
+    int msgType = [_notification[@"msgType"] intValue];
+    switch (msgType) {
+        case PushMessageTypeRing:
+            if ([_notification.allKeys containsObject:@"timeInSecs"]) {
+                [self setupRingPortrait];
             }
-                
-            case 1:
-                [self recognitionSuccessHandle];
-                break;
-                
-            case 2:
-                break;
-                
-            default:
-                break;
-        }
+            break;
+            
+        case PushMessageTypeFaceRecognition:
+            if ([_notification.allKeys containsObject:@"result"]) {
+                int result = [_notification[@"result"] intValue];
+                switch (result) {
+                    case 0: {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
+                        });
+                        [self strangerHandle];
+                        break;
+                    }
+                        
+                    case 1:
+                        [self recognitionSuccessHandle];
+                        break;
+                        
+                    case 2:
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            break;
+            
+        default:
+            break;
     }
+}
+
+- (void)setupRingPortrait {
+    if (_notification == nil) {
+        return;
+    }
+    
+    SHMessageInfo *info = [SHMessageInfo messageInfoWithDeviceID:_shCameraObj.camera.id messageDict:_notification];
+    
+    WEAK_SELF(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [info getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+            if (image != nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
+                });
+            }
+        }];
+    });
 }
 
 - (void)strangerHandle {
@@ -2293,14 +2327,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)showSyncFaceDataAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"账户中人脸数据有更新，是否要同步到设备？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kFaceDataUpdateDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"不同步" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kNotSync", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakself connectSuccessHandler];
     }]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"同步" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kSync", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself syncFaceDataHandle];
     }]];
     

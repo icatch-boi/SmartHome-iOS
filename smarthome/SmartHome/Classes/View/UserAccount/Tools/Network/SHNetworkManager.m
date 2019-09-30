@@ -255,6 +255,16 @@
             completion(YES, newToken);
         }
 
+        if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil || self.userAccount.id == nil) {
+            if (completion) {
+                Error *error = [[Error alloc] initWithErrorCode:-1024 andName:@"refreshToken error" andError:@"refreshToken parameter invalid" andErrorDescription:@"access_token or refresh_token is nil."];
+                completion(NO, error);
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            
+            return;
+        }
 //        Token *token = [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token,
 //                                                     @"refresh_token" : self.userAccount.refresh_token,
 //                                                     }];

@@ -92,7 +92,11 @@ typedef enum : NSUInteger {
             }
         }];
     } else {
-        [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:completion];
+        [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:^(BOOL isSuccess, id  _Nullable result) {
+            if (completion) {
+                isSuccess ? completion(isSuccess, ((AWSS3GetObjectOutput *)result).body) : completion(isSuccess, result);
+            }
+        }];
     }
 }
 

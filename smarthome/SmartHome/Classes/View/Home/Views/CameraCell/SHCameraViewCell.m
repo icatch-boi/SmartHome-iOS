@@ -67,6 +67,7 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     [self addGestureEvent];
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
+    _messageBtn.enabled = NO;
 }
 
 - (void)addGestureEvent {
@@ -122,6 +123,7 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     (viewModel.cameraObj.camera.operable == 1) ? [self removeShareDescriptionLabel] : [self addShareDescriptionLabel];
 }
 
+#if 0
 - (void)willMoveToWindow:(UIWindow *)newWindow {
     [super willMoveToWindow:newWindow];
     
@@ -143,6 +145,7 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
         weakself.messageBtn.badgeValue = weakself.viewModel.cameraObj.newMessageCount;
     }];
 }
+#endif
 
 - (UILabel *)sharedLabel {
     if (_sharedLabel == nil) {

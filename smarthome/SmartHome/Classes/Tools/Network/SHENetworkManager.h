@@ -52,6 +52,12 @@ typedef enum : NSUInteger {
  */
 typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 
+typedef NS_ENUM(NSInteger, SHEError) {
+    SHEErrorUnknown = -10000,
+    SHEErrorInvalidParameters = -10001,
+};
+static NSString * const SHEErrorDomain = @"SHEErrorDomainUser"; //定义错误范围
+
 @interface SHENetworkManager : NSObject
 
 @property (nonatomic, strong) SHS3DirectoryInfo *userDirectoryInfo;
@@ -67,6 +73,9 @@ typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
 #pragma mark - Common method
 - (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
 - (void)registerS3WithProviderType:(SHES3ProviderType)type identityPoolId:(NSString *)identityPoolId forKey:(NSString *)key;
+- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion;
+
+- (NSError *)createInvalidParametersErrorWithDescription:(NSString *)description;
 
 @end
 

@@ -525,3 +525,7 @@
 "kPushMessageTypeTamperAlarm" = "Tamper Alarm";
 "kPushMessageTypeFaceRecognition" = "Ring(AI)";
 "kPushMessageTypeUnknown" = "Unknown";
+
+"kFaceDataUpdateDescription" = "The face data in the account is updated. Do you want to synchronize to the device?";
+"kNotSync" = "Not sync";
+"kSync" = "Sync";

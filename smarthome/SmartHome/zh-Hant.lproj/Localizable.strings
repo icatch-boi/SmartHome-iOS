@@ -532,3 +532,7 @@
 "kPushMessageTypeTamperAlarm" = "防拆報警";
 "kPushMessageTypeFaceRecognition" = "門鈴（帶AI）";
 "kPushMessageTypeUnknown" = "未知類型";
+
+"kFaceDataUpdateDescription" = "帳戶中人臉數據有更新，是否要同步到設備？";
+"kNotSync" = "不同步";
+"kSync" = "同步";

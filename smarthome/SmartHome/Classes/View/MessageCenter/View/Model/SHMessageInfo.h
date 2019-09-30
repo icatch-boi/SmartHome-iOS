@@ -44,6 +44,7 @@ typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
 @property (nonatomic, copy, readonly) NSString *localTimeString;
 
 + (instancetype)messageInfoWithDict:(NSDictionary *)dict;
++ (instancetype)messageInfoWithDeviceID:(NSString *)deviceID messageDict:(NSDictionary *)messageDict;
 
 - (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion;
 

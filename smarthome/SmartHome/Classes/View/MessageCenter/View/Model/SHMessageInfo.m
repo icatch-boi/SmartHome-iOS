@@ -47,6 +47,15 @@
     return [[self alloc] initWithDict:dict];
 }
 
++ (instancetype)messageInfoWithDeviceID:(NSString *)deviceID messageDict:(nonnull NSDictionary *)messageDict {
+    SHMessageInfo *info = [SHMessageInfo new];
+    
+    info.deviceID = deviceID;
+    info.message = [SHMessage messageWithDict:messageDict];
+    
+    return info;
+}
+
 - (instancetype)initWithDict:(NSDictionary *)dict
 {
     self = [super init];

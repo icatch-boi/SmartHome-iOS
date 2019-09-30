@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString * const kDeviceAWSAuth = @"v1/devices/awsauth";
 static NSString * const kDeviceS3Path = @"v1/devices/s3path";
 
+typedef void(^SHEListFilesCompletionBlock)(NSArray<AWSS3Object *> * _Nullable files, NSError * _Nullable error);
+
 @interface SHENetworkManager (DeviceAWSS3)
 
 #pragma mark - Device IdentityInfo
@@ -45,6 +47,15 @@ static NSString * const kDeviceS3Path = @"v1/devices/s3path";
 - (void)getDeviceCoverWithDeviceID:(NSString *)deviceID completion:(SHERequestCompletionBlock)completion;
 - (void)getStrangerFaceImageWithDeviceID:(NSString *)deviceID completion:(SHERequestCompletionBlock)completion;
 - (void)getDeviceMessageFileWithDeviceID:(NSString *)deviceID fileName:(NSString *)fileName completion:(SHERequestCompletionBlock)completion;
+
+#pragma mark - List Files
+- (void)listFilesWithDeviceID:(NSString *)deviceID oneday:(NSDate * _Nullable)oneday completion:(SHEListFilesCompletionBlock)completion;
+- (void)listFilesWithDeviceID:(NSString *)deviceID onemonth:(NSDate * _Nullable)onemonth completion:(void (^)(NSDictionary<NSString *, NSArray<AWSS3Object *> *> *files))completion;
+
+- (void)listFilesWithDeviceID:(NSString *)deviceID startDate:(NSDate *)startDate endDate:(NSDate *)endDate completion:(SHEListFilesCompletionBlock)completion;
+
+#pragma mark - Get File
+- (void)getFileWithDeviceID:(NSString *)deviceID s3Object:(AWSS3Object *)s3Obj completion:(SHERequestCompletionBlock)completion;
 
 @end
 
