@@ -30,11 +30,20 @@
 }
 
 + (instancetype)sharedSlidingDrawerVC {
-    return (ZJSlidingDrawerViewController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+//    return (ZJSlidingDrawerViewController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
+
+//    return (ZJSlidingDrawerViewController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    static id instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc] init];
+    });
+    return instance;
 }
 
 + (instancetype)slidingDrawerVCWithMainVC:(UIViewController *)mainVC leftMenuVC:(UIViewController *)leftMenuVC slideScale:(CGFloat)slideScale {
-    ZJSlidingDrawerViewController *drawerVC = [[ZJSlidingDrawerViewController alloc] init];
+    ZJSlidingDrawerViewController *drawerVC = [self sharedSlidingDrawerVC]; //[[ZJSlidingDrawerViewController alloc] init];
     
     drawerVC.mainVC = mainVC;
     drawerVC.slideSacle = slideScale;

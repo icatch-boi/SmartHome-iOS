@@ -518,3 +518,21 @@
 "kUploadFaceDataFailedDes" = "上傳人臉數據失敗, error: %@";
 "kUplaodFaceDataSetFailedDes" = "上傳人臉集合數據失敗，error: %@";
 "kStranger" = "陌生人";
+
+"kEnterMySharing" = "我的分享";
+"kNoDevicesToShare" = "沒有可分享的設備";
+"kDevice" = "設備";
+"kTotalShared" = "共分享給 %d 個用戶";
+
+"kNotificationContentBasicBody" = "剛剛收到一條新的門鈴通知，點擊查看詳情";
+"kMessageCenter" = "消息中心";
+"kPushMessageTypeLowPower" = "低電量";
+"kPushMessageTypeSDCardFull" = "SD卡滿";
+"kPushMessageTypeSDCardError" = "SD卡出錯";
+"kPushMessageTypeTamperAlarm" = "防拆報警";
+"kPushMessageTypeFaceRecognition" = "門鈴（帶AI）";
+"kPushMessageTypeUnknown" = "未知類型";
+
+"kFaceDataUpdateDescription" = "帳戶中人臉數據有更新，是否要同步到設備？";
+"kNotSync" = "不同步";
+"kSync" = "同步";

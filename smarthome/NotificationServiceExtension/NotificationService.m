@@ -13,8 +13,11 @@
 #import "SHShareCamera.h"
 #import "SHUtilsMacro.h"
 #import "SHFaceInfo.h"
+#import "SHMessageFileHelper.h"
+
 static NSString * const kFaceInfoPath = @"v1/users/faces/info";
 static NSString * const kFaceimagePath = @"v1/devices/faceimage";
+
 @interface NotificationService ()
 
 @property (nonatomic, strong) void (^contentHandler)(UNNotificationContent *contentToDeliver);
@@ -31,6 +34,7 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     // Modify the notification content here...
 //    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
     self.bestAttemptContent.title = NSLocalizedString(@"kNotificationInfoTitle", nil);
+    self.bestAttemptContent.body = NSLocalizedString(@"kNotificationContentBasicBody", nil);
 
     if ([self.bestAttemptContent.userInfo.allKeys containsObject:@"devID"]) {
         NSDictionary *userInfo = self.bestAttemptContent.userInfo;
@@ -46,6 +50,8 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
         } else {
             self.contentHandler(self.bestAttemptContent);
         }
+        
+        [self updateMessageCountWithCameraUID:userInfo[@"devID"]];
     } else {
         [self test];
         
@@ -54,7 +60,7 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
         if (msgType == PushMessageTypeFaceRecognition) {
             return;
         }
-        self.contentHandler(self.bestAttemptContent);
+//        self.contentHandler(self.bestAttemptContent);
     }
 }
 
@@ -158,6 +164,11 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     if (str != nil) {
         self.bestAttemptContent.body = [NSString stringWithFormat:NSLocalizedString(@"kNotificationContentInfo", nil), devID, time, str];
     }
+    
+    [self updateMessageCountWithCameraUID:aps[@"devID"]];
+    [self loacAttachmentWithMessage:aps completionHandle:^{
+        self.contentHandler(self.bestAttemptContent);
+    }];
 }
 
 - (void)handleCompletion {
@@ -424,6 +435,33 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     [defaults setObject:@(currentCount) forKey:kRecvNotificationCount];
 }
 
+- (void)updateMessageCountWithCameraUID:(NSString *)uid {
+    if (uid.length == 0) {
+        NSLog(@"uid is nil.");
+        return;
+    }
+    
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
+    NSDictionary *local = [defaults objectForKey:kRecvNotificationCount];
+    
+    NSMutableDictionary *current;
+    if (local == nil) {
+        current = [[NSMutableDictionary alloc] init];
+        [current setObject:@(1) forKey:uid];
+    } else {
+        current = [[NSMutableDictionary alloc] initWithDictionary:local];
+        
+        NSUInteger currentCount = 1;
+        if ([current.allKeys containsObject:uid]) {
+            currentCount += [current[uid] unsignedIntegerValue];
+        }
+        
+        current[uid] = @(currentCount);
+    }
+    
+    [defaults setObject:current.copy forKey:kRecvNotificationCount];
+}
+
 - (NSString *)checkRecvTime:(NSString *)timeStr {
     //2019-06-06 10:25:55
     NSDateFormatter *formatter = [NSDateFormatter new];
@@ -439,6 +477,78 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     }
    
     return timeStr;
+}
+
+- (void)loacAttachmentWithMessage:(NSDictionary *)message completionHandle:(void(^)(void))completionHandler {
+    if (message == nil) {
+        SHLogWarn(SHLogTagAPP, @"Message is nil.");
+        if (completionHandler) {
+            completionHandler();
+        }
+        
+        return;
+    }
+    
+    if (![message.allKeys containsObject:@"timeInSecs"]) {
+        SHLogWarn(SHLogTagAPP, @"Message not contains `timeInSecs` key.");
+        if (completionHandler) {
+            completionHandler();
+        }
+        
+        return;
+    }
+    
+    NSString *fileName = [self createFileNameWithTimeInSecs:message[@"timeInSecs"]];
+    if (fileName.length == 0) {
+        SHLogWarn(SHLogTagAPP, @"File name is nil.");
+        if (completionHandler) {
+            completionHandler();
+        }
+        
+        return;
+    }
+    
+    NSString *deviceID = [self getDeviceID:message[@"devID"]];
+    if (deviceID.length == 0) {
+        SHLogWarn(SHLogTagAPP, @"Device id is nil.");
+        if (completionHandler) {
+            completionHandler();
+        }
+        
+        return;
+    }
+    
+    SHMessageFileHelper *helper = [[SHMessageFileHelper alloc] init];
+    [helper getMessageFileWithDeviceID:deviceID fileName:fileName completion:^(NSString * _Nullable filePath) {
+        if (filePath.length != 0) {
+            [self configAttachment:filePath];
+        }
+        
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
+}
+
+- (void)configAttachment:(NSString *)localPath {
+    NSError *attachmentError = nil;
+    UNNotificationAttachment *attachment = [UNNotificationAttachment attachmentWithIdentifier:@"myAttachment" URL:[NSURL fileURLWithPath:localPath] options:nil error:&attachmentError];
+    
+    if (attachmentError) {
+        SHLogError(SHLogTagAPP, @"%@", attachmentError.localizedDescription);
+    } else {
+        self.bestAttemptContent.attachments = @[attachment];
+        self.bestAttemptContent.launchImageName = localPath.lastPathComponent;
+    }
+}
+
+- (NSString *)createFileNameWithTimeInSecs:(NSNumber *)timeInSecs {
+    NSString *fileName;
+    if (timeInSecs != nil) {
+        fileName = [NSString stringWithFormat:@"%@.jpg", timeInSecs];
+    }
+    
+    return fileName;
 }
 
 @end

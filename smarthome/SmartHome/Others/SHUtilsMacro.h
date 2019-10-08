@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, SHLogTag) {
 
 // SmartHome debug toggle
 #pragma mark - debug toggle
-#define SDK_DEBUG 1
+#define SDK_DEBUG 0
 #define APP_DEBUG 0
 #define SHLOG_ENABLE 1
 
@@ -166,8 +166,11 @@ static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
 static const NSTimeInterval kTimeoutInterval = 15.0; // Network request
 
+#define KUSE_S3_SERVICE
+#define KTEMP_MODIFY
+
 #pragma mark - Config Account Server
-static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/"; //@"http://18.221.2.61:80/";
+static NSString * const kServerBaseURL = @"https://account.smarthome.icatchtek.com:3026/";
 static NSString * const kServerClientID = @"icatch_smarthome";
 static NSString * const kServerClientSecret = @"123456";
 static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";

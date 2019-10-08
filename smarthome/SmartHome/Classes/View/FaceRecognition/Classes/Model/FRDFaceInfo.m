@@ -53,6 +53,7 @@
             completion(_faceImage);
         }
     } else {
+#ifndef KUSE_S3_SERVICE
         if (_faceid != nil) {
             UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, _faceid)];
             if (image != nil) {
@@ -89,7 +90,53 @@
                 }
             }
         }];
+#else
+        WEAK_SELF(self);
+        [FRDFaceInfo getFaceImageWithFaceid:_faceid completion:^(UIImage * _Nullable faceImage) {
+            weakself.faceImage = faceImage;
+            
+            if (completion) {
+                completion(faceImage);
+            }
+        }];
+#endif
     }
+}
+
++ (void)getFaceImageWithFaceid:(NSString *)faceid completion:(FaceInfoGetFaceImageCompletionBlock)completion {
+#ifdef KUSE_S3_SERVICE
+    if (faceid != nil) {
+        UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, faceid)];
+        if (image != nil) {
+            if (completion) {
+                completion(image);
+            }
+
+            return;
+        }
+    }
+    
+    [[SHENetworkManager sharedManager] getFaceImageWithFaceid:faceid completion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess && result != nil) {
+            UIImage *image = result;
+            
+            faceid ? [[ZJImageCache sharedImageCache] storeImage:image forKey:FaceCollectImageKey([SHNetworkManager sharedNetworkManager].userAccount.id, faceid) completion:nil] : void();
+            
+            if (completion) {
+                completion(image);
+            }
+        } else {
+            SHLogError(SHLogTagAPP, @"Get face image failed, error: %@", result);
+            if (completion) {
+                completion(nil);
+            }
+        }
+    }];
+#else
+    if (completion) {
+        completion(nil);
+    }
+#endif
 }
 
 @end

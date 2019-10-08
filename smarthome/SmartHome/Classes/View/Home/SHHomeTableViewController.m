@@ -45,6 +45,7 @@
 #import "SHAddDeviceView.h"
 #import "SHFaceDataManager.h"
 #import "SHStrangerViewController.h"
+#import "SHMessageCenterTVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -114,6 +115,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     self.tableView.rowHeight = [SHCameraViewModel rowHeight];
     
     [self setupRefreshView];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"11.0")) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
 }
 
 - (void)setupRefreshView {
@@ -177,7 +182,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         });
     }];
     
-    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
+//    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
 }
 
 - (void)showLoadCameraListFailedTips {
@@ -439,7 +444,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterMessageCenterWithCell:(SHCameraViewCell *)cell {
-
+    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCameraObj:cell.viewModel.cameraObj];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
@@ -808,6 +814,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         }
     } else if ([notification.allKeys containsObject:@"attachment"]) {
         NSString *urlStr = notification[@"attachment"];
+        if (![urlStr hasPrefix:@"http"] && ![urlStr hasPrefix:@"https"]) {
+            [self loadStrangerFaceDataWithDeviceID:urlStr];
+            return;
+        }
         NSURL *url = [[NSURL alloc] initWithString:urlStr];
         
         if (url) {
@@ -827,6 +837,26 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             }];
         }
     }
+#endif
+}
+
+- (void)loadStrangerFaceDataWithDeviceID:(NSString *)deviceID {
+#ifdef KUSE_S3_SERVICE
+    WEAK_SELF(self);
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    
+    [[SHENetworkManager sharedManager] getStrangerFaceImageWithDeviceID:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getStrangerFaceImageWithDeviceID result: %@", result);
+
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+
+            if (isSuccess && result != nil) {
+                [self enterAddFaceViewWithFaceImage:result facesRect:nil];
+            }
+        });
+    }];
 #endif
 }
 

@@ -31,7 +31,7 @@
 #import <UIKit/UIKit.h>
 // sensor 0237: 716*512 --> 224*224
 // sensor 4689: 684*512 --> 224*224
-static const CGFloat kImageWHScale = 684.0 / 512; //716.0 / 512;
+static const CGFloat kImageWHScale = 716.0 / 512; //684.0 / 512;
 static const CGFloat kCompressImageWidth = 224;
 
 #import "SHUserAccount.h"

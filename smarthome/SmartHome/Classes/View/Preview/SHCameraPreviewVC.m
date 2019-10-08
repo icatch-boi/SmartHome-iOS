@@ -46,6 +46,7 @@
 #import "SHDeviceUpgradeVC.h"
 #import "SHFaceDataManager.h"
 #import "SHNetworkManager+SHFaceHandle.h"
+#import "SHMessageInfo.h"
 
 #define ENABLE_AUDIO_BITRATE 0
 
@@ -124,8 +125,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self connectAndPreview];
     }
     
+#ifndef KTEMP_MODIFY
     self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
+#else
+    self.speakerButton.enabled = NO;
+    [self.speakerButton setImage:[UIImage imageNamed:@"video_btn_speak_1"] forState:UIControlStateNormal];
+#endif
     [self updateTalkState];
     [self.previewImageView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
 }
@@ -263,7 +269,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
 
             [self.progressHUDPreview hideProgressHUD:YES];
+#ifndef KTEMP_MODIFY
             [self isRing] ? [self talkBackAction:_speakerButton] : void();
+#endif
 
             [self enableUserInteraction:YES];
         });
@@ -516,6 +524,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)updateTalkButtonState {
+#ifndef KTEMP_MODIFY
     NSString *speakerImg = @"video-btn-speak";
     NSString *speakerImg_Pre = @"video-btn-speak-pre";
     
@@ -528,6 +537,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self.speakerButton setImage:[UIImage imageNamed:speakerImg] forState:UIControlStateNormal];
         [self.speakerButton setImage:[UIImage imageNamed:speakerImg_Pre] forState:UIControlStateHighlighted];
     });
+#endif
 }
 
 - (void)noTalkingHandle:(SHICatchEvent *)evt {
@@ -1362,34 +1372,68 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         return;
     }
     
-    if ([_notification.allKeys containsObject:@"result"]) {
-        int result = [_notification[@"result"] intValue];
-        switch (result) {
-            case 0: {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
-                });
-                [self strangerHandle];
-                break;
+    int msgType = [_notification[@"msgType"] intValue];
+    switch (msgType) {
+        case PushMessageTypeRing:
+            if ([_notification.allKeys containsObject:@"timeInSecs"]) {
+                [self setupRingPortrait];
             }
-                
-            case 1:
-                [self recognitionSuccessHandle];
-                break;
-                
-            case 2:
-                break;
-                
-            default:
-                break;
-        }
+            break;
+            
+        case PushMessageTypeFaceRecognition:
+            if ([_notification.allKeys containsObject:@"result"]) {
+                int result = [_notification[@"result"] intValue];
+                switch (result) {
+                    case 0: {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            _presentView.nickName = [NSString stringWithFormat:NSLocalizedString(@"kDoorbellAnsweringDescription", nil), NSLocalizedString(@"kStranger", nil), self.shCameraObj.camera.cameraName];
+                        });
+                        [self strangerHandle];
+                        break;
+                    }
+                        
+                    case 1:
+                        [self recognitionSuccessHandle];
+                        break;
+                        
+                    case 2:
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            break;
+            
+        default:
+            break;
     }
+}
+
+- (void)setupRingPortrait {
+    if (_notification == nil) {
+        return;
+    }
+    
+    SHMessageInfo *info = [SHMessageInfo messageInfoWithDeviceID:_shCameraObj.camera.id messageDict:_notification];
+    
+    WEAK_SELF(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [info getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+            if (image != nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
+                });
+            }
+        }];
+    });
 }
 
 - (void)strangerHandle {
     WEAK_SELF(self);
 
-    [[SHNetworkManager sharedNetworkManager] getStrangerFaceDataWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+#ifndef KUSE_S3_SERVICE
+    [[SHNetworkManager sharedNetworkManager] getStrangerFaceInfoWithDeviceid:_shCameraObj.camera.id finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
         if (error == nil) {
             FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
             
@@ -1397,6 +1441,24 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
             [weakself setupStrangerURLWithFaceInfo:faceInfo];
         }
     }];
+#else
+    [[SHENetworkManager sharedManager] getStrangerFaceImageWithDeviceID:self.shCameraObj.camera.id completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getStrangerFaceImageWithDeviceID result: %@", result);
+
+        if (isSuccess && result != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:result rangeRect:weakself.presentView.portraitImageView.bounds];
+            });
+            [weakself setupNotificationImage:result];
+        }
+    }];
+    
+    // S3 service use `deviceid` get stranger face data
+    NSMutableDictionary *temp = [[NSMutableDictionary alloc] initWithDictionary:_notification];
+    
+    temp[@"attachment"] = _shCameraObj.camera.id;
+    _notification = temp.copy;
+#endif
 }
 
 - (void)setupStrangerURLWithFaceInfo:(FRDFaceInfo *)faceInfo {
@@ -1414,9 +1476,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         if (faceIDArr.count == 0) {
             return;
         }
-        
+#ifndef KUSE_S3_SERVICE
         WEAK_SELF(self);
-        [[SHNetworkManager sharedNetworkManager] getFaceDataWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+        [[SHNetworkManager sharedNetworkManager] getFaceInfoWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
             if (error == nil) {
                 FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
                 
@@ -1424,6 +1486,28 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
                 [weakself setupPresentViewPortraitWithFaceInfo:faceInfo];
             }
         }];
+#else
+        WEAK_SELF(self);
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[SHNetworkManager sharedNetworkManager] getFaceInfoWithFaceid:[faceIDArr.firstObject stringValue] finished:^(id  _Nullable result, ZJRequestError * _Nullable error) {
+                if (error == nil) {
+                    FRDFaceInfo *faceInfo = [FRDFaceInfo faceInfoWithDict:result];
+                    
+                    [weakself setupPresentViewNickNameWithFaceInfo:faceInfo];
+                }
+            }];
+            
+            [FRDFaceInfo getFaceImageWithFaceid:[faceIDArr.firstObject stringValue] completion:^(UIImage * _Nullable faceImage) {
+                if (faceImage != nil) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:faceImage rangeRect:weakself.presentView.portraitImageView.bounds];
+                    });
+                    [weakself setupNotificationImage:faceImage];
+                }
+            }];
+        });
+#endif
     }
 }
 
@@ -1555,7 +1639,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)enableUserInteraction:(BOOL)enable {
     _funScreenButton.enabled = enable;
     _audioButton.enabled = enable;
+#ifndef KTEMP_MODIFY
     _speakerButton.enabled = enable;
+#endif
     _captureButton.enabled = enable;
     self.navigationItem.rightBarButtonItem.enabled = enable;
     self.resolutionButton.enabled = enable;
@@ -2252,14 +2338,14 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)showSyncFaceDataAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"账户中人脸数据有更新，是否要同步到设备？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kFaceDataUpdateDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"不同步" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kNotSync", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [weakself connectSuccessHandler];
     }]];
     
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"同步" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kSync", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [weakself syncFaceDataHandle];
     }]];
     
