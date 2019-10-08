@@ -179,8 +179,13 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     
     [self.preview addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
     
+#ifndef KTEMP_MODIFY
     self.talkbackButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
+#else
+    self.talkbackButton.enabled = NO;
+    [self.talkbackButton setImage:[UIImage imageNamed:@"full screen-video-btn-speak_1"] forState:UIControlStateNormal];
+#endif
 }
 
 - (void)showConnectFailedAlertView {
@@ -388,7 +393,14 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
     }
     
     [self removePreviewCacheObserver];
-    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+//    [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    @try {
+        [self.shCameraObj.cameraProperty removeObserver:self forKeyPath:@"serverOpened"];
+    } @catch (NSException *exception) {
+        SHLogError(SHLogTagAPP, @"remove observer happen exception: %@", exception);
+    } @finally {
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1284,6 +1296,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 }
 
 - (void)updateTalkButtonState {
+#ifndef KTEMP_MODIFY
     NSString *speakerImg = @"full screen-video-btn-speak";
     NSString *speakerImg_Pre = @"full screen-video-btn-speak-pre";
     
@@ -1297,7 +1310,7 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
         [self.talkbackButton setImage:[UIImage imageNamed:speakerImg] forState:UIControlStateNormal];
         [self.talkbackButton setImage:[UIImage imageNamed:speakerImg_Pre] forState:UIControlStateHighlighted];
     });
-    
+#endif
 }
 
 - (void)noTalkingHandle:(SHICatchEvent *)evt {
@@ -1445,7 +1458,9 @@ static const CGFloat kTalkbackBtnDefaultWidth = 80;
 
 - (void)enableUserInteraction:(BOOL)enable {
     _muteButton.enabled = enable;
+#ifndef KTEMP_MODIFY
     _talkbackButton.enabled = enable;
+#endif
     _captureButton.enabled = enable;
     _pvFailedLabel.hidden = enable;
     _pvFailedLabel.text = enable ? nil : NSLocalizedString(@"StartPVFailed", nil);

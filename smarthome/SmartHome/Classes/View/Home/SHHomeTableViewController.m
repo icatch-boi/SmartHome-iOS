@@ -115,6 +115,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     self.tableView.rowHeight = [SHCameraViewModel rowHeight];
     
     [self setupRefreshView];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"11.0")) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
 }
 
 - (void)setupRefreshView {
@@ -178,7 +182,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         });
     }];
     
-    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
+//    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
 }
 
 - (void)showLoadCameraListFailedTips {

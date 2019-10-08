@@ -136,7 +136,7 @@
     homeVC.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext;
     
     if (launchOptions != nil) {
-#if 0
+#if 1
         NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
@@ -209,7 +209,7 @@
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
-#if 0
+#if 1
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
         if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];

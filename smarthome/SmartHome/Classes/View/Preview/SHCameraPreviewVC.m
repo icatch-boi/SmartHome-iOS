@@ -125,8 +125,13 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self connectAndPreview];
     }
     
+#ifndef KTEMP_MODIFY
     self.speakerButton.enabled = _shCameraObj.cameraProperty.serverOpened;
     [self.shCameraObj.cameraProperty addObserver:self forKeyPath:@"serverOpened" options:NSKeyValueObservingOptionNew context:nil];
+#else
+    self.speakerButton.enabled = NO;
+    [self.speakerButton setImage:[UIImage imageNamed:@"video_btn_speak_1"] forState:UIControlStateNormal];
+#endif
     [self updateTalkState];
     [self.previewImageView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew context:nil];
 }
@@ -264,7 +269,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
 
             [self.progressHUDPreview hideProgressHUD:YES];
+#ifndef KTEMP_MODIFY
             [self isRing] ? [self talkBackAction:_speakerButton] : void();
+#endif
 
             [self enableUserInteraction:YES];
         });
@@ -517,6 +524,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 }
 
 - (void)updateTalkButtonState {
+#ifndef KTEMP_MODIFY
     NSString *speakerImg = @"video-btn-speak";
     NSString *speakerImg_Pre = @"video-btn-speak-pre";
     
@@ -529,6 +537,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         [self.speakerButton setImage:[UIImage imageNamed:speakerImg] forState:UIControlStateNormal];
         [self.speakerButton setImage:[UIImage imageNamed:speakerImg_Pre] forState:UIControlStateHighlighted];
     });
+#endif
 }
 
 - (void)noTalkingHandle:(SHICatchEvent *)evt {
@@ -1630,7 +1639,9 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
 - (void)enableUserInteraction:(BOOL)enable {
     _funScreenButton.enabled = enable;
     _audioButton.enabled = enable;
+#ifndef KTEMP_MODIFY
     _speakerButton.enabled = enable;
+#endif
     _captureButton.enabled = enable;
     self.navigationItem.rightBarButtonItem.enabled = enable;
     self.resolutionButton.enabled = enable;
