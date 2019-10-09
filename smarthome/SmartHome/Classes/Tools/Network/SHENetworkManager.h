@@ -73,7 +73,7 @@ static NSString * const SHEErrorDomain = @"SHEErrorDomainUser"; //定义错误�
 #pragma mark - Common method
 - (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
 - (void)registerS3WithProviderType:(SHES3ProviderType)type identityPoolId:(NSString *)identityPoolId forKey:(NSString *)key;
-- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion;
+- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion;
 
 - (NSError *)createInvalidParametersErrorWithDescription:(NSString *)description;
 

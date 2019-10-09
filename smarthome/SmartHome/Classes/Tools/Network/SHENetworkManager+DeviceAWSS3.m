@@ -316,7 +316,8 @@ typedef enum : NSUInteger {
     NSString *dateFormat = @"yyyy/MM";
     NSString *dateString = [onemonth convertToStringWithFormat:dateFormat];
     WEAK_SELF(self);
-    [self listFilesWithDeviceID:deviceID dateString:dateString completion:^(NSArray<AWSS3Object *> * _Nullable files, NSError * _Nullable error) {
+    [self listFilesWithDeviceID:deviceID dateString:dateString completion:^(AWSS3ListObjectsV2Output * _Nullable result, NSError * _Nullable error) {
+        NSArray<AWSS3Object *> * _Nullable files = result.contents;
         if (error == nil || files != nil) {
             NSMutableDictionary *tempDict = [NSMutableDictionary dictionary];
             [files enumerateObjectsUsingBlock:^(AWSS3Object * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -382,6 +383,10 @@ typedef enum : NSUInteger {
 }
 
 - (void)listFilesWithDeviceID:(NSString *)deviceID dateString:(NSString *)dateString completion:(SHEListFilesCompletionBlock)completion {
+    [self listFilesWithDeviceID:deviceID dateString:dateString startKey:nil number:0 completion:completion];
+}
+
+- (void)listFilesWithDeviceID:(NSString *)deviceID dateString:(NSString *)dateString startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(SHEListFilesCompletionBlock)completion {
     if (deviceID.length == 0 || dateString.length == 0) {
         SHLogError(SHLogTagAPP, @"Paramete `deviceID` or `dateString` can't be nil.");
         
@@ -398,7 +403,7 @@ typedef enum : NSUInteger {
             if (isSuccess) {
                 weakself.deviceDirectoryInfos[deviceID] = result;
                 
-                [weakself listFilesWithDeviceID:deviceID dateString:dateString completion:completion];
+                [weakself listFilesWithDeviceID:deviceID dateString:dateString startKey:startKey number:number completion:completion];
             } else {
                 if (completion) {
 //                    completion(isSuccess, result);
@@ -414,11 +419,11 @@ typedef enum : NSUInteger {
         SHS3DirectoryInfo *deviceDirectoryInfo = self.deviceDirectoryInfos[deviceID];
         NSString *prefix = [deviceDirectoryInfo.files stringByAppendingPathComponent:dateString];
         
-        [self listFilesWithDeviceID:deviceID bucketName:deviceDirectoryInfo.bucket prefix:prefix completion:completion];
+        [self listFilesWithDeviceID:deviceID bucketName:deviceDirectoryInfo.bucket prefix:prefix startKey:startKey number:number completion:completion];
     }
 }
 
-- (void)listFilesWithDeviceID:(NSString *)deviceID bucketName:(NSString *)bucketName prefix:(NSString *)prefix completion:(SHEListFilesCompletionBlock)completion {
+- (void)listFilesWithDeviceID:(NSString *)deviceID bucketName:(NSString *)bucketName prefix:(NSString *)prefix startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(SHEListFilesCompletionBlock)completion {
     NSString *key = deviceID;
     AWSS3 *s3 = [AWSS3 S3ForKey:key];
     if (s3 == nil) {
@@ -429,7 +434,7 @@ typedef enum : NSUInteger {
                 
                 [weakself registerS3WithProviderType:SHES3ProviderTypeDevice identityPoolId:info.IdentityPoolId forKey:key];
                 
-                [weakself listFilesWithDeviceID:key bucketName:bucketName prefix:prefix completion:completion];
+                [weakself listFilesWithDeviceID:key bucketName:bucketName prefix:prefix startKey:startKey number:number completion:completion];
             } else {
                 if (completion) {
 //                    completion(isSuccess, result);
@@ -447,17 +452,13 @@ typedef enum : NSUInteger {
 //                isSuccess ? completion(isSuccess, ((AWSS3ListObjectsV2Output *)result).contents) : completion(isSuccess, result);
 //            }
 //        }];
-        [self listObjectsWithAWSS3Client:s3 bucketName:bucketName prefix:prefix completion:^(AWSS3ListObjectsV2Output * _Nullable result, NSError * _Nullable error) {
-            if (completion) {
-                completion(result.contents, error);
-            }
-        }];
+        [self listObjectsWithAWSS3Client:s3 bucketName:bucketName prefix:prefix startKey:startKey number:number completion:completion];
     }
 }
 
 #pragma mark - Get File
-- (void)getFileWithDeviceID:(NSString *)deviceID s3Object:(AWSS3Object *)s3Obj completion:(SHERequestCompletionBlock)completion {
-    if (deviceID.length == 0 || s3Obj == nil) {
+- (void)getFileWithDeviceID:(NSString *)deviceID filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion {
+    if (deviceID.length == 0 || filePath.length == 0) {
         SHLogError(SHLogTagAPP, @"Parameter `deviceID` or `s3Obj` can't be nil.");
         if (completion) {
             completion(NO, @"Parameter `deviceID` or `s3Obj` can't be nil.");
@@ -472,7 +473,7 @@ typedef enum : NSUInteger {
             if (isSuccess) {
                 weakself.deviceDirectoryInfos[deviceID] = result;
                 
-                [weakself getFileWithDeviceID:deviceID s3Object:s3Obj completion:completion];
+                [weakself getFileWithDeviceID:deviceID filePath:filePath completion:completion];
             } else {
                 if (completion) {
                     completion(isSuccess, result);
@@ -482,11 +483,11 @@ typedef enum : NSUInteger {
     } else {
         SHS3DirectoryInfo *deviceDirectoryInfo = self.deviceDirectoryInfos[deviceID];
         
-        [self getFileWithDeviceID:deviceID s3Object:s3Obj bucketName:deviceDirectoryInfo.bucket completion:completion];
+        [self getFileWithDeviceID:deviceID filePath:filePath bucketName:deviceDirectoryInfo.bucket completion:completion];
     }
 }
 
-- (void)getFileWithDeviceID:(NSString *)deviceID s3Object:(AWSS3Object *)s3Obj bucketName:(NSString *)bucketName completion:(SHERequestCompletionBlock)completion {
+- (void)getFileWithDeviceID:(NSString *)deviceID filePath:(NSString *)filePath bucketName:(NSString *)bucketName completion:(SHERequestCompletionBlock)completion {
     NSString *key = deviceID;
     AWSS3 *s3 = [AWSS3 S3ForKey:key];
     if (s3 == nil) {
@@ -497,7 +498,7 @@ typedef enum : NSUInteger {
                 
                 [weakself registerS3WithProviderType:SHES3ProviderTypeDevice identityPoolId:info.IdentityPoolId forKey:key];
                 
-                [weakself getFileWithDeviceID:deviceID s3Object:s3Obj bucketName:bucketName completion:completion];
+                [weakself getFileWithDeviceID:deviceID filePath:filePath bucketName:bucketName completion:completion];
             } else {
                 if (completion) {
                     completion(isSuccess, result);
@@ -505,13 +506,129 @@ typedef enum : NSUInteger {
             }
         }];
     } else {
-        [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:s3Obj.key completion:completion];
+        [self getObjectWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:completion];
     }
 }
 
-- (void)getFilesStorageInfoWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate days:(NSInteger)days completion:(void (^)(NSDictionary<NSString *, NSNumber *> *))completion {
+#pragma mark - Files Ops
+- (NSDictionary<NSString *, NSNumber *> *)getFilesStorageInfoWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate days:(NSInteger)days {
     if (deviceID.length == 0 || days < 1) {
-        SHLogError(SHLogTagAPP, @"Paramete `deviceID` can't be nil, or days must be greater than `1`");
+        SHLogError(SHLogTagAPP, @"Paramete `deviceID` can't be nil, and days must be greater than or equal `1`");
+        
+        return nil;
+    }
+    
+    if (queryDate == nil) {
+        queryDate = [NSDate date];
+    }
+    
+    int beforeDay = 0;
+    NSDate *curDate = nil;
+    NSString *monthKey = nil;
+    NSString *dayKey = nil;
+    __block AWSS3ListObjectsV2Output *monthFilesInfo = nil;
+    NSMutableDictionary<NSString *, AWSS3ListObjectsV2Output *> *monthsFielsInfo = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, NSNumber *> *dayFilesInfo = [NSMutableDictionary dictionary];
+    
+    while (days > beforeDay) {
+        curDate = [NSDate dateWithTimeInterval:- (beforeDay * 24 * 3600) sinceDate:queryDate];
+        monthKey = [self getCurMonthString:curDate];
+        dayKey = [self getCurDayString:curDate];
+        
+        beforeDay++;
+        monthFilesInfo = monthsFielsInfo[monthKey];
+        if (monthFilesInfo == nil) {
+            monthFilesInfo = [self getMonthFilesStorageInfoWithDeviceID:deviceID queryDate:curDate];
+            
+            if (monthFilesInfo != nil) {
+                monthsFielsInfo[monthKey] = monthFilesInfo;
+            }
+        }
+        
+        if (monthFilesInfo == nil) {
+            dayFilesInfo[dayKey] = @(NO);
+            continue;
+        }
+        
+        if ([self dayFilesExistWithDeviceID:deviceID dateString:dayKey monthFilesInfos:monthFilesInfo.commonPrefixes]) {
+            dayFilesInfo[dayKey] = @(YES);
+        } else {
+            dayFilesInfo[dayKey] = @(NO);
+        }
+    }
+
+    return dayFilesInfo.copy;
+}
+
+- (BOOL)dayFilesExistWithDeviceID:(NSString *)deviceID dateString:(NSString *)dateString monthFilesInfos:(NSArray<AWSS3CommonPrefix *> *)monthFilesInfos {
+    __block BOOL exist = NO;
+    
+    SHS3DirectoryInfo *deviceDirectoryInfo = self.deviceDirectoryInfos[deviceID];
+    NSString *prefix = [deviceDirectoryInfo.files stringByAppendingPathComponent:dateString];
+    prefix = [prefix stringByAppendingString:@"/"];
+    
+    [monthFilesInfos enumerateObjectsUsingBlock:^(AWSS3CommonPrefix * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.prefix isEqualToString:prefix]) {
+            exist = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return exist;
+}
+
+- (NSString *)getCurDayString:(NSDate *)date {
+    NSString *dateFormat = @"yyyy/MM/dd";
+    return [date convertToStringWithFormat:dateFormat];
+}
+
+- (NSString *)getCurMonthString:(NSDate *)date {
+    NSString *dateFormat = @"yyyy/MM";
+    return [date convertToStringWithFormat:dateFormat];
+}
+
+- (AWSS3ListObjectsV2Output * _Nullable)getMonthFilesStorageInfoWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate {
+    __block AWSS3ListObjectsV2Output *monthFilesInfo = nil;
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [self getMonthFilesStorageInfoWithDeviceID:deviceID queryDate:queryDate completion:^(AWSS3ListObjectsV2Output * _Nullable result, NSError * _Nullable error) {
+        if (error == nil) {
+            monthFilesInfo = result;
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    return monthFilesInfo;
+}
+
+- (void)getMonthFilesStorageInfoWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate completion:(SHEListFilesCompletionBlock)completion {
+    if (deviceID.length == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `deviceID` can't be nil.");
+        
+        if (completion) {
+            completion(nil, [self createInvalidParametersErrorWithDescription:@"Parameter `deviceID` can't be nil."]);
+        }
+        
+        return;
+    }
+    
+    if (queryDate == nil) {
+        queryDate = [NSDate date];
+    }
+    
+    NSString *dateFormat = @"yyyy/MM";
+    NSString *dateString = [queryDate convertToStringWithFormat:dateFormat];
+
+    [self listFilesWithDeviceID:deviceID dateString:dateString completion:completion];
+}
+
+- (void)listFilesWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion {
+    if (deviceID.length == 0) {
+        SHLogError(SHLogTagAPP, @"Paramete `deviceID` can't be nil.");
         
         if (completion) {
             completion(nil);
@@ -525,30 +642,127 @@ typedef enum : NSUInteger {
     }
     
     NSString *dateFormat = @"yyyy/MM/dd";
-    NSString *dateString = [[NSDate date] convertToStringWithFormat:dateFormat];
+    NSString *dateString = [queryDate convertToStringWithFormat:dateFormat];
     
-    int beforeDay = 0;
-    NSDate *curDate = nil;
-    NSString *monthKey = nil;
-    NSArray<NSString *> *monthFilesInfo = nil;
-    NSDictionary<NSString *, NSArray *> *monthsInfo = nil;
-    
-    while (days > beforeDay) {
-        curDate = [NSDate dateWithTimeInterval:- (beforeDay * 24 * 3600) sinceDate:queryDate];
-        monthKey = [self getCurMonthString:curDate];
-        
-        beforeDay++;
-        monthFilesInfo = monthsInfo[monthKey];
-        if (monthsInfo == nil) {
+    WEAK_SELF(self);
+    [self listFilesWithDeviceID:deviceID dateString:dateString startKey:startKey number:number completion:^(AWSS3ListObjectsV2Output * _Nullable result, NSError * _Nullable error) {
+        if (error == nil) {
+            NSArray<AWSS3Object *> *contents = result.contents;
             
+            [weakself getFilesInfoWithDeviceID:deviceID fileContents:contents completion:completion];
+        } else {
+            SHLogError(SHLogTagAPP, @"List files failed, error: %@", error);
+            
+            if (completion) {
+                completion(nil);
+            }
         }
-    }
-
+    }];
 }
 
-- (NSString *)getCurMonthString:(NSDate *)date {
-    NSString *dateFormat = @"yyyy/MM";
-    return [date convertToStringWithFormat:dateFormat];
+- (void)getFilesInfoWithDeviceID:(NSString *)deviceID fileContents:(NSArray<AWSS3Object *> *)contents completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion {
+    if (deviceID.length == 0 || contents.count == 0) {
+        SHLogError(SHLogTagAPP, @"Paramete `deviceID` or `contents` can't be nil.");
+        
+        if (completion) {
+            completion(nil);
+        }
+        
+        return;
+    }
+    
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_queue_create("com.icatchtek.GetFilesInfo", DISPATCH_QUEUE_CONCURRENT);
+    
+    NSMutableArray<SHS3FileInfo *> *infoArray = [NSMutableArray array];
+    
+    [contents enumerateObjectsUsingBlock:^(AWSS3Object * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSString *key = obj.key;
+        if ([key hasSuffix:@".jpg"] || [key hasSuffix:@".JPG"]) {
+            NSString *videoPath = [self getVideoPathWithFileContents:contents key:key];
+            if (videoPath != nil) {
+                dispatch_group_enter(group);
+                dispatch_async(queue, ^{
+                    [self getFileInfoWithDeviceID:deviceID filePath:key completion:^(SHS3FileInfo * _Nullable fileInfo) {
+                        if (fileInfo != nil) {
+                            fileInfo.filePath = videoPath;
+                            fileInfo.key = key;
+                            fileInfo.fileName = [[videoPath componentsSeparatedByString:@"/"] lastObject];
+                            
+                            [infoArray addObject:fileInfo];
+                        }
+                        
+                        dispatch_group_leave(group);
+                    }];
+                });
+            }
+        }
+    }];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        SHLogInfo(SHLogTagAPP, @"Files count: %lu", (unsigned long)infoArray.count);
+
+        if (completion) {
+            completion(infoArray.copy);
+        }
+    });
+}
+
+- (void)getFileInfoWithDeviceID:(NSString *)deviceID filePath:(NSString *)filePath completion:(void (^)(SHS3FileInfo * _Nullable fileInfo))completion {
+    if (deviceID.length == 0 || filePath.length == 0) {
+        SHLogError(SHLogTagAPP, @"Paramete `deviceID` or `fileName` can't be nil.");
+        
+        if (completion) {
+            completion(nil);
+        }
+        
+        return;
+    }
+    
+    [self getFileWithDeviceID:deviceID filePath:filePath completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHS3FileInfo *fileInfo = nil;
+        
+        if (isSuccess == YES) {
+            AWSS3GetObjectOutput *response = result;
+            NSDictionary<NSString *, NSString *> *metadata = response.metadata;
+            
+            if (metadata != nil) {
+                fileInfo = [SHS3FileInfo s3FileInfoWithFileInfoDict:metadata];
+            }
+            
+            if (fileInfo != nil) {
+                fileInfo.thumbnail = [[UIImage alloc] initWithData:response.body];
+            }
+        } else {
+            SHLogError(SHLogTagAPP, @"Get file failed, error: %@", result);
+        }
+        
+        if (completion) {
+            completion(fileInfo);
+        }
+    }];
+}
+
+- (NSString *)getVideoPathWithFileContents:(NSArray<AWSS3Object *> *)contents key:(NSString *)key {
+    if (contents.count == 0 || key.length == 0) {
+        SHLogWarn(SHLogTagAPP, @"Paramete `contents` or `key` can't be nil.");
+        return nil;
+    }
+    
+    NSString *videoKeyHeader = [key componentsSeparatedByString:@"."][0];
+    __block NSString *videoKey = nil;
+    
+    [contents enumerateObjectsUsingBlock:^(AWSS3Object * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *tempKey = obj.key;
+
+        if ([tempKey hasPrefix:videoKeyHeader]) {
+            videoKey = tempKey;
+            *stop = YES;
+        }
+    }];
+    
+    return videoKey;
 }
 
 @end

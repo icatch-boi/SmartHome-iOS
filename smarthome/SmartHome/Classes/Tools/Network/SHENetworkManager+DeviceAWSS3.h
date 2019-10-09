@@ -26,13 +26,14 @@
     
 
 #import "SHENetworkManager.h"
+#import "SHS3FileInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kDeviceAWSAuth = @"v1/devices/awsauth";
 static NSString * const kDeviceS3Path = @"v1/devices/s3path";
 
-typedef void(^SHEListFilesCompletionBlock)(NSArray<AWSS3Object *> * _Nullable files, NSError * _Nullable error);
+typedef void(^SHEListFilesCompletionBlock)(AWSS3ListObjectsV2Output * _Nullable result, NSError * _Nullable error);
 
 @interface SHENetworkManager (DeviceAWSS3)
 
@@ -55,7 +56,12 @@ typedef void(^SHEListFilesCompletionBlock)(NSArray<AWSS3Object *> * _Nullable fi
 - (void)listFilesWithDeviceID:(NSString *)deviceID startDate:(NSDate *)startDate endDate:(NSDate *)endDate completion:(SHEListFilesCompletionBlock)completion;
 
 #pragma mark - Get File
-- (void)getFileWithDeviceID:(NSString *)deviceID s3Object:(AWSS3Object *)s3Obj completion:(SHERequestCompletionBlock)completion;
+- (void)getFileWithDeviceID:(NSString *)deviceID filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
+
+#pragma mark - Files Ops
+- (NSDictionary<NSString *, NSNumber *> *)getFilesStorageInfoWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate days:(NSInteger)days;
+
+- (void)listFilesWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
 
 @end
 
