@@ -1,8 +1,8 @@
-// XJSetupDeviceInfoVC.h
+// SHSetupHomeViewController.h
 
 /**************************************************************************
  *
- *       Copyright (c) 2014-2018年 by iCatch Technology, Inc.
+ *       Copyright (c) 2014-2019 by iCatch Technology, Inc.
  *
  *  This software is copyrighted by and is the property of iCatch
  *  Technology, Inc.. All rights are reserved by iCatch Technology, Inc..
@@ -22,16 +22,17 @@
  *
  **************************************************************************/
  
- // Created by zj on 2018/5/21 下午5:37.
+ // Created by zj on 2019/10/9 5:08 PM.
     
 
 #import <UIKit/UIKit.h>
 
-@interface XJSetupDeviceInfoVC : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, copy) NSString *wifiSSID;
-@property (nonatomic, copy) NSString *wifiPWD;
-@property (nonatomic, assign) BOOL useQRCodeSetup;
-@property (nonatomic, assign, getter=isAutoWay) BOOL autoWay;
+@interface SHSetupHomeViewController : UIViewController
+
++ (instancetype)setupHomeViewController;
 
 @end
+
+NS_ASSUME_NONNULL_END

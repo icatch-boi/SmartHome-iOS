@@ -189,6 +189,7 @@
 		38C7940421C2279600E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		38D857D2234DDB210087926F /* SHSetupHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D857D1234DDB210087926F /* SHSetupHomeViewController.m */; };
 		38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */; };
 		38DA5D9B22F83C5C00BF30AB /* SHStrangerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38DA5D9A22F83C5C00BF30AB /* SHStrangerViewController.m */; };
 		38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */; };
@@ -782,6 +783,8 @@
 		38BFB28922D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.model.bundle; sourceTree = "<group>"; };
 		38BFB28A22D86ABE00AA3ABC /* com.baidu.idl.face.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.faceSDK.bundle; sourceTree = "<group>"; };
 		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
+		38D857D0234DDB210087926F /* SHSetupHomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSetupHomeViewController.h; sourceTree = "<group>"; };
+		38D857D1234DDB210087926F /* SHSetupHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSetupHomeViewController.m; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
 		38DA5D9922F83C5C00BF30AB /* SHStrangerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHStrangerViewController.h; sourceTree = "<group>"; };
@@ -1689,6 +1692,8 @@
 				3897E0B82180743000E72417 /* XJSetupDeviceInfoVC.m */,
 				38656B3021F9904500C5A65B /* SHQRCodeSetupDeviceVC.h */,
 				38656B3121F9904500C5A65B /* SHQRCodeSetupDeviceVC.m */,
+				38D857D0234DDB210087926F /* SHSetupHomeViewController.h */,
+				38D857D1234DDB210087926F /* SHSetupHomeViewController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3738,6 +3743,7 @@
 				38E5C2FB20A3F80B003004E0 /* SHFileDownloadTVC.m in Sources */,
 				384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */,
 				38BB265921DF08EE00270CE1 /* FRDFaceDisplayVC.m in Sources */,
+				38D857D2234DDB210087926F /* SHSetupHomeViewController.m in Sources */,
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
 				38F30F962338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m in Sources */,
 				38A38FAE22C0CE7100E831E3 /* SHAccountSettingTVC.m in Sources */,

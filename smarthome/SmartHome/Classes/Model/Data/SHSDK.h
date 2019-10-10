@@ -12,7 +12,7 @@
 #import "SHObserver.h"
 #import "SHFile.h"
 
-#define VIDEO_BUFFER_SIZE 640 * 480 * 2
+#define VIDEO_BUFFER_SIZE 640 * 480 * 4
 #define AUDIO_BUFFER_SIZE 1024 * 50
 
 enum SHFileType {

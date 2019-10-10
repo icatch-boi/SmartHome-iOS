@@ -46,6 +46,7 @@
 #import "SHFaceDataManager.h"
 #import "SHStrangerViewController.h"
 #import "SHMessageCenterTVC.h"
+#import "SHSetupHomeViewController.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -312,7 +313,14 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (IBAction)addCameraAction:(id)sender {
+#if 0
     [self scanQRCode];
+#else
+    SHSetupHomeViewController *vc = [SHSetupHomeViewController setupHomeViewController];
+    SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+#endif
 }
 
 - (void)scanQRCode {

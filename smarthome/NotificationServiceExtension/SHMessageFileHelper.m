@@ -178,7 +178,7 @@ static NSString * const DEVICE_MESSAGEFILE_PATH = @"v1/devices/messagefile";
 
 - (NSString *)makeAccessToken {
     NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
-    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccountInfo];
     NSLog(@"dict: %@", dict);
     
     if (![dict.allKeys containsObject:@"access_token"]) {

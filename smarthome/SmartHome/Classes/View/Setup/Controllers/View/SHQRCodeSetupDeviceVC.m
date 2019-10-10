@@ -27,6 +27,9 @@
 
 #import "SHQRCodeSetupDeviceVC.h"
 #import "XJSetupDeviceInfoVC.h"
+#import "SHNetworkManager.h"
+#import "SVProgressHUD.h"
+#import "SHMessage.h"
 
 static int QRCodeStringMappingArray[] = {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -43,6 +46,7 @@ static int QRCodeStringMappingArray[] = {
     220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
     240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
 };
+static NSString * const kQRCodeKey = @"SH";
 
 @interface SHQRCodeSetupDeviceVC ()
 
@@ -62,6 +66,11 @@ static int QRCodeStringMappingArray[] = {
     
     [self setupLocalizedString];
     [self setupGUI];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupNotificationHandle:) name:kSetupDeviceNotification object:nil];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setupLocalizedString {
@@ -79,7 +88,7 @@ static int QRCodeStringMappingArray[] = {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self showQRCodeHandler];
+    self.isAutoWay ? [self showAutoWayQRCode] : [self showQRCodeHandler];
 }
 
 - (IBAction)exitClick:(id)sender {
@@ -89,6 +98,9 @@ static int QRCodeStringMappingArray[] = {
 - (IBAction)nextClick:(id)sender {
     XJSetupDeviceInfoVC *vc = [[UIStoryboard storyboardWithName:kSetupStoryboardName bundle:nil] instantiateViewControllerWithIdentifier:@"XJSetupDeviceInfoVCID"];
     vc.useQRCodeSetup = YES;
+    vc.wifiSSID = self.wifiSSID;
+    vc.wifiPWD = self.wifiPWD;
+    vc.autoWay = self.isAutoWay;
     
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -131,6 +143,110 @@ static int QRCodeStringMappingArray[] = {
     SHLogInfo(SHLogTagAPP, @"Mapping string: %@", mapString);
     
     return mapString.copy;
+}
+
+#pragma mark - Auto Way
+- (void)showAutoWayQRCode {
+    if (self.isConfigWiFi) {
+        NSString *qrString = [self createAutoWayQRCodeStringWithCode:nil];
+        [self showAutoWayQRCodeWithCodeString:qrString];
+    } else {
+        WEAK_SELF(self);
+        [self getAuthorizeCodeWithCompletion:^(NSString *code) {
+            if (code != nil) {
+                NSString *qrString = [weakself createAutoWayQRCodeStringWithCode:code];
+                [weakself showAutoWayQRCodeWithCodeString:qrString];
+            }
+        }];
+    }
+}
+
+- (void)showAutoWayQRCodeWithCodeString:(NSString *)qrString {
+    if (qrString != nil) {
+        CIImage *qrCIImage = [self createQRForString:qrString];
+        if (qrCIImage != nil) {
+            UIImage *qrImage = [self createNonInterpolatedUIImageFromCIImage:qrCIImage withScale:4 * [[UIScreen mainScreen] scale]];
+            
+            if (qrImage != nil) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.qrcodeImageView.image = qrImage;
+                });
+            }
+        }
+    }
+}
+
+- (NSString *)createAutoWayQRCodeStringWithCode:(NSString *)code {
+    if (self.wifiPWD.length == 0 || self.wifiSSID.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"Wi-Fi ssid or password 不能为空"];
+        [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
+        return nil;
+    }
+    
+    int flag = 1;
+    if (self.isConfigWiFi) {
+        flag = 0;
+        NSString *cameraUID = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID];
+        code = cameraUID ? cameraUID : @"";
+    } else {
+        if (code.length == 0) {
+            return nil;
+        }
+    }
+    
+    NSString *originalStr = [NSString stringWithFormat:@"%02d%@%02d%d%02d%@%02d%@%02d%@", (int)kQRCodeKey.length, kQRCodeKey, (int)(sizeof(flag)/sizeof(int)), flag, (int)self.wifiSSID.length, self.wifiSSID, (int)self.wifiPWD.length, self.wifiPWD, (int)code.length, code];
+    
+    NSMutableString *mapString = [NSMutableString string];
+    for (int i = 0 ; i < originalStr.length; i ++) {
+        unichar charactor = [originalStr characterAtIndex:i];
+        unichar mappingchar = QRCodeStringMappingArray[charactor];
+        NSString *string =[NSString stringWithFormat:@"%c", mappingchar];
+        [mapString appendString:string];
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"Mapping string: %@", mapString);
+    
+    return mapString.copy;
+}
+
+- (void)getAuthorizeCodeWithCompletion:(void (^)(NSString *code))completion {
+    NSArray *scopes = @[@"get_user_info", @"add_device", @"update_private_info", @"get_device_info"];
+    [SVProgressHUD showWithStatus:nil];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    
+    [[SHNetworkManager sharedNetworkManager] getAuthorizeCodeWithUsername:[[NSUserDefaults standardUserDefaults] stringForKey:kUserAccounts] password:[[NSUserDefaults standardUserDefaults] stringForKey:kUserAccountPassword] scopes:scopes completion:^(BOOL isSuccess, id  _Nullable result) {
+        [SVProgressHUD dismiss];
+        
+        if (isSuccess) {
+            NSDictionary *dict = result;
+            NSString *code = nil;
+            if ([dict.allKeys containsObject:@"code"]) {
+                code = dict[@"code"];
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Response中不包含`code`值"];
+                [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
+            }
+            
+            if (completion) {
+                completion(code);
+            }
+        } else {
+            ZJRequestError *error = result;
+            [SVProgressHUD showErrorWithStatus:error.error_description];
+            [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
+            
+            if (completion) {
+                completion(nil);
+            }
+        }
+    }];
+}
+
+- (void)setupNotificationHandle:(NSNotification *)nc {
+    SHMessage *message = nc.object;
+    if (message.msgType.intValue == 1205) {
+        [self nextClick:nil];
+    }
 }
 
 #pragma mark - Create QRcode

@@ -628,13 +628,21 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self ringNotificationHandleWithInfo:userInfo];
             break;
             
+        case 1201:
+        case 1202:
+        case 1205: {
+            SHMessage *message = [SHMessage messageWithDict:aps];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSetupDeviceNotification object:message];
+        }
+            break;
+            
         default:
             break;
     }
     
     [self updateMessageCountWithCameraUID:aps[@"devID"]];
 
-    if (msgType != 106) {
+    if (msgType != 106 && msgType != 1201 && msgType != 1202 && msgType != 1205) {
         if (completionHandler == nil) {
             return;
         }

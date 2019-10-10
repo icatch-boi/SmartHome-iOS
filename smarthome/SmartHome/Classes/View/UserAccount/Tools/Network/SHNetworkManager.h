@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
+#import "ZJRequestError.h"
 #ifdef KUSE_S3_SERVICE
 #import "SHENetworkManagerCommon.h"
 #endif
@@ -26,6 +27,8 @@ static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 static NSString * const REVOKE_TOKEN_PATH = @"oauth2/revoke";
 static NSString * const EXTENSIONS_INFO_PATH = @"v1/users/extensions";
 static NSString * const USERS_PORTRAIT_PATH = @"v1/users/portrait";
+static NSString * const AUTHORIZE_CODE_PATH = @"oauth2/authorize2";
+
 static const NSUInteger PORTRAIT_MAX_SZIE = 60 * 1024;
 
 @class SHUserAccount;
@@ -70,6 +73,8 @@ static const NSUInteger PORTRAIT_MAX_SZIE = 60 * 1024;
 - (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion;
 
 - (void)downloadFileWithURLString:(NSString *)urlString finished:(RequestCompletionBlock)finished;
+
+- (void)getAuthorizeCodeWithUsername:(NSString *)username password:(NSString *)password scopes:(NSArray<NSString *> * _Nullable)scopes completion:(RequestCompletionBlock)completion;
 
 @end
 

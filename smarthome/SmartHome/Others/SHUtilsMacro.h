@@ -110,7 +110,7 @@ static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kLocalAlbumName = @"SmartHome";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
 static NSString * const kReconfigureDevice = @"ReconfigureDevice";
-static NSString * const kUserAccount = @"UserAccount";
+static NSString * const kUserAccountInfo = @"UserAccountInfo";
 
 #pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";
@@ -124,6 +124,7 @@ static NSString * const kDeviceUpgradeFailedNotification = @"DeviceUpgradeFailed
 static NSString * const kDeviceUpgradeSuccessNotification = @"DeviceUpgradeSuccessNotification";
 static NSString * const kDownloadUpgradePackageSuccessNotification = @"DownloadUpgradePackageSuccessNotification";
 static NSString * const kRecvVideoTimeoutNotification = @"RecvVideoTimeoutNotification";
+static NSString * const kSetupDeviceNotification = @"SetupDeviceNotification";
 
 #pragma mark - Color
 static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;
@@ -165,6 +166,8 @@ static const NSInteger kQRCodeValidDuration = 24; //hours
 static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
 static const NSTimeInterval kTimeoutInterval = 15.0; // Network request
+static const NSTimeInterval kPromptinfoDisplayDuration = 2.0;
+static NSString * const kUserAccountPassword = @"UserAccountPassword";
 
 #define KUSE_S3_SERVICE
 #define KTEMP_MODIFY

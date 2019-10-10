@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0Kc-80-Zvp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0Kc-80-Zvp">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +16,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0Kc-80-Zvp" customClass="SHSetupNavVC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="PoY-8w-YSb">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
@@ -337,6 +337,87 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XLK-1n-Akp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4177.5" y="-1140"/>
+        </scene>
+        <!--Setup Home View Controller-->
+        <scene sceneID="SGM-7x-nRJ">
+            <objects>
+                <viewController storyboardIdentifier="SHSetupHomeViewController" id="jyk-qg-bTC" customClass="SHSetupHomeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uow-QP-gvl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PY4-ty-U6j">
+                                <rect key="frame" x="24" y="212" width="272" height="56"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="扫描二维码方式" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
+                                <connections>
+                                    <action selector="scanQRCodeWayClick:" destination="jyk-qg-bTC" eventType="touchUpInside" id="tSJ-PP-fUu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wk2-Jx-OtG">
+                                <rect key="frame" x="24" y="405" width="272" height="56"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="自动获取UUID方式" backgroundImage="default-btn"/>
+                                <state key="highlighted" backgroundImage="default-btn-pre"/>
+                                <connections>
+                                    <action selector="autoWayClick:" destination="jyk-qg-bTC" eventType="touchUpInside" id="uCm-BY-XqC"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="使用扫描二维码方式添加设备的情况如下：" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1SS-82-z42">
+                                <rect key="frame" x="20" y="107" width="280" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1、V35设备；2、设备不支持自动获取UUID方式；3、添加分享设备" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="99N-cR-N2l">
+                                <rect key="frame" x="30" y="156" width="260" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="使用自动获取UUID方式添加设备的情况如下：" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X6w-yE-ZvI">
+                                <rect key="frame" x="20" y="318" width="280" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1、设备支持自动获取UUID方式；" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJR-0Y-yQp">
+                                <rect key="frame" x="30" y="367" width="260" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="mYq-5E-573" firstAttribute="trailing" secondItem="99N-cR-N2l" secondAttribute="trailing" constant="30" id="4G9-wu-Qks"/>
+                            <constraint firstItem="99N-cR-N2l" firstAttribute="top" secondItem="1SS-82-z42" secondAttribute="bottom" constant="8" id="8po-pt-Z0R"/>
+                            <constraint firstItem="YJR-0Y-yQp" firstAttribute="top" secondItem="X6w-yE-ZvI" secondAttribute="bottom" constant="8" id="AMH-tv-F6a"/>
+                            <constraint firstItem="PY4-ty-U6j" firstAttribute="centerX" secondItem="uow-QP-gvl" secondAttribute="centerX" id="CeR-3y-dCG"/>
+                            <constraint firstItem="Wk2-Jx-OtG" firstAttribute="centerX" secondItem="uow-QP-gvl" secondAttribute="centerX" id="ChU-eu-fIc"/>
+                            <constraint firstAttribute="trailing" secondItem="1SS-82-z42" secondAttribute="trailing" constant="20" id="FKh-Dk-sBJ"/>
+                            <constraint firstItem="X6w-yE-ZvI" firstAttribute="leading" secondItem="mYq-5E-573" secondAttribute="leading" constant="20" id="Fsk-z8-Arm"/>
+                            <constraint firstItem="Wk2-Jx-OtG" firstAttribute="top" secondItem="YJR-0Y-yQp" secondAttribute="bottom" constant="20" id="TL3-c2-5zo"/>
+                            <constraint firstItem="YJR-0Y-yQp" firstAttribute="leading" secondItem="mYq-5E-573" secondAttribute="leading" constant="30" id="Yyr-VX-2Zw"/>
+                            <constraint firstItem="PY4-ty-U6j" firstAttribute="centerY" secondItem="uow-QP-gvl" secondAttribute="centerY" id="ZLd-9y-hM8"/>
+                            <constraint firstItem="1SS-82-z42" firstAttribute="leading" secondItem="mYq-5E-573" secondAttribute="leading" constant="20" id="dra-fU-Q0W"/>
+                            <constraint firstItem="PY4-ty-U6j" firstAttribute="top" secondItem="99N-cR-N2l" secondAttribute="bottom" constant="20" id="fAr-zb-TTK"/>
+                            <constraint firstItem="mYq-5E-573" firstAttribute="trailing" secondItem="YJR-0Y-yQp" secondAttribute="trailing" constant="30" id="pwE-XH-nc8"/>
+                            <constraint firstItem="mYq-5E-573" firstAttribute="trailing" secondItem="X6w-yE-ZvI" secondAttribute="trailing" constant="20" id="qjq-3X-YfX"/>
+                            <constraint firstItem="99N-cR-N2l" firstAttribute="leading" secondItem="mYq-5E-573" secondAttribute="leading" constant="30" id="w9O-Gz-PZN"/>
+                            <constraint firstItem="X6w-yE-ZvI" firstAttribute="top" secondItem="PY4-ty-U6j" secondAttribute="bottom" constant="50" id="ycW-Tf-g7X"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="mYq-5E-573"/>
+                    </view>
+                    <connections>
+                        <outlet property="autoDescriptionLabel" destination="YJR-0Y-yQp" id="1af-FH-8hX"/>
+                        <outlet property="scanDescriptionLabel" destination="99N-cR-N2l" id="v5z-5K-DZj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s9S-2J-lQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2528" y="-380"/>
         </scene>
         <!--Code Setup DeviceVC-->
         <scene sceneID="AIJ-4r-i6g">

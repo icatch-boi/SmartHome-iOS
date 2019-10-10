@@ -217,6 +217,7 @@
         
         vc.wifiSSID = _ssidTextField.text;
         vc.wifiPWD = _pwdTextField.text;
+        vc.autoWay = self.isAutoWay;
     }
 }
 
@@ -349,7 +350,7 @@
 */
 
 - (void)updateButtonEnableState {
-    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && !self.isAutoWay;
     _qrcodeButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
 }
 

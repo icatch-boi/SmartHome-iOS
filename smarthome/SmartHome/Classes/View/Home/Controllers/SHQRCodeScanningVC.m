@@ -38,7 +38,7 @@ static const CGFloat kTipsViewHeight = UIScreen.screenHeight * 0.8;
     [SGQRCodeNotificationCenter addObserver:self selector:@selector(SGQRCodeInformationFromeAibum:) name:SGQRCodeInformationFromeAibum object:nil];
     [SGQRCodeNotificationCenter addObserver:self selector:@selector(SGQRCodeInformationFromeScanning:) name:SGQRCodeInformationFromeScanning object:nil];
     
-    [self setupGUI];
+//    [self setupGUI];
     [self setupGestureHandle];
     [self resetParameter];
 }

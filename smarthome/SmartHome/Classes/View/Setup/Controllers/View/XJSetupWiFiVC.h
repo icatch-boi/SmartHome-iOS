@@ -29,6 +29,7 @@
 
 @interface XJSetupWiFiVC : UIViewController
 
+@property (nonatomic, assign, getter=isAutoWay) BOOL autoWay;
 + (instancetype)setupWiFiVC;
 
 @end
