@@ -47,6 +47,7 @@ static int QRCodeStringMappingArray[] = {
     240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255
 };
 static NSString * const kQRCodeKey = @"SH";
+static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
 
 @interface SHQRCodeSetupDeviceVC ()
 
@@ -55,6 +56,7 @@ static NSString * const kQRCodeKey = @"SH";
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (nonatomic, strong) NSTimer *refreshTimer;
 
 @end
 
@@ -89,6 +91,13 @@ static NSString * const kQRCodeKey = @"SH";
     [super viewWillAppear:animated];
     
     self.isAutoWay ? [self showAutoWayQRCode] : [self showQRCodeHandler];
+    [self refreshTimer];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self releaseRefreshTimer];
 }
 
 - (IBAction)exitClick:(id)sender {
@@ -334,6 +343,24 @@ static NSString * const kQRCodeKey = @"SH";
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resultingImage;
+}
+
+- (NSTimer *)refreshTimer {
+    if (_refreshTimer == nil) {
+        WEAK_SELF(self);
+        _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kAutoRefreshInterval repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [weakself showAutoWayQRCode];
+        }];
+    }
+    
+    return _refreshTimer;
+}
+
+- (void)releaseRefreshTimer {
+    if ([_refreshTimer isValid]) {
+        [_refreshTimer invalidate];
+        _refreshTimer = nil;
+    }
 }
 
 @end
