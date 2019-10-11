@@ -20,5 +20,7 @@
 @dynamic mapToTutk;
 @dynamic id;
 @dynamic operable;
+@dynamic hwversionid;
+@dynamic versionid;
 
 @end

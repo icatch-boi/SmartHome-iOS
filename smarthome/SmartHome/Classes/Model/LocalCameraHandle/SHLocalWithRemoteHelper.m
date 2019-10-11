@@ -297,6 +297,7 @@ static NSString * const kInvalidDeviceName = @"NA";
 
     SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:deviceInfo.uid devicePassword:deviceInfo.devicepassword id:deviceInfo.id thumbnail:nil operable:operable];
     camera.addTime = [SHTool localDBTimeStringFromServer:baseInfo.time];
+    camera.deviceInfo = deviceInfo;
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];

@@ -23,6 +23,8 @@
 @property(nonatomic, readonly) NSString * _Nullable devicepassword;
 @property(nonatomic, readonly) int status;
 
+@property (nonatomic, copy) NSString * _Nullable hwversionid;
+@property (nonatomic, copy) NSString * _Nullable versionid;
 
 -(instancetype _Nonnull )initWithData:(NSDictionary * _Nonnull )dict;
 
