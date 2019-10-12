@@ -91,7 +91,9 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
     [super viewWillAppear:animated];
     
     self.isAutoWay ? [self showAutoWayQRCode] : [self showQRCodeHandler];
-    [self refreshTimer];
+    if (self.isAutoWay && self.isConfigWiFi == NO) {
+        [self refreshTimer];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -253,7 +255,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
 
 - (void)setupNotificationHandle:(NSNotification *)nc {
     SHMessage *message = nc.object;
-    if (message.msgType.intValue == 1205) {
+    if (message.msgType.intValue == SHSystemMessageTypeScanSuccess || message.msgType.intValue == PushMessageTypeScanQRcodeSuccess) {
         [self nextClick:nil];
     }
 }

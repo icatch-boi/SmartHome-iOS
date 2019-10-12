@@ -49,6 +49,7 @@
     // Do any additional setup after loading the view.
     
     [self setupGUI];
+    [self resetParameter];
 }
 
 - (void)setupGUI {
@@ -131,6 +132,13 @@
         
         [SVProgressHUD dismiss];
     });
+}
+
+- (void)resetParameter {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentAddCameraUID];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kReconfigureDevice];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

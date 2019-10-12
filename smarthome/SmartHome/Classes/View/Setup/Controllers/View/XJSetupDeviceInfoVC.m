@@ -37,6 +37,7 @@
 #import "SHWiFiInfoHelper.h"
 #import "SHMessage.h"
 #import "SHSetupHomeViewController.h"
+#import "XJSetupWiFiVC.h"
 
 static int const totalFindTime = 90;
 static int const apmodeTimeout = 30;
@@ -573,9 +574,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 #if 0
             [weakself scanQRCode];
 #else
-            [weakself presentSetupHomeVC];
+            [weakself presentSetupViewController];
 #endif
-            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [weakself.navigationController dismissViewControllerAnimated:NO completion:nil];
         });
     }]];
     
@@ -636,8 +637,21 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     });
 }
 
-- (void)presentSetupHomeVC {
+- (void)presentSetupViewController {
+#if 0
     SHSetupHomeViewController *vc = [SHSetupHomeViewController setupHomeViewController];
+#else
+    UIViewController *vc = nil;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice]) {
+        XJSetupWiFiVC *setupWiFiVC = [XJSetupWiFiVC setupWiFiVC];
+        setupWiFiVC.autoWay = self.autoWay;
+        setupWiFiVC.configWiFi = YES;
+        
+        vc = setupWiFiVC;
+    } else {
+        vc = [SHSetupHomeViewController setupHomeViewController];
+    }
+#endif
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1115,11 +1129,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     SHMessage *message = nc.object;
     int msgType = message.msgType.intValue;
     switch (msgType) {
-        case 1201:
+        case SHSystemMessageTypeAddDevice:
             [self showAddDeviceViewWithDeviceID:message.deviceId];
             break;
             
-        case 1202: {
+        case SHSystemMessageTypeAddDeviceFailed: {
             NSString *msg = message.msgParam;
             
             if (message.errCode.intValue == 50034) {
@@ -1132,6 +1146,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             
             [self showFailedAlertViewWithTitle:NSLocalizedString(@"kConfigureDeviceFailed", nil) message:msg];
         }
+            break;
+            
+        case PushMessageTypeModifyWiFiSuccess:
+            [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:self.wifiSSID password:self.wifiPWD];
+            [self reconfigureDeviceHandle];
             break;
             
         default:

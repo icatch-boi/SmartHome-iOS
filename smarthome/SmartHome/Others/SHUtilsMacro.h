@@ -195,6 +195,16 @@ typedef enum : NSUInteger {
     PushMessageTypeFDMiss = 203,
     PushMessageTypePushTest = 204,
     PushMessageTypeFaceRecognition = 301,
+    PushMessageTypeScanQRcodeSuccess = 302,
+    PushMessageTypeModifyWiFiSuccess = 303,
 } PushMessageType;
+
+typedef NS_ENUM(NSUInteger, SHSystemMessageType) {
+    SHSystemMessageTypeAddDevice = 1201,
+    SHSystemMessageTypeAddDeviceFailed = 1202,
+    SHSystemMessageTypeDeleteDevice = 1203,
+    SHSystemMessageTypeDeleteDeviceFailed = 1204,
+    SHSystemMessageTypeScanSuccess = 1205,
+};
 
 #endif /* SHUtilsMacro_h */

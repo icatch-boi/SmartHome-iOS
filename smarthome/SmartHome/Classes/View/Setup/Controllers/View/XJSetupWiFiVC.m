@@ -105,6 +105,15 @@
     [_pwdTextField addTarget:self action:@selector(updateButtonEnableState) forControlEvents:UIControlEventEditingChanged];
     [self updateButtonEnableState];
     _pwdTextField.secureTextEntry = NO;
+    
+    if (self.isConfigWiFi) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(closeAction) isBack:NO];
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+}
+
+- (void)closeAction {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addLineForChangePasswordBtn {
@@ -218,6 +227,7 @@
         vc.wifiSSID = _ssidTextField.text;
         vc.wifiPWD = _pwdTextField.text;
         vc.autoWay = self.isAutoWay;
+        vc.configWiFi = self.isConfigWiFi;
     }
 }
 
