@@ -190,6 +190,7 @@
 		38C7940521C2279E00E55F96 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; };
 		38C7940621C2279E00E55F96 /* MJRefresh.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 38C7940321C2279600E55F96 /* MJRefresh.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		38D857D2234DDB210087926F /* SHSetupHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D857D1234DDB210087926F /* SHSetupHomeViewController.m */; };
+		38D85889235180A30087926F /* PopMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D85888235180A30087926F /* PopMenuView.m */; };
 		38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */; };
 		38DA5D9B22F83C5C00BF30AB /* SHStrangerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38DA5D9A22F83C5C00BF30AB /* SHStrangerViewController.m */; };
 		38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38E5BFE820A3F5AE003004E0 /* SHHomeTableViewController.m */; };
@@ -785,6 +786,8 @@
 		38C7940321C2279600E55F96 /* MJRefresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = "<group>"; };
 		38D857D0234DDB210087926F /* SHSetupHomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHSetupHomeViewController.h; sourceTree = "<group>"; };
 		38D857D1234DDB210087926F /* SHSetupHomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHSetupHomeViewController.m; sourceTree = "<group>"; };
+		38D85887235180A30087926F /* PopMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopMenuView.h; sourceTree = "<group>"; };
+		38D85888235180A30087926F /* PopMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopMenuView.m; sourceTree = "<group>"; };
 		38D867CD21A803B700AB6FB2 /* SHNetworkRequestErrorDes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHNetworkRequestErrorDes.h; sourceTree = "<group>"; };
 		38D867CE21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHNetworkRequestErrorDes.m; sourceTree = "<group>"; };
 		38DA5D9922F83C5C00BF30AB /* SHStrangerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHStrangerViewController.h; sourceTree = "<group>"; };
@@ -2086,6 +2089,15 @@
 			path = FaceSDK;
 			sourceTree = "<group>";
 		};
+		38D85886235180800087926F /* PopMenuView */ = {
+			isa = PBXGroup;
+			children = (
+				38D85887235180A30087926F /* PopMenuView.h */,
+				38D85888235180A30087926F /* PopMenuView.m */,
+			);
+			path = PopMenuView;
+			sourceTree = "<group>";
+		};
 		38E5BF3120A3F5AE003004E0 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -3026,6 +3038,7 @@
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				38D85886235180800087926F /* PopMenuView */,
 				38F30F87233865CB004F25E6 /* BadgeButton */,
 				38F30F6723385EFD004F25E6 /* ZJDownloader */,
 				38EC861F2303EF6E00624C10 /* ZJDataCache */,
@@ -3655,6 +3668,7 @@
 				38EC86432303EF6E00624C10 /* UIImage+MemoryCacheCost.m in Sources */,
 				38E5C14F20A3F5AF003004E0 /* SHCamera.xcdatamodeld in Sources */,
 				38EC86422303EF6E00624C10 /* NSData+ImageContentType.m in Sources */,
+				38D85889235180A30087926F /* PopMenuView.m in Sources */,
 				387577E12238FD37006A4052 /* SHDeviceUpgradeHomeVC.m in Sources */,
 				38E5C21F20A3F610003004E0 /* SHTool.m in Sources */,
 				38F525B31F2F020400F5A5A2 /* SGQRCodeScanningView.m in Sources */,

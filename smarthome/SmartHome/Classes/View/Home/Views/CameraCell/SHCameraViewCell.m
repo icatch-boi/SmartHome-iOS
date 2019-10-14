@@ -42,6 +42,7 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 @property (weak, nonatomic) IBOutlet SHMsgBadgeButton *messageBtn;
 @property (weak, nonatomic) IBOutlet UIButton *albumBtn;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
+@property (weak, nonatomic) IBOutlet UIButton *moreButton;
 @property (weak, nonatomic) IBOutlet UILabel *lastPreviewTime;
 @property (weak, nonatomic) IBOutlet UILabel *cameraInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
@@ -254,9 +255,15 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 }
 
 - (IBAction)deleteCameraAction:(id)sender {
+#if 0
     if ([self.delegate respondsToSelector:@selector(longPressDeleteCamera:)]) {
         [self.delegate longPressDeleteCamera:self];
     }
+#else
+    if ([self.delegate respondsToSelector:@selector(moreOperationWithCell:viewPosition:)]) {
+        [self.delegate moreOperationWithCell:self viewPosition:[self moreButtonPosition]];
+    }
+#endif
 }
 
 - (IBAction)changeButtonBackgroundColor:(UIButton *)sender {
@@ -290,6 +297,14 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
     _cameraThumbnail.highlighted = NO;
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
+}
+
+- (CGRect)moreButtonPosition {
+    CGRect rect1 = [self.moreButton convertRect:self.moreButton.bounds toView:self.footBarView];
+    CGRect rect2 = [self.footBarView convertRect:rect1 fromView:self.contentView];
+    CGRect rect3 = [self.footBarView convertRect:rect2 toView:self.superview.superview];
+    
+    return CGRectMake(CGRectGetMinX(rect3), CGRectGetMinY(rect3) + CGRectGetHeight(self.frame) - CGRectGetHeight(self.footBarView.frame) - 10, CGRectGetWidth(rect3), CGRectGetHeight(rect3));
 }
 
 @end

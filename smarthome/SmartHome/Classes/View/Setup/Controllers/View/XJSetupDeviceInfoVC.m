@@ -1138,7 +1138,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             
             if (message.errCode.intValue == 50034) {
                 if (message.deviceId != nil) {
-                    msg = NSLocalizedString(@"kDeviceAlreadyExist", nil);
+                    msg = [self createAddFailedErrorInfoWithDeviceID:message.deviceId];
                 } else {
                     msg = NSLocalizedString(@"kDeviceBindByOtherAccounts", nil);
                 }
@@ -1156,6 +1156,25 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         default:
             break;
     }
+}
+
+- (NSString *)createAddFailedErrorInfoWithDeviceID:(NSString *)deviceID {
+    __block SHCameraObject *cameraObj = nil;
+    [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(SHCameraObject *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.camera.id isEqualToString:deviceID]) {
+            cameraObj = obj;
+            *stop = YES;
+        }
+    }];
+    
+    NSString *msg = nil;
+    if (cameraObj.camera.operable == 1) {
+        msg = [NSString stringWithFormat:@"该设备已被自己注册过，设备名称: %@", cameraObj.camera.cameraName];
+    } else {
+        msg = [NSString stringWithFormat:@"该设备已订阅过，设备名称: %@", cameraObj.camera.cameraName];
+    }
+    
+    return msg;
 }
 
 - (void)showAddDeviceViewWithDeviceID:(NSString *)deviceID {

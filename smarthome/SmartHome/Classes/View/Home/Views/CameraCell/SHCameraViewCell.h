@@ -36,6 +36,7 @@
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell;
 - (void)enterShareWithCell:(SHCameraViewCell *)cell;
 - (void)longPressDeleteCamera:(SHCameraViewCell *)cell;
+- (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position;
 
 @end
 

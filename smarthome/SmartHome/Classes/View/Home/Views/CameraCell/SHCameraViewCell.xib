@@ -55,8 +55,8 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="LsN-tq-ZfH" secondAttribute="height" id="FZa-tJ-4Ii"/>
                                 </constraints>
-                                <state key="normal" image="home-btn-delect"/>
-                                <state key="highlighted" image="home-btn-delect-pre"/>
+                                <state key="normal" image="home_btn_more"/>
+                                <state key="highlighted" image="home_btn_more_pre"/>
                                 <connections>
                                     <action selector="changeButtonBackgroundColor:" destination="CTu-tF-U19" eventType="touchDown" id="SJD-V8-ZGN"/>
                                     <action selector="deleteCameraAction:" destination="CTu-tF-U19" eventType="touchUpInside" id="uq0-UO-QMB"/>
@@ -168,6 +168,7 @@
                 <outlet property="footBarView" destination="G6K-aN-rNC" id="ztM-Ph-Mi8"/>
                 <outlet property="lastPreviewTime" destination="4mS-IM-5TP" id="Y6E-VY-nge"/>
                 <outlet property="messageBtn" destination="3Mv-7g-bC5" id="DGW-nv-c6F"/>
+                <outlet property="moreButton" destination="LsN-tq-ZfH" id="qSr-Uu-Bm8"/>
                 <outlet property="playButton" destination="VPa-2b-rHo" id="fbD-aI-gOT"/>
                 <outlet property="shareBtn" destination="teC-3B-khn" id="spk-6k-sHx"/>
             </connections>
@@ -177,12 +178,12 @@
     <resources>
         <image name="home-btn-camera roll" width="52" height="52"/>
         <image name="home-btn-camera roll-pre" width="52" height="52"/>
-        <image name="home-btn-delect" width="52" height="52"/>
-        <image name="home-btn-delect-pre" width="52" height="52"/>
         <image name="home-btn-message center" width="52" height="52"/>
         <image name="home-btn-message center-pre" width="52" height="52"/>
         <image name="home-btn-play" width="50" height="50"/>
         <image name="home-btn-share" width="52" height="52"/>
         <image name="home-btn-share-pre" width="52" height="52"/>
+        <image name="home_btn_more" width="52" height="52"/>
+        <image name="home_btn_more_pre" width="52" height="52"/>
     </resources>
 </document>

@@ -47,6 +47,8 @@
 #import "SHStrangerViewController.h"
 #import "SHMessageCenterTVC.h"
 #import "SHSetupHomeViewController.h"
+#import "XJSetupWiFiVC.h"
+#import "PopMenuView.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -480,6 +482,67 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", @"") style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alertVC animated:YES completion:nil];
     }
+}
+
+- (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position {
+    WEAK_SELF(self);
+    NSArray<NSDictionary *> *items = @[@{@"title":@"修改Wi-Fi", @"imageName":@"setup_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
+                                       @{@"title":@"删除设备", @"imageName":@"home-btn-delect", @"methodName": @"longPressDeleteCamera:"},
+                                       ];
+    
+    SHCameraObject *camObj = cell.viewModel.cameraObj;
+    if (camObj.camera.operable != 1) {
+        items = @[@{@"title":@"删除设备", @"imageName":@"home-btn-delect", @"methodName": @"longPressDeleteCamera:"},
+                   ];
+    }
+    
+    __block CGFloat width = [SHTool stringSizeWithString:items.firstObject[@"title"] font:[UIFont systemFontOfSize:16]].width;
+    [items enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGFloat temp = [SHTool stringSizeWithString:obj[@"title"] font:[UIFont systemFontOfSize:16]].width;
+        if (temp > width) {
+            width = temp;
+        }
+    }];
+    
+    width = 40 + width + 3 * 10;
+    [PopMenuView showWithItems:items
+                         width:width
+              triangleLocation:CGPointMake(CGRectGetMidX(position), CGRectGetMinY(position))
+            animationDirection:PopMenuAnimationDirectionUp
+                        action:^(NSInteger index) {
+                            NSLog(@"点击了第%ld行", (long)index);
+
+                            NSDictionary *dict = items[index];
+                            if ([dict.allKeys containsObject:@"methodName"]) {
+                                NSString *methodName = dict[@"methodName"];
+                                SEL action = NSSelectorFromString(methodName);
+                                if (action && [weakself respondsToSelector:action]) {
+                                    [weakself performSelector:action withObject:cell afterDelay:0];
+                                }
+                            }
+                        }];
+}
+
+- (void)enterModifyWiFiViewWithCell:(SHCameraViewCell *)cell {
+    SHCamera *camera = cell.viewModel.cameraObj.camera;
+    SHLogInfo(SHLogTagAPP, @"hwversionid: %@", camera.hwversionid);
+    
+    BOOL useAutoWay = NO;
+    if ([camera.hwversionid hasPrefix:@"V37"]) {
+        useAutoWay = YES;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kReconfigureDevice];
+    [[NSUserDefaults standardUserDefaults] setObject:camera.cameraUid forKey:kCurrentAddCameraUID];
+    
+    XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
+    vc.autoWay = useAutoWay;
+    vc.configWiFi = YES;
+    
+//    [self.navigationController pushViewController:vc animated:YES];
+    SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - Action Progress
