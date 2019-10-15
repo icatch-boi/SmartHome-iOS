@@ -20,5 +20,7 @@
 @property (nonatomic) BOOL mapToTutk;
 @property (nonatomic, retain) NSString *id;
 @property (nonatomic) int operable; //1 代表拥有者权限
+@property (nonatomic, retain) NSString *hwversionid;
+@property (nonatomic, retain) NSString *versionid;
 
 @end

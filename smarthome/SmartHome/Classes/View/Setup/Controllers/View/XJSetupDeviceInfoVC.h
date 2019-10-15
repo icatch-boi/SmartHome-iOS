@@ -32,5 +32,6 @@
 @property (nonatomic, copy) NSString *wifiSSID;
 @property (nonatomic, copy) NSString *wifiPWD;
 @property (nonatomic, assign) BOOL useQRCodeSetup;
+@property (nonatomic, assign, getter=isAutoWay) BOOL autoWay;
 
 @end

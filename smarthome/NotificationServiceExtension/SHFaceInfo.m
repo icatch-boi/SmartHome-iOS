@@ -127,7 +127,7 @@ static NSTimeInterval TIME_OUT_INTERVAL = 15.0;
 
 - (NSString *)getAccountID {
     NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
-    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccountInfo];
     NSLog(@"dict: %@", dict);
     
     NSString *accountID = nil;

@@ -628,13 +628,23 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self ringNotificationHandleWithInfo:userInfo];
             break;
             
+        case PushMessageTypeScanQRcodeSuccess:
+        case PushMessageTypeModifyWiFiSuccess:
+        case SHSystemMessageTypeAddDevice:
+        case SHSystemMessageTypeAddDeviceFailed:
+        case SHSystemMessageTypeScanSuccess: {
+            SHMessage *message = [SHMessage messageWithDict:aps];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSetupDeviceNotification object:message];
+        }
+            break;
+            
         default:
             break;
     }
     
     [self updateMessageCountWithCameraUID:aps[@"devID"]];
 
-    if (msgType != 106) {
+    if (msgType != 106 && msgType != SHSystemMessageTypeAddDevice && msgType != SHSystemMessageTypeAddDeviceFailed && msgType != SHSystemMessageTypeScanSuccess && msgType != PushMessageTypeScanQRcodeSuccess && msgType != PushMessageTypeModifyWiFiSuccess) {
         if (completionHandler == nil) {
             return;
         }

@@ -538,3 +538,15 @@
 "kFaceDataUpdateDescription" = "账户中人脸数据有更新，是否要同步到设备？";
 "kNotSync" = "不同步";
 "kSync" = "同步";
+
+"kDeviceAlreadyRegistered" = "该设备已被自己注册过，设备名称: %@";
+"kDeviceAlreadySubscribed" = "该设备已订阅过，设备名称: %@";
+"kSetDeviceNameFailedDescription" = "设置设备名称失败，需要重新尝试吗？";
+"kScanQRCodeAddDeviceDescription" = "1、V35设备；\n2、设备不支持自动获取UUID方式；\n3、添加分享设备";
+"kAutoWayAddDeviceDescription" = "1、设备支持自动获取UUID方式";
+"kModifyWiFi" = "修改Wi-Fi";
+"kDeleteDevice" = "删除设备";
+"kUseScanQRCodeWayDescription" = "使用扫描二维码方式添加设备的情况如下：";
+"kScanQRCodeWayButtonTitle" = "扫描二维码方式";
+"kUseAutoWayDescription" = "使用自动获取UUID方式添加设备的情况如下：";
+"kAutoWayButtonTitle" = "自动获取UUID方式";

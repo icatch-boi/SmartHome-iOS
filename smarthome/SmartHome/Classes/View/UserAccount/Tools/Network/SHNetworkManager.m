@@ -9,7 +9,6 @@
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
 #import "SHNetworkManager+SHPush.h"
-#import "ZJRequestError.h"
 #import <AFNetworking/AFNetworking.h>
 
 @interface SHNetworkManager ()
@@ -135,6 +134,7 @@
             
             SHLogInfo(SHLogTagAPP, @"userAccount: %@", self.userAccount);
             [[NSUserDefaults standardUserDefaults] setObject:email forKey:kUserAccounts];
+            [[NSUserDefaults standardUserDefaults] setObject:password forKey:kUserAccountPassword];
             if (completion) {
                 completion(YES, account);
             }
@@ -920,6 +920,41 @@
     NSString *len = [NSString stringWithFormat:@"%d", (int)data.length];
     [request setValue:len forHTTPHeaderField:@"Content-Length"];
     
+    // 设置body
+    [request setHTTPBody:data];
+    
+    [self dataTaskWithRequest:request completion:completion];
+}
+
+- (void)getAuthorizeCodeWithUsername:(NSString *)username password:(NSString *)password scopes:(NSArray<NSString *> * _Nullable)scopes completion:(RequestCompletionBlock)completion {
+    if (username.length == 0 || password.length == 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
+        }
+        
+        return;
+    }
+    
+    NSString *scopesString = @"get_user_info";
+    if (scopes.count > 0) {
+        NSMutableString *temp = [NSMutableString string];
+        [scopes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [temp appendFormat:@"%@ ", obj];
+        }];
+        
+        scopesString = temp.copy;
+    }
+    
+    NSString *urlString = [self requestURLString:AUTHORIZE_CODE_PATH];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"post" URLString:urlString parameters:nil error:nil];
+    request.timeoutInterval = TIME_OUT_INTERVAL;
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    NSString *bodyString = [NSString stringWithFormat:@"client_id=%@&username=%@&password=%@&response_type=code&scope=%@", kServerClientID, username, password, scopesString];
+    NSData *data = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
     // 设置body
     [request setHTTPBody:data];
     

@@ -217,7 +217,7 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     }
     
     NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
-    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccountInfo];
     NSLog(@"dict: %@", dict);
     
     if (![dict.allKeys containsObject:@"access_token"]) {
@@ -267,7 +267,7 @@ static NSString * const kFaceimagePath = @"v1/devices/faceimage";
     }
     
     NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:kAppGroupsName];
-    NSDictionary *dict = [userDefault objectForKey:kUserAccount];
+    NSDictionary *dict = [userDefault objectForKey:kUserAccountInfo];
     NSLog(@"dict: %@", dict);
     
     if (![dict.allKeys containsObject:@"access_token"]) {

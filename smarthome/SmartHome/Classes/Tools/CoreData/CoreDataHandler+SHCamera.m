@@ -226,6 +226,8 @@
         camera.id = cameraInfo.id ? cameraInfo.id : camera.id;
         camera.thumbnail = cameraInfo.thumnail ? cameraInfo.thumnail : camera.thumbnail;
         camera.operable = cameraInfo.operable;
+        camera.hwversionid = cameraInfo.deviceInfo.hwversionid;
+        camera.versionid = cameraInfo.deviceInfo.versionid;
 
         camera.createTime = cameraInfo.addTime;
         // Save data to sqlite
@@ -254,6 +256,8 @@
         savedCamera.id = cameraInfo.id;
         savedCamera.thumbnail = cameraInfo.thumnail;
         savedCamera.operable = cameraInfo.operable;
+        savedCamera.hwversionid = cameraInfo.deviceInfo.hwversionid;
+        savedCamera.versionid = cameraInfo.deviceInfo.versionid;
 #if 0
         NSDate *date = [NSDate date];
         NSTimeInterval sec = [date timeIntervalSinceNow];

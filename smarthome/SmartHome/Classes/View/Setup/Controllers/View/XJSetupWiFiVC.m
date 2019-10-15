@@ -105,6 +105,15 @@
     [_pwdTextField addTarget:self action:@selector(updateButtonEnableState) forControlEvents:UIControlEventEditingChanged];
     [self updateButtonEnableState];
     _pwdTextField.secureTextEntry = NO;
+    
+    if (self.isConfigWiFi) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(closeAction) isBack:NO];
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+}
+
+- (void)closeAction {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addLineForChangePasswordBtn {
@@ -137,6 +146,7 @@
 
 - (void)updateSSIDStatus {
     [self setupSSID];
+    [self updateButtonEnableState];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -217,6 +227,8 @@
         
         vc.wifiSSID = _ssidTextField.text;
         vc.wifiPWD = _pwdTextField.text;
+        vc.autoWay = self.isAutoWay;
+        vc.configWiFi = self.isConfigWiFi;
     }
 }
 
@@ -349,7 +361,7 @@
 */
 
 - (void)updateButtonEnableState {
-    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && !self.isAutoWay;
     _qrcodeButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
 }
 
