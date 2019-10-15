@@ -155,6 +155,7 @@
 		38A7523D1EA894B100C0ACB0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887447C1EA4A57E004802D7 /* AudioToolbox.framework */; };
 		38A837F11E9CB4D200553985 /* SmartHomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837F01E9CB4D200553985 /* SmartHomeTests.m */; };
 		38A837FC1E9CB4D200553985 /* SmartHomeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */; };
+		38AA1481234CB2CF00637764 /* SHS3FileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38AA1480234CB2CF00637764 /* SHS3FileInfo.m */; };
 		38AAE01F2202C78E009B37F8 /* SHWechatServerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38AAE01E2202C78E009B37F8 /* SHWechatServerVC.m */; };
 		38AAE0262202CAA0009B37F8 /* SHWCQRCodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38AAE0252202CAA0009B37F8 /* SHWCQRCodeView.m */; };
 		38AAE0282202CAAA009B37F8 /* SHWCQRCodeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38AAE0272202CAAA009B37F8 /* SHWCQRCodeView.xib */; };
@@ -726,6 +727,8 @@
 		38A837F71E9CB4D200553985 /* SmartHomeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartHomeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38A837FB1E9CB4D200553985 /* SmartHomeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartHomeUITests.m; sourceTree = "<group>"; };
 		38A837FD1E9CB4D200553985 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38AA147F234CB2CF00637764 /* SHS3FileInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHS3FileInfo.h; sourceTree = "<group>"; };
+		38AA1480234CB2CF00637764 /* SHS3FileInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHS3FileInfo.m; sourceTree = "<group>"; };
 		38AAE01D2202C78E009B37F8 /* SHWechatServerVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWechatServerVC.h; sourceTree = "<group>"; };
 		38AAE01E2202C78E009B37F8 /* SHWechatServerVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHWechatServerVC.m; sourceTree = "<group>"; };
 		38AAE0242202CAA0009B37F8 /* SHWCQRCodeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHWCQRCodeView.h; sourceTree = "<group>"; };
@@ -2910,6 +2913,8 @@
 				38F30F432330E9F4004F25E6 /* SHDeveloperAuthenticatedIdentityProvider.m */,
 				38F30F942338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.h */,
 				38F30F952338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m */,
+				38AA147F234CB2CF00637764 /* SHS3FileInfo.h */,
+				38AA1480234CB2CF00637764 /* SHS3FileInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3802,6 +3807,7 @@
 				3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */,
 				38E5C37E20A41027003004E0 /* SHCameraHelper.m in Sources */,
 				38BFB26E22D85EE800AA3ABC /* RemindView.m in Sources */,
+				38AA1481234CB2CF00637764 /* SHS3FileInfo.m in Sources */,
 				386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */,
 				38E5C33020A40F49003004E0 /* SHSettingData.m in Sources */,
 				38E5C28D20A3F698003004E0 /* SHLocalWithRemoteHelper.m in Sources */,

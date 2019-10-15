@@ -244,7 +244,7 @@
     [AWSS3 registerS3WithConfiguration:configuration forKey:key];
 }
 
-- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion {
+- (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion {
     
     if (s3client == nil || bucketName.length == 0 || prefix.length == 0) {
         SHLogError(SHLogTagAPP, @"Parameter `s3client` or `bucketName` or `prefix` can't be nil.");
@@ -257,7 +257,16 @@
     
     AWSS3ListObjectsV2Request *request = [[AWSS3ListObjectsV2Request alloc] init];
     request.bucket = bucketName;
-    request.prefix = prefix;
+    request.prefix = [prefix stringByAppendingString:@"/"];
+    request.delimiter = @"/";
+    if (startKey.length != 0) {
+        request.startAfter = startKey;
+    }
+    
+    if (number < 1 || number > 100) {
+        number = 20;
+    }
+    request.maxKeys = @(number * 2);
     
     [s3client listObjectsV2:request completionHandler:^(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error) {
 
