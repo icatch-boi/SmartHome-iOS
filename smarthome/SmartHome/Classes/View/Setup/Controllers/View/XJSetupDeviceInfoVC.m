@@ -1125,6 +1125,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
 - (void)setupNotificationHandle:(NSNotification *)nc {
     [self releaseTimer];
+    [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:self.wifiSSID password:self.wifiPWD];
 
     SHMessage *message = nc.object;
     int msgType = message.msgType.intValue;
@@ -1149,7 +1150,6 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             break;
             
         case PushMessageTypeModifyWiFiSuccess:
-            [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:self.wifiSSID password:self.wifiPWD];
             [self reconfigureDeviceHandle];
             break;
             
@@ -1169,9 +1169,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     NSString *msg = nil;
     if (cameraObj.camera.operable == 1) {
-        msg = [NSString stringWithFormat:@"该设备已被自己注册过，设备名称: %@", cameraObj.camera.cameraName];
+        msg = [NSString stringWithFormat:NSLocalizedString(@"kDeviceAlreadyRegistered", nil), cameraObj.camera.cameraName];
     } else {
-        msg = [NSString stringWithFormat:@"该设备已订阅过，设备名称: %@", cameraObj.camera.cameraName];
+        msg = [NSString stringWithFormat:NSLocalizedString(@"kDeviceAlreadySubscribed", nil), cameraObj.camera.cameraName];
     }
     
     return msg;
@@ -1230,7 +1230,6 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 
             if(isSuccess) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
-                [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:weakself.wifiSSID password:weakself.wifiPWD];
 
                 [weakself.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
             } else {
@@ -1241,7 +1240,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)showSetupDeviceNameFailedAlertWithDeviceID:(NSString *)deviceID deviceName:(NSString *)deviceName {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"设置设备名称失败，需要重新尝试吗？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kSetDeviceNameFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     WEAK_SELF(self);
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {

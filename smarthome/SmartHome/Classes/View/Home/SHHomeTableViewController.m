@@ -486,13 +486,13 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 - (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position {
     WEAK_SELF(self);
-    NSArray<NSDictionary *> *items = @[@{@"title":@"修改Wi-Fi", @"imageName":@"setup_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
-                                       @{@"title":@"删除设备", @"imageName":@"home-btn-delect", @"methodName": @"longPressDeleteCamera:"},
+    NSArray<NSDictionary *> *items = @[@{@"title": NSLocalizedString(@"kModifyWiFi", nil), @"imageName": @"home_btn_modify_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
+                                       @{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
                                        ];
     
     SHCameraObject *camObj = cell.viewModel.cameraObj;
     if (camObj.camera.operable != 1) {
-        items = @[@{@"title":@"删除设备", @"imageName":@"home-btn-delect", @"methodName": @"longPressDeleteCamera:"},
+        items = @[@{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
                    ];
     }
     

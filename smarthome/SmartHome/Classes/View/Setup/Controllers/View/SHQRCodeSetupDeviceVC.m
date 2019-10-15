@@ -48,6 +48,7 @@ static int QRCodeStringMappingArray[] = {
 };
 static NSString * const kQRCodeKey = @"SH";
 static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
+static const CGFloat kQRCodeImageViewDefaultWidth = 200;
 
 @interface SHQRCodeSetupDeviceVC ()
 
@@ -56,6 +57,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *qrcodeImageWidthCons;
 @property (nonatomic, strong) NSTimer *refreshTimer;
 
 @end
@@ -81,6 +83,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
     [_nextButton setTitle:NSLocalizedString(@"kNext", nil) forState:UIControlStateHighlighted];
     _titleLabel.text = NSLocalizedString(@"kUseQRCodeSetupDeviceTitle", nil);
     _descriptionLabel.text = NSLocalizedString(@"kUseQRCodeSetupDeviceDescription", nil);
+    self.qrcodeImageWidthCons.constant = kQRCodeImageViewDefaultWidth * kScreenHeightScale;
 }
 
 - (void)setupGUI {
@@ -189,7 +192,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
 
 - (NSString *)createAutoWayQRCodeStringWithCode:(NSString *)code {
     if (self.wifiPWD.length == 0 || self.wifiSSID.length == 0) {
-        [SVProgressHUD showErrorWithStatus:@"Wi-Fi ssid or password 不能为空"];
+        [SVProgressHUD showErrorWithStatus:@"Wi-Fi ssid or password cannot be empty"];
         [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
         return nil;
     }
@@ -234,7 +237,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
             if ([dict.allKeys containsObject:@"code"]) {
                 code = dict[@"code"];
             } else {
-                [SVProgressHUD showErrorWithStatus:@"Response中不包含`code`值"];
+                [SVProgressHUD showErrorWithStatus:@"Response does not contain `code` values"];
                 [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
             }
             
@@ -349,10 +352,7 @@ static const NSTimeInterval kAutoRefreshInterval = 4 * 60;
 
 - (NSTimer *)refreshTimer {
     if (_refreshTimer == nil) {
-        WEAK_SELF(self);
-        _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kAutoRefreshInterval repeats:YES block:^(NSTimer * _Nonnull timer) {
-            [weakself showAutoWayQRCode];
-        }];
+        _refreshTimer = [NSTimer scheduledTimerWithTimeInterval:kAutoRefreshInterval target:self selector:@selector(showAutoWayQRCode) userInfo:nil repeats:YES];
     }
     
     return _refreshTimer;

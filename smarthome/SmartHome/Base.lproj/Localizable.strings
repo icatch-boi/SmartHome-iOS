@@ -529,3 +529,15 @@
 "kFaceDataUpdateDescription" = "The face data in the account is updated. Do you want to synchronize to the device?";
 "kNotSync" = "Not sync";
 "kSync" = "Sync";
+
+"kDeviceAlreadyRegistered" = "The device has been registered by itself, device name: %@";
+"kDeviceAlreadySubscribed" = "This device has been subscribed to, device name: %@";
+"kSetDeviceNameFailedDescription" = "Failed to set device name, need to try again?";
+"kScanQRCodeAddDeviceDescription" = "1. V35 device; \n2. The device does not support automatic acquisition of UUID mode; \n3. Add sharing device";
+"kAutoWayAddDeviceDescription" = "1. The device supports automatic access to UUID mode";
+"kModifyWiFi" = "Modify Wi-Fi";
+"kDeleteDevice" = "Delete device";
+"kUseScanQRCodeWayDescription" = "The situation in which devices are added by scanning the QR code is as follows:";
+"kScanQRCodeWayButtonTitle" = "Scan QR code mode";
+"kUseAutoWayDescription" = "The case of adding a device using the automatic UUID method is as follows:";
+"kAutoWayButtonTitle" = "Auto obtain UUID mode";

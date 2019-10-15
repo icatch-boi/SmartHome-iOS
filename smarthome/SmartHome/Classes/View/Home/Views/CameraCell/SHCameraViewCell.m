@@ -300,9 +300,11 @@ static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 }
 
 - (CGRect)moreButtonPosition {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    
     CGRect rect1 = [self.moreButton convertRect:self.moreButton.bounds toView:self.footBarView];
     CGRect rect2 = [self.footBarView convertRect:rect1 fromView:self.contentView];
-    CGRect rect3 = [self.footBarView convertRect:rect2 toView:self.superview.superview];
+    CGRect rect3 = [self.footBarView convertRect:rect2 toView:window];
     
     return CGRectMake(CGRectGetMinX(rect3), CGRectGetMinY(rect3) + CGRectGetHeight(self.frame) - CGRectGetHeight(self.footBarView.frame) - 10, CGRectGetWidth(rect3), CGRectGetHeight(rect3));
 }

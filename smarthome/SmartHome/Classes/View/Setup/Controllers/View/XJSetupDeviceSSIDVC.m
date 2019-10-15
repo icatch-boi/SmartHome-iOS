@@ -30,6 +30,7 @@
 #import "XJSetupDeviceInfoVC.h"
 
 static const CGFloat kTipsViewDefaultHeight = 140;
+static const CGFloat kChooseWiFiIconDefauleHeight = 160;
 
 @interface XJSetupDeviceSSIDVC ()
 
@@ -38,6 +39,7 @@ static const CGFloat kTipsViewDefaultHeight = 140;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *chooseWifiDesLabel;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *exitButtonItem;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *chooseWiFiIconHeightCons;
 
 @end
 
@@ -70,6 +72,7 @@ static const CGFloat kTipsViewDefaultHeight = 140;
     
     _titleLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
     _chooseWifiDesLabel.textColor = [UIColor ic_colorWithHex:kTextThemeColor];
+    _chooseWiFiIconHeightCons.constant = kChooseWiFiIconDefauleHeight * kScreenHeightScale;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

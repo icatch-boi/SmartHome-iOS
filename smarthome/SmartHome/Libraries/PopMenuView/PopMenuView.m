@@ -13,6 +13,8 @@
 #endif
 
 static CGFloat const kCellHeight = 44;
+static CGFloat const kIconHeight = 32;
+static CGFloat const kMargin = 10;
 
 @interface PopMenuTableViewCell : UITableViewCell
 
@@ -180,7 +182,8 @@ static CGFloat const kCellHeight = 44;
     cell.leftImageView.image = [UIImage imageNamed:dic[@"imageName"]];
     cell.titleLabel.text = dic[@"title"];
     [cell.titleLabel sizeToFit];
-    cell.titleLabel.center = CGPointMake(cell.titleLabel.center.x, cell.center.y);
+//    cell.titleLabel.center = CGPointMake(cell.titleLabel.center.x, cell.center.y);
+    cell.titleLabel.frame = CGRectMake(CGRectGetMaxX(cell.leftImageView.frame) + kMargin, (kCellHeight - CGRectGetHeight(cell.titleLabel.frame)) / 2, CGRectGetWidth(cell.titleLabel.frame), CGRectGetHeight(cell.titleLabel.frame));
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.layoutMargins = UIEdgeInsetsZero;
     cell.separatorInset = UIEdgeInsetsZero;
@@ -203,12 +206,12 @@ static CGFloat const kCellHeight = 44;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        _leftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (kCellHeight - 40) / 2, 40, 40)];
+        _leftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kMargin, (kCellHeight - kIconHeight) / 2, kIconHeight, kIconHeight)];
         _leftImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_leftImageView];
         
         
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftImageView.frame) + 10, _leftImageView.frame.origin.y, 0, 0)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftImageView.frame) + kMargin, _leftImageView.frame.origin.y, 0, 0)];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:16];
         [self.contentView addSubview:_titleLabel];

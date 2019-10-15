@@ -146,6 +146,7 @@
 
 - (void)updateSSIDStatus {
     [self setupSSID];
+    [self updateButtonEnableState];
 }
 
 - (void)didReceiveMemoryWarning {

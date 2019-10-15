@@ -30,10 +30,20 @@
 #import "SVProgressHUD.h"
 #import "XJSetupWiFiVC.h"
 
+static const CGFloat kScanQRCodeTopDefaultHeight = 10;
+static const CGFloat kScanQRCodeBottomDefaultHeight = 40;
+
 @interface SHSetupHomeViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *scanDescriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *autoDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *scanQRCodeTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *scanQRCodeWayBtn;
+@property (weak, nonatomic) IBOutlet UILabel *autoWayTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *autoWayBtn;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *scanQRCodeTopCons;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *autoWayTitleLabelTopCons;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *autoWayTopCons;
 
 @end
 
@@ -53,9 +63,17 @@
 }
 
 - (void)setupGUI {
-    self.title = @"添加设备";
-    self.scanDescriptionLabel.text = @"1、V35设备；\n2、设备不支持自动获取UUID方式；\n3、添加分享设备";
-    self.autoDescriptionLabel.text = @"1、设备支持自动获取UUID方式";
+    self.title = NSLocalizedString(@"kAddDevice", nil);
+    self.scanDescriptionLabel.text = NSLocalizedString(@"kScanQRCodeAddDeviceDescription", nil);
+    self.autoDescriptionLabel.text = NSLocalizedString(@"kAutoWayAddDeviceDescription", nil);
+    self.scanQRCodeTitleLabel.text = NSLocalizedString(@"kUseScanQRCodeWayDescription", nil);
+    self.autoWayTitleLabel.text = NSLocalizedString(@"kUseAutoWayDescription", nil);
+    [self.scanQRCodeWayBtn setTitle:NSLocalizedString(@"kScanQRCodeWayButtonTitle", nil) forState:UIControlStateNormal];
+    [self.autoWayBtn setTitle:NSLocalizedString(@"kAutoWayButtonTitle", nil) forState:UIControlStateNormal];
+
+    self.scanQRCodeTopCons.constant = kScanQRCodeTopDefaultHeight * kScreenHeightScale;
+    self.autoWayTitleLabelTopCons.constant = kScanQRCodeBottomDefaultHeight * kScreenHeightScale;
+    self.autoWayTopCons.constant = kScanQRCodeTopDefaultHeight * kScreenHeightScale;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(closeAction) isBack:NO];
 }

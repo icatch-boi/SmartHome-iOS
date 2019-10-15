@@ -536,3 +536,15 @@
 "kFaceDataUpdateDescription" = "帳戶中人臉數據有更新，是否要同步到設備？";
 "kNotSync" = "不同步";
 "kSync" = "同步";
+
+"kDeviceAlreadyRegistered" = "該設備已被自己註冊過，設備名稱: %@";
+"kDeviceAlreadySubscribed" = "該設備已訂閱過，設備名稱: %@";
+"kSetDeviceNameFailedDescription" = "設置設備名稱失敗，需要重新嘗試嗎？";
+"kScanQRCodeAddDeviceDescription" = "1、V35設備；\n2、設備不支持自動獲取UUID方式；\n3、添加分享設備";
+"kAutoWayAddDeviceDescription" = "1、設備支持自動獲取UUID方式";
+"kModifyWiFi" = "修改Wi-Fi";
+"kDeleteDevice" = "刪除設備";
+"kUseScanQRCodeWayDescription" = "使用掃描二維碼方式添加設備的情況如下：";
+"kScanQRCodeWayButtonTitle" = "掃描二維碼方式";
+"kUseAutoWayDescription" = "使用自動獲取UUID方式添加設備的情況如下：";
+"kAutoWayButtonTitle" = "自動獲取UUID方式";
