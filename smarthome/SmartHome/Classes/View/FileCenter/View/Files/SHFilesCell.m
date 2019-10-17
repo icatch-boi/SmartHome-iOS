@@ -31,8 +31,10 @@
     // Configure the view for the selected state
 }
 
-- (void)setDateString:(NSString *)dateString {
-    self.deviceNameLabel.text = dateString;
+- (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
+    _dateFileInfo = dateFileInfo;
+    
+    self.deviceNameLabel.text = dateFileInfo.dateString;
 }
 
 @end

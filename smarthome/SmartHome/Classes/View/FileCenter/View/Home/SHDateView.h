@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SHDateFileInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,10 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SHDateView : UIView
 
 @property (nonatomic, assign) CGFloat scale;
+@property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
 
 @property (nonatomic, weak) id<SHDateViewDelete> delegate;
 
-+ (instancetype)dateViewWithTitle:(NSString *)title;
++ (instancetype)dateViewWithTitle:(NSString * _Nullable)title;
 
 @end
 

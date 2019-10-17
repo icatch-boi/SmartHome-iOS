@@ -23,6 +23,7 @@
 		38113ED623580DEF005677B0 /* SHFilesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113ECE23580DEE005677B0 /* SHFilesCell.m */; };
 		38113ED723580DEF005677B0 /* Files.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38113ECF23580DEE005677B0 /* Files.storyboard */; };
 		38113ED923580DFF005677B0 /* FileCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38113ED823580DFF005677B0 /* FileCenter.storyboard */; };
+		38113EDD23583855005677B0 /* SHDateFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EDC23583855005677B0 /* SHDateFileInfo.m */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
@@ -479,6 +480,8 @@
 		38113ECE23580DEE005677B0 /* SHFilesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHFilesCell.m; sourceTree = "<group>"; };
 		38113ECF23580DEE005677B0 /* Files.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Files.storyboard; sourceTree = "<group>"; };
 		38113ED823580DFF005677B0 /* FileCenter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FileCenter.storyboard; sourceTree = "<group>"; };
+		38113EDB23583855005677B0 /* SHDateFileInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDateFileInfo.h; sourceTree = "<group>"; };
+		38113EDC23583855005677B0 /* SHDateFileInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDateFileInfo.m; sourceTree = "<group>"; };
 		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
@@ -1303,6 +1306,7 @@
 		38113EC023580DEE005677B0 /* FileCenter */ = {
 			isa = PBXGroup;
 			children = (
+				38113EDA235837F9005677B0 /* Model */,
 				38113EC123580DEE005677B0 /* View */,
 			);
 			path = FileCenter;
@@ -1327,8 +1331,8 @@
 				38113EC723580DEE005677B0 /* SHDateView.h */,
 				38113EC323580DEE005677B0 /* SHDateView.m */,
 				38113EC423580DEE005677B0 /* SHDateView.xib */,
-				38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */,
 				38113EC523580DEE005677B0 /* SHFileCenterHomeCell.h */,
+				38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1342,6 +1346,15 @@
 				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
 			);
 			path = Files;
+			sourceTree = "<group>";
+		};
+		38113EDA235837F9005677B0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				38113EDB23583855005677B0 /* SHDateFileInfo.h */,
+				38113EDC23583855005677B0 /* SHDateFileInfo.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		3818D66321709A8C00AF846C /* PushTest */ = {
@@ -3884,6 +3897,7 @@
 				386FAFD720AFC1FE007655CF /* SHLoginViewController.m in Sources */,
 				38E5C33020A40F49003004E0 /* SHSettingData.m in Sources */,
 				38E5C28D20A3F698003004E0 /* SHLocalWithRemoteHelper.m in Sources */,
+				38113EDD23583855005677B0 /* SHDateFileInfo.m in Sources */,
 				38E5C26620A3F66D003004E0 /* SHDatabase.m in Sources */,
 				3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */,
 				3818D69021709BA100AF846C /* XYChartItem.m in Sources */,

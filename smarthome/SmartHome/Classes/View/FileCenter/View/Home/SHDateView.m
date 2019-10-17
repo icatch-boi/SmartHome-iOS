@@ -20,7 +20,7 @@
 
 @implementation SHDateView
 
-+ (instancetype)dateViewWithTitle:(NSString *)title {
++ (instancetype)dateViewWithTitle:(NSString * _Nullable)title {
     UINib *nib = [UINib nibWithNibName:NSStringFromClass([self class]) bundle:nil];
     
     SHDateView *view = [nib instantiateWithOwner:nil options:nil][0];
@@ -42,6 +42,14 @@
     
     self.dateButton.transform = CGAffineTransformMakeScale(max * scale + 1, max * scale + 1);
     [self.dateButton setTitleColor:[UIColor colorWithRed:scale green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+}
+
+- (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
+    _dateFileInfo = dateFileInfo;
+    
+    NSArray *temp = [dateFileInfo.dateString componentsSeparatedByString:@"/"];
+    [self.dateButton setTitle:temp.lastObject forState:UIControlStateNormal];
+    self.existView.backgroundColor = dateFileInfo.exist ? [UIColor ic_colorWithHex:kThemeColor] : [UIColor lightGrayColor];
 }
 
 - (IBAction)dateButtonClick:(id)sender {

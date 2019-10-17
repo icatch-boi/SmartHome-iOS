@@ -33,8 +33,10 @@
     self.filesController.view.frame = self.bounds;
 }
 
-- (void)setDateString:(NSString *)dateString {
-    self.filesController.dateString = dateString;
+- (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
+    _dateFileInfo = dateFileInfo;
+    
+    self.filesController.dateFileInfo = dateFileInfo;
 }
 
 @end

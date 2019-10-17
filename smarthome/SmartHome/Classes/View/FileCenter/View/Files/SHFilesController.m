@@ -50,8 +50,8 @@
     return rowH;
 }
 
-- (void)setDateString:(NSString *)dateString {
-    _dateString = dateString;
+- (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
+    _dateFileInfo = dateFileInfo;
     
     [self.tableView reloadData];
 }
@@ -65,7 +65,7 @@
     SHFilesCell *cell = [tableView dequeueReusableCellWithIdentifier:@"files" forIndexPath:indexPath];
     
     // Configure the cell...
-    cell.dateString = self.dateString;
+    cell.dateFileInfo = self.dateFileInfo;
     
     return cell;
 }

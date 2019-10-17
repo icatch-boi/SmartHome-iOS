@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SHDateFileInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SHFilesCell : UITableViewCell
 
-@property (nonatomic, copy) NSString *dateString;
+@property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
 
 @end
 

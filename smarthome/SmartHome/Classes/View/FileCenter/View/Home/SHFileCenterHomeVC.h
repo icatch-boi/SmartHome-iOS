@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHFileCenterHomeVC : UIViewController
 
-+ (instancetype)fileCenterHomeVC;
++ (UINavigationController *)fileCenterHomeVCWithDeviceID:(NSString *)deviceID;
 
 @end
 

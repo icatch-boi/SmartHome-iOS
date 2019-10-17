@@ -9,34 +9,36 @@
 #import "SHFileCenterHomeVC.h"
 #import "SHDateView.h"
 #import "SHFileCenterHomeCell.h"
+#import "SHDateFileInfo.h"
+#import "SHENetworkManagerCommon.h"
+
+static const NSUInteger kShowDays = 8;
 
 @interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete>
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 
-@property (nonatomic, strong) NSArray *dates;
+@property (nonatomic, strong) NSArray *dateFileInfos;
 
 @property (nonatomic, assign) int currentIndex;
+
+@property (nonatomic, copy) NSString *deviceID;
 
 @end
 
 @implementation SHFileCenterHomeVC
 
-+ (instancetype)fileCenterHomeVC {
++ (UINavigationController *)fileCenterHomeVCWithDeviceID:(NSString *)deviceID {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"FileCenter" bundle:nil];
+    UINavigationController *nav = [sb instantiateInitialViewController];
     
-    return [sb instantiateInitialViewController];
-}
-
-- (NSArray *)dates {
-    if (_dates == nil) {
-        _dates = @[@"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18"
-                  ];
-    }
+    SHFileCenterHomeVC *vc = (SHFileCenterHomeVC *)nav.topViewController;
+    vc.deviceID = deviceID;
     
-    return _dates;
+    return nav;
 }
 
 - (void)viewDidLoad {
@@ -44,9 +46,11 @@
     // Do any additional setup after loading the view.
     
     [self setupGUI];
-    [self loadDays];
+    NSDate *date = [@"2019/10/01" convertToDateWithFormat:@"yyyy/MM/dd"];
+    [self loadDateFileInfoWithDate:date];
 }
 
+#pragma mark - GUI
 - (void)setupGUI {
     self.flowLayout.itemSize = self.collectionView.bounds.size;
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -56,10 +60,12 @@
     self.collectionView.pagingEnabled = YES;
     self.collectionView.bounces = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
+    
+    [self loadDateView];
 }
 
 // 在导航控制器中如果出现了 scrollview，会自动加上64的偏移
-- (void)loadDays {
+- (void)loadDateView {
     // 不让控制器自动生成64的偏移
 //    self.automaticallyAdjustsScrollViewInsets = NO;
 //    self.scrollView.contentInsetAdjustmentBehavior = NO;
@@ -67,10 +73,10 @@
     CGFloat marginX = 0;
     CGFloat x = marginX;
     CGFloat h = CGRectGetHeight(self.scrollView.frame);
-    CGFloat w = (CGRectGetWidth(self.scrollView.frame) - marginX * self.dates.count) / self.dates.count;
+    CGFloat w = (CGRectGetWidth(self.scrollView.frame) - marginX * kShowDays) / kShowDays;
     
-    for (NSString *temp in self.dates) {
-        SHDateView *dateView = [SHDateView dateViewWithTitle:temp];
+    for (int i = 0; i < kShowDays; i++) {
+        SHDateView *dateView = [SHDateView dateViewWithTitle:nil];
         dateView.delegate = self;
         
         [self.scrollView addSubview:dateView];
@@ -94,19 +100,88 @@
     self.flowLayout.itemSize = self.collectionView.bounds.size;
 }
 
+- (void)updateTitle:(NSDate *)date {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _titleLabel.text = [self createTitleWithDate:date];
+    });
+}
+
+#pragma mark - Load Data
+- (void)loadDateFileInfoWithDate:(NSDate *)date {
+    NSDictionary<NSString *, NSNumber *> *dict = [[SHENetworkManager sharedManager] getFilesStorageInfoWithDeviceID:_deviceID queryDate:date days:kShowDays];
+    
+    NSMutableArray<SHDateFileInfo *> *dateFileInfos = [NSMutableArray arrayWithCapacity:dict.count];
+    [dict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
+        SHDateFileInfo *info = [[SHDateFileInfo alloc] init];
+        info.dateString = key;
+        info.exist = [obj boolValue];
+        [dateFileInfos addObject:info];
+    }];
+    
+    SHLogInfo(SHLogTagAPP, @"Before: %@", dateFileInfos);
+    
+    [dateFileInfos sortUsingComparator:^NSComparisonResult(SHDateFileInfo *  _Nonnull obj1, SHDateFileInfo *  _Nonnull obj2) {
+        return [obj1.dateString compare:obj2.dateString];
+    }];
+    
+    SHLogInfo(SHLogTagAPP, @"After: %@", dateFileInfos);
+    
+    self.dateFileInfos = dateFileInfos;
+    [self updateTitle:date];
+}
+
+- (void)setDateFileInfos:(NSArray *)dateFileInfos {
+    _dateFileInfos = dateFileInfos;
+    
+    [self.collectionView reloadData];
+    [self updateDateFileInfoData];
+}
+
+- (void)updateDateFileInfoData {
+    [self.dateFileInfos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIView *view = self.scrollView.subviews[idx];
+        if ([view isKindOfClass:[SHDateView class]]) {
+            SHDateView *dateView = (SHDateView *)view;
+            dateView.dateFileInfo = obj;
+        }
+    }];
+}
+
+- (NSString *)createTitleWithDate:(NSDate *)curDate {
+    NSString *curMonth = [curDate convertToStringWithFormat:@"MM"];
+    NSString *titleString = [NSString stringWithFormat:@"%@", [[SHCamStaticData instance] monthStringDict][curMonth]];
+    
+    BOOL done = NO;
+    for (int i = 0; i < kShowDays; i++) {
+        //单位为秒
+        NSDate *date = [NSDate dateWithTimeInterval:-24 * 60 * 60 * i sinceDate:curDate];
+        
+        NSString *month = [date convertToStringWithFormat:@"MM"];
+        if (![month isEqualToString:curMonth]) {
+            if (!done) {
+                //夸月处理
+                titleString = [NSString stringWithFormat:@"%@/%@", [[SHCamStaticData instance] monthStringDict][month], [[SHCamStaticData instance] monthStringDict][curMonth]];
+                done = YES;
+            }
+        }
+    }
+    
+    return titleString;
+}
+
 - (IBAction)returnBackAction:(id)sender {
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UICollectonViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.dates.count;
+    return self.dateFileInfos.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SHFileCenterHomeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"files" forIndexPath:indexPath];
     
-    cell.dateString = self.dates[indexPath.row];
+    cell.dateFileInfo = self.dateFileInfos[indexPath.row];
     
     return cell;
 }
