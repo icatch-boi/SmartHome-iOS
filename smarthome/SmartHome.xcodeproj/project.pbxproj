@@ -15,6 +15,14 @@
 		380770B91FDA2DED006E7B92 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 380770B81FDA2DEC006E7B92 /* Bugly.framework */; };
 		38080EFD21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */; };
 		3810273B20622E4200B0B806 /* XJMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3810273A20622E4200B0B806 /* XJMain.storyboard */; };
+		38113ED123580DEF005677B0 /* SHDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EC323580DEE005677B0 /* SHDateView.m */; };
+		38113ED223580DEF005677B0 /* SHDateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38113EC423580DEE005677B0 /* SHDateView.xib */; };
+		38113ED323580DEF005677B0 /* SHFileCenterHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EC623580DEE005677B0 /* SHFileCenterHomeVC.m */; };
+		38113ED423580DEF005677B0 /* SHFileCenterHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */; };
+		38113ED523580DEF005677B0 /* SHFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113ECD23580DEE005677B0 /* SHFilesController.m */; };
+		38113ED623580DEF005677B0 /* SHFilesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113ECE23580DEE005677B0 /* SHFilesCell.m */; };
+		38113ED723580DEF005677B0 /* Files.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38113ECF23580DEE005677B0 /* Files.storyboard */; };
+		38113ED923580DFF005677B0 /* FileCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38113ED823580DFF005677B0 /* FileCenter.storyboard */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
@@ -458,6 +466,19 @@
 		38080EFC21E320C500676B5F /* SHNetworkManager+SHFaceHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHFaceHandle.m"; sourceTree = "<group>"; };
 		3809230020B7DAC0002E502B /* LoginCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginCommonHeader.h; sourceTree = "<group>"; };
 		3810273A20622E4200B0B806 /* XJMain.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = XJMain.storyboard; sourceTree = "<group>"; };
+		38113EC323580DEE005677B0 /* SHDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHDateView.m; sourceTree = "<group>"; };
+		38113EC423580DEE005677B0 /* SHDateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SHDateView.xib; sourceTree = "<group>"; };
+		38113EC523580DEE005677B0 /* SHFileCenterHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHFileCenterHomeCell.h; sourceTree = "<group>"; };
+		38113EC623580DEE005677B0 /* SHFileCenterHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHFileCenterHomeVC.m; sourceTree = "<group>"; };
+		38113EC723580DEE005677B0 /* SHDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHDateView.h; sourceTree = "<group>"; };
+		38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHFileCenterHomeCell.m; sourceTree = "<group>"; };
+		38113EC923580DEE005677B0 /* SHFileCenterHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHFileCenterHomeVC.h; sourceTree = "<group>"; };
+		38113ECB23580DEE005677B0 /* SHFilesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHFilesController.h; sourceTree = "<group>"; };
+		38113ECC23580DEE005677B0 /* SHFilesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHFilesCell.h; sourceTree = "<group>"; };
+		38113ECD23580DEE005677B0 /* SHFilesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHFilesController.m; sourceTree = "<group>"; };
+		38113ECE23580DEE005677B0 /* SHFilesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHFilesCell.m; sourceTree = "<group>"; };
+		38113ECF23580DEE005677B0 /* Files.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Files.storyboard; sourceTree = "<group>"; };
+		38113ED823580DFF005677B0 /* FileCenter.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FileCenter.storyboard; sourceTree = "<group>"; };
 		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
@@ -1277,6 +1298,50 @@
 				7611601B8D29426A9F8A8AA4 /* Pods-SmartHomeUITests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		38113EC023580DEE005677B0 /* FileCenter */ = {
+			isa = PBXGroup;
+			children = (
+				38113EC123580DEE005677B0 /* View */,
+			);
+			path = FileCenter;
+			sourceTree = "<group>";
+		};
+		38113EC123580DEE005677B0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				38113EC223580DEE005677B0 /* Home */,
+				38113ECA23580DEE005677B0 /* Files */,
+				38113ECF23580DEE005677B0 /* Files.storyboard */,
+				38113ED823580DFF005677B0 /* FileCenter.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		38113EC223580DEE005677B0 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				38113EC923580DEE005677B0 /* SHFileCenterHomeVC.h */,
+				38113EC623580DEE005677B0 /* SHFileCenterHomeVC.m */,
+				38113EC723580DEE005677B0 /* SHDateView.h */,
+				38113EC323580DEE005677B0 /* SHDateView.m */,
+				38113EC423580DEE005677B0 /* SHDateView.xib */,
+				38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */,
+				38113EC523580DEE005677B0 /* SHFileCenterHomeCell.h */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		38113ECA23580DEE005677B0 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				38113ECB23580DEE005677B0 /* SHFilesController.h */,
+				38113ECD23580DEE005677B0 /* SHFilesController.m */,
+				38113ECC23580DEE005677B0 /* SHFilesCell.h */,
+				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
+			);
+			path = Files;
 			sourceTree = "<group>";
 		};
 		3818D66321709A8C00AF846C /* PushTest */ = {
@@ -2259,6 +2324,7 @@
 		38E5BFE620A3F5AE003004E0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38113EC023580DEE005677B0 /* FileCenter */,
 				38F30F4B23385975004F25E6 /* MessageCenter */,
 				38BB262C21DF08AB00270CE1 /* FaceRecognition */,
 				38E5C07620A3F5AE003004E0 /* UserAccount */,
@@ -3409,10 +3475,13 @@
 				389C29FA1F2EEAF5004C4806 /* Localizable.strings in Resources */,
 				38A38FA822C0CE7100E831E3 /* AccountSettingItems.json in Resources */,
 				38E5C3D420A419E0003004E0 /* AccountTableViewCell.xib in Resources */,
+				38113ED923580DFF005677B0 /* FileCenter.storyboard in Resources */,
 				3897E0C42180743100E72417 /* XJSetupScanTipsView.xib in Resources */,
 				38F30F6523385975004F25E6 /* MessageCenter.storyboard in Resources */,
+				38113ED723580DEF005677B0 /* Files.storyboard in Resources */,
 				38E5C38220A417AD003004E0 /* Album.storyboard in Resources */,
 				38E5C1C620A3F5AF003004E0 /* DeleteCameraCell.xib in Resources */,
+				38113ED223580DEF005677B0 /* SHDateView.xib in Resources */,
 				384A198222115B82003D3042 /* SHWCServerView.xib in Resources */,
 				389C29FE1F2EEB65004C4806 /* Assets.xcassets in Resources */,
 				38F525C71F2F04F000F5A5A2 /* MWPhotoBrowser.bundle in Resources */,
@@ -3717,6 +3786,7 @@
 				388CCA6822CCADFE00FC8909 /* SHAddDeviceView.m in Sources */,
 				38E5C15D20A3F5AF003004E0 /* SHLocalAlbumCell.m in Sources */,
 				3897E0C32180743100E72417 /* XJSetupScanTipsView.m in Sources */,
+				38113ED123580DEF005677B0 /* SHDateView.m in Sources */,
 				3818D68E21709BA100AF846C /* XYLineChart.m in Sources */,
 				38BB265121DF08EE00270CE1 /* ZJRequestError.m in Sources */,
 				38D867CF21A803B700AB6FB2 /* SHNetworkRequestErrorDes.m in Sources */,
@@ -3762,6 +3832,7 @@
 				38E5C2FB20A3F80B003004E0 /* SHFileDownloadTVC.m in Sources */,
 				384BBE4720C13A900047E152 /* UIImage+ZJPhotoBrowser.m in Sources */,
 				38BB265921DF08EE00270CE1 /* FRDFaceDisplayVC.m in Sources */,
+				38113ED623580DEF005677B0 /* SHFilesCell.m in Sources */,
 				38D857D2234DDB210087926F /* SHSetupHomeViewController.m in Sources */,
 				38E5C15320A3F5AF003004E0 /* SHPortraitNavVC.m in Sources */,
 				38F30F962338CD4B004F25E6 /* SHDeviceAuthenticatedIdentityProvider.m in Sources */,
@@ -3787,6 +3858,7 @@
 				38EC863F2303EF6E00624C10 /* ZJImageCoderHelper.m in Sources */,
 				38A38FA722C0CE7100E831E3 /* SHAccountSettingViewModelItem.m in Sources */,
 				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,
+				38113ED423580DEF005677B0 /* SHFileCenterHomeCell.m in Sources */,
 				38E5C1B620A3F5AF003004E0 /* SH_XJ_SettingDetailTVC.m in Sources */,
 				38757838223A2A4B006A4052 /* SHProgressView.m in Sources */,
 				389C29F01F2EEA5D004C4806 /* AppDelegate.m in Sources */,
@@ -3803,6 +3875,7 @@
 				38BB266E21DF5E2900270CE1 /* FRDFaceData.m in Sources */,
 				38F30F5F23385975004F25E6 /* SHMessageListViewModel.m in Sources */,
 				38E5C14D20A3F5AF003004E0 /* SHHomeTableViewController.m in Sources */,
+				38113ED523580DEF005677B0 /* SHFilesController.m in Sources */,
 				38F30F7023385EFD004F25E6 /* UIImageView+ZJWebCache.m in Sources */,
 				3818D69A21709C6C00AF846C /* SHPushTestViewController.m in Sources */,
 				38E5C37E20A41027003004E0 /* SHCameraHelper.m in Sources */,
@@ -3815,6 +3888,7 @@
 				3818D68C21709BA100AF846C /* XYLineItemView.m in Sources */,
 				3818D69021709BA100AF846C /* XYChartItem.m in Sources */,
 				38BFB26C22D85EE800AA3ABC /* LivenessViewController.m in Sources */,
+				38113ED323580DEF005677B0 /* SHFileCenterHomeVC.m in Sources */,
 				38E5C20C20A3F610003004E0 /* SHAudioUnitRecord.m in Sources */,
 				38E5C2FA20A3F80B003004E0 /* VideoPlaybackSlideController.m in Sources */,
 				384BBE4820C13A900047E152 /* ZJGridCell.m in Sources */,
