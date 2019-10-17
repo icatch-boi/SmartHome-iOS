@@ -1,4 +1,4 @@
-// SHDateFileInfo.h
+// SHFileInfoViewModel.h
 
 /**************************************************************************
  *
@@ -22,19 +22,22 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/17 1:49 PM.
+ // Created by zj on 2019/10/17 3:43 PM.
     
 
 #import <Foundation/Foundation.h>
+#import "SHDateFileInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHDateFileInfo : NSObject
+@interface SHFileInfoViewModel : NSObject
 
-@property (nonatomic, copy) NSString *dateString;
-@property (nonatomic, assign) BOOL exist;
-@property (nonatomic, copy) NSString *deviceID;
-@property (nonatomic, strong) NSDate *date;
+- (instancetype)initWithDeviceID:(NSString *)deviceID;
+- (instancetype)init NS_UNAVAILABLE;
+
++ (instancetype)fileInfoViewModelWithDeviceID:(NSString *)deviceID;
+
+- (void)loadDateFileInfoWithDate:(NSDate *)date completion:(void (^)(NSArray<SHDateFileInfo *> *dateFileInfos))completion;
 
 @end
 

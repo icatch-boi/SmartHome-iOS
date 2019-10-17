@@ -8,22 +8,15 @@
 
 #import "SHFilesController.h"
 #import "SHFilesCell.h"
+#import "SHENetworkManagerCommon.h"
 
 @interface SHFilesController ()
 
-@property (nonatomic, strong) NSArray *filesList;
+@property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
 
 @end
 
 @implementation SHFilesController
-
-- (NSArray *)filesList {
-    if (_filesList == nil) {
-        _filesList = @[@"1", @"2"];
-    }
-    
-    return _filesList;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,7 +46,20 @@
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
     _dateFileInfo = dateFileInfo;
     
-    [self.tableView reloadData];
+    self.filesList = nil;
+    
+    WEAK_SELF(self);
+    [[SHENetworkManager sharedManager] listFilesWithDeviceID:dateFileInfo.deviceID queryDate:dateFileInfo.date startKey:nil number:0 completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
+        weakself.filesList = filesInfo;
+    }];
+}
+
+- (void)setFilesList:(NSArray<SHS3FileInfo *> *)filesList {
+    _filesList = filesList;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - Table view data source
@@ -66,6 +72,7 @@
     
     // Configure the cell...
     cell.dateFileInfo = self.dateFileInfo;
+    cell.fileInfo = self.filesList[indexPath.row];
     
     return cell;
 }

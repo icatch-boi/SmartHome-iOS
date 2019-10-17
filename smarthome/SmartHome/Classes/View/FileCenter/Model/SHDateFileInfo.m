@@ -34,4 +34,10 @@
     return [NSString stringWithFormat:@"%@", self.dateString];
 }
 
+- (void)setDateString:(NSString *)dateString {
+    _dateString = dateString;
+    
+    _date = [dateString convertToDateWithFormat:@"yyyy/MM/dd"];
+}
+
 @end

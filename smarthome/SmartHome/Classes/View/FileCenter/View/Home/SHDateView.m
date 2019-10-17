@@ -36,6 +36,12 @@
     return view;
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    [_existView setCornerWithRadius:CGRectGetWidth(_existView.bounds) * 0.5];
+}
+
 // 根据比例改变文字的大小
 - (void)setScale:(CGFloat)scale {
     CGFloat max = kBIGFONT * 1.0 / kSMALLFONT - 1;

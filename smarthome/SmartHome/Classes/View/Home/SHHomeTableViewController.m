@@ -49,6 +49,7 @@
 #import "SHSetupHomeViewController.h"
 #import "XJSetupWiFiVC.h"
 #import "PopMenuView.h"
+#import "SHFileCenterHomeVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -459,12 +460,17 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
+#if 0
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
     tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
 
     [self.navigationController pushViewController:tvc animated:YES];
+#else
+    UINavigationController *vc = [SHFileCenterHomeVC fileCenterHomeVCWithDeviceID:cell.viewModel.cameraObj.camera.id];
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
+#endif
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {

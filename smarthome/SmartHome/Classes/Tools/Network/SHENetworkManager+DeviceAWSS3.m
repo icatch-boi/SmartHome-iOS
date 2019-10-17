@@ -649,6 +649,14 @@ typedef enum : NSUInteger {
         if (error == nil) {
             NSArray<AWSS3Object *> *contents = result.contents;
             
+            if (contents == nil) {
+                if (completion) {
+                    completion(nil);
+                }
+                
+                return;
+            }
+            
             [weakself getFilesInfoWithDeviceID:deviceID fileContents:contents completion:completion];
         } else {
             SHLogError(SHLogTagAPP, @"List files failed, error: %@", error);

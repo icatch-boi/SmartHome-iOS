@@ -1,4 +1,4 @@
-// SHDateFileInfo.h
+// SHFileCenterCommon.h
 
 /**************************************************************************
  *
@@ -22,20 +22,12 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/17 1:49 PM.
+ // Created by zj on 2019/10/17 4:40 PM.
     
 
-#import <Foundation/Foundation.h>
+#ifndef SHFileCenterCommon_h
+#define SHFileCenterCommon_h
 
-NS_ASSUME_NONNULL_BEGIN
+static const NSUInteger kFileCenterShowDays = 8;
 
-@interface SHDateFileInfo : NSObject
-
-@property (nonatomic, copy) NSString *dateString;
-@property (nonatomic, assign) BOOL exist;
-@property (nonatomic, copy) NSString *deviceID;
-@property (nonatomic, strong) NSDate *date;
-
-@end
-
-NS_ASSUME_NONNULL_END
+#endif /* SHFileCenterCommon_h */

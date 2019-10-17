@@ -37,4 +37,39 @@
     self.deviceNameLabel.text = dateFileInfo.dateString;
 }
 
+- (void)setFileInfo:(SHS3FileInfo *)fileInfo {
+    _fileInfo = fileInfo;
+    
+    _recodTimeLabel.text = fileInfo.datetime;
+    _lengthLabel.text = fileInfo.duration;
+    _recodTypeLabel.text = [self translateMonitorType:fileInfo.monitor.intValue];
+}
+
+- (NSString *)translateMonitorType:(int)type {
+    NSString *str = nil;
+    
+    switch (type) {
+        case ICH_FILE_MONITOR_TYPE_ALL:
+            break;
+        case ICH_FILE_MONITOR_TYPE_AUDIO:
+            break;
+        case ICH_FILE_MONITOR_TYPE_MANUALLY:
+            str = NSLocalizedString(@"kMonitorTypeManually", nil);
+            break;
+        case ICH_FILE_MONITOR_TYPE_PIR:
+            str = NSLocalizedString(@"kMonitorTypePir", nil);
+            break;
+        case ICH_FILE_MONITOR_TYPE_RING:
+            str = NSLocalizedString(@"kMonitorTypeRing", nil);
+            break;
+        case ICH_FILE_MONITOR_TYPE_UNKNOWN:
+            break;
+            
+        default:
+            break;
+    }
+    
+    return str;
+}
+
 @end
