@@ -82,7 +82,7 @@
         
         [self.scrollView addSubview:dateView];
         
-        dateView.frame = CGRectMake(x, 0, MAX(w, dateView.bounds.size.width), h);
+        dateView.frame = CGRectMake(x, 0, MAX(w, kDateViewMinWidth /*dateView.bounds.size.width*/), h);
         x += dateView.bounds.size.width + marginX;
     }
     

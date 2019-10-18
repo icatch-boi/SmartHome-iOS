@@ -764,7 +764,7 @@ typedef enum : NSUInteger {
     [contents enumerateObjectsUsingBlock:^(AWSS3Object * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *tempKey = obj.key;
 
-        if ([tempKey hasPrefix:videoKeyHeader]) {
+        if (![tempKey isEqualToString:key] && [tempKey hasPrefix:videoKeyHeader]) {
             videoKey = tempKey;
             *stop = YES;
         }

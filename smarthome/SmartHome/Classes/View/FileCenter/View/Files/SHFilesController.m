@@ -8,11 +8,13 @@
 
 #import "SHFilesController.h"
 #import "SHFilesCell.h"
-#import "SHENetworkManagerCommon.h"
+#import "SHFilesViewModel.h"
+#import "SVProgressHUD.h"
 
 @interface SHFilesController ()
 
 @property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
+@property (nonatomic, strong) SHFilesViewModel *filesViewModel;
 
 @end
 
@@ -27,20 +29,8 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 //    self.view.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1.0];
-    self.tableView.rowHeight = [self calcRowHeight];
+    self.tableView.rowHeight = [SHFilesViewModel filesCellRowHeight];
     self.tableView.tableFooterView = [[UIView alloc] init];
-}
-
-- (CGFloat)calcRowHeight {
-    CGFloat screenW = [[UIScreen mainScreen] bounds].size.width;
-    NSInteger space = 4;
-    
-    CGFloat imgViewW = screenW  * 0.4;
-    CGFloat imgViewH = imgViewW * 9 / 16;
-    
-    CGFloat rowH = imgViewH + space * 2;
-    
-    return rowH;
 }
 
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
@@ -48,8 +38,13 @@
     
     self.filesList = nil;
     
+    [SVProgressHUD showWithStatus:nil];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    
     WEAK_SELF(self);
-    [[SHENetworkManager sharedManager] listFilesWithDeviceID:dateFileInfo.deviceID queryDate:dateFileInfo.date startKey:nil number:0 completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
+    [self.filesViewModel listFilesWithDeviceID:dateFileInfo.deviceID date:dateFileInfo.date completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
+        [SVProgressHUD dismiss];
+        
         weakself.filesList = filesInfo;
     }];
 }
@@ -80,6 +75,15 @@
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"didSelectRowAtIndexPath");
+}
+
+#pragma mark - Init
+- (SHFilesViewModel *)filesViewModel {
+    if (_filesViewModel == nil) {
+        _filesViewModel = [[SHFilesViewModel alloc] init];
+    }
+    
+    return _filesViewModel;
 }
 
 @end

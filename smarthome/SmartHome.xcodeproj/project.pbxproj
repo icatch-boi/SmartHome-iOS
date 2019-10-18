@@ -25,6 +25,7 @@
 		38113ED923580DFF005677B0 /* FileCenter.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38113ED823580DFF005677B0 /* FileCenter.storyboard */; };
 		38113EDD23583855005677B0 /* SHDateFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EDC23583855005677B0 /* SHDateFileInfo.m */; };
 		38113EE12358531C005677B0 /* SHFileInfoViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EE02358531C005677B0 /* SHFileInfoViewModel.m */; };
+		38113EE523588EBF005677B0 /* SHFilesViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 38113EE423588EBF005677B0 /* SHFilesViewModel.m */; };
 		3814BECA2178276700A13148 /* Resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3814BEC92178276700A13148 /* Resource.bundle */; };
 		3818D662217074A700AF846C /* SHNetworkManager+SHPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */; };
 		3818D66521709AB200AF846C /* PushTest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3818D66421709AB200AF846C /* PushTest.storyboard */; };
@@ -486,6 +487,8 @@
 		38113EDF2358531C005677B0 /* SHFileInfoViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFileInfoViewModel.h; sourceTree = "<group>"; };
 		38113EE02358531C005677B0 /* SHFileInfoViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFileInfoViewModel.m; sourceTree = "<group>"; };
 		38113EE223586075005677B0 /* SHFileCenterCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFileCenterCommon.h; sourceTree = "<group>"; };
+		38113EE323588EBF005677B0 /* SHFilesViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFilesViewModel.h; sourceTree = "<group>"; };
+		38113EE423588EBF005677B0 /* SHFilesViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFilesViewModel.m; sourceTree = "<group>"; };
 		3814BEC92178276700A13148 /* Resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resource.bundle; sourceTree = SOURCE_ROOT; };
 		3818D660217074A700AF846C /* SHNetworkManager+SHPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SHNetworkManager+SHPush.h"; sourceTree = "<group>"; };
 		3818D661217074A700AF846C /* SHNetworkManager+SHPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SHNetworkManager+SHPush.m"; sourceTree = "<group>"; };
@@ -1368,6 +1371,8 @@
 			children = (
 				38113EDF2358531C005677B0 /* SHFileInfoViewModel.h */,
 				38113EE02358531C005677B0 /* SHFileInfoViewModel.m */,
+				38113EE323588EBF005677B0 /* SHFilesViewModel.h */,
+				38113EE423588EBF005677B0 /* SHFilesViewModel.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -3951,6 +3956,7 @@
 				38AAE01F2202C78E009B37F8 /* SHWechatServerVC.m in Sources */,
 				38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */,
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
+				38113EE523588EBF005677B0 /* SHFilesViewModel.m in Sources */,
 				38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */,
 				38757834223A27F5006A4052 /* SHDeviceUpgradeVC.m in Sources */,
 			);

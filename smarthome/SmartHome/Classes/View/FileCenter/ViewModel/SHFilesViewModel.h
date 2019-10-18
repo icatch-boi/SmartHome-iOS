@@ -1,4 +1,4 @@
-// SHFileCenterCommon.h
+// SHFilesViewModel.h
 
 /**************************************************************************
  *
@@ -22,13 +22,20 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/17 4:40 PM.
+ // Created by zj on 2019/10/17 7:57 PM.
     
 
-#ifndef SHFileCenterCommon_h
-#define SHFileCenterCommon_h
+#import <Foundation/Foundation.h>
+#import "SHS3FileInfo.h"
 
-static const NSUInteger kFileCenterShowDays = 8;
-static const CGFloat kDateViewMinWidth = 60;
+NS_ASSUME_NONNULL_BEGIN
 
-#endif /* SHFileCenterCommon_h */
+@interface SHFilesViewModel : NSObject
+
+- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
+
++ (CGFloat)filesCellRowHeight;
+
+@end
+
+NS_ASSUME_NONNULL_END

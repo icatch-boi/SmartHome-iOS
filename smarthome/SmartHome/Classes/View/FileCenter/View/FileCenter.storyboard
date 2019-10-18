@@ -36,6 +36,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mm4-vR-NkX">
+                                <rect key="frame" x="160" y="82" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNa-LP-TnA">
+                                <rect key="frame" x="264" y="64" width="36" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="MnI-iW-Y2h"/>
+                                    <constraint firstAttribute="width" constant="36" id="mMx-Me-AIV"/>
+                                </constraints>
+                                <state key="normal" image="ic_calendar_red_36dp"/>
+                                <connections>
+                                    <action selector="calendarClickAction:" destination="LJi-aC-dYB" eventType="touchUpInside" id="hYB-a5-B3T"/>
+                                </connections>
+                            </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lgF-nO-Mvy">
                                 <rect key="frame" x="0.0" y="100" width="320" height="48"/>
                                 <constraints>
@@ -43,7 +60,7 @@
                                 </constraints>
                             </scrollView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TFk-a2-FOv">
-                                <rect key="frame" x="0.0" y="148" width="320" height="420"/>
+                                <rect key="frame" x="0.0" y="152" width="320" height="416"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="CPg-cY-ajf">
                                     <size key="itemSize" width="50" height="50"/>
@@ -66,34 +83,27 @@
                                     <outlet property="delegate" destination="LJi-aC-dYB" id="YiX-YY-rs0"/>
                                 </connections>
                             </collectionView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mm4-vR-NkX">
-                                <rect key="frame" x="160" y="82" width="0.0" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNa-LP-TnA">
-                                <rect key="frame" x="264" y="64" width="36" height="36"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnJ-Ak-hfb">
+                                <rect key="frame" x="0.0" y="151.5" width="320" height="0.5"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="MnI-iW-Y2h"/>
-                                    <constraint firstAttribute="width" constant="36" id="mMx-Me-AIV"/>
+                                    <constraint firstAttribute="height" constant="0.5" id="KTD-UX-ugv"/>
                                 </constraints>
-                                <state key="normal" image="ic_calendar_red_36dp"/>
-                                <connections>
-                                    <action selector="calendarClickAction:" destination="LJi-aC-dYB" eventType="touchUpInside" id="hYB-a5-B3T"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="TFk-a2-FOv" firstAttribute="trailing" secondItem="Ge9-f2-FUc" secondAttribute="trailing" id="25I-RG-2no"/>
+                            <constraint firstAttribute="trailing" secondItem="fnJ-Ak-hfb" secondAttribute="trailing" id="2Y5-BG-9So"/>
                             <constraint firstItem="Ge9-f2-FUc" firstAttribute="trailing" secondItem="fNa-LP-TnA" secondAttribute="trailing" constant="20" id="6W1-OA-BeD"/>
                             <constraint firstItem="fNa-LP-TnA" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" id="8qA-7Z-pyF"/>
                             <constraint firstItem="lgF-nO-Mvy" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="Bq4-fg-lnC"/>
+                            <constraint firstItem="fnJ-Ak-hfb" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="JJK-xE-EZX"/>
                             <constraint firstItem="lgF-nO-Mvy" firstAttribute="trailing" secondItem="Ge9-f2-FUc" secondAttribute="trailing" id="MPj-Mv-Wnf"/>
                             <constraint firstItem="TFk-a2-FOv" firstAttribute="bottom" secondItem="Ge9-f2-FUc" secondAttribute="bottom" id="N0p-rU-daE"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="top" secondItem="fnJ-Ak-hfb" secondAttribute="bottom" id="VoT-Fx-G3X"/>
                             <constraint firstItem="Mm4-vR-NkX" firstAttribute="centerX" secondItem="ylE-pf-MaT" secondAttribute="centerX" id="ZhP-sH-ggK"/>
-                            <constraint firstItem="TFk-a2-FOv" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" constant="84" id="eyJ-bt-vJL"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" constant="88" id="eyJ-bt-vJL"/>
                             <constraint firstItem="fNa-LP-TnA" firstAttribute="centerY" secondItem="Mm4-vR-NkX" secondAttribute="centerY" id="g6W-dh-WrY"/>
                             <constraint firstItem="TFk-a2-FOv" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="oI4-SV-xk7"/>
                             <constraint firstItem="lgF-nO-Mvy" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" constant="36" id="wNX-vm-egx"/>

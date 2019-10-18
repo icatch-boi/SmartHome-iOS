@@ -7,6 +7,7 @@
 //
 
 #import "SHFilesCell.h"
+#import "SHENetworkManagerCommon.h"
 
 @interface SHFilesCell ()
 
@@ -34,15 +35,17 @@
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
     _dateFileInfo = dateFileInfo;
     
-    self.deviceNameLabel.text = dateFileInfo.dateString;
+//    self.deviceNameLabel.text = dateFileInfo.dateString;
+    _deviceNameLabel.text = [[SHCameraManager sharedCameraManger] getCameraObjectWithDeviceID:dateFileInfo.deviceID].camera.cameraName;
 }
 
 - (void)setFileInfo:(SHS3FileInfo *)fileInfo {
     _fileInfo = fileInfo;
     
     _recodTimeLabel.text = fileInfo.datetime;
-    _lengthLabel.text = fileInfo.duration;
+    _lengthLabel.text = [NSString translateSecsToString1:fileInfo.duration.integerValue];
     _recodTypeLabel.text = [self translateMonitorType:fileInfo.monitor.intValue];
+    _thumbnailImgView.image = [fileInfo.thumbnail ic_cornerImageWithSize:_thumbnailImgView.bounds.size radius:kImageCornerRadius];
 }
 
 - (NSString *)translateMonitorType:(int)type {
@@ -50,8 +53,10 @@
     
     switch (type) {
         case ICH_FILE_MONITOR_TYPE_ALL:
+            str = @"All";
             break;
         case ICH_FILE_MONITOR_TYPE_AUDIO:
+            str = @"Audio";
             break;
         case ICH_FILE_MONITOR_TYPE_MANUALLY:
             str = NSLocalizedString(@"kMonitorTypeManually", nil);
@@ -63,6 +68,7 @@
             str = NSLocalizedString(@"kMonitorTypeRing", nil);
             break;
         case ICH_FILE_MONITOR_TYPE_UNKNOWN:
+            str = @"Unknown";
             break;
             
         default:
