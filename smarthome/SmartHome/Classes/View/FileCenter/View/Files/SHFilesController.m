@@ -74,7 +74,13 @@
 
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"didSelectRowAtIndexPath");
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SHS3FileInfo *fileInfo = self.filesList[indexPath.row];
+
+    if (self.didSelectBlock) {
+        self.didSelectBlock(fileInfo);
+    }
 }
 
 #pragma mark - Init

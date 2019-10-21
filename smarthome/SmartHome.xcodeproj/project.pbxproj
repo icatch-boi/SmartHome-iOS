@@ -57,6 +57,7 @@
 		382CAA921EE6A0F70042442C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA911EE6A0F70042442C /* CoreTelephony.framework */; };
 		382CAA941EE6A1270042442C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA931EE6A1270042442C /* UserNotifications.framework */; };
 		382CAA961EE6A1A60042442C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA951EE6A1A60042442C /* Security.framework */; };
+		3832653D2359AEBD00913843 /* SHAVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */; };
 		38362CE72304FE5800C34E29 /* ZJImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC86232303EF6E00624C10 /* ZJImageCache.m */; };
 		38362CE82304FE5800C34E29 /* FaceCollectCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC86452303F2DE00624C10 /* FaceCollectCommon.m */; };
 		38362CE92304FEAE00C34E29 /* ZJImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC862C2303EF6E00624C10 /* ZJImageCoderHelper.m */; };
@@ -542,6 +543,8 @@
 		382CAA911EE6A0F70042442C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		382CAA931EE6A1270042442C /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		382CAA951EE6A1A60042442C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3832653B2359AEBD00913843 /* SHAVPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAVPlayerViewController.h; sourceTree = "<group>"; };
+		3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAVPlayerViewController.m; sourceTree = "<group>"; };
 		384130E023419B95008B418C /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libturbojpeg.a; sourceTree = "<group>"; };
 		384130E123419B95008B418C /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
 		384130E223419B95008B418C /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
@@ -1324,6 +1327,7 @@
 		38113EC123580DEE005677B0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3832653A2359AE2C00913843 /* Player */,
 				38113EC223580DEE005677B0 /* Home */,
 				38113ECA23580DEE005677B0 /* Files */,
 				38113ECF23580DEE005677B0 /* Files.storyboard */,
@@ -1475,6 +1479,15 @@
 				384ADD1622F19884002905DA /* SHFaceDataCommon.h */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		3832653A2359AE2C00913843 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				3832653B2359AEBD00913843 /* SHAVPlayerViewController.h */,
+				3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */,
+			);
+			path = Player;
 			sourceTree = "<group>";
 		};
 		384130DF23419B95008B418C /* smarthome_SDK_Test */ = {
@@ -3858,6 +3871,7 @@
 				38E5C36D20A40FFC003004E0 /* UIScreen+Addition.m in Sources */,
 				38F30F6123385975004F25E6 /* SHSingleImageDisplayVC.m in Sources */,
 				38E5C28E20A3F698003004E0 /* SHLocalCamerasHelper.m in Sources */,
+				3832653D2359AEBD00913843 /* SHAVPlayerViewController.m in Sources */,
 				38802F1C20B51580006274AE /* UnderLineTextField.m in Sources */,
 				38E5C22120A3F610003004E0 /* H264Decoder.m in Sources */,
 				38E5C1B420A3F5AF003004E0 /* SHWiFiSettingCell.m in Sources */,

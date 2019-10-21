@@ -24,6 +24,12 @@
     self.filesController = [sb instantiateInitialViewController];
     
     [self.contentView addSubview:self.filesController.view];
+    WEAK_SELF(self);
+    [self.filesController setDidSelectBlock:^(SHS3FileInfo * _Nonnull fileInfo) {
+        if ([weakself.delegate respondsToSelector:@selector(fileCenterHomeCell:didSelectWithFileInfo:)]) {
+            [weakself.delegate fileCenterHomeCell:weakself didSelectWithFileInfo:fileInfo];
+        }
+    }];
 }
 
 - (void)layoutSubviews {

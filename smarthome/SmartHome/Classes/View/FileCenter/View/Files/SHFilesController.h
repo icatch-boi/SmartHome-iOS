@@ -11,9 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SHS3FileInfo;
+typedef void(^SHFilesControllerDidSelectBlock)(SHS3FileInfo *fileInfo);
+
 @interface SHFilesController : UITableViewController
 
 @property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
+@property (nonatomic, copy) SHFilesControllerDidSelectBlock didSelectBlock;
 
 @end
 

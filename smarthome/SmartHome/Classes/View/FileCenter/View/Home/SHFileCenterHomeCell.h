@@ -11,9 +11,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SHS3FileInfo;
+@class SHFileCenterHomeCell;
+@protocol SHFileCenterHomeCellDelegate <NSObject>
+
+- (void)fileCenterHomeCell:(SHFileCenterHomeCell *)cell didSelectWithFileInfo:(SHS3FileInfo *)fileInfo;
+
+@end
+
 @interface SHFileCenterHomeCell : UICollectionViewCell
 
 @property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
+
+@property (nonatomic, weak) id<SHFileCenterHomeCellDelegate> delegate;
 
 @end
 

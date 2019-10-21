@@ -1,4 +1,4 @@
-// SHS3FileInfo.h
+// SHAVPlayerViewController.h
 
 /**************************************************************************
  *
@@ -22,27 +22,17 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/8 8:04 PM.
+ // Created by zj on 2019/10/18 4:26 PM.
     
 
-#import <Foundation/Foundation.h>
+#import <AVKit/AVKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHS3FileInfo : NSObject
+@class SHS3FileInfo;
+@interface SHAVPlayerViewController : UIViewController
 
-@property (nonatomic, copy, readonly) NSString *datetime;
-@property (nonatomic, copy, readonly) NSString *duration;
-@property (nonatomic, copy, readonly) NSString *monitor;
-@property (nonatomic, copy, readonly) NSString *videosize;
-
-@property (nonatomic, copy) NSString *key;
-@property (nonatomic, copy) NSString *fileName;
-@property (nonatomic, copy) NSString *filePath;
-@property (nonatomic, strong) UIImage *thumbnail;
-@property (nonatomic, copy) NSString *deviceID;
-
-+ (instancetype)s3FileInfoWithFileInfoDict:(NSDictionary *)dict;
+- (instancetype)initWithFileInfo:(SHS3FileInfo *)fileInfo;
 
 @end
 

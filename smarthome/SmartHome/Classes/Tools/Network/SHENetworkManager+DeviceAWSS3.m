@@ -400,7 +400,7 @@ typedef enum : NSUInteger {
     if (self.deviceDirectoryInfos[deviceID] == nil) {
         WEAK_SELF(self);
         [self getDeviceS3DirectoryInfoWithDeviceid:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
-            if (isSuccess) {
+            if (isSuccess && result != nil) {
                 weakself.deviceDirectoryInfos[deviceID] = result;
                 
                 [weakself listFilesWithDeviceID:deviceID dateString:dateString startKey:startKey number:number completion:completion];
@@ -697,6 +697,7 @@ typedef enum : NSUInteger {
                             fileInfo.filePath = videoPath;
                             fileInfo.key = key;
                             fileInfo.fileName = [[videoPath componentsSeparatedByString:@"/"] lastObject];
+                            fileInfo.deviceID = deviceID;
                             
                             [infoArray addObject:fileInfo];
                         }

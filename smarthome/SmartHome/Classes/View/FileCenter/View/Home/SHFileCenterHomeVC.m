@@ -13,8 +13,9 @@
 #import "SHFileCenterCommon.h"
 #import "SHFileInfoViewModel.h"
 #import "SVProgressHUD.h"
+#import "SHAVPlayerViewController.h"
 
-@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete>
+@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -190,6 +191,7 @@
     SHFileCenterHomeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"files" forIndexPath:indexPath];
     
     cell.dateFileInfo = self.dateFileInfos[indexPath.row];
+    cell.delegate = self;
     
     return cell;
 }
@@ -268,6 +270,20 @@
     [self.scrollView setContentOffset:CGPointMake(offset, 0) animated:YES];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
     [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+}
+
+#pragma mark - SHFileCenterHomeCellDelegate
+- (void)fileCenterHomeCell:(SHFileCenterHomeCell *)cell didSelectWithFileInfo:(SHS3FileInfo *)fileInfo {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        SHAVPlayerViewController *vc = [[SHAVPlayerViewController alloc] initWithFileInfo:fileInfo];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+            nav.navigationBarHidden = YES;
+            
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
+        });
+    });
 }
 
 #pragma mark - Init
