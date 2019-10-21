@@ -141,7 +141,7 @@
                     }
                 } else {
                     SHLogError(SHLogTagAPP, @"Get file failed, error: %@", result);
-                    [SVProgressHUD showErrorWithStatus:@"获取数据失败，请稍后重试！"];
+                    [SVProgressHUD showErrorWithStatus:@"获取文件数据失败，请稍后重试"];
                     [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
                 }
             }];

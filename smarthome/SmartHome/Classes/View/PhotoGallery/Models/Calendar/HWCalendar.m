@@ -8,6 +8,7 @@
 
 #import "HWCalendar.h"
 #import "HWOptionButton.h"
+#import "SHENetworkManagerCommon.h"
 
 #define KCol 7
 #define KBtnW 44
@@ -48,16 +49,22 @@ static const CGFloat kDefaultFontSize = 16.0f;
 @property (nonatomic) MBProgressHUD *progressHUD;
 @property (nonatomic, strong) NSDate *curDateTime;
 @property (nonatomic, strong) SHCameraObject *shCamObj;
+@property (nonatomic, assign, getter=isFileCenter) BOOL fileCenter;
 
 @end
 
 @implementation HWCalendar
 
-- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj
+- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj {
+    return [self initWithFrame:frame andCurDateTime:date cameraObj:shCamObj fileCenter:NO];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj fileCenter:(BOOL)fileCenter
 {
     if (self = [super initWithFrame:frame]) {
         self.curDateTime = date;
         self.shCamObj = shCamObj;
+        self.fileCenter = fileCenter;
         
         //获取当前时间
         [self getCurrentDate];
@@ -279,6 +286,11 @@ static const CGFloat kDefaultFontSize = 16.0f;
 }
 
 - (void)resetStorageData {
+    if (self.isFileCenter) {
+        [self loadFileCenterData];
+        return;
+    }
+    
     NSString *startDate = [NSString stringWithFormat:@"%zd/%02zd/01", _year, _month];
     NSString *endDate = [NSString stringWithFormat:@"%zd/%02zd/%zd", _year, _month, [self numberOfDaysInMonth]];
     
@@ -316,6 +328,36 @@ static const CGFloat kDefaultFontSize = 16.0f;
     }];
 }
 
+- (void)loadFileCenterData {
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSInteger days = [self numberOfDaysInMonth];
+        NSString *date = [NSString stringWithFormat:@"%zd/%02zd/%zd", _year, _month, days];
+        NSDictionary *dict = [[SHENetworkManager sharedManager] getFilesStorageInfoWithDeviceID:_shCamObj.camera.id queryDate:[date convertToDateWithFormat:@"yyyy/MM/dd"] days:days];
+        
+        if (dict == nil) {
+            if ([self.delegate respondsToSelector:@selector(calendarWithGetDataFailedHandler:)]) {
+                [self.delegate calendarWithGetDataFailedHandler:self];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+        } else {
+            self.storageInfoDit = [[NSMutableDictionary alloc] initWithDictionary:dict];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hide:YES];
+                
+                //刷新数据
+                [self reloadData];
+            });
+        }
+    });
+}
+
 //刷新数据
 - (void)reloadData
 {
@@ -340,6 +382,9 @@ static const CGFloat kDefaultFontSize = 16.0f;
         }else {
             NSString *curDate = [NSString stringWithFormat:@"%zd/%02zd/%02zd", _year, _month, i - (firstDay - 1) + 1];
             BOOL isHidden = [self.storageInfoDit objectForKey:curDate] ? NO : YES;
+            if (self.isFileCenter) {
+                isHidden = ![[self.storageInfoDit objectForKey:curDate] boolValue];
+            }
             SHLogDebug(SHLogTagAPP, @"curDay: %zd, cueDate: %@, isHidden: %d", _day, curDate, isHidden);
             imgView.hidden = isHidden;
             btn.enabled = !isHidden;

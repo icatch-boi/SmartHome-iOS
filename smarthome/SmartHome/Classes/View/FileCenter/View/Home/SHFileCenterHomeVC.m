@@ -14,8 +14,9 @@
 #import "SHFileInfoViewModel.h"
 #import "SVProgressHUD.h"
 #import "SHAVPlayerViewController.h"
+#import "HWCalendar.h"
 
-@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate>
+@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate, HWCalendarDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -28,6 +29,8 @@
 
 @property (nonatomic, copy) NSString *deviceID;
 @property (nonatomic, strong) SHFileInfoViewModel *fileInfoViewModel;
+
+@property (nonatomic, weak) HWCalendar *calendar;
 
 @end
 
@@ -54,6 +57,12 @@
 
 #pragma mark - GUI
 - (void)setupGUI {
+    [self setupCollectionView];
+    [self loadDateView];
+    [self creatCalendar];
+}
+
+- (void)setupCollectionView {
     self.flowLayout.itemSize = self.collectionView.bounds.size;
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.flowLayout.minimumLineSpacing = 0;
@@ -62,8 +71,6 @@
     self.collectionView.pagingEnabled = YES;
     self.collectionView.bounces = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
-    
-    [self loadDateView];
 }
 
 // 在导航控制器中如果出现了 scrollview，会自动加上64的偏移
@@ -93,6 +100,20 @@
     
 //    SHDateView *view = self.scrollView.subviews[0];
 //    view.scale = 1.0;
+}
+
+- (void)creatCalendar
+{
+    SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getCameraObjectWithDeviceID:self.deviceID];
+    //日历
+    HWCalendar *calendar = [[HWCalendar alloc] initWithFrame:CGRectMake(0, [UIScreen screenHeight], CGRectGetWidth(self.view.bounds), 396) andCurDateTime:[NSDate date] cameraObj:camObj fileCenter:YES];
+    calendar.backgroundColor = [UIColor ic_colorWithHex:kBackgroundThemeColor];
+    calendar.hidden = YES;
+    calendar.delegate = self;
+    calendar.showTimePicker = YES;
+    
+    [self.view addSubview:calendar];
+    self.calendar = calendar;
 }
 
 // 当计算好collectionView的大小，再设置cell的大小
@@ -140,6 +161,7 @@
         if ([view isKindOfClass:[SHDateView class]]) {
             SHDateView *dateView = (SHDateView *)view;
             dateView.dateFileInfo = obj;
+            dateView.scale = 0;
             
             if (obj.exist) {
                 lastView = dateView;
@@ -179,7 +201,11 @@
 }
 
 - (IBAction)calendarClickAction:(id)sender {
-    
+    if (_calendar.frame.origin.y != [UIScreen screenHeight] && _calendar) {
+        [_calendar dismiss];
+    } else {
+        [_calendar show];
+    }
 }
 
 #pragma mark - UICollectonViewDataSource
@@ -283,6 +309,29 @@
             
             [self.navigationController presentViewController:nav animated:YES completion:nil];
         });
+    });
+}
+
+#pragma mark - HWCalendarDelegate
+- (void)calendar:(HWCalendar *)calendar didClickSureButtonWithDate:(NSString *)date
+{
+    SHLogInfo(SHLogTagAPP, @"selected date: %@", date);
+ 
+    NSDate *curDate = [date convertToDateWithFormat:@"yyyy-MM-dd HH:mm"];
+    [self loadDateFileInfoWithDate:curDate];
+}
+
+- (void)calendarWithGetDataFailedHandler:(HWCalendar *)calendar {
+    [self showGetRemoteAlbumDataFailedAlertView];
+}
+
+- (void)showGetRemoteAlbumDataFailedAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"获取文件数据失败，请稍后重试" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertVC animated:YES completion:nil];
     });
 }
 
