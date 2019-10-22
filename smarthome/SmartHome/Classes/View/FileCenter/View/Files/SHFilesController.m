@@ -11,10 +11,16 @@
 #import "SHFilesViewModel.h"
 #import "SVProgressHUD.h"
 
-@interface SHFilesController ()
+static void * SHFilesControllerContext = &SHFilesControllerContext;
+
+@interface SHFilesController ()<SHFilesCellDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *footerView;
 
 @property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
 @property (nonatomic, strong) SHFilesViewModel *filesViewModel;
+@property (nonatomic, assign) BOOL editState;
 
 @end
 
@@ -29,10 +35,34 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 //    self.view.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1.0];
-    self.tableView.rowHeight = [SHFilesViewModel filesCellRowHeight];
-    self.tableView.tableFooterView = [[UIView alloc] init];
+    [self setupGUI];
+    [self addEditStateObserver];
 }
 
+- (void)dealloc {
+    [self removeEditStateObserver];
+}
+
+- (void)addEditStateObserver {
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) options:NSKeyValueObservingOptionNew context:SHFilesControllerContext];
+}
+
+- (void)removeEditStateObserver {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) context:SHFilesControllerContext];
+}
+
+#pragma mark - GUI
+- (void)setupGUI {
+    self.tableView.rowHeight = [SHFilesViewModel filesCellRowHeight];
+    self.tableView.tableFooterView = [[UIView alloc] init];
+    [self setupFooterView];
+}
+
+- (void)setupFooterView {
+    self.footerView.alpha = self.editState ? 0.85 : 0;
+}
+
+#pragma mark - Load Data
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
     _dateFileInfo = dateFileInfo;
     
@@ -68,6 +98,7 @@
     // Configure the cell...
     cell.dateFileInfo = self.dateFileInfo;
     cell.fileInfo = self.filesList[indexPath.row];
+    cell.delegate = self;
     
     return cell;
 }
@@ -83,6 +114,23 @@
     }
 }
 
+#pragma mark - SHFilesCellDelegate
+- (void)longPressGestureHandleWithCell:(SHFilesCell *)cell {
+    SHLogInfo(SHLogTagAPP, @"longPressGestureHandleWithCell: %@", cell);
+    
+    if (self.editState == NO) {
+        if (self.editStateBlock) {
+            self.editStateBlock();
+        }
+    }
+    
+    self.editState = YES;
+}
+
+- (void)cancelEditAction {
+    self.editState = NO;
+}
+
 #pragma mark - Init
 - (SHFilesViewModel *)filesViewModel {
     if (_filesViewModel == nil) {
@@ -90,6 +138,19 @@
     }
     
     return _filesViewModel;
+}
+
+#pragma mark - Observer
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == SHFilesControllerContext) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(editState))]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupFooterView];
+            });
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

@@ -24,12 +24,30 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    [self addGesture];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)addGesture {
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    [self addGestureRecognizer:longPress];
+}
+
+- (void)longPressGesture:(UILongPressGestureRecognizer *)recognizer {
+    
+    if (recognizer.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(longPressGestureHandleWithCell:)]) {
+        [self.delegate longPressGestureHandleWithCell:self];
+    }
 }
 
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {

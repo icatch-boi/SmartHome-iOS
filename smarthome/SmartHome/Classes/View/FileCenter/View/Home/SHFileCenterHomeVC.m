@@ -16,6 +16,8 @@
 #import "SHAVPlayerViewController.h"
 #import "HWCalendar.h"
 
+static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
+
 @interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate, HWCalendarDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -31,6 +33,8 @@
 @property (nonatomic, strong) SHFileInfoViewModel *fileInfoViewModel;
 
 @property (nonatomic, weak) HWCalendar *calendar;
+@property (nonatomic, assign) BOOL editState;
+@property (nonatomic, weak) SHFileCenterHomeCell *currentCell;
 
 @end
 
@@ -53,6 +57,19 @@
     [self setupGUI];
     NSDate *date = [@"2019/10/01" convertToDateWithFormat:@"yyyy/MM/dd"];
     [self loadDateFileInfoWithDate:[NSDate date]];
+    [self addEditStateObserver];
+}
+
+- (void)dealloc {
+    [self removeEditStateObserver];
+}
+
+- (void)addEditStateObserver {
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) options:NSKeyValueObservingOptionNew context:SHFileCenterHomeVCContext];
+}
+
+- (void)removeEditStateObserver {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) context:SHFileCenterHomeVCContext];
 }
 
 #pragma mark - GUI
@@ -60,6 +77,7 @@
     [self setupCollectionView];
     [self loadDateView];
     [self creatCalendar];
+    [self setupNavigationItem];
 }
 
 - (void)setupCollectionView {
@@ -127,6 +145,18 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _titleLabel.text = [self createTitleWithDate:date];
     });
+}
+
+- (void)setupNavigationItem {
+    if (self.editState) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(cancelEditAction:)];
+        self.collectionView.scrollEnabled = NO;
+        self.title = NSLocalizedString(@"SelectItem", nil);
+    } else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackAction:)];
+        self.collectionView.scrollEnabled = YES;
+        self.title = @"File Center";
+    }
 }
 
 #pragma mark - Load Data
@@ -276,6 +306,9 @@
 #pragma mark - SHDateViewDelete
 - (void)clickedActionWithDateView:(SHDateView *)dateView {
     NSLog(@"clickedActionWithDateView");
+    if (self.editState) {
+        return;
+    }
     
     [self.scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (dateView == obj) {
@@ -312,6 +345,17 @@
     });
 }
 
+- (void)enterEditeStateWithCell:(SHFileCenterHomeCell *)cell {
+    self.editState = YES;
+    self.currentCell = cell;
+}
+
+- (void)cancelEditAction:(id)sender {
+    self.editState = NO;
+    
+    [self.currentCell cancelEditAction];
+}
+
 #pragma mark - HWCalendarDelegate
 - (void)calendar:(HWCalendar *)calendar didClickSureButtonWithDate:(NSString *)date
 {
@@ -342,6 +386,19 @@
     }
     
     return _fileInfoViewModel;
+}
+
+#pragma mark - Observer
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == SHFileCenterHomeVCContext) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(editState))]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupNavigationItem];
+            });
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

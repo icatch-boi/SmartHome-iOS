@@ -30,6 +30,11 @@
             [weakself.delegate fileCenterHomeCell:weakself didSelectWithFileInfo:fileInfo];
         }
     }];
+    [self.filesController setEditStateBlock:^{
+        if ([weakself.delegate respondsToSelector:@selector(enterEditeStateWithCell:)]) {
+            [weakself.delegate enterEditeStateWithCell:weakself];
+        }
+    }];
 }
 
 - (void)layoutSubviews {
@@ -43,6 +48,10 @@
     _dateFileInfo = dateFileInfo;
     
     self.filesController.dateFileInfo = dateFileInfo;
+}
+
+- (void)cancelEditAction {
+    [self.filesController cancelEditAction];
 }
 
 @end

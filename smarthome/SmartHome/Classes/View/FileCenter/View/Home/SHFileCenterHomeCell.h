@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol SHFileCenterHomeCellDelegate <NSObject>
 
 - (void)fileCenterHomeCell:(SHFileCenterHomeCell *)cell didSelectWithFileInfo:(SHS3FileInfo *)fileInfo;
+- (void)enterEditeStateWithCell:(SHFileCenterHomeCell *)cell;
 
 @end
 
@@ -24,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
 
 @property (nonatomic, weak) id<SHFileCenterHomeCellDelegate> delegate;
+
+- (void)cancelEditAction;
 
 @end
 
