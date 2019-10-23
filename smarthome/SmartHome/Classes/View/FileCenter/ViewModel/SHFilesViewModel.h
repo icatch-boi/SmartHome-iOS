@@ -32,9 +32,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHFilesViewModel : NSObject
 
+@property (nonatomic, strong, readonly) NSMutableArray<SHS3FileInfo *> *selectedFiles;
+
 - (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
 
 + (CGFloat)filesCellRowHeight;
+
+- (void)addSelectedFile:(SHS3FileInfo *)fileInfo;
+- (void)addSelectedFiles:(NSArray<SHS3FileInfo *> *)filesInfo;
+- (void)clearSelectedFiles;
 
 @end
 

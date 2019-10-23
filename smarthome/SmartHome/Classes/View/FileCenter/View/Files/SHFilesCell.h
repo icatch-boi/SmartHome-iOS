@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
 @property (nonatomic, strong) SHS3FileInfo *fileInfo;
+@property (nonatomic, assign) BOOL editState;
 
 @property (nonatomic, weak) id<SHFilesCellDelegate> delegate;
 

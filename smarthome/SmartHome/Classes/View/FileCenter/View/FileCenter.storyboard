@@ -118,6 +118,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="caledarButton" destination="fNa-LP-TnA" id="eZv-Jo-8En"/>
                         <outlet property="collectionView" destination="TFk-a2-FOv" id="azR-ww-WqA"/>
                         <outlet property="flowLayout" destination="CPg-cY-ajf" id="V4b-pb-Lul"/>
                         <outlet property="scrollView" destination="lgF-nO-Mvy" id="MGN-wv-hyH"/>

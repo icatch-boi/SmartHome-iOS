@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *filePath;
 @property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, copy) NSString *deviceID;
+@property (nonatomic, assign) BOOL selected;
 
 + (instancetype)s3FileInfoWithFileInfoDict:(NSDictionary *)dict;
 

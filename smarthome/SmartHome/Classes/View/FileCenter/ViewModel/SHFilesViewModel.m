@@ -32,6 +32,12 @@ static const CGFloat kTopSpace = 8;
 static const CGFloat kIconWithScreenWidthScale = 0.45;
 static const CGFloat kIconWidthWithHeightScale = 16.0 / 9;
 
+@interface SHFilesViewModel ()
+
+@property (nonatomic, strong) NSMutableArray<SHS3FileInfo *> *selectedFiles;
+
+@end
+
 @implementation SHFilesViewModel
 
 - (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion {
@@ -53,6 +59,38 @@ static const CGFloat kIconWidthWithHeightScale = 16.0 / 9;
     CGFloat rowH = imgViewH + space * 2;
     
     return rowH;
+}
+
+- (void)addSelectedFile:(SHS3FileInfo *)fileInfo {
+    if (fileInfo.selected) {
+        if (![self.selectedFilesArray containsObject:fileInfo]) {
+            [self.selectedFilesArray addObject:fileInfo];
+        }
+    } else {
+        if ([self.selectedFilesArray containsObject:fileInfo]) {
+            [self.selectedFilesArray removeObject:fileInfo];
+        }
+    }
+}
+
+- (void)addSelectedFiles:(NSArray<SHS3FileInfo *> *)filesInfo {
+    [self.selectedFilesArray addObjectsFromArray:filesInfo];
+}
+
+- (void)clearSelectedFiles {
+    [self.selectedFilesArray removeAllObjects];
+}
+
+- (NSMutableArray<SHS3FileInfo *> *)selectedFilesArray {
+    return [self mutableArrayValueForKey:NSStringFromSelector(@selector(selectedFiles))];
+}
+
+- (NSMutableArray<SHS3FileInfo *> *)selectedFiles {
+    if (_selectedFiles == nil) {
+        _selectedFiles = [[NSMutableArray alloc] init];
+    }
+    
+    return _selectedFiles;
 }
 
 @end

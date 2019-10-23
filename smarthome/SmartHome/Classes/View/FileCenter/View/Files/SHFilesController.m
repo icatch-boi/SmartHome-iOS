@@ -17,6 +17,8 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
+@property (weak, nonatomic) IBOutlet UIButton *selectNumButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectButton;
 
 @property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
 @property (nonatomic, strong) SHFilesViewModel *filesViewModel;
@@ -36,19 +38,21 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 //    self.view.backgroundColor = [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1.0];
     [self setupGUI];
-    [self addEditStateObserver];
+    [self addObserver];
 }
 
 - (void)dealloc {
-    [self removeEditStateObserver];
+    [self removeObserver];
 }
 
-- (void)addEditStateObserver {
+- (void)addObserver {
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) options:NSKeyValueObservingOptionNew context:SHFilesControllerContext];
+    [self.filesViewModel addObserver:self forKeyPath:NSStringFromSelector(@selector(selectedFiles)) options:NSKeyValueObservingOptionNew context:SHFilesControllerContext];
 }
 
-- (void)removeEditStateObserver {
+- (void)removeObserver {
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) context:SHFilesControllerContext];
+    [self.filesViewModel removeObserver:self forKeyPath:NSStringFromSelector(@selector(selectedFiles)) context:SHFilesControllerContext];
 }
 
 #pragma mark - GUI
@@ -56,10 +60,25 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     self.tableView.rowHeight = [SHFilesViewModel filesCellRowHeight];
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self setupFooterView];
+    [self updateSelectNumber];
 }
 
 - (void)setupFooterView {
     self.footerView.alpha = self.editState ? 0.85 : 0;
+    
+    [self.tableView reloadData];
+}
+
+- (void)updateSelectNumber {
+    [self.selectNumButton setTitle:@(self.filesViewModel.selectedFiles.count).stringValue forState:UIControlStateNormal];
+    
+    if (self.filesList.count != self.filesViewModel.selectedFiles.count) {
+        [self.selectButton setImage:[UIImage imageNamed:@"ic_unselected_white_24dp"] forState:UIControlStateNormal];
+        self.selectButton.tag = 0;
+    } else {
+        [self.selectButton setImage:[UIImage imageNamed:@"ic_select_all_white_24dp"] forState:UIControlStateNormal];
+        self.selectButton.tag = 1;
+    }
 }
 
 #pragma mark - Load Data
@@ -99,6 +118,7 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     cell.dateFileInfo = self.dateFileInfo;
     cell.fileInfo = self.filesList[indexPath.row];
     cell.delegate = self;
+    cell.editState = self.editState;
     
     return cell;
 }
@@ -109,8 +129,15 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     
     SHS3FileInfo *fileInfo = self.filesList[indexPath.row];
 
-    if (self.didSelectBlock) {
-        self.didSelectBlock(fileInfo);
+    if (self.editState) {
+        fileInfo.selected = !fileInfo.selected;
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [self.filesViewModel addSelectedFile:fileInfo];
+    } else {
+        if (self.didSelectBlock) {
+            self.didSelectBlock(fileInfo);
+        }
     }
 }
 
@@ -125,10 +152,54 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     }
     
     self.editState = YES;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
 }
 
 - (void)cancelEditAction {
     self.editState = NO;
+
+    [self clearSelection];
+}
+
+- (void)clearSelection {
+    [self clearAllSelect];
+    [self.filesViewModel clearSelectedFiles];
+}
+
+- (void)selectAllFiles {
+    [self.filesList enumerateObjectsUsingBlock:^(SHS3FileInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.selected = YES;
+    }];
+}
+
+- (void)clearAllSelect {
+    [self.filesList enumerateObjectsUsingBlock:^(SHS3FileInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.selected = NO;
+    }];
+}
+
+#pragma mark - Edit Action
+- (IBAction)downloadAction:(id)sender {
+    
+}
+
+- (IBAction)deleteAction:(id)sender {
+    
+}
+
+- (IBAction)selectAllAction:(UIButton *)sender {
+    if (sender.tag == 0) {
+        [self selectAllFiles];
+        
+        [self.filesViewModel clearSelectedFiles];
+        [self.filesViewModel addSelectedFiles:self.filesList];
+    } else {
+        [self clearSelection];
+    }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Init
@@ -146,6 +217,10 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
         if ([keyPath isEqualToString:NSStringFromSelector(@selector(editState))]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self setupFooterView];
+            });
+        } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(selectedFiles))]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateSelectNumber];
             });
         }
     } else {

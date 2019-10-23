@@ -228,6 +228,14 @@
                                                         <constraint firstAttribute="width" secondItem="smF-RX-rEd" secondAttribute="height" multiplier="16:9" id="yH0-fs-eGh"/>
                                                     </constraints>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_done_gray_24dp" translatesAutoresizingMaskIntoConstraints="NO" id="eB5-aQ-YRL">
+                                                    <rect key="frame" x="108" y="8.5" width="24" height="24"/>
+                                                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="eB5-aQ-YRL" secondAttribute="height" multiplier="1:1" id="nDU-dD-zcO"/>
+                                                        <constraint firstAttribute="width" constant="24" id="yhg-rp-7pb"/>
+                                                    </constraints>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qr9-q8-mzH">
                                                     <rect key="frame" x="157" y="3.5" width="139" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -259,8 +267,10 @@
                                                 <constraint firstItem="Qr9-q8-mzH" firstAttribute="leading" secondItem="smF-RX-rEd" secondAttribute="trailing" constant="20" id="3vW-Wx-ahS"/>
                                                 <constraint firstItem="ub9-3s-j8T" firstAttribute="leading" secondItem="Qr9-q8-mzH" secondAttribute="leading" id="75T-6h-vfD"/>
                                                 <constraint firstItem="PxC-bW-FUw" firstAttribute="trailing" secondItem="Qr9-q8-mzH" secondAttribute="trailing" id="8ql-tL-6Xz"/>
+                                                <constraint firstItem="eB5-aQ-YRL" firstAttribute="top" secondItem="smF-RX-rEd" secondAttribute="top" constant="5" id="MHy-kx-vQz"/>
                                                 <constraint firstItem="N6u-9M-jDO" firstAttribute="height" secondItem="Qr9-q8-mzH" secondAttribute="height" id="Qxb-9r-mDf"/>
                                                 <constraint firstItem="smF-RX-rEd" firstAttribute="centerY" secondItem="Nbz-7K-HrI" secondAttribute="centerY" id="RKr-Yy-5Yw"/>
+                                                <constraint firstItem="smF-RX-rEd" firstAttribute="trailing" secondItem="eB5-aQ-YRL" secondAttribute="trailing" constant="5" id="Srq-f5-DT8"/>
                                                 <constraint firstItem="N6u-9M-jDO" firstAttribute="trailing" secondItem="Qr9-q8-mzH" secondAttribute="trailing" id="TSn-ua-oJL"/>
                                                 <constraint firstItem="N6u-9M-jDO" firstAttribute="leading" secondItem="Qr9-q8-mzH" secondAttribute="leading" id="XCk-2g-blz"/>
                                                 <constraint firstItem="ub9-3s-j8T" firstAttribute="height" secondItem="Qr9-q8-mzH" secondAttribute="height" id="kyV-k0-Tiz"/>
@@ -282,6 +292,7 @@
                                             <outlet property="lengthLabel" destination="PxC-bW-FUw" id="rfq-qV-jHa"/>
                                             <outlet property="recodTimeLabel" destination="N6u-9M-jDO" id="DzE-Z2-Koj"/>
                                             <outlet property="recodTypeLabel" destination="ub9-3s-j8T" id="gXx-tQ-jIm"/>
+                                            <outlet property="selectImgView" destination="eB5-aQ-YRL" id="Mu9-aY-uId"/>
                                             <outlet property="thumbnailImgView" destination="smF-RX-rEd" id="J83-sD-Ily"/>
                                         </connections>
                                     </tableViewCell>
@@ -302,7 +313,10 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="fOu-66-UQm" secondAttribute="height" multiplier="1:1" id="l8r-ZL-I8s"/>
                                                 </constraints>
-                                                <state key="normal" image="ic_delete_white_24dp"/>
+                                                <state key="normal" image="ic_download_white_24dp"/>
+                                                <connections>
+                                                    <action selector="downloadAction:" destination="NeN-rI-fk7" eventType="touchUpInside" id="Cg0-LK-lsY"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -320,7 +334,10 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="aek-O3-tkt" secondAttribute="height" multiplier="1:1" id="xD4-5Z-FxC"/>
                                                 </constraints>
-                                                <state key="normal" image="ic_download_white_24dp"/>
+                                                <state key="normal" image="ic_delete_white_24dp"/>
+                                                <connections>
+                                                    <action selector="deleteAction:" destination="NeN-rI-fk7" eventType="touchUpInside" id="YnD-CV-2TB"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -339,6 +356,9 @@
                                                     <constraint firstAttribute="width" secondItem="3Qd-PA-pgO" secondAttribute="height" multiplier="1:1" id="OEa-9e-dAH"/>
                                                 </constraints>
                                                 <state key="normal" image="ic_unselected_white_24dp"/>
+                                                <connections>
+                                                    <action selector="selectAllAction:" destination="NeN-rI-fk7" eventType="touchUpInside" id="egc-Ny-Rdk"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -351,7 +371,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj3-au-QMg">
                                         <rect key="frame" x="240" y="0.0" width="80" height="44"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gy6-vH-J60">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gy6-vH-J60">
                                                 <rect key="frame" x="18" y="0.0" width="44" height="44"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="gy6-vH-J60" secondAttribute="height" multiplier="1:1" id="wmQ-wQ-Kjj"/>
@@ -408,6 +428,8 @@
                     </view>
                     <connections>
                         <outlet property="footerView" destination="6sg-FM-8LB" id="6PJ-w2-Jgm"/>
+                        <outlet property="selectButton" destination="3Qd-PA-pgO" id="xWL-bI-AcP"/>
+                        <outlet property="selectNumButton" destination="gy6-vH-J60" id="5La-YE-HXG"/>
                         <outlet property="tableView" destination="bcM-1O-zUh" id="aUb-iA-YEn"/>
                     </connections>
                 </viewController>
@@ -418,6 +440,7 @@
     </scenes>
     <resources>
         <image name="ic_delete_white_24dp" width="24" height="24"/>
+        <image name="ic_done_gray_24dp" width="24" height="24"/>
         <image name="ic_download_white_24dp" width="24" height="24"/>
         <image name="ic_unselected_white_24dp" width="24" height="24"/>
     </resources>

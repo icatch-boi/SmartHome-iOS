@@ -12,6 +12,7 @@
 @interface SHFilesCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnailImgView;
+@property (weak, nonatomic) IBOutlet UIImageView *selectImgView;
 @property (weak, nonatomic) IBOutlet UILabel *deviceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recodTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lengthLabel;
@@ -64,6 +65,12 @@
     _lengthLabel.text = [NSString translateSecsToString1:fileInfo.duration.integerValue];
     _recodTypeLabel.text = [self translateMonitorType:fileInfo.monitor.intValue];
     _thumbnailImgView.image = [fileInfo.thumbnail ic_cornerImageWithSize:_thumbnailImgView.bounds.size radius:kImageCornerRadius];
+    _selectImgView.image = fileInfo.selected ? [UIImage imageNamed:@"ic_done_red_24dp"] : [UIImage imageNamed:@"ic_done_gray_24dp"];
+    self.backgroundColor = fileInfo.selected ? [UIColor ic_colorWithHex:kBackgroundThemeColor] : self.superview.backgroundColor;
+}
+
+- (void)setEditState:(BOOL)editState {
+    _selectImgView.hidden = !editState;
 }
 
 - (NSString *)translateMonitorType:(int)type {

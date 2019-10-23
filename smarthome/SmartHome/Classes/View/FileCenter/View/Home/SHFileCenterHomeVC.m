@@ -21,6 +21,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 @interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate, HWCalendarDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *caledarButton;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
@@ -157,6 +158,8 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
         self.collectionView.scrollEnabled = YES;
         self.title = @"File Center";
     }
+    
+    self.caledarButton.enabled = !self.editState;
 }
 
 #pragma mark - Load Data
