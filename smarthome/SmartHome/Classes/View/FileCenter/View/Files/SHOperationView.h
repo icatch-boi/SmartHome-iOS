@@ -1,4 +1,4 @@
-// SHFilesViewModel.h
+// SHOperationView.h
 
 /**************************************************************************
  *
@@ -22,27 +22,31 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/17 7:57 PM.
+ // Created by zj on 2019/10/23 2:21 PM.
     
 
-#import <Foundation/Foundation.h>
-#import "SHS3FileInfo.h"
+#import <UIKit/UIKit.h>
 #import "SHOperationItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHFilesViewModel : NSObject
+@class SHOperationView;
+@protocol SHOperationViewDelegate <NSObject>
 
-@property (nonatomic, strong, readonly) NSMutableArray<SHS3FileInfo *> *selectedFiles;
-@property (nonatomic, strong, readonly) NSArray<SHOperationItem *> *operationItems;
+- (void)clickedActionWithOperationView:(SHOperationView *)operationView;
 
-- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
+@end
 
-+ (CGFloat)filesCellRowHeight;
+@interface SHOperationView : UIView
 
-- (void)addSelectedFile:(SHS3FileInfo *)fileInfo;
-- (void)addSelectedFiles:(NSArray<SHS3FileInfo *> *)filesInfo;
-- (void)clearSelectedFiles;
+@property (nonatomic, strong) SHOperationItem *item;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *subTitle;
+@property (nonatomic, strong) UIImage *icon;
+
+@property (nonatomic, weak) id<SHOperationViewDelegate> delegate;
+
++ (instancetype)operationView;
 
 @end
 

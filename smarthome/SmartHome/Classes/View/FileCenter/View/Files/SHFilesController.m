@@ -10,15 +10,16 @@
 #import "SHFilesCell.h"
 #import "SHFilesViewModel.h"
 #import "SVProgressHUD.h"
+#import "SHOperationView.h"
 
 static void * SHFilesControllerContext = &SHFilesControllerContext;
 
-@interface SHFilesController ()<SHFilesCellDelegate>
+@interface SHFilesController ()<SHFilesCellDelegate, SHOperationViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
-@property (weak, nonatomic) IBOutlet UIButton *selectNumButton;
-@property (weak, nonatomic) IBOutlet UIButton *selectButton;
+@property (weak, nonatomic) SHOperationView *selectNumOpView;
+@property (weak, nonatomic) SHOperationView *selectOpView;
 
 @property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
 @property (nonatomic, strong) SHFilesViewModel *filesViewModel;
@@ -64,20 +65,66 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 }
 
 - (void)setupFooterView {
+    NSInteger operationNum = self.filesViewModel.operationItems.count;
+    
+    CGFloat marginX = 0;
+    CGFloat x = marginX;
+    CGFloat h = CGRectGetHeight(self.footerView.frame);
+    CGFloat w = (CGRectGetWidth(self.footerView.frame) - marginX * operationNum) / operationNum;
+    
+    for (int i = 0; i < operationNum; i++) {
+        SHOperationView *view = [SHOperationView operationView];
+        view.item = self.filesViewModel.operationItems[i];
+        view.delegate = self;
+        
+        [self.footerView addSubview:view];
+        
+        view.frame = CGRectMake(x, 0, w, h);
+        x += view.bounds.size.width + marginX;
+        
+        if ([view.subTitle isEqualToString:@"全选"]) {
+            self.selectOpView = view;
+        } else if ([view.subTitle isEqualToString:@"已选择"]) {
+            self.selectNumOpView = view;
+        }
+    }
+    
+    self.footerView.alpha = 0;
+}
+
+- (void)updateFooterView {
     self.footerView.alpha = self.editState ? 0.85 : 0;
     
     [self.tableView reloadData];
 }
 
 - (void)updateSelectNumber {
-    [self.selectNumButton setTitle:@(self.filesViewModel.selectedFiles.count).stringValue forState:UIControlStateNormal];
+    self.selectNumOpView.title = @(self.filesViewModel.selectedFiles.count).stringValue;
     
+    [self updateSelectOpView];
+    [self updateOtherOpView];
+}
+
+- (void)updateSelectOpView {
     if (self.filesList.count != self.filesViewModel.selectedFiles.count) {
-        [self.selectButton setImage:[UIImage imageNamed:@"ic_unselected_white_24dp"] forState:UIControlStateNormal];
-        self.selectButton.tag = 0;
+        self.selectOpView.icon = [UIImage imageNamed:@"ic_unselected_white_24dp"];
+        self.selectOpView.subTitle = @"全选";
+        self.selectOpView.tag = 0;
     } else {
-        [self.selectButton setImage:[UIImage imageNamed:@"ic_select_all_white_24dp"] forState:UIControlStateNormal];
-        self.selectButton.tag = 1;
+        self.selectOpView.icon = [UIImage imageNamed:@"ic_select_all_white_24dp"];
+        self.selectOpView.subTitle = @"取消全选";
+        self.selectOpView.tag = 1;
+    }
+}
+
+- (void)updateOtherOpView {
+    for (SHOperationView *view in self.footerView.subviews) {
+        if ([view isKindOfClass:[SHOperationView class]] &&
+            view != self.selectOpView &&
+            view != self.selectNumOpView) {
+            view.userInteractionEnabled = self.filesViewModel.selectedFiles.count;
+            view.backgroundColor = self.filesViewModel.selectedFiles.count ? [UIColor clearColor] : [UIColor ic_colorWithHex:kBackgroundThemeColor alpha:0.5];
+        }
     }
 }
 
@@ -143,8 +190,8 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 
 #pragma mark - SHFilesCellDelegate
 - (void)longPressGestureHandleWithCell:(SHFilesCell *)cell {
-    SHLogInfo(SHLogTagAPP, @"longPressGestureHandleWithCell: %@", cell);
-    
+    SHLogTRACE();
+
     if (self.editState == NO) {
         if (self.editStateBlock) {
             self.editStateBlock();
@@ -180,16 +227,26 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     }];
 }
 
+#pragma mark - SHOperationViewDelegate
+- (void)clickedActionWithOperationView:(SHOperationView *)operationView {
+    SHOperationItem *item = operationView.item;
+    
+    SEL selector = NSSelectorFromString(item.methodName);
+    if ([self respondsToSelector:selector]) {
+        [self performSelector:selector withObject:operationView afterDelay:0];
+    }
+}
+
 #pragma mark - Edit Action
-- (IBAction)downloadAction:(id)sender {
-    
+- (void)downloadAction {
+    SHLogTRACE();
 }
 
-- (IBAction)deleteAction:(id)sender {
-    
+- (void)deleteAction {
+    SHLogTRACE();
 }
 
-- (IBAction)selectAllAction:(UIButton *)sender {
+- (void)selectAllAction:(SHOperationView *)sender {
     if (sender.tag == 0) {
         [self selectAllFiles];
         
@@ -216,7 +273,7 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     if (context == SHFilesControllerContext) {
         if ([keyPath isEqualToString:NSStringFromSelector(@selector(editState))]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self setupFooterView];
+                [self updateFooterView];
             });
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(selectedFiles))]) {
             dispatch_async(dispatch_get_main_queue(), ^{

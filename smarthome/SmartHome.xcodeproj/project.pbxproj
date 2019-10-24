@@ -58,6 +58,10 @@
 		382CAA941EE6A1270042442C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA931EE6A1270042442C /* UserNotifications.framework */; };
 		382CAA961EE6A1A60042442C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA951EE6A1A60042442C /* Security.framework */; };
 		3832653D2359AEBD00913843 /* SHAVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */; };
+		38339F0C236028ED007C433E /* SHOperationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38339F0B236028ED007C433E /* SHOperationView.m */; };
+		38339F0E236028F8007C433E /* SHOperationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38339F0D236028F8007C433E /* SHOperationView.xib */; };
+		3833A27D23605206007C433E /* EditOperationItems.json in Resources */ = {isa = PBXBuildFile; fileRef = 3833A27C23605206007C433E /* EditOperationItems.json */; };
+		3833A2802360537B007C433E /* SHOperationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3833A27F2360537B007C433E /* SHOperationItem.m */; };
 		38362CE72304FE5800C34E29 /* ZJImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC86232303EF6E00624C10 /* ZJImageCache.m */; };
 		38362CE82304FE5800C34E29 /* FaceCollectCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC86452303F2DE00624C10 /* FaceCollectCommon.m */; };
 		38362CE92304FEAE00C34E29 /* ZJImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 38EC862C2303EF6E00624C10 /* ZJImageCoderHelper.m */; };
@@ -545,6 +549,12 @@
 		382CAA951EE6A1A60042442C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3832653B2359AEBD00913843 /* SHAVPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAVPlayerViewController.h; sourceTree = "<group>"; };
 		3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAVPlayerViewController.m; sourceTree = "<group>"; };
+		38339F0A236028ED007C433E /* SHOperationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHOperationView.h; sourceTree = "<group>"; };
+		38339F0B236028ED007C433E /* SHOperationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHOperationView.m; sourceTree = "<group>"; };
+		38339F0D236028F8007C433E /* SHOperationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHOperationView.xib; sourceTree = "<group>"; };
+		3833A27C23605206007C433E /* EditOperationItems.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EditOperationItems.json; sourceTree = "<group>"; };
+		3833A27E2360537B007C433E /* SHOperationItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHOperationItem.h; sourceTree = "<group>"; };
+		3833A27F2360537B007C433E /* SHOperationItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHOperationItem.m; sourceTree = "<group>"; };
 		384130E023419B95008B418C /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libturbojpeg.a; sourceTree = "<group>"; };
 		384130E123419B95008B418C /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavutil.a; sourceTree = "<group>"; };
 		384130E223419B95008B418C /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libavfilter.a; sourceTree = "<group>"; };
@@ -1357,6 +1367,10 @@
 				38113ECD23580DEE005677B0 /* SHFilesController.m */,
 				38113ECC23580DEE005677B0 /* SHFilesCell.h */,
 				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
+				38339F0A236028ED007C433E /* SHOperationView.h */,
+				38339F0B236028ED007C433E /* SHOperationView.m */,
+				38339F0D236028F8007C433E /* SHOperationView.xib */,
+				3833A27C23605206007C433E /* EditOperationItems.json */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -1366,6 +1380,8 @@
 			children = (
 				38113EDB23583855005677B0 /* SHDateFileInfo.h */,
 				38113EDC23583855005677B0 /* SHDateFileInfo.m */,
+				3833A27E2360537B007C433E /* SHOperationItem.h */,
+				3833A27F2360537B007C433E /* SHOperationItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3503,6 +3519,7 @@
 				38BFB28D22D86ABE00AA3ABC /* com.baidu.idl.face.model.bundle in Resources */,
 				389C29E81F2EEA0D004C4806 /* Capture_Shutter.WAV in Resources */,
 				38F525B01F2F020400F5A5A2 /* SGQRCode.bundle in Resources */,
+				3833A27D23605206007C433E /* EditOperationItems.json in Resources */,
 				38E5C30C20A3F81F003004E0 /* MpbPopover.xib in Resources */,
 				3814BECA2178276700A13148 /* Resource.bundle in Resources */,
 				3897E0C22180743100E72417 /* XJSetupTipsView.xib in Resources */,
@@ -3517,6 +3534,7 @@
 				384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */,
 				389C29F71F2EEADC004C4806 /* Settings.bundle in Resources */,
 				38E5C3D320A419E0003004E0 /* userAccountItem.json in Resources */,
+				38339F0E236028F8007C433E /* SHOperationView.xib in Resources */,
 				3841312623419B96008B418C /* .cp in Resources */,
 				389C29FA1F2EEAF5004C4806 /* Localizable.strings in Resources */,
 				38A38FA822C0CE7100E831E3 /* AccountSettingItems.json in Resources */,
@@ -3707,6 +3725,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				384BBE3E20C13A900047E152 /* ZJPhoto.m in Sources */,
+				3833A2802360537B007C433E /* SHOperationItem.m in Sources */,
 				38F30F7B233860BF004F25E6 /* SHSubscriberCell.m in Sources */,
 				38BB264F21DF08EE00270CE1 /* FRDFaceInfoViewModel.m in Sources */,
 				38E5C2E520A3F7FA003004E0 /* SHDownloadManager.m in Sources */,
@@ -3849,6 +3868,7 @@
 				384BBE4420C13A900047E152 /* SVIndefiniteAnimatedView.m in Sources */,
 				38E5C15620A3F5AF003004E0 /* SHLocalAlbumTVC.m in Sources */,
 				38E5C15020A3F5AF003004E0 /* SHCamera.m in Sources */,
+				38339F0C236028ED007C433E /* SHOperationView.m in Sources */,
 				38E5C26520A3F66D003004E0 /* SHFileThumbnail.m in Sources */,
 				3818D69D21709CAA00AF846C /* SHChartGroup.m in Sources */,
 				38EC863C2303EF6E00624C10 /* ZJDataCacheConfig.m in Sources */,

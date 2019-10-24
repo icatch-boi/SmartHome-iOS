@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="ErR-wm-QlS" customClass="SHOperationView">
+            <rect key="frame" x="0.0" y="0.0" width="114" height="70"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jmp-6b-npa">
+                    <rect key="frame" x="32" y="0.0" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="jmp-6b-npa" secondAttribute="height" id="WMO-SK-Rpz"/>
+                    </constraints>
+                    <state key="normal" image="ic_download_white_24dp"/>
+                    <connections>
+                        <action selector="clickAction:" destination="ErR-wm-QlS" eventType="touchUpInside" id="d2P-DK-c29"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3j-BJ-zrI">
+                    <rect key="frame" x="0.0" y="50" width="114" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="18" id="4Hf-qo-gZK"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="oEa-QJ-bZh" firstAttribute="bottom" secondItem="c3j-BJ-zrI" secondAttribute="bottom" constant="2" id="1Bl-bs-cCb"/>
+                <constraint firstItem="jmp-6b-npa" firstAttribute="top" secondItem="oEa-QJ-bZh" secondAttribute="top" id="DX5-wn-wKz"/>
+                <constraint firstItem="jmp-6b-npa" firstAttribute="centerX" secondItem="ErR-wm-QlS" secondAttribute="centerX" id="YLg-5X-9vj"/>
+                <constraint firstItem="c3j-BJ-zrI" firstAttribute="top" secondItem="jmp-6b-npa" secondAttribute="bottom" id="xf8-pk-w91"/>
+                <constraint firstItem="c3j-BJ-zrI" firstAttribute="leading" secondItem="oEa-QJ-bZh" secondAttribute="leading" id="ybh-ZQ-BMH"/>
+                <constraint firstItem="oEa-QJ-bZh" firstAttribute="trailing" secondItem="c3j-BJ-zrI" secondAttribute="trailing" id="z2a-b2-jeB"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="oEa-QJ-bZh"/>
+            <connections>
+                <outlet property="button" destination="jmp-6b-npa" id="WTk-zD-ihq"/>
+                <outlet property="descriptionLabel" destination="c3j-BJ-zrI" id="LeI-9U-Kh1"/>
+            </connections>
+            <point key="canvasLocation" x="48.75" y="-20.070422535211268"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_download_white_24dp" width="24" height="24"/>
+    </resources>
+</document>

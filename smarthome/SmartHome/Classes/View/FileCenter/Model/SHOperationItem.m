@@ -1,4 +1,4 @@
-// SHFilesViewModel.h
+// SHOperationItem.m
 
 /**************************************************************************
  *
@@ -22,28 +22,26 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/17 7:57 PM.
+ // Created by zj on 2019/10/23 5:23 PM.
     
 
-#import <Foundation/Foundation.h>
-#import "SHS3FileInfo.h"
 #import "SHOperationItem.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation SHOperationItem
 
-@interface SHFilesViewModel : NSObject
++ (instancetype)operationItemWithDict:(NSDictionary *)dict {
+    return [[self alloc] initWithDict:dict];
+}
 
-@property (nonatomic, strong, readonly) NSMutableArray<SHS3FileInfo *> *selectedFiles;
-@property (nonatomic, strong, readonly) NSArray<SHOperationItem *> *operationItems;
+- (instancetype)initWithDict:(NSDictionary *)dict
+{
+    self = [super init];
+    if (self) {
+        [self setValuesForKeysWithDictionary:dict];
+    }
+    return self;
+}
 
-- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
-
-+ (CGFloat)filesCellRowHeight;
-
-- (void)addSelectedFile:(SHS3FileInfo *)fileInfo;
-- (void)addSelectedFiles:(NSArray<SHS3FileInfo *> *)filesInfo;
-- (void)clearSelectedFiles;
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
 @end
-
-NS_ASSUME_NONNULL_END

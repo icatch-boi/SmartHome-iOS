@@ -1,0 +1,26 @@
+[
+    {
+        "title" : "",
+        "iconName" : "ic_download_white_24dp",
+        "methodName" : "downloadAction",
+        "subTitle" : "下载",
+    },
+    {
+        "title" : "",
+        "iconName" : "ic_delete_white_24dp",
+        "methodName" : "deleteAction",
+        "subTitle" : "删除",
+    },
+    {
+        "title" : "",
+        "iconName" : "ic_unselected_white_24dp",
+        "methodName" : "selectAllAction:",
+        "subTitle" : "全选",
+    },
+    {
+        "title" : "0",
+        "iconName" : "",
+        "methodName" : "",
+        "subTitle" : "已选择",
+    },
+]

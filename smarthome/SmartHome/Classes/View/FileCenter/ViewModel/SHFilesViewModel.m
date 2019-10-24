@@ -31,10 +31,12 @@
 static const CGFloat kTopSpace = 8;
 static const CGFloat kIconWithScreenWidthScale = 0.45;
 static const CGFloat kIconWidthWithHeightScale = 16.0 / 9;
+static NSString * const kOperationItemFileName = @"EditOperationItems.json";
 
 @interface SHFilesViewModel ()
 
 @property (nonatomic, strong) NSMutableArray<SHS3FileInfo *> *selectedFiles;
+@property (nonatomic, strong) NSArray<SHOperationItem *> *operationItems;
 
 @end
 
@@ -91,6 +93,38 @@ static const CGFloat kIconWidthWithHeightScale = 16.0 / 9;
     }
     
     return _selectedFiles;
+}
+
+- (NSArray<SHOperationItem *> *)operationItems {
+    if (_operationItems == nil) {
+        NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        NSString *jsonPath = [docDir stringByAppendingPathComponent:kOperationItemFileName];
+        
+        NSData *data = [[NSData alloc] initWithContentsOfFile:jsonPath];
+        
+        if (data == nil) {
+            NSString *path = [[NSBundle mainBundle] pathForResource:kOperationItemFileName ofType:nil];
+            data = [[NSData alloc] initWithContentsOfFile:path];
+        }
+        
+        NSArray *tempArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if (tempArray == nil) {
+            SHLogError(SHLogTagAPP, @"Serialization is failed.");
+            _operationItems = [NSArray array];
+        } else {
+            NSMutableArray *tempMArray = [[NSMutableArray alloc] initWithCapacity:tempArray.count];
+            [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                SHOperationItem *item = [SHOperationItem operationItemWithDict:obj];
+                if (item) {
+                    [tempMArray addObject:item];
+                }
+            }];
+            
+            _operationItems = tempMArray.copy;
+        }
+    }
+    
+    return _operationItems;
 }
 
 @end
