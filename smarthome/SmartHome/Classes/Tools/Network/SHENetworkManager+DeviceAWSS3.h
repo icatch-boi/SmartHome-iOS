@@ -63,6 +63,9 @@ typedef void(^SHEListFilesCompletionBlock)(AWSS3ListObjectsV2Output * _Nullable 
 
 - (void)listFilesWithDeviceID:(NSString *)deviceID queryDate:(NSDate *)queryDate startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
 
+- (void)deleteFile:(SHS3FileInfo *)fileInfo completion:(SHEDeleteFileCompletionBlock)completion;
+- (void)deleteFiles:(NSArray<SHS3FileInfo *> *)filesInfo completion:(void (^)(NSArray<SHS3FileInfo *> *deleteSuccess, NSArray<SHS3FileInfo *> *deleteFailed))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

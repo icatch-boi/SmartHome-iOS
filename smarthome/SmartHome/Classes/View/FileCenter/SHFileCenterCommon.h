@@ -31,4 +31,6 @@
 static const NSUInteger kFileCenterShowDays = 8;
 static const CGFloat kDateViewMinWidth = 60;
 
+static NSString * const kReloadDateFileInfoNotification = @"ReloadDateFileInfoNotification";
+
 #endif /* SHFileCenterCommon_h */

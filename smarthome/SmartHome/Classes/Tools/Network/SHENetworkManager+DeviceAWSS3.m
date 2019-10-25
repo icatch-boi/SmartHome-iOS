@@ -774,4 +774,152 @@ typedef enum : NSUInteger {
     return videoKey;
 }
 
+- (void)deleteFiles:(NSArray<SHS3FileInfo *> *)filesInfo completion:(void (^)(NSArray<SHS3FileInfo *> *deleteSuccess, NSArray<SHS3FileInfo *> *deleteFailed))completion {
+    if (filesInfo.count == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `filesInfo` can't be nil.");
+        if (completion) {
+            completion(nil, nil);
+        }
+        
+        return;
+    }
+    
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_queue_create("com.icatchtek.DeleteFiles", DISPATCH_QUEUE_CONCURRENT);
+    __block NSMutableArray *successArray = nil;
+    __block NSMutableArray *failedArray = nil;
+    
+    WEAK_SELF(self);
+    [filesInfo enumerateObjectsUsingBlock:^(SHS3FileInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        dispatch_group_enter(group);
+        dispatch_async(queue, ^{
+            [weakself deleteFile:obj completion:^(BOOL isSuccess) {
+                if (isSuccess) {
+                    if (successArray == nil) {
+                        successArray = [NSMutableArray array];
+                    }
+                    
+                    [successArray addObject:obj];
+                } else {
+                    if (failedArray == nil) {
+                        failedArray = [NSMutableArray array];
+                    }
+                    
+                    [failedArray addObject:obj];
+                }
+                
+                dispatch_group_leave(group);
+            }];
+        });
+    }];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        SHLogInfo(SHLogTagAPP, @"Delete success count: %lu, failed count: %lu", (unsigned long)successArray.count, (unsigned long)failedArray.count);
+        
+        if (completion) {
+            completion(successArray.copy, failedArray.copy);
+        }
+    });
+}
+
+- (void)deleteFile:(SHS3FileInfo *)fileInfo completion:(SHEDeleteFileCompletionBlock)completion {
+    if (fileInfo == nil) {
+        SHLogError(SHLogTagAPP, @"Parameter `fileInfo` can't be nil.");
+        if (completion) {
+            completion(NO);
+        }
+        
+        return;
+    }
+    
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_queue_create("com.icatchtek.DeleteFile", DISPATCH_QUEUE_CONCURRENT);
+    __block BOOL success = YES;
+    
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        [self deleteFileWithDeviceID:fileInfo.deviceID filePath:fileInfo.key completion:^(BOOL isSuccess) {
+            success = !(isSuccess ^ success);
+            
+            dispatch_group_leave(group);
+        }];
+    });
+    
+    dispatch_group_enter(group);
+    dispatch_async(queue, ^{
+        [self deleteFileWithDeviceID:fileInfo.deviceID filePath:fileInfo.filePath completion:^(BOOL isSuccess) {
+            success = !(isSuccess ^ success);
+            
+            dispatch_group_leave(group);
+        }];
+    });
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (completion) {
+            completion(success);
+        }
+    });
+}
+
+- (void)deleteFileWithDeviceID:(NSString *)deviceID filePath:(NSString *)filePath completion:(SHEDeleteFileCompletionBlock)completion {
+    if (deviceID.length == 0 || filePath.length == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `deviceID` or `s3Obj` can't be nil.");
+        if (completion) {
+            completion(NO);
+        }
+        
+        return;
+    }
+    
+    if (self.deviceDirectoryInfos[deviceID] == nil) {
+        WEAK_SELF(self);
+        [self getDeviceS3DirectoryInfoWithDeviceid:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess && result != nil) {
+                weakself.deviceDirectoryInfos[deviceID] = result;
+                
+                [weakself deleteFileWithDeviceID:deviceID filePath:filePath completion:completion];
+            } else {
+                if (completion) {
+                    completion(NO);
+                }
+            }
+        }];
+    } else {
+        SHS3DirectoryInfo *deviceDirectoryInfo = self.deviceDirectoryInfos[deviceID];
+        [self deleteFileWithDeviceID:deviceID bucketName:deviceDirectoryInfo.bucket filePath:filePath completion:completion];
+    }
+}
+
+- (void)deleteFileWithDeviceID:(NSString *)deviceID bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHEDeleteFileCompletionBlock)completion {
+    if (deviceID.length == 0 || bucketName.length == 0 || filePath.length == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `deviceID` or `bucketName` or `filePath` can't be nil.");
+        if (completion) {
+            completion(NO);
+        }
+        
+        return;
+    }
+    
+    NSString *key = deviceID;
+    AWSS3 *s3 = [AWSS3 S3ForKey:key];
+    if (s3 == nil) {
+        WEAK_SELF(self);
+        [self getDeviceIdentityInfoWithDeviceid:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
+            if (isSuccess) {
+                SHIdentityInfo *info = result;
+                
+                [weakself registerS3WithProviderType:SHES3ProviderTypeDevice identityPoolId:info.IdentityPoolId forKey:key];
+                
+                [weakself deleteFileWithDeviceID:deviceID bucketName:bucketName filePath:filePath completion:completion];
+            } else {
+                if (completion) {
+                    completion(isSuccess);
+                }
+            }
+        }];
+    } else {
+        [self deleteFileWithAWSS3Client:s3 bucketName:bucketName filePath:filePath completion:completion];
+    }
+}
+
 @end

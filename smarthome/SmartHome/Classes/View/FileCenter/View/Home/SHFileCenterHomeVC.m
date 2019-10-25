@@ -36,6 +36,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 @property (nonatomic, weak) HWCalendar *calendar;
 @property (nonatomic, assign) BOOL editState;
 @property (nonatomic, weak) SHFileCenterHomeCell *currentCell;
+@property (nonatomic, strong) NSDate *currentDate;
 
 @end
 
@@ -57,20 +58,36 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     
     [self setupGUI];
     NSDate *date = [@"2019/10/01" convertToDateWithFormat:@"yyyy/MM/dd"];
-    [self loadDateFileInfoWithDate:[NSDate date]];
-    [self addEditStateObserver];
+    self.currentDate = [NSDate date];
+    [self addObserver];
 }
 
 - (void)dealloc {
-    [self removeEditStateObserver];
+    [self removeObserver];
 }
 
-- (void)addEditStateObserver {
+- (void)addObserver {
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) options:NSKeyValueObservingOptionNew context:SHFileCenterHomeVCContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDateFileInfoHandle:) name:kReloadDateFileInfoNotification object:nil];
 }
 
-- (void)removeEditStateObserver {
+- (void)removeObserver {
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) context:SHFileCenterHomeVCContext];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReloadDateFileInfoNotification object:nil];
+}
+
+- (void)reloadDateFileInfoHandle:(NSNotification *)nc {
+    [self cancelEditAction:nil];
+    
+    [self loadDateFileInfo];
+}
+
+- (void)setCurrentDate:(NSDate *)currentDate {
+    _currentDate = currentDate;
+    
+    if (currentDate != nil) {
+        [self loadDateFileInfo];
+    }
 }
 
 #pragma mark - GUI
@@ -163,18 +180,18 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 }
 
 #pragma mark - Load Data
-- (void)loadDateFileInfoWithDate:(NSDate *)date {
+- (void)loadDateFileInfo {
     [SVProgressHUD showWithStatus:nil];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
     WEAK_SELF(self);
-    [self.fileInfoViewModel loadDateFileInfoWithDate:date completion:^(NSArray<SHDateFileInfo *> * _Nonnull dateFileInfos) {
+    [self.fileInfoViewModel loadDateFileInfoWithDate:_currentDate completion:^(NSArray<SHDateFileInfo *> * _Nonnull dateFileInfos) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             
             weakself.dateFileInfos = dateFileInfos;
-            [weakself updateTitle:date];
+            [weakself updateTitle:weakself.currentDate];
         });
     }];
 }
@@ -364,8 +381,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 {
     SHLogInfo(SHLogTagAPP, @"selected date: %@", date);
  
-    NSDate *curDate = [date convertToDateWithFormat:@"yyyy-MM-dd HH:mm"];
-    [self loadDateFileInfoWithDate:curDate];
+    self.currentDate = [date convertToDateWithFormat:@"yyyy-MM-dd HH:mm"];
 }
 
 - (void)calendarWithGetDataFailedHandler:(HWCalendar *)calendar {

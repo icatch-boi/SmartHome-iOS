@@ -11,6 +11,7 @@
 #import "SHFilesViewModel.h"
 #import "SVProgressHUD.h"
 #import "SHOperationView.h"
+#import "SHFileCenterCommon.h"
 
 static void * SHFilesControllerContext = &SHFilesControllerContext;
 
@@ -244,6 +245,15 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 
 - (void)deleteAction {
     SHLogTRACE();
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:@"确定要删除所选文件吗？删除后数据将不能恢复！" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteHandle];
+    }]];
+
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
 
 - (void)selectAllAction:(SHOperationView *)sender {
@@ -257,6 +267,48 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     }
     
     [self.tableView reloadData];
+}
+
+- (void)deleteHandle {
+    [SVProgressHUD showWithStatus:@"正在删除..."];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    
+    WEAK_SELF(self);
+    [self.filesViewModel deleteSelectFileWithCompletion:^(NSArray<SHS3FileInfo *> * _Nonnull deleteSuccess, NSArray<SHS3FileInfo *> * _Nonnull deleteFailed) {
+        
+        NSString *noticeMessage = nil;
+        
+        if (deleteFailed.count == 0) {
+            noticeMessage = NSLocalizedString(@"DeleteDoneMessage", nil);
+        } else {
+            noticeMessage = NSLocalizedString(@"DeleteMultiError", nil);
+            NSString *failedCountString = [NSString stringWithFormat:@"%lu", (unsigned long)deleteFailed.count];
+            noticeMessage = [noticeMessage stringByReplacingOccurrencesOfString:@"%d" withString:failedCountString];
+        }
+        
+        [SVProgressHUD showErrorWithStatus:noticeMessage];
+        [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
+        
+        [weakself deleteResultHandle:deleteSuccess];
+    }];
+}
+
+- (void)deleteResultHandle:(NSArray<SHS3FileInfo *> *)deletedFiles {
+    if (deletedFiles.count == 0) {
+        return;
+    }
+    
+    NSMutableArray *temp = [NSMutableArray arrayWithArray:self.filesList];
+    [temp removeObjectsInArray:deletedFiles];
+    [self.filesViewModel removeSelectedFilesInArray:deletedFiles];
+    
+    self.filesList = temp.copy;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kPromptinfoDisplayDuration * 0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.filesList.count == 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kReloadDateFileInfoNotification object:nil];
+        }
+    });
 }
 
 #pragma mark - Init

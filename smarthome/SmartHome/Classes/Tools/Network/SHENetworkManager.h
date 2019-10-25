@@ -51,6 +51,7 @@ typedef enum : NSUInteger {
  @param result If request success return the requested data, Otherwise return error info.
  */
 typedef void(^SHERequestCompletionBlock)(BOOL isSuccess, id _Nullable result);
+typedef void(^SHEDeleteFileCompletionBlock)(BOOL isSuccess);
 
 typedef NS_ENUM(NSInteger, SHEError) {
     SHEErrorUnknown = -10000,
@@ -74,6 +75,7 @@ static NSString * const SHEErrorDomain = @"SHEErrorDomainUser"; //定义错误�
 - (void)getObjectWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHERequestCompletionBlock)completion;
 - (void)registerS3WithProviderType:(SHES3ProviderType)type identityPoolId:(NSString *)identityPoolId forKey:(NSString *)key;
 - (void)listObjectsWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName prefix:(NSString *)prefix startKey:(NSString * _Nullable)startKey number:(NSInteger)number completion:(void (^)(AWSS3ListObjectsV2Output * _Nullable response, NSError * _Nullable error))completion;
+- (void)deleteFileWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHEDeleteFileCompletionBlock)completion;
 
 - (NSError *)createInvalidParametersErrorWithDescription:(NSString *)description;
 

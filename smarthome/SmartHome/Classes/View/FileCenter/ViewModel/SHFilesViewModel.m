@@ -79,6 +79,10 @@ static NSString * const kOperationItemFileName = @"EditOperationItems.json";
     [self.selectedFilesArray addObjectsFromArray:filesInfo];
 }
 
+- (void)removeSelectedFilesInArray:(NSArray<SHS3FileInfo *> *)filesInfo {
+    [self.selectedFilesArray removeObjectsInArray:filesInfo];
+}
+
 - (void)clearSelectedFiles {
     [self.selectedFilesArray removeAllObjects];
 }
@@ -125,6 +129,15 @@ static NSString * const kOperationItemFileName = @"EditOperationItems.json";
     }
     
     return _operationItems;
+}
+
+- (void)deleteSelectFileWithCompletion:(void (^)(NSArray<SHS3FileInfo *> *deleteSuccess, NSArray<SHS3FileInfo *> *deleteFailed))completion {
+
+    [[SHENetworkManager sharedManager] deleteFiles:self.selectedFiles completion:^(NSArray<SHS3FileInfo *> * _Nonnull deleteSuccess, NSArray<SHS3FileInfo *> * _Nonnull deleteFailed) {
+        if (completion) {
+            completion(deleteSuccess, deleteFailed);
+        }
+    }];
 }
 
 @end

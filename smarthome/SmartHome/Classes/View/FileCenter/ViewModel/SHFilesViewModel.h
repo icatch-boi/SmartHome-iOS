@@ -42,7 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addSelectedFile:(SHS3FileInfo *)fileInfo;
 - (void)addSelectedFiles:(NSArray<SHS3FileInfo *> *)filesInfo;
+- (void)removeSelectedFilesInArray:(NSArray<SHS3FileInfo *> *)filesInfo;
 - (void)clearSelectedFiles;
+
+- (void)deleteSelectFileWithCompletion:(void (^)(NSArray<SHS3FileInfo *> *deleteSuccess, NSArray<SHS3FileInfo *> *deleteFailed))completion;
 
 @end
 
