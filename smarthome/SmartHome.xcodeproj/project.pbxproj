@@ -1337,6 +1337,7 @@
 		38113EC123580DEE005677B0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				38F4AC802362960700DCFE73 /* Download */,
 				3832653A2359AE2C00913843 /* Player */,
 				38113EC223580DEE005677B0 /* Home */,
 				38113ECA23580DEE005677B0 /* Files */,
@@ -1349,13 +1350,10 @@
 		38113EC223580DEE005677B0 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				38F4AC82236298E000DCFE73 /* HomeCell */,
+				38F4AC81236298A200DCFE73 /* DateView */,
 				38113EC923580DEE005677B0 /* SHFileCenterHomeVC.h */,
 				38113EC623580DEE005677B0 /* SHFileCenterHomeVC.m */,
-				38113EC723580DEE005677B0 /* SHDateView.h */,
-				38113EC323580DEE005677B0 /* SHDateView.m */,
-				38113EC423580DEE005677B0 /* SHDateView.xib */,
-				38113EC523580DEE005677B0 /* SHFileCenterHomeCell.h */,
-				38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1363,13 +1361,10 @@
 		38113ECA23580DEE005677B0 /* Files */ = {
 			isa = PBXGroup;
 			children = (
+				38F4AC832362995600DCFE73 /* OperationView */,
+				38F4AC842362999200DCFE73 /* FilesCell */,
 				38113ECB23580DEE005677B0 /* SHFilesController.h */,
 				38113ECD23580DEE005677B0 /* SHFilesController.m */,
-				38113ECC23580DEE005677B0 /* SHFilesCell.h */,
-				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
-				38339F0A236028ED007C433E /* SHOperationView.h */,
-				38339F0B236028ED007C433E /* SHOperationView.m */,
-				38339F0D236028F8007C433E /* SHOperationView.xib */,
 				3833A27C23605206007C433E /* EditOperationItems.json */,
 			);
 			path = Files;
@@ -3166,6 +3161,51 @@
 				38503D3622F4178600B5226F /* SHFaceInfo.m */,
 			);
 			path = NotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		38F4AC802362960700DCFE73 /* Download */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
+		38F4AC81236298A200DCFE73 /* DateView */ = {
+			isa = PBXGroup;
+			children = (
+				38113EC723580DEE005677B0 /* SHDateView.h */,
+				38113EC323580DEE005677B0 /* SHDateView.m */,
+				38113EC423580DEE005677B0 /* SHDateView.xib */,
+			);
+			path = DateView;
+			sourceTree = "<group>";
+		};
+		38F4AC82236298E000DCFE73 /* HomeCell */ = {
+			isa = PBXGroup;
+			children = (
+				38113EC523580DEE005677B0 /* SHFileCenterHomeCell.h */,
+				38113EC823580DEE005677B0 /* SHFileCenterHomeCell.m */,
+			);
+			path = HomeCell;
+			sourceTree = "<group>";
+		};
+		38F4AC832362995600DCFE73 /* OperationView */ = {
+			isa = PBXGroup;
+			children = (
+				38339F0A236028ED007C433E /* SHOperationView.h */,
+				38339F0B236028ED007C433E /* SHOperationView.m */,
+				38339F0D236028F8007C433E /* SHOperationView.xib */,
+			);
+			path = OperationView;
+			sourceTree = "<group>";
+		};
+		38F4AC842362999200DCFE73 /* FilesCell */ = {
+			isa = PBXGroup;
+			children = (
+				38113ECC23580DEE005677B0 /* SHFilesCell.h */,
+				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
+			);
+			path = FilesCell;
 			sourceTree = "<group>";
 		};
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
