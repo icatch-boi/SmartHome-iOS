@@ -381,6 +381,14 @@
 		38F442521FAC079A00BDA6DF /* NotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 38F442491FAC079900BDA6DF /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		38F442571FAC125600BDA6DF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9C41EE69C270042442C /* libz.tbd */; };
 		38F442581FAC126300BDA6DF /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CA9BC1EE69BEF0042442C /* libresolv.tbd */; };
+		38F4AC8623629B8500DCFE73 /* Download.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38F4AC8523629B8500DCFE73 /* Download.storyboard */; };
+		38F4AC8923629D5100DCFE73 /* SHDownloadHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC8823629D5100DCFE73 /* SHDownloadHomeVC.m */; };
+		38F4AC8F2362A03200DCFE73 /* SHOptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC8E2362A03200DCFE73 /* SHOptionView.m */; };
+		38F4AC912362A53F00DCFE73 /* SHOptionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38F4AC902362A53F00DCFE73 /* SHOptionView.xib */; };
+		38F4AC942362D42000DCFE73 /* SHOptionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC932362D42000DCFE73 /* SHOptionItem.m */; };
+		38F4AC982362D78300DCFE73 /* SHDownloadHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC972362D78300DCFE73 /* SHDownloadHomeCell.m */; };
+		38F4AC9B2362EAB800DCFE73 /* SHDownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC9A2362EAB800DCFE73 /* SHDownloadController.m */; };
+		38F4AC9F2362EAF000DCFE73 /* SHDownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC9E2362EAF000DCFE73 /* SHDownloadCell.m */; };
 		38F5257F1F2F020400F5A5A2 /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F524FB1F2F020400F5A5A2 /* CustomIOS7AlertView.m */; };
 		38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F524FE1F2F020400F5A5A2 /* GCDiscreetNotificationView.m */; };
 		38F525811F2F020400F5A5A2 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 38F524FF1F2F020400F5A5A2 /* LICENSE.txt */; };
@@ -1178,6 +1186,20 @@
 		38F4424B1FAC079A00BDA6DF /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		38F4424C1FAC079A00BDA6DF /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		38F4424E1FAC079A00BDA6DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38F4AC8523629B8500DCFE73 /* Download.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Download.storyboard; sourceTree = "<group>"; };
+		38F4AC8723629D5100DCFE73 /* SHDownloadHomeVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadHomeVC.h; sourceTree = "<group>"; };
+		38F4AC8823629D5100DCFE73 /* SHDownloadHomeVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadHomeVC.m; sourceTree = "<group>"; };
+		38F4AC8D2362A03200DCFE73 /* SHOptionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHOptionView.h; sourceTree = "<group>"; };
+		38F4AC8E2362A03200DCFE73 /* SHOptionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHOptionView.m; sourceTree = "<group>"; };
+		38F4AC902362A53F00DCFE73 /* SHOptionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SHOptionView.xib; sourceTree = "<group>"; };
+		38F4AC922362D42000DCFE73 /* SHOptionItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHOptionItem.h; sourceTree = "<group>"; };
+		38F4AC932362D42000DCFE73 /* SHOptionItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHOptionItem.m; sourceTree = "<group>"; };
+		38F4AC962362D78300DCFE73 /* SHDownloadHomeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadHomeCell.h; sourceTree = "<group>"; };
+		38F4AC972362D78300DCFE73 /* SHDownloadHomeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadHomeCell.m; sourceTree = "<group>"; };
+		38F4AC992362EAB800DCFE73 /* SHDownloadController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadController.h; sourceTree = "<group>"; };
+		38F4AC9A2362EAB800DCFE73 /* SHDownloadController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadController.m; sourceTree = "<group>"; };
+		38F4AC9D2362EAF000DCFE73 /* SHDownloadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadCell.h; sourceTree = "<group>"; };
+		38F4AC9E2362EAF000DCFE73 /* SHDownloadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadCell.m; sourceTree = "<group>"; };
 		38F524FA1F2F020400F5A5A2 /* CustomIOS7AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOS7AlertView.h; sourceTree = "<group>"; };
 		38F524FB1F2F020400F5A5A2 /* CustomIOS7AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOS7AlertView.m; sourceTree = "<group>"; };
 		38F524FD1F2F020400F5A5A2 /* GCDiscreetNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDiscreetNotificationView.h; sourceTree = "<group>"; };
@@ -1377,6 +1399,8 @@
 				38113EDC23583855005677B0 /* SHDateFileInfo.m */,
 				3833A27E2360537B007C433E /* SHOperationItem.h */,
 				3833A27F2360537B007C433E /* SHOperationItem.m */,
+				38F4AC922362D42000DCFE73 /* SHOptionItem.h */,
+				38F4AC932362D42000DCFE73 /* SHOptionItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3166,6 +3190,14 @@
 		38F4AC802362960700DCFE73 /* Download */ = {
 			isa = PBXGroup;
 			children = (
+				38F4AC9C2362EAD000DCFE73 /* DownloadCell */,
+				38F4AC952362D75800DCFE73 /* HomeCell */,
+				38F4AC8B2362A00500DCFE73 /* OptionView */,
+				38F4AC8523629B8500DCFE73 /* Download.storyboard */,
+				38F4AC8723629D5100DCFE73 /* SHDownloadHomeVC.h */,
+				38F4AC8823629D5100DCFE73 /* SHDownloadHomeVC.m */,
+				38F4AC992362EAB800DCFE73 /* SHDownloadController.h */,
+				38F4AC9A2362EAB800DCFE73 /* SHDownloadController.m */,
 			);
 			path = Download;
 			sourceTree = "<group>";
@@ -3206,6 +3238,34 @@
 				38113ECE23580DEE005677B0 /* SHFilesCell.m */,
 			);
 			path = FilesCell;
+			sourceTree = "<group>";
+		};
+		38F4AC8B2362A00500DCFE73 /* OptionView */ = {
+			isa = PBXGroup;
+			children = (
+				38F4AC8D2362A03200DCFE73 /* SHOptionView.h */,
+				38F4AC8E2362A03200DCFE73 /* SHOptionView.m */,
+				38F4AC902362A53F00DCFE73 /* SHOptionView.xib */,
+			);
+			path = OptionView;
+			sourceTree = "<group>";
+		};
+		38F4AC952362D75800DCFE73 /* HomeCell */ = {
+			isa = PBXGroup;
+			children = (
+				38F4AC962362D78300DCFE73 /* SHDownloadHomeCell.h */,
+				38F4AC972362D78300DCFE73 /* SHDownloadHomeCell.m */,
+			);
+			path = HomeCell;
+			sourceTree = "<group>";
+		};
+		38F4AC9C2362EAD000DCFE73 /* DownloadCell */ = {
+			isa = PBXGroup;
+			children = (
+				38F4AC9D2362EAF000DCFE73 /* SHDownloadCell.h */,
+				38F4AC9E2362EAF000DCFE73 /* SHDownloadCell.m */,
+			);
+			path = DownloadCell;
 			sourceTree = "<group>";
 		};
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
@@ -3542,6 +3602,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F4AC8623629B8500DCFE73 /* Download.storyboard in Resources */,
 				382B99922175950400318BB8 /* test1.caf in Resources */,
 				380770391FD66C3C006E7B92 /* test.caf in Resources */,
 				38E5C38020A41190003004E0 /* Setting.storyboard in Resources */,
@@ -3569,6 +3630,7 @@
 				389C2A051F2EF533004C4806 /* LaunchScreen.storyboard in Resources */,
 				384BBE4520C13A900047E152 /* SVProgressHUD.bundle in Resources */,
 				3818D66521709AB200AF846C /* PushTest.storyboard in Resources */,
+				38F4AC912362A53F00DCFE73 /* SHOptionView.xib in Resources */,
 				38E5C2E720A3F7FA003004E0 /* SHFileFilter.plist in Resources */,
 				38BFB28C22D86ABE00AA3ABC /* idl-license.face-ios in Resources */,
 				384BBE3F20C13A900047E152 /* ZJPhotoBrowser.bundle in Resources */,
@@ -3810,6 +3872,7 @@
 				38E5C2FD20A3F80B003004E0 /* SHVideoPlaybackVC.m in Sources */,
 				38F30F9A233A34CF004F25E6 /* SHENetworkManager+DeviceAWSS3.m in Sources */,
 				38E5C15E20A3F5AF003004E0 /* SHSinglePreviewVC.m in Sources */,
+				38F4AC982362D78300DCFE73 /* SHDownloadHomeCell.m in Sources */,
 				38F525B11F2F020400F5A5A2 /* SGQRCodeConst.m in Sources */,
 				38E5C34B20A40F8A003004E0 /* SHCameraListViewModel.m in Sources */,
 				38E5C30D20A3F81F003004E0 /* VideoPlaybackBufferingView.m in Sources */,
@@ -3904,6 +3967,7 @@
 				38EC86402303EF6E00624C10 /* UIImage+GIF.m in Sources */,
 				38E5C26420A3F66D003004E0 /* SHObserver.m in Sources */,
 				38BB265A21DF08EE00270CE1 /* FRDFacesViewController.m in Sources */,
+				38F4AC942362D42000DCFE73 /* SHOptionItem.m in Sources */,
 				38E5C37D20A41027003004E0 /* CoreDataHandler.m in Sources */,
 				384BBE4420C13A900047E152 /* SVIndefiniteAnimatedView.m in Sources */,
 				38E5C15620A3F5AF003004E0 /* SHLocalAlbumTVC.m in Sources */,
@@ -3924,6 +3988,7 @@
 				38E5C2A120A3F6C3003004E0 /* SHH264StreamParameter.cpp in Sources */,
 				38E5C1B220A3F5AF003004E0 /* SHCameraPreviewVC.m in Sources */,
 				38E5C2E620A3F7FA003004E0 /* MpbSDKEventListener.cpp in Sources */,
+				38F4AC9B2362EAB800DCFE73 /* SHDownloadController.m in Sources */,
 				38BB265721DF08EE00270CE1 /* FRDFaceDetectionVC.m in Sources */,
 				38E5C23C20A3F650003004E0 /* SHGettingSupportedProperty.m in Sources */,
 				3818D68A21709BA100AF846C /* NSArray+XYChart.m in Sources */,
@@ -3964,6 +4029,7 @@
 				38E5C18E20A3F5AF003004E0 /* SHUserAccountCommon.m in Sources */,
 				38EC863F2303EF6E00624C10 /* ZJImageCoderHelper.m in Sources */,
 				38A38FA722C0CE7100E831E3 /* SHAccountSettingViewModelItem.m in Sources */,
+				38F4AC9F2362EAF000DCFE73 /* SHDownloadCell.m in Sources */,
 				3875AC0421E6150100481AE9 /* FRDAddFaceCollectionVC.m in Sources */,
 				38113ED423580DEF005677B0 /* SHFileCenterHomeCell.m in Sources */,
 				38E5C1B620A3F5AF003004E0 /* SH_XJ_SettingDetailTVC.m in Sources */,
@@ -3978,6 +4044,7 @@
 				38E5C16020A3F5AF003004E0 /* SHWaterView.m in Sources */,
 				38F30F6423385975004F25E6 /* SHMessageFile.m in Sources */,
 				38E5C21E20A3F610003004E0 /* Reachability.m in Sources */,
+				38F4AC8923629D5100DCFE73 /* SHDownloadHomeVC.m in Sources */,
 				38A38FA622C0CE7100E831E3 /* SHAccountSettingViewModel.m in Sources */,
 				38BB266E21DF5E2900270CE1 /* FRDFaceData.m in Sources */,
 				38F30F5F23385975004F25E6 /* SHMessageListViewModel.m in Sources */,
@@ -4030,6 +4097,7 @@
 				38AAE01F2202C78E009B37F8 /* SHWechatServerVC.m in Sources */,
 				38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */,
 				38E5C2A020A3F6C3003004E0 /* SHCamStaticData.m in Sources */,
+				38F4AC8F2362A03200DCFE73 /* SHOptionView.m in Sources */,
 				38113EE523588EBF005677B0 /* SHFilesViewModel.m in Sources */,
 				38BB266B21DF40E000270CE1 /* FaceCollectionViewCell.m in Sources */,
 				38757834223A27F5006A4052 /* SHDeviceUpgradeVC.m in Sources */,

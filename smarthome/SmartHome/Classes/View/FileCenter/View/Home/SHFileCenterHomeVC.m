@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "SHAVPlayerViewController.h"
 #import "HWCalendar.h"
+#import "SHDownloadHomeVC.h"
 
 static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 
@@ -166,6 +167,12 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 }
 
 - (void)setupNavigationItem {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_download_white_24dp"] style:UIBarButtonItemStyleDone target:self action:@selector(enterDownloadController)];
+    
+    [self updateNavigationItem];
+}
+
+- (void)updateNavigationItem {
     if (self.editState) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-cancel"] style:UIBarButtonItemStyleDone target:self action:@selector(cancelEditAction:)];
         self.collectionView.scrollEnabled = NO;
@@ -256,6 +263,12 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     } else {
         [_calendar show];
     }
+}
+
+- (void)enterDownloadController {
+    SHDownloadHomeVC *vc = [SHDownloadHomeVC downloadHomeVC];
+
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - UICollectonViewDataSource
@@ -412,7 +425,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     if (context == SHFileCenterHomeVCContext) {
         if ([keyPath isEqualToString:NSStringFromSelector(@selector(editState))]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self setupNavigationItem];
+                [self updateNavigationItem];
             });
         }
     } else {
