@@ -27,8 +27,9 @@
 
 #import "SHDownloadController.h"
 #import "SHDownloadCell.h"
+#import "SHFCDownloaderOpManager.h"
 
-@interface SHDownloadController ()
+@interface SHDownloadController ()<SHFCDownloaderOpManagerDelegate>
 
 @end
 
@@ -43,11 +44,25 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self setupGUI];
+    [self addObserver];
 }
 
+- (void)dealloc {
+    [self removeObserver];
+}
+
+#pragma mark - GUI
 - (void)setupGUI {
     self.tableView.rowHeight = 60;
     self.tableView.tableFooterView = [[UIView alloc] init];
+}
+
+- (void)addObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadCompletionHandle:) name:kDownloadCompletionNotification object:nil];
+}
+
+- (void)removeObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kDownloadCompletionNotification object:nil];
 }
 
 #pragma mark - Table view data source
@@ -57,15 +72,48 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return [self listArray].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SHDownloadCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DownloadCell" forIndexPath:indexPath];
     
     // Configure the cell...
+    cell.fileInfo = [self listArray][indexPath.row];
     
     return cell;
+}
+
+#pragma mark - SHFCDownloaderOpManager
+- (void)startDownloadWithFileInfo:(SHS3FileInfo *)fileInfo {
+    NSInteger row = [[self listArray] indexOfObject:fileInfo];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    });
+}
+
+- (void)downloadCompletionWithFileInfo:(SHS3FileInfo *)fileInfo {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
+- (void)downloadCompletionHandle:(NSNotification *)nc {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+}
+
+#pragma mark - Load Data
+- (NSArray *)listArray {
+    SHDownloadItem *item = [[SHFCDownloaderOpManager sharedDownloader] downloadItemWithDeviceID:self.deviceID];
+    if ([self.optionItem.title isEqualToString:@"正在下载"]) {
+        return item.downloadArray.copy;
+    } else {
+        return item.finishedArray.copy;
+    }
 }
 
 @end

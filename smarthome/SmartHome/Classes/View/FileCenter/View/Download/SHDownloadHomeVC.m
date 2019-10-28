@@ -33,8 +33,6 @@
 @interface SHDownloadHomeVC ()<SHOptionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *optionsView;
-@property (weak, nonatomic) IBOutlet SHOptionView *downloadingOptionView;
-@property (weak, nonatomic) IBOutlet SHOptionView *finishOptionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 
@@ -56,9 +54,6 @@
     
     [self setupGUI];
     
-//    self.downloadingOptionView.optionItem = self.optionsArray.firstObject;
-//    self.finishOptionView.optionItem = self.optionsArray.lastObject;
-//    self.downloadingOptionView.scale = 1.0;
     [self setupOptionViewData];
 }
 
@@ -115,6 +110,9 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SHDownloadHomeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"DownloadHomeCell" forIndexPath:indexPath];
+    
+    cell.optionItem = self.optionsArray[indexPath.row];
+    cell.deviceID = self.deviceID;
     
     return cell;
 }

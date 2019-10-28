@@ -58,4 +58,10 @@
     self.downloadController.optionItem = optionItem;
 }
 
+- (void)setDeviceID:(NSString *)deviceID {
+    _deviceID = deviceID;
+    
+    self.downloadController.deviceID = deviceID;
+}
+
 @end

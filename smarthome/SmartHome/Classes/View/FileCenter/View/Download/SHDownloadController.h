@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SHDownloadController : UITableViewController
 
 @property (nonatomic, strong) SHOptionItem *optionItem;
+@property (nonatomic, copy) NSString *deviceID;
 
 @end
 

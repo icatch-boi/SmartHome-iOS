@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHDownloadHomeVC : UIViewController
 
+@property (nonatomic, copy) NSString *deviceID;
+
 + (instancetype)downloadHomeVC;
 
 @end

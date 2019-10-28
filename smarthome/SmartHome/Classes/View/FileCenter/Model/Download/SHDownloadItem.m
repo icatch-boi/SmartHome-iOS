@@ -1,4 +1,4 @@
-// SHDownloadCell.h
+// SHDownloadItem.m
 
 /**************************************************************************
  *
@@ -22,18 +22,28 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/25 4:33 PM.
+ // Created by zj on 2019/10/25 7:42 PM.
     
 
-#import <UIKit/UIKit.h>
-#import "SHS3FileInfo.h"
+#import "SHDownloadItem.h"
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation SHDownloadItem
 
-@interface SHDownloadCell : UITableViewCell
+- (NSMutableArray *)downloadArray {
+    NSMutableArray * _Nonnull extractedExpr = _downloadArray;
+    if (extractedExpr == nil) {
+        _downloadArray = [[NSMutableArray alloc] init];
+    }
+    
+    return _downloadArray;
+}
 
-@property (nonatomic, strong) SHS3FileInfo *fileInfo;
+- (NSMutableArray *)finishedArray {
+    if (_finishedArray == nil) {
+        _finishedArray = [[NSMutableArray alloc] init];
+    }
+    
+    return _finishedArray;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

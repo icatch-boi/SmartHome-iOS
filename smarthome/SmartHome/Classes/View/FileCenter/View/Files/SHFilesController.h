@@ -14,12 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 @class SHS3FileInfo;
 typedef void(^SHFilesControllerDidSelectBlock)(SHS3FileInfo *fileInfo);
 typedef void(^SHFilesControllerEditStateBlock)();
+typedef void(^SHFilesControllerEnterDownloadBlock)();
 
 @interface SHFilesController : UIViewController
 
 @property (nonatomic, strong) SHDateFileInfo *dateFileInfo;
 @property (nonatomic, copy) SHFilesControllerDidSelectBlock didSelectBlock;
 @property (nonatomic, copy) SHFilesControllerEditStateBlock editStateBlock;
+@property (nonatomic, copy) SHFilesControllerEnterDownloadBlock enterDownloadBlock;
 
 - (void)cancelEditAction;
 

@@ -1,4 +1,4 @@
-// SHS3FileInfo.h
+// SHFCDownloaderOpManager.h
 
 /**************************************************************************
  *
@@ -22,35 +22,36 @@
  *
  **************************************************************************/
  
- // Created by zj on 2019/10/8 8:04 PM.
+ // Created by zj on 2019/10/25 7:27 PM.
     
 
 #import <Foundation/Foundation.h>
+#import "SHS3FileInfo.h"
+#import "SHDownloadItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, SHDownloadState) {
-    SHDownloadStateWaiting = 0,
-    SHDownloadStateDownloading,
-    SHDownloadStateFinished,
-};
+static NSString * const kDownloadCompletionNotification = @"DownloadCompletionNotification";
 
-@interface SHS3FileInfo : NSObject<NSCopying>
+@protocol SHFCDownloaderOpManagerDelegate <NSObject>
 
-@property (nonatomic, copy, readonly) NSString *datetime;
-@property (nonatomic, copy, readonly) NSString *duration;
-@property (nonatomic, copy, readonly) NSString *monitor;
-@property (nonatomic, copy, readonly) NSString *videosize;
+- (void)startDownloadWithFileInfo:(SHS3FileInfo *)fileInfo;
+- (void)downloadCompletionWithFileInfo:(SHS3FileInfo *)fileInfo;
 
-@property (nonatomic, copy) NSString *key;
-@property (nonatomic, copy) NSString *fileName;
-@property (nonatomic, copy) NSString *filePath;
-@property (nonatomic, strong) UIImage *thumbnail;
-@property (nonatomic, copy) NSString *deviceID;
-@property (nonatomic, assign) BOOL selected;
-@property (nonatomic, assign) SHDownloadState downloadState;
+@end
 
-+ (instancetype)s3FileInfoWithFileInfoDict:(NSDictionary *)dict;
+@interface SHFCDownloaderOpManager : NSObject
+
++ (instancetype)sharedDownloader;
+- (void)addDownloadFile:(SHS3FileInfo *)fileInfo;
+
+- (void)cancelDownload:(SHS3FileInfo *)fileInfo;
+
+- (void)startDownloadWithDeviceID:(NSString *)deviceID;
+
+- (SHDownloadItem *)downloadItemWithDeviceID:(NSString *)deviceID;
+
+@property (nonatomic, weak) id<SHFCDownloaderOpManagerDelegate> delegate;
 
 @end
 

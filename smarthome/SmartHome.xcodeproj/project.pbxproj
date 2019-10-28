@@ -389,6 +389,9 @@
 		38F4AC982362D78300DCFE73 /* SHDownloadHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC972362D78300DCFE73 /* SHDownloadHomeCell.m */; };
 		38F4AC9B2362EAB800DCFE73 /* SHDownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC9A2362EAB800DCFE73 /* SHDownloadController.m */; };
 		38F4AC9F2362EAF000DCFE73 /* SHDownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4AC9E2362EAF000DCFE73 /* SHDownloadCell.m */; };
+		38F4ACA3236305C100DCFE73 /* SHFCDownloaderOp.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4ACA2236305C100DCFE73 /* SHFCDownloaderOp.m */; };
+		38F4ACA9236313AA00DCFE73 /* SHFCDownloaderOpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4ACA8236313AA00DCFE73 /* SHFCDownloaderOpManager.m */; };
+		38F4ACAC2363170B00DCFE73 /* SHDownloadItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F4ACAB2363170B00DCFE73 /* SHDownloadItem.m */; };
 		38F5257F1F2F020400F5A5A2 /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F524FB1F2F020400F5A5A2 /* CustomIOS7AlertView.m */; };
 		38F525801F2F020400F5A5A2 /* GCDiscreetNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F524FE1F2F020400F5A5A2 /* GCDiscreetNotificationView.m */; };
 		38F525811F2F020400F5A5A2 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 38F524FF1F2F020400F5A5A2 /* LICENSE.txt */; };
@@ -1200,6 +1203,12 @@
 		38F4AC9A2362EAB800DCFE73 /* SHDownloadController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadController.m; sourceTree = "<group>"; };
 		38F4AC9D2362EAF000DCFE73 /* SHDownloadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadCell.h; sourceTree = "<group>"; };
 		38F4AC9E2362EAF000DCFE73 /* SHDownloadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadCell.m; sourceTree = "<group>"; };
+		38F4ACA1236305C100DCFE73 /* SHFCDownloaderOp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFCDownloaderOp.h; sourceTree = "<group>"; };
+		38F4ACA2236305C100DCFE73 /* SHFCDownloaderOp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFCDownloaderOp.m; sourceTree = "<group>"; };
+		38F4ACA7236313AA00DCFE73 /* SHFCDownloaderOpManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFCDownloaderOpManager.h; sourceTree = "<group>"; };
+		38F4ACA8236313AA00DCFE73 /* SHFCDownloaderOpManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFCDownloaderOpManager.m; sourceTree = "<group>"; };
+		38F4ACAA2363170B00DCFE73 /* SHDownloadItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHDownloadItem.h; sourceTree = "<group>"; };
+		38F4ACAB2363170B00DCFE73 /* SHDownloadItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHDownloadItem.m; sourceTree = "<group>"; };
 		38F524FA1F2F020400F5A5A2 /* CustomIOS7AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOS7AlertView.h; sourceTree = "<group>"; };
 		38F524FB1F2F020400F5A5A2 /* CustomIOS7AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOS7AlertView.m; sourceTree = "<group>"; };
 		38F524FD1F2F020400F5A5A2 /* GCDiscreetNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDiscreetNotificationView.h; sourceTree = "<group>"; };
@@ -1395,6 +1404,7 @@
 		38113EDA235837F9005677B0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				38F4ACA02363056500DCFE73 /* Download */,
 				38113EDB23583855005677B0 /* SHDateFileInfo.h */,
 				38113EDC23583855005677B0 /* SHDateFileInfo.m */,
 				3833A27E2360537B007C433E /* SHOperationItem.h */,
@@ -3268,6 +3278,19 @@
 			path = DownloadCell;
 			sourceTree = "<group>";
 		};
+		38F4ACA02363056500DCFE73 /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				38F4ACA1236305C100DCFE73 /* SHFCDownloaderOp.h */,
+				38F4ACA2236305C100DCFE73 /* SHFCDownloaderOp.m */,
+				38F4ACA7236313AA00DCFE73 /* SHFCDownloaderOpManager.h */,
+				38F4ACA8236313AA00DCFE73 /* SHFCDownloaderOpManager.m */,
+				38F4ACAA2363170B00DCFE73 /* SHDownloadItem.h */,
+				38F4ACAB2363170B00DCFE73 /* SHDownloadItem.m */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
 		38F524F81F2F020400F5A5A2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -3932,6 +3955,7 @@
 				38BB265521DF08EE00270CE1 /* FRDFaceInfo.m in Sources */,
 				38E5C35120A40F8A003004E0 /* SHCommonControl.m in Sources */,
 				38E5C29320A3F6AA003004E0 /* SHTutkHttp.m in Sources */,
+				38F4ACAC2363170B00DCFE73 /* SHDownloadItem.m in Sources */,
 				38E5C35220A40F8A003004E0 /* SHPropertyControl.m in Sources */,
 				38E5C15120A3F5AF003004E0 /* SHShareCamera.m in Sources */,
 				38BB265821DF08EE00270CE1 /* FRDHomeViewController.m in Sources */,
@@ -3948,6 +3972,7 @@
 				38E5C37120A40FFC003004E0 /* UIView+Addition.m in Sources */,
 				38E5C22220A3F610003004E0 /* SHFindIndicator.m in Sources */,
 				38E5C36A20A40FFC003004E0 /* GCDiscreetNotificationView+Addition.m in Sources */,
+				38F4ACA3236305C100DCFE73 /* SHFCDownloaderOp.m in Sources */,
 				38E5C34F20A40F8A003004E0 /* SHPlaybackControl.m in Sources */,
 				389C29F21F2EEABF004C4806 /* main.m in Sources */,
 				38E5C1B520A3F5AF003004E0 /* SHDetailTableViewController.m in Sources */,
@@ -4071,6 +4096,7 @@
 				38E5C2E820A3F7FA003004E0 /* HWCalendar.m in Sources */,
 				38F30F8C233865CB004F25E6 /* UIBarButtonItem+Badge.m in Sources */,
 				38E5C31120A3F81F003004E0 /* SHMpbTableViewCell.m in Sources */,
+				38F4ACA9236313AA00DCFE73 /* SHFCDownloaderOpManager.m in Sources */,
 				38BB265021DF08EE00270CE1 /* ZJFaceRecognition.m in Sources */,
 				38BFB26D22D85EE800AA3ABC /* DisplayViewController.m in Sources */,
 				38A0C56620EDE63300AE7B7F /* UIImage+ZJTint.m in Sources */,

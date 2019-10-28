@@ -35,6 +35,11 @@
             [weakself.delegate enterEditeStateWithCell:weakself];
         }
     }];
+    [self.filesController setEnterDownloadBlock:^{
+        if ([weakself.delegate respondsToSelector:@selector(enterDownloadViewWithCell:)]) {
+            [weakself.delegate enterDownloadViewWithCell:weakself];
+        }
+    }];
 }
 
 - (void)layoutSubviews {

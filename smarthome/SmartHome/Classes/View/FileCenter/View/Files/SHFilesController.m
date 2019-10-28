@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "SHOperationView.h"
 #import "SHFileCenterCommon.h"
+#import "SHFCDownloaderOpManager.h"
 
 static void * SHFilesControllerContext = &SHFilesControllerContext;
 
@@ -241,6 +242,19 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 #pragma mark - Edit Action
 - (void)downloadAction {
     SHLogTRACE();
+    
+    [self.filesViewModel.selectedFiles enumerateObjectsUsingBlock:^(SHS3FileInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[SHFCDownloaderOpManager sharedDownloader] addDownloadFile:obj];
+    }];
+    
+    [self clearSelection];
+    [self.tableView reloadData];
+
+    [[SHFCDownloaderOpManager sharedDownloader] startDownloadWithDeviceID:self.dateFileInfo.deviceID];
+    
+    if (self.enterDownloadBlock) {
+        self.enterDownloadBlock();
+    }
 }
 
 - (void)deleteAction {

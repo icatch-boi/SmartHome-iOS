@@ -55,4 +55,36 @@
 - (IBAction)detailAction:(id)sender {
 }
 
+- (void)setFileInfo:(SHS3FileInfo *)fileInfo {
+    _fileInfo = fileInfo;
+    
+    _nameLabel.text = fileInfo.fileName;
+    _sizeLabel.text = [DiskSpaceTool humanReadableStringFromBytes:fileInfo.videosize.integerValue];
+    _iconImageView.image = [fileInfo.thumbnail ic_cornerImageWithSize:_iconImageView.bounds.size radius:kImageCornerRadius];
+    _statusLabel.text = [self currentDownloadState:fileInfo.downloadState];
+}
+
+- (NSString *)currentDownloadState:(SHDownloadState)state {
+    NSString *stateString = nil;
+    
+    switch (state) {
+        case SHDownloadStateWaiting:
+            stateString = @"等待下载...";
+            break;
+            
+        case SHDownloadStateDownloading:
+            stateString = @"正在下载...";
+            break;
+            
+        case SHDownloadStateFinished:
+            stateString = @"下载完成";
+            break;
+            
+        default:
+            break;
+    }
+    
+    return stateString;
+}
+
 @end

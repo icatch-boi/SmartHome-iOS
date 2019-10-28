@@ -267,6 +267,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 
 - (void)enterDownloadController {
     SHDownloadHomeVC *vc = [SHDownloadHomeVC downloadHomeVC];
+    vc.deviceID = self.deviceID;
 
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -381,6 +382,10 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 - (void)enterEditeStateWithCell:(SHFileCenterHomeCell *)cell {
     self.editState = YES;
     self.currentCell = cell;
+}
+
+- (void)enterDownloadViewWithCell:(SHFileCenterHomeCell *)cell {
+    [self enterDownloadController];
 }
 
 - (void)cancelEditAction:(id)sender {

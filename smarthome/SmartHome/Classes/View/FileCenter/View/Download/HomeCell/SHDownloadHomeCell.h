@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SHDownloadHomeCell : UICollectionViewCell
 
 @property (nonatomic, strong) SHOptionItem *optionItem;
+@property (nonatomic, copy) NSString *deviceID;
 
 @end
 

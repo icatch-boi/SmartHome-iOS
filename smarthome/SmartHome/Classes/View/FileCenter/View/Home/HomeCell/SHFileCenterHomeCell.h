@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)fileCenterHomeCell:(SHFileCenterHomeCell *)cell didSelectWithFileInfo:(SHS3FileInfo *)fileInfo;
 - (void)enterEditeStateWithCell:(SHFileCenterHomeCell *)cell;
+- (void)enterDownloadViewWithCell:(SHFileCenterHomeCell *)cell;
 
 @end
 
