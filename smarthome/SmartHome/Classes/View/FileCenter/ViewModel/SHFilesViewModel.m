@@ -33,23 +33,84 @@ static const CGFloat kTopSpace = 8;
 static const CGFloat kIconWithScreenWidthScale = 0.45;
 static const CGFloat kIconWidthWithHeightScale = 16.0 / 9;
 static NSString * const kOperationItemFileName = @"EditOperationItems.json";
+static const NSInteger maxPullupTryTimes = 3;
 
 @interface SHFilesViewModel ()
 
 @property (nonatomic, strong) NSMutableArray<SHS3FileInfo *> *selectedFiles;
 @property (nonatomic, strong) NSArray<SHOperationItem *> *operationItems;
+@property (nonatomic, strong) NSMutableArray<SHS3FileInfo *> *fileList;
+@property (nonatomic, copy) NSString *lastquerykey;
+@property (nonatomic, assign) NSInteger pullupErrorTimes;
 
 @end
 
 @implementation SHFilesViewModel
 
-- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion {
-    [[SHENetworkManager sharedManager] listFilesWithDeviceID:deviceID queryDate:date startKey:nil number:0 completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
+- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date pullup:(BOOL)pullup completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion {
+    
+    NSString *startKey = !pullup ? _lastquerykey : nil;
+    
+    WEAK_SELF(self);
+    [[SHENetworkManager sharedManager] listFilesWithDeviceID:deviceID queryDate:date startKey:startKey number:0 completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
         
+//        if (pullup && weakself.pullupErrorTimes > maxPullupTryTimes) {
+//            if (completion) {
+//                completion(weakself.fileList);
+//            }
+//
+//            return;
+//        }
+//
+//        if (pullup && filesInfo.count == 0) {
+//            weakself.pullupErrorTimes += 1;
+//        }
+        
+        if (filesInfo.count == 0) {
+            if (completion) {
+                completion(weakself.fileList);
+            }
+            
+            return;
+        }
+        
+        if (pullup) {
+            [weakself.fileList removeAllObjects];
+        }
+        
+        [weakself.fileList addObjectsFromArray:filesInfo];
+
+        [weakself sortFileList];
+        
+        weakself.lastquerykey = weakself.fileList.firstObject.key;
+
         if (completion) {
-            completion(filesInfo);
+            completion(weakself.fileList);
         }
     }];
+}
+
+- (void)sortFileList {
+    NSArray<SHS3FileInfo *> *orderlyFileList = [self.fileList sortedArrayUsingComparator:^NSComparisonResult(SHS3FileInfo *  _Nonnull obj1, SHS3FileInfo *  _Nonnull obj2) {
+        return [obj2.datetime compare:obj1.datetime];
+    }];
+    
+    [self.fileList removeAllObjects];
+    [self.fileList addObjectsFromArray:orderlyFileList];
+}
+
+- (void)clearInnerCacheData {
+    [self.fileList removeAllObjects];
+    self.lastquerykey = nil;
+    self.pullupErrorTimes = 0;
+}
+
+- (NSMutableArray<SHS3FileInfo *> *)fileList {
+    if (_fileList == nil) {
+        _fileList = [[NSMutableArray alloc] init];
+    }
+    
+    return _fileList;
 }
 
 + (CGFloat)filesCellRowHeight {

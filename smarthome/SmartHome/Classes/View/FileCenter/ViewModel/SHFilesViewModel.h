@@ -36,7 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSMutableArray<SHS3FileInfo *> *selectedFiles;
 @property (nonatomic, strong, readonly) NSArray<SHOperationItem *> *operationItems;
 
-- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
+- (void)listFilesWithDeviceID:(NSString *)deviceID date:(NSDate *)date pullup:(BOOL)pullup completion:(void (^)(NSArray<SHS3FileInfo *> * _Nullable filesInfo))completion;
+- (void)clearInnerCacheData;
 
 + (CGFloat)filesCellRowHeight;
 

@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "SHOperationView.h"
 #import "SHFileCenterCommon.h"
+#import <MJRefresh/MJRefresh.h>
 
 static void * SHFilesControllerContext = &SHFilesControllerContext;
 
@@ -25,6 +26,9 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 @property (nonatomic, strong) NSArray<SHS3FileInfo *> *filesList;
 @property (nonatomic, strong) SHFilesViewModel *filesViewModel;
 @property (nonatomic, assign) BOOL editState;
+@property (nonatomic, assign, getter=isPullup) BOOL pullup;
+@property (nonatomic, strong) MJRefreshNormalHeader *header;
+@property (nonatomic, strong) MJRefreshAutoNormalFooter *footer;
 
 @end
 
@@ -63,6 +67,61 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self setupFooterView];
     [self updateSelectNumber];
+    
+    [self setupRefreshView];
+    [self setupPullupRefreshView];
+}
+
+- (void)setupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakself loadData];
+    }];
+    
+    // 设置文字
+    [header setTitle:@"Pull down to refresh" forState:MJRefreshStateIdle];
+    [header setTitle:@"Release to refresh" forState:MJRefreshStatePulling];
+    [header setTitle:@"Loading ..." forState:MJRefreshStateRefreshing];
+    
+    // 设置字体
+    header.stateLabel.font = [UIFont systemFontOfSize:15];
+    header.lastUpdatedTimeLabel.font = [UIFont systemFontOfSize:14];
+    
+    // 设置颜色
+    header.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    header.lastUpdatedTimeLabel.textColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+    
+    header.automaticallyChangeAlpha = YES;
+    
+    // 马上进入刷新状态
+//    [header beginRefreshing];
+    
+    // 设置刷新控件
+    self.tableView.mj_header = header;
+    self.header = header;
+}
+
+- (void)setupPullupRefreshView {
+    WEAK_SELF(self);
+    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        weakself.pullup = YES;
+        [weakself loadData];
+    }];
+    
+    // 设置文字
+    [footer setTitle:@"Click or drag up to refresh" forState:MJRefreshStateIdle];
+    [footer setTitle:@"Loading more ..." forState:MJRefreshStateRefreshing];
+    [footer setTitle:@"No more data" forState:MJRefreshStateNoMoreData];
+    
+    // 设置字体
+    footer.stateLabel.font = [UIFont systemFontOfSize:15];
+    
+    // 设置颜色
+    footer.stateLabel.textColor = [UIColor ic_colorWithHex:kButtonDefaultColor];
+    
+    // 设置footer
+    self.tableView.mj_footer = footer;
+    self.footer = footer;
 }
 
 - (void)setupFooterView {
@@ -130,20 +189,44 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 }
 
 #pragma mark - Load Data
+- (void)loadData {
+    [SVProgressHUD showWithStatus:nil];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    
+    WEAK_SELF(self);
+    [self.filesViewModel listFilesWithDeviceID:_dateFileInfo.deviceID date:_dateFileInfo.date pullup:self.isPullup completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
+        [SVProgressHUD dismiss];
+        
+        weakself.filesList = filesInfo;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakself.isPullup) {
+                [weakself.tableView.mj_footer endRefreshing];
+            } else {
+                [weakself.tableView.mj_header endRefreshing];
+            }
+            
+            weakself.pullup = NO;
+        });
+    }];
+}
+
 - (void)setDateFileInfo:(SHDateFileInfo *)dateFileInfo {
     _dateFileInfo = dateFileInfo;
     
     self.filesList = nil;
     
-    [SVProgressHUD showWithStatus:nil];
-    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    [self.filesViewModel clearInnerCacheData];
     
-    WEAK_SELF(self);
-    [self.filesViewModel listFilesWithDeviceID:dateFileInfo.deviceID date:dateFileInfo.date completion:^(NSArray<SHS3FileInfo *> * _Nullable filesInfo) {
-        [SVProgressHUD dismiss];
+    if (dateFileInfo.exist) {
+        self.tableView.mj_header = self.header;
+        self.tableView.mj_footer = self.footer;
         
-        weakself.filesList = filesInfo;
-    }];
+        [self loadData];
+    } else {
+        self.tableView.mj_header = nil;
+        self.tableView.mj_footer = nil;
+    }
 }
 
 - (void)setFilesList:(NSArray<SHS3FileInfo *> *)filesList {
