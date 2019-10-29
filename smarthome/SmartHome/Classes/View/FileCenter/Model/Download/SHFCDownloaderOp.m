@@ -27,6 +27,7 @@
 
 #import "SHFCDownloaderOp.h"
 #import "SHENetworkManagerCommon.h"
+#import "filecache/FileCacheManager.h"
 
 @interface SHFCDownloaderOp ()
 
@@ -60,6 +61,7 @@
         WEAK_SELF(self);
         [[SHENetworkManager sharedManager] getFileWithDeviceID:self.fileInfo.deviceID filePath:self.fileInfo.filePath completion:^(BOOL isSuccess, id  _Nullable result) {
             if (self.isCancelled) {
+                weakself.fileInfo.downloadState = SHDownloadStateCancelDownload;
                 if (weakself.finishedBlock) {
                     weakself.finishedBlock();
                 }
@@ -67,11 +69,36 @@
                 return;
             }
             
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if (weakself.finishedBlock) {
-                    weakself.finishedBlock();
+            if (isSuccess == YES && result != nil) {
+                AWSS3GetObjectOutput *response = result;
+                
+                if (response.body != nil) {
+                    NSData *data = response.body;
+                    
+                    NSString *keyString = [NSString stringWithFormat:@"%@_%@", weakself.fileInfo.deviceID, weakself.fileInfo.fileName];
+                    string key = keyString.UTF8String;
+                    
+                    FileCache::FileCacheManager::sharedFileCache()->storeDataForKey(key, data.bytes, (int)data.length);
+                    
+                    if (weakself.fileInfo.downloadState != SHDownloadStateCancelDownload) {
+                        weakself.fileInfo.downloadState = SHDownloadStateDownloadSuccess;
+                    }
+                } else {
+                    SHLogWarn(SHLogTagAPP, @"Response body is nil.");
+                    if (weakself.fileInfo.downloadState != SHDownloadStateCancelDownload) {
+                        weakself.fileInfo.downloadState = SHDownloadStateDownloadFailed;
+                    }
                 }
-            }];
+            } else {
+                SHLogError(SHLogTagAPP, @"Download file failed, error: %@", result);
+                if (weakself.fileInfo.downloadState != SHDownloadStateCancelDownload) {
+                    weakself.fileInfo.downloadState = SHDownloadStateDownloadFailed;
+                }
+            }
+            
+            if (weakself.finishedBlock) {
+                weakself.finishedBlock();
+            }
         }];
     }
 }

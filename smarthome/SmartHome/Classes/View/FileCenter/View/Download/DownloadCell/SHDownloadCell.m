@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sizeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (weak, nonatomic) IBOutlet UIButton *operationButton;
 
 @end
 
@@ -41,6 +42,8 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    self.userInteractionEnabled = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -49,10 +52,10 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)cancelAction:(id)sender {
-}
-
-- (IBAction)detailAction:(id)sender {
+- (IBAction)clickAction:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(buttonClickedActionWithCell:)]) {
+        [self.delegate buttonClickedActionWithCell:self];
+    }
 }
 
 - (void)setFileInfo:(SHS3FileInfo *)fileInfo {
@@ -62,6 +65,18 @@
     _sizeLabel.text = [DiskSpaceTool humanReadableStringFromBytes:fileInfo.videosize.integerValue];
     _iconImageView.image = [fileInfo.thumbnail ic_cornerImageWithSize:_iconImageView.bounds.size radius:kImageCornerRadius];
     _statusLabel.text = [self currentDownloadState:fileInfo.downloadState];
+}
+
+- (void)setOptionItem:(SHOptionItem *)optionItem {
+    _optionItem = optionItem;
+    
+    if ([optionItem.title isEqualToString:@"正在下载"]) {
+        [_operationButton setImage:[UIImage imageNamed:@"ic_cancel_red_500_24dp"] forState:UIControlStateNormal];
+        [_operationButton setImage:[UIImage imageNamed:@"ic_cancel_red_500_24dp"] forState:UIControlStateHighlighted];
+    } else {
+        [_operationButton setImage:[UIImage imageNamed:@"ic_info_black_24dp"] forState:UIControlStateNormal];
+        [_operationButton setImage:[UIImage imageNamed:@"ic_info_black_24dp"] forState:UIControlStateHighlighted];
+    }
 }
 
 - (NSString *)currentDownloadState:(SHDownloadState)state {
@@ -76,8 +91,16 @@
             stateString = @"正在下载...";
             break;
             
-        case SHDownloadStateFinished:
-            stateString = @"下载完成";
+        case SHDownloadStateDownloadSuccess:
+            stateString = @"下载成功";
+            break;
+            
+        case SHDownloadStateDownloadFailed:
+            stateString = @"下载失败";
+            break;
+            
+        case SHDownloadStateCancelDownload:
+            stateString = @"已取消";
             break;
             
         default:

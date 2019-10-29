@@ -32,7 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, SHDownloadState) {
     SHDownloadStateWaiting = 0,
     SHDownloadStateDownloading,
-    SHDownloadStateFinished,
+    SHDownloadStateDownloadSuccess,
+    SHDownloadStateDownloadFailed,
+    SHDownloadStateCancelDownload,
 };
 
 @interface SHS3FileInfo : NSObject<NSCopying>

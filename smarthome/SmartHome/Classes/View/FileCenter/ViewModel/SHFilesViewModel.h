@@ -47,6 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)deleteSelectFileWithCompletion:(void (^)(NSArray<SHS3FileInfo *> *deleteSuccess, NSArray<SHS3FileInfo *> *deleteFailed))completion;
 
+- (void)downloadHandleWithDeviceID:(NSString *)deviceID;
+
 @end
 
 NS_ASSUME_NONNULL_END

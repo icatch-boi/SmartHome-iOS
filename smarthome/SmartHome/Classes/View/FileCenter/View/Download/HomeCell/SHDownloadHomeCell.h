@@ -30,10 +30,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SHDownloadHomeCell;
+@protocol SHDownloadHomeCellDelegate <NSObject>
+
+- (void)enterLocalAlbumWithCell:(SHDownloadHomeCell *)cell;
+
+@end
+
 @interface SHDownloadHomeCell : UICollectionViewCell
 
 @property (nonatomic, strong) SHOptionItem *optionItem;
 @property (nonatomic, copy) NSString *deviceID;
+@property (nonatomic, weak) id<SHDownloadHomeCellDelegate> delegate;
 
 @end
 

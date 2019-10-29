@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHOptionView : UIView
 
+@property (nonatomic, copy) NSString *title;
 @property (nonatomic, assign) CGFloat scale;
 @property (nonatomic, strong) SHOptionItem *optionItem;
 

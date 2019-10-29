@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SHOptionItem : NSObject
 
 @property (nonatomic, copy, readonly) NSString *title;
+@property (nonatomic, copy, readonly) NSString *methodName;
 
 + (instancetype)optionItemWithDict:(NSDictionary *)dict;
 

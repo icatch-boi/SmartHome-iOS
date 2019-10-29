@@ -29,12 +29,16 @@
 #import "SHOptionView.h"
 #import "SHOptionItem.h"
 #import "SHDownloadHomeCell.h"
+#import "SHLocalAlbumTVC.h"
+#import "SHFCDownloaderOpManager.h"
 
-@interface SHDownloadHomeVC ()<SHOptionViewDelegate>
+@interface SHDownloadHomeVC ()<SHOptionViewDelegate, SHDownloadHomeCellDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *optionsView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
+@property (weak, nonatomic) IBOutlet SHOptionView *downloadOptionView;
+@property (weak, nonatomic) IBOutlet SHOptionView *finishedOptionView;
 
 @property (nonatomic, strong) NSArray<SHOptionItem *> *optionsArray;
 @property (nonatomic, assign) int currentIndex;
@@ -55,12 +59,26 @@
     [self setupGUI];
     
     [self setupOptionViewData];
+    [self updateOptionView];
+    [self addObserver];
+}
+
+- (void)dealloc {
+    [self removeObserver];
 }
 
 #pragma mark - GUI
 - (void)setupGUI {
     [self setupCollectionView];
 //    [self setupNavigationItem];
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return NO;
 }
 
 - (void)setupCollectionView {
@@ -89,6 +107,28 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)updateOptionView {
+    SHDownloadItem *item = [[SHFCDownloaderOpManager sharedDownloader] downloadItemWithDeviceID:self.deviceID];
+
+    self.downloadOptionView.title = [NSString stringWithFormat:@"正在下载(%lu)", (unsigned long)item.downloadArray.count];
+    self.finishedOptionView.title = [NSString stringWithFormat:@"已完成(%lu)", (unsigned long)item.finishedArray.count];
+}
+
+#pragma mark - Observer
+- (void)addObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadCompletionHandle:) name:kDownloadCompletionNotification object:nil];
+}
+
+- (void)removeObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kDownloadCompletionNotification object:nil];
+}
+
+- (void)downloadCompletionHandle:(NSNotification *)nc {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateOptionView];
+    });
+}
+
 #pragma mark - Set Data
 - (void)setupOptionViewData {
     WEAK_SELF(self);
@@ -113,6 +153,7 @@
     
     cell.optionItem = self.optionsArray[indexPath.row];
     cell.deviceID = self.deviceID;
+    cell.delegate = self;
     
     return cell;
 }
@@ -152,6 +193,16 @@
     self.currentIndex = scrollView.contentOffset.x / CGRectGetWidth(scrollView.bounds);
 }
 
+#pragma mark - SHDownloadHomeCellDelegate
+- (void)enterLocalAlbumWithCell:(SHDownloadHomeCell *)cell {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
+    
+    SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
+    tvc.cameraUid = [[SHCameraManager sharedCameraManger] getCameraObjectWithDeviceID:_deviceID].camera.cameraUid;
+    
+    [self.navigationController pushViewController:tvc animated:YES];
+}
+
 #pragma mark - SHOptionViewDelegate
 - (void)clickedActionWithOptionView:(SHOptionView *)optionView {
     if (_currentIndex == [self.optionsView.subviews indexOfObject:optionView]) {
@@ -172,8 +223,8 @@
 #pragma mark - Init
 - (NSArray<SHOptionItem *> *)optionsArray {
     if (_optionsArray == nil) {
-        NSArray *options = @[@{@"title": @"正在下载"},
-                             @{@"title": @"已完成"}
+        NSArray *options = @[@{@"title": @"正在下载", @"methodName": @"cancelDownload:"},
+                             @{@"title": @"已完成", @"methodName": @"enterLocalAlbum"}
                              ];
         
         NSMutableArray *temp = [NSMutableArray arrayWithCapacity:options.count];

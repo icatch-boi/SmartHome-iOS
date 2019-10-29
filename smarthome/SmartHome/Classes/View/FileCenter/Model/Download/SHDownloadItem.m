@@ -30,8 +30,7 @@
 @implementation SHDownloadItem
 
 - (NSMutableArray *)downloadArray {
-    NSMutableArray * _Nonnull extractedExpr = _downloadArray;
-    if (extractedExpr == nil) {
+    if (_downloadArray == nil) {
         _downloadArray = [[NSMutableArray alloc] init];
     }
     

@@ -27,12 +27,23 @@
 
 #import <UIKit/UIKit.h>
 #import "SHS3FileInfo.h"
+#import "SHOptionItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class SHDownloadCell;
+@protocol SHDownloadCellDelegate <NSObject>
+
+- (void)buttonClickedActionWithCell:(SHDownloadCell *)cell;
+
+@end
 
 @interface SHDownloadCell : UITableViewCell
 
 @property (nonatomic, strong) SHS3FileInfo *fileInfo;
+@property (nonatomic, strong) SHOptionItem *optionItem;
+
+@property (nonatomic, weak) id<SHDownloadCellDelegate> delegate;
 
 @end
 

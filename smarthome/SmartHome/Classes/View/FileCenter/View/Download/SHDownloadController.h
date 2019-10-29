@@ -30,10 +30,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^SHDCEnterLocalAlbumBlock)(void);
 @interface SHDownloadController : UITableViewController
 
 @property (nonatomic, strong) SHOptionItem *optionItem;
 @property (nonatomic, copy) NSString *deviceID;
+@property (nonatomic, copy) SHDCEnterLocalAlbumBlock enterLocalAlbumBlock;
 
 @end
 

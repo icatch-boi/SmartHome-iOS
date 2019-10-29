@@ -27,6 +27,7 @@
 
 #import "SHFilesViewModel.h"
 #import "SHENetworkManagerCommon.h"
+#import "SHFCDownloaderOpManager.h"
 
 static const CGFloat kTopSpace = 8;
 static const CGFloat kIconWithScreenWidthScale = 0.45;
@@ -138,6 +139,14 @@ static NSString * const kOperationItemFileName = @"EditOperationItems.json";
             completion(deleteSuccess, deleteFailed);
         }
     }];
+}
+
+- (void)downloadHandleWithDeviceID:(NSString *)deviceID {
+    [self.selectedFiles enumerateObjectsUsingBlock:^(SHS3FileInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[SHFCDownloaderOpManager sharedDownloader] addDownloadFile:obj];
+    }];
+    
+    [[SHFCDownloaderOpManager sharedDownloader] startDownloadWithDeviceID:deviceID];
 }
 
 @end

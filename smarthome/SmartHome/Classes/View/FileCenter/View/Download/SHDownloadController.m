@@ -29,7 +29,7 @@
 #import "SHDownloadCell.h"
 #import "SHFCDownloaderOpManager.h"
 
-@interface SHDownloadController ()<SHFCDownloaderOpManagerDelegate>
+@interface SHDownloadController ()<SHFCDownloaderOpManagerDelegate, SHDownloadCellDelegate>
 
 @end
 
@@ -80,8 +80,28 @@
     
     // Configure the cell...
     cell.fileInfo = [self listArray][indexPath.row];
+    cell.optionItem = self.optionItem;
+    cell.delegate = self;
     
     return cell;
+}
+
+#pragma mark - SHDownloadCellDelegate
+- (void)buttonClickedActionWithCell:(SHDownloadCell *)cell {
+    SEL selector = NSSelectorFromString(cell.optionItem.methodName);
+    if ([self respondsToSelector:selector]) {
+        [self performSelector:selector withObject:cell.fileInfo afterDelay:0];
+    }
+}
+
+- (void)cancelDownload:(SHS3FileInfo *)fileInfo {
+    [[SHFCDownloaderOpManager sharedDownloader] cancelDownload:fileInfo];
+}
+
+- (void)enterLocalAlbum {
+    if (self.enterLocalAlbumBlock) {
+        self.enterLocalAlbumBlock();
+    }
 }
 
 #pragma mark - SHFCDownloaderOpManager

@@ -58,10 +58,16 @@
     self.contentView.frame = rect;
 }
 
+- (void)setTitle:(NSString *)title {
+    _title = title;
+    
+    [_optionButton setTitle:title forState:UIControlStateNormal];
+}
+
 - (void)setOptionItem:(SHOptionItem *)optionItem {
     _optionItem = optionItem;
     
-    [_optionButton setTitle:optionItem.title forState:UIControlStateNormal];
+    self.title = optionItem.title;
 }
 
 // 根据比例改变文字的大小

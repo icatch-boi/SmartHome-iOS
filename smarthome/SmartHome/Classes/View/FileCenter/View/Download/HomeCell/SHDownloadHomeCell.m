@@ -43,6 +43,13 @@
     self.downloadController = [sb instantiateViewControllerWithIdentifier:NSStringFromClass(SHDownloadController.class)];
     
     [self.contentView addSubview:self.downloadController.view];
+    
+    WEAK_SELF(self);
+    [self.downloadController setEnterLocalAlbumBlock:^{
+        if ([weakself.delegate respondsToSelector:@selector(enterLocalAlbumWithCell:)]) {
+            [weakself.delegate enterLocalAlbumWithCell:weakself];
+        }
+    }];
 }
 
 - (void)layoutSubviews {

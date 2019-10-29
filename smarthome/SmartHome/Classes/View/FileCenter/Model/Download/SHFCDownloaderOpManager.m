@@ -27,6 +27,8 @@
 
 #import "SHFCDownloaderOpManager.h"
 #import "SHFCDownloaderOp.h"
+#import "filecache/FileCacheManager.h"
+#import "XJLocalAssetHelper.h"
 
 @interface SHFCDownloaderOpManager ()
 
@@ -81,9 +83,7 @@
         
         self.downloadItems[fileInfo.deviceID] = item;
     } else {
-        if (![item.downloadArray containsObject:fileInfo]) {
-            [item.downloadArray addObject:fileInfo.copy];
-        }
+        [item.downloadArray addObject:fileInfo.copy];
     }
 }
 
@@ -98,11 +98,11 @@
     SHDownloadItem *item = self.downloadItems[fileInfo.deviceID];
     if (item == nil) {
         item = [[SHDownloadItem alloc] init];
-        [item.finishedArray addObject:fileInfo];
+        [item.finishedArray insertObject:fileInfo atIndex:0];
         
         self.downloadItems[fileInfo.deviceID] = item;
     } else {
-        [item.finishedArray addObject:fileInfo];
+        [item.finishedArray insertObject:fileInfo atIndex:0];
     }
 }
 
@@ -122,6 +122,11 @@
     }
     
     SHS3FileInfo *fileInfo = item.downloadArray.firstObject;
+    if (self.operationCache[fileInfo.filePath]) {
+        SHLogWarn(SHLogTagAPP, @"File '%@' is downloading.", fileInfo.fileName);
+        return;
+    }
+    
     fileInfo.downloadState = SHDownloadStateDownloading;
     
     if ([self.delegate respondsToSelector:@selector(startDownloadWithFileInfo:)]) {
@@ -130,16 +135,17 @@
     
     WEAK_SELF(self);
     [self fileCenterDownloaderOpWithFileInfo:fileInfo finishedBlock:^{
-        fileInfo.downloadState = SHDownloadStateFinished;
+        if (fileInfo.downloadState == SHDownloadStateCancelDownload) {
+            SHLogWarn(SHLogTagAPP, @"File '%@' already cancel download.", fileInfo.fileName);
+            return;
+        }
         
-        [weakself addFinishedFile:fileInfo];
-        [weakself removeDownloadFile:fileInfo];
+        if (fileInfo.downloadState == SHDownloadStateDownloading) {
+            SHLogError(SHLogTagAPP, @"Download error, corresponding file: '%@'", fileInfo.fileName);
+            return;
+        }
         
-//        if ([weakself.delegate respondsToSelector:@selector(downloadCompletionWithFileInfo:)]) {
-//            [weakself.delegate downloadCompletionWithFileInfo:fileInfo];
-//        }
-        [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadCompletionNotification object:nil];
-        
+        [weakself downloadFinishedHandleWithFileInfo:fileInfo];
         [weakself startDownloadWithDeviceID:deviceID];
     }];
 }
@@ -162,15 +168,29 @@
     }
     
     // check disk
-    // ...
-    
-    WEAK_SELF(self);
-    SHFCDownloaderOp *op = [SHFCDownloaderOp fileCenterDownloaderOpWithFileInfo:fileInfo finishedBlock:^{
+    if ([self checkLocalExist:fileInfo]) {
+        fileInfo.downloadState = SHDownloadStateDownloadSuccess;
+        [self addNewAssetToLocalAlbum:fileInfo];
+        
         if (finishedBlock) {
             finishedBlock();
         }
         
+        return;
+    }
+    
+    WEAK_SELF(self);
+    SHFCDownloaderOp *op = [SHFCDownloaderOp fileCenterDownloaderOpWithFileInfo:fileInfo finishedBlock:^{
+        
         [weakself.operationCache removeObjectForKey:fileInfo.filePath];
+        
+        if ([weakself checkLocalExist:fileInfo]) {
+            [weakself addNewAssetToLocalAlbum:fileInfo];
+        }
+        
+        if (finishedBlock) {
+            finishedBlock();
+        }
     }];
     
     [self.downloadQueue addOperation:op];
@@ -184,10 +204,58 @@
     
     [(SHFCDownloaderOp *)self.operationCache[fileInfo.filePath] cancel];
     [self.operationCache removeObjectForKey:fileInfo.filePath];
+    
+    BOOL next = fileInfo.downloadState == SHDownloadStateDownloading;
+    fileInfo.downloadState = SHDownloadStateCancelDownload;
+    [self downloadFinishedHandleWithFileInfo:fileInfo];
+    if (next) {
+        [self startDownloadWithDeviceID:fileInfo.deviceID];
+    }
+}
+
+- (void)downloadFinishedHandleWithFileInfo:(SHS3FileInfo *)fileInfo {
+    [self addFinishedFile:fileInfo];
+    [self removeDownloadFile:fileInfo];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kDownloadCompletionNotification object:nil];
 }
 
 - (SHDownloadItem *)downloadItemWithDeviceID:(NSString *)deviceID {
     return self.downloadItems[deviceID];
+}
+
+- (BOOL)checkLocalExist:(SHS3FileInfo *)fileInfo {
+    string key = [self makeLocalKey:fileInfo].UTF8String;
+    string cachePath;
+    return FileCache::FileCacheManager::sharedFileCache()->diskFileDataExistsForKey(key, cachePath);
+}
+
+- (NSString *)makeLocalKey:(SHS3FileInfo *)fileInfo {
+    return [NSString stringWithFormat:@"%@_%@", fileInfo.deviceID, fileInfo.fileName];
+}
+
+- (BOOL)addNewAssetToLocalAlbum:(SHS3FileInfo *)fileInfo {
+    BOOL retVal = NO;
+    NSURL *fileURL = nil;
+    
+    string key = [self makeLocalKey:fileInfo].UTF8String;
+    string path = FileCache::FileCacheManager::sharedFileCache()->cachePathForKey(key);
+    NSString *locatePath = [NSString stringWithFormat:@"%s", path.c_str()];
+    if (locatePath) {
+        fileURL = [NSURL fileURLWithPath:locatePath];
+    } else {
+        return retVal;
+    }
+    
+    SHCameraObject *obj = [[SHCameraManager sharedCameraManger] getCameraObjectWithDeviceID:fileInfo.deviceID];
+
+    if (locatePath && UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(locatePath)) {
+        retVal = [[XJLocalAssetHelper sharedLocalAssetHelper] addNewAssetWithURL:fileURL toAlbum:kLocalAlbumName andFileType:ICH_FILE_TYPE_VIDEO forKey:obj.camera.cameraUid];
+    } else {
+        SHLogError(SHLogTagAPP, @"The specified video can not be saved to user’s Camera Roll album");
+    }
+    
+    return retVal;
 }
 
 @end
