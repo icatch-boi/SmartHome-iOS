@@ -97,7 +97,7 @@
 }
 
 - (void)loadData {
-    [SVProgressHUD showWithStatus:@"正在努力加载数据..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kTryToLoadData", nil)];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
     WEAK_SELF(self);
@@ -141,7 +141,7 @@
                     }
                 } else {
                     SHLogError(SHLogTagAPP, @"Get file failed, error: %@", result);
-                    [SVProgressHUD showErrorWithStatus:@"获取文件数据失败，请稍后重试"];
+                    [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"kGetFileDataFailed", nil)];
                     [SVProgressHUD dismissWithDelay:kPromptinfoDisplayDuration];
                 }
             }];

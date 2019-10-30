@@ -70,7 +70,7 @@
 - (void)setOptionItem:(SHOptionItem *)optionItem {
     _optionItem = optionItem;
     
-    if ([optionItem.title isEqualToString:@"正在下载"]) {
+    if ([optionItem.title isEqualToString:NSLocalizedString(@"kDownloading", nil)]) {
         [_operationButton setImage:[UIImage imageNamed:@"ic_cancel_red_500_24dp"] forState:UIControlStateNormal];
         [_operationButton setImage:[UIImage imageNamed:@"ic_cancel_red_500_24dp"] forState:UIControlStateHighlighted];
     } else {
@@ -84,23 +84,23 @@
     
     switch (state) {
         case SHDownloadStateWaiting:
-            stateString = @"等待下载...";
+            stateString = NSLocalizedString(@"kWaitDownload", nil);
             break;
             
         case SHDownloadStateDownloading:
-            stateString = @"正在下载...";
+            stateString = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"kDownloading", nil)];
             break;
             
         case SHDownloadStateDownloadSuccess:
-            stateString = @"下载成功";
+            stateString = NSLocalizedString(@"kDownloadSuccess", nil);
             break;
             
         case SHDownloadStateDownloadFailed:
-            stateString = @"下载失败";
+            stateString = NSLocalizedString(@"kDownloadFailed", nil);
             break;
             
         case SHDownloadStateCancelDownload:
-            stateString = @"已取消";
+            stateString = NSLocalizedString(@"kAlreadyCancel", nil);
             break;
             
         default:

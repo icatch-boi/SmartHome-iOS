@@ -44,7 +44,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 @implementation SHFileCenterHomeVC
 
 + (UINavigationController *)fileCenterHomeVCWithDeviceID:(NSString *)deviceID {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"FileCenter" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:kFileCenterStoryboardName bundle:nil];
     UINavigationController *nav = [sb instantiateInitialViewController];
     
     SHFileCenterHomeVC *vc = (SHFileCenterHomeVC *)nav.topViewController;
@@ -180,7 +180,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav-btn-back"] style:UIBarButtonItemStyleDone target:self action:@selector(returnBackAction:)];
         self.collectionView.scrollEnabled = YES;
-        self.title = @"File Center";
+        self.title = NSLocalizedString(@"kFileCenter", nil);
     }
     
     self.caledarButton.enabled = !self.editState;
@@ -407,7 +407,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 }
 
 - (void)showGetRemoteAlbumDataFailedAlertView {
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:@"获取文件数据失败，请稍后重试" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kGetFileDataFailed", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:nil]];
     

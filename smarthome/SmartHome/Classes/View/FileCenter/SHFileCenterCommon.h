@@ -33,4 +33,8 @@ static const CGFloat kDateViewMinWidth = 60;
 
 static NSString * const kReloadDateFileInfoNotification = @"ReloadDateFileInfoNotification";
 
+static NSString * const kFileCenterStoryboardName = @"FileCenter";
+static NSString * const kFilesStoryboardName = @"Files";
+static NSString * const kDownloadStoryboardName = @"Download";
+
 #endif /* SHFileCenterCommon_h */

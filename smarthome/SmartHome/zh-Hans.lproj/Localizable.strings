@@ -550,3 +550,19 @@
 "kScanQRCodeWayButtonTitle" = "扫描二维码方式";
 "kUseAutoWayDescription" = "使用自动获取UUID方式添加设备的情况如下：";
 "kAutoWayButtonTitle" = "自动获取UUID方式";
+
+"kFileCenter" = "文件中心";
+"kGetFileDataFailed" = "获取文件数据失败，请稍候重试";
+"kSelectAll" = "全选";
+"kChosen" = "已选择";
+"kCancelSelectAll" = "取消全选";
+"kDeleteFileWarning" = "确定要删除所选文件吗？删除后数据将不能恢复！";
+"kDeleteing" = "正在删除...";
+"kDownload" = "下载";
+"kTryToLoadData" = "正在努力加载数据...";
+"kDownloading" = "正在下载";
+"kWaitDownload" = "等待下载...";
+"kDownloadSuccess" = "下载成功";
+"kDownloadFailed" = "下载失败";
+"kAlreadyCancel" = "已取消";
+"kCompleted" = "已完成";

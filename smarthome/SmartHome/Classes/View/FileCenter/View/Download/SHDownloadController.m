@@ -129,7 +129,7 @@
 #pragma mark - Load Data
 - (NSArray *)listArray {
     SHDownloadItem *item = [[SHFCDownloaderOpManager sharedDownloader] downloadItemWithDeviceID:self.deviceID];
-    if ([self.optionItem.title isEqualToString:@"正在下载"]) {
+    if ([self.optionItem.title isEqualToString:NSLocalizedString(@"kDownloading", nil)]) {
         return item.downloadArray.copy;
     } else {
         return item.finishedArray.copy;

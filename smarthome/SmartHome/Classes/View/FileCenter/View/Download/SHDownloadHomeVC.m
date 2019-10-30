@@ -110,8 +110,8 @@
 - (void)updateOptionView {
     SHDownloadItem *item = [[SHFCDownloaderOpManager sharedDownloader] downloadItemWithDeviceID:self.deviceID];
 
-    self.downloadOptionView.title = [NSString stringWithFormat:@"正在下载(%lu)", (unsigned long)item.downloadArray.count];
-    self.finishedOptionView.title = [NSString stringWithFormat:@"已完成(%lu)", (unsigned long)item.finishedArray.count];
+    self.downloadOptionView.title = [NSString stringWithFormat:@"%@(%lu)", NSLocalizedString(@"kDownloading", nil), (unsigned long)item.downloadArray.count];
+    self.finishedOptionView.title = [NSString stringWithFormat:@"%@(%lu)", NSLocalizedString(@"kCompleted", nil), (unsigned long)item.finishedArray.count];
 }
 
 #pragma mark - Observer
@@ -223,8 +223,8 @@
 #pragma mark - Init
 - (NSArray<SHOptionItem *> *)optionsArray {
     if (_optionsArray == nil) {
-        NSArray *options = @[@{@"title": @"正在下载", @"methodName": @"cancelDownload:"},
-                             @{@"title": @"已完成", @"methodName": @"enterLocalAlbum"}
+        NSArray *options = @[@{@"title": NSLocalizedString(@"kDownloading", nil), @"methodName": @"cancelDownload:"},
+                             @{@"title": NSLocalizedString(@"kCompleted", nil), @"methodName": @"enterLocalAlbum"}
                              ];
         
         NSMutableArray *temp = [NSMutableArray arrayWithCapacity:options.count];

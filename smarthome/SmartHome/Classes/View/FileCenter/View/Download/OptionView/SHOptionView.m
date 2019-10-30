@@ -27,8 +27,8 @@
 
 #import "SHOptionView.h"
 
-#define kBIGFONT 20
-#define kSMALLFONT 18
+#define kBIGFONT 18
+#define kSMALLFONT 16
 
 @interface SHOptionView ()
 

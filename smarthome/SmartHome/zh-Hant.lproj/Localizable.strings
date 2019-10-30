@@ -548,3 +548,19 @@
 "kScanQRCodeWayButtonTitle" = "掃描二維碼方式";
 "kUseAutoWayDescription" = "使用自動獲取UUID方式添加設備的情況如下：";
 "kAutoWayButtonTitle" = "自動獲取UUID方式";
+
+"kFileCenter" = "文件中心";
+"kGetFileDataFailed" = "獲取文件數據失敗，請稍候重試";
+"kSelectAll" = "全選";
+"kChosen" = "已選擇";
+"kCancelSelectAll" = "取消全選";
+"kDeleteFileWarning" = "確定要刪除所選文件嗎？刪除後數據將不能恢復！";
+"kDeleteing" = "正在刪除...";
+"kDownload" = "下載";
+"kTryToLoadData" = "正在努力加載數據...";
+"kDownloading" = "正在下載";
+"kWaitDownload" = "等待下載...";
+"kDownloadSuccess" = "下載成功";
+"kDownloadFailed" = "下載失敗";
+"kAlreadyCancel" = "已取消";
+"kCompleted" = "已完成";

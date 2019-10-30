@@ -8,6 +8,7 @@
 
 #import "SHFileCenterHomeCell.h"
 #import "SHFilesController.h"
+#import "SHFileCenterCommon.h"
 
 @interface SHFileCenterHomeCell ()
 
@@ -20,7 +21,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Files" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:kFilesStoryboardName bundle:nil];
     self.filesController = [sb instantiateInitialViewController];
     
     [self.contentView addSubview:self.filesController.view];

@@ -27,6 +27,7 @@
 
 #import "SHDownloadHomeCell.h"
 #import "SHDownloadController.h"
+#import "SHFileCenterCommon.h"
 
 @interface SHDownloadHomeCell ()
 
@@ -39,7 +40,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Download" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:kDownloadStoryboardName bundle:nil];
     self.downloadController = [sb instantiateViewControllerWithIdentifier:NSStringFromClass(SHDownloadController.class)];
     
     [self.contentView addSubview:self.downloadController.view];

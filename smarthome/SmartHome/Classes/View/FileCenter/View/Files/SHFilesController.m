@@ -142,9 +142,9 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
         view.frame = CGRectMake(x, 0, w, h);
         x += view.bounds.size.width + marginX;
         
-        if ([view.subTitle isEqualToString:@"全选"]) {
+        if ([view.subTitle isEqualToString:NSLocalizedString(@"kSelectAll", nil)]) {
             self.selectOpView = view;
-        } else if ([view.subTitle isEqualToString:@"已选择"]) {
+        } else if ([view.subTitle isEqualToString:NSLocalizedString(@"kChosen", nil)]) {
             self.selectNumOpView = view;
         }
     }
@@ -168,11 +168,11 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 - (void)updateSelectOpView {
     if (self.filesList.count != self.filesViewModel.selectedFiles.count) {
         self.selectOpView.icon = [UIImage imageNamed:@"ic_unselected_white_24dp"];
-        self.selectOpView.subTitle = @"全选";
+        self.selectOpView.subTitle = NSLocalizedString(@"kSelectAll", nil);
         self.selectOpView.tag = 0;
     } else {
         self.selectOpView.icon = [UIImage imageNamed:@"ic_select_all_white_24dp"];
-        self.selectOpView.subTitle = @"取消全选";
+        self.selectOpView.subTitle = NSLocalizedString(@"kCancelSelectAll", nil);
         self.selectOpView.tag = 1;
     }
 }
@@ -338,7 +338,7 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 - (void)deleteAction {
     SHLogTRACE();
     
-    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:@"确定要删除所选文件吗？删除后数据将不能恢复！" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", nil) message:NSLocalizedString(@"kDeleteFileWarning", nil) preferredStyle:UIAlertControllerStyleAlert];
     
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
@@ -362,7 +362,7 @@ static void * SHFilesControllerContext = &SHFilesControllerContext;
 }
 
 - (void)deleteHandle {
-    [SVProgressHUD showWithStatus:@"正在删除..."];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"kDeleteing", nil)];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
     WEAK_SELF(self);

@@ -460,17 +460,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
-#if 0
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:kAlbumStoryboardName bundle:nil];
     SHLocalAlbumTVC *tvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocalAlbumSBID"];
     tvc.cameraUid = cell.viewModel.cameraObj.camera.cameraUid;
     tvc.title = NSLocalizedString(@"kCameraRoll", nil); //@"Camera Roll";
 
     [self.navigationController pushViewController:tvc animated:YES];
-#else
-    UINavigationController *vc = [SHFileCenterHomeVC fileCenterHomeVCWithDeviceID:cell.viewModel.cameraObj.camera.id];
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-#endif
 }
 
 - (void)enterShareWithCell:(SHCameraViewCell *)cell {
@@ -492,7 +487,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 - (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position {
     WEAK_SELF(self);
-    NSArray<NSDictionary *> *items = @[@{@"title": NSLocalizedString(@"kModifyWiFi", nil), @"imageName": @"home_btn_modify_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
+    NSArray<NSDictionary *> *items = @[@{@"title": NSLocalizedString(@"kFileCenter", nil), @"imageName": @"", @"methodName": @"enterFileCenterViewWithCell:"},
+                                       @{@"title": NSLocalizedString(@"kModifyWiFi", nil), @"imageName": @"home_btn_modify_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
                                        @{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
                                        ];
     
@@ -549,6 +545,13 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
     
     [self.navigationController presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)enterFileCenterViewWithCell:(SHCameraViewCell *)cell {
+    SHCameraObject *camObj = cell.viewModel.cameraObj;
+    UINavigationController *vc = [SHFileCenterHomeVC fileCenterHomeVCWithDeviceID:camObj.camera.id];
+    
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - Action Progress
