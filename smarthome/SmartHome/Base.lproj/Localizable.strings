@@ -541,3 +541,19 @@
 "kScanQRCodeWayButtonTitle" = "Scan QR code mode";
 "kUseAutoWayDescription" = "The case of adding a device using the automatic UUID method is as follows:";
 "kAutoWayButtonTitle" = "Auto obtain UUID mode";
+
+"kFileCenter" = "File Center";
+"kGetFileDataFailed" = "Failed to get file data, please try again later";
+"kSelectAll" = "Select All";
+"kChosen" = "Chosen";
+"kCancelSelectAll" = "Unselect All";
+"kDeleteFileWarning" = "Are you sure you want to delete the selected file? After deleting, the data will not be recovered!";
+"kDeleteing" = "Deleting...";
+"kDownload" = "Download";
+"kTryToLoadData" = "Trying to load data...";
+"kDownloading" = "Downloading";
+"kWaitDownload" = "Waiting...";
+"kDownloadSuccess" = "Successful";
+"kDownloadFailed" = "Failed";
+"kAlreadyCancel" = "Cancelled";
+"kCompleted" = "Completed";

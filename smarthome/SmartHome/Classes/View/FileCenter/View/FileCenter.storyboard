@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="M4t-71-5v5">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Portrait NavVC-->
+        <scene sceneID="1Ek-o2-STO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="M4t-71-5v5" customClass="SHPortraitNavVC" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zLv-W3-e0E">
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="LJi-aC-dYB" kind="relationship" relationship="rootViewController" id="9Xn-7f-yp3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bBt-kt-u07" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="64" y="413"/>
+        </scene>
+        <!--File Center-->
+        <scene sceneID="WPN-Ao-twH">
+            <objects>
+                <viewController id="LJi-aC-dYB" customClass="SHFileCenterHomeVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ylE-pf-MaT">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mm4-vR-NkX">
+                                <rect key="frame" x="160" y="82" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNa-LP-TnA">
+                                <rect key="frame" x="264" y="64" width="36" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="MnI-iW-Y2h"/>
+                                    <constraint firstAttribute="width" constant="36" id="mMx-Me-AIV"/>
+                                </constraints>
+                                <state key="normal" image="ic_calendar_red_36dp"/>
+                                <connections>
+                                    <action selector="calendarClickAction:" destination="LJi-aC-dYB" eventType="touchUpInside" id="hYB-a5-B3T"/>
+                                </connections>
+                            </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lgF-nO-Mvy">
+                                <rect key="frame" x="0.0" y="100" width="320" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="tov-Se-tc7"/>
+                                </constraints>
+                            </scrollView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TFk-a2-FOv">
+                                <rect key="frame" x="0.0" y="152" width="320" height="416"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="CPg-cY-ajf">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="files" id="LBh-HS-hr6" customClass="SHFileCenterHomeCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="LJi-aC-dYB" id="xWo-EX-WC0"/>
+                                    <outlet property="delegate" destination="LJi-aC-dYB" id="YiX-YY-rs0"/>
+                                </connections>
+                            </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnJ-Ak-hfb">
+                                <rect key="frame" x="0.0" y="151.5" width="320" height="0.5"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="0.5" id="KTD-UX-ugv"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="trailing" secondItem="Ge9-f2-FUc" secondAttribute="trailing" id="25I-RG-2no"/>
+                            <constraint firstAttribute="trailing" secondItem="fnJ-Ak-hfb" secondAttribute="trailing" id="2Y5-BG-9So"/>
+                            <constraint firstItem="Ge9-f2-FUc" firstAttribute="trailing" secondItem="fNa-LP-TnA" secondAttribute="trailing" constant="20" id="6W1-OA-BeD"/>
+                            <constraint firstItem="fNa-LP-TnA" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" id="8qA-7Z-pyF"/>
+                            <constraint firstItem="lgF-nO-Mvy" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="Bq4-fg-lnC"/>
+                            <constraint firstItem="fnJ-Ak-hfb" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="JJK-xE-EZX"/>
+                            <constraint firstItem="lgF-nO-Mvy" firstAttribute="trailing" secondItem="Ge9-f2-FUc" secondAttribute="trailing" id="MPj-Mv-Wnf"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="bottom" secondItem="Ge9-f2-FUc" secondAttribute="bottom" id="N0p-rU-daE"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="top" secondItem="fnJ-Ak-hfb" secondAttribute="bottom" id="VoT-Fx-G3X"/>
+                            <constraint firstItem="Mm4-vR-NkX" firstAttribute="centerX" secondItem="ylE-pf-MaT" secondAttribute="centerX" id="ZhP-sH-ggK"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" constant="88" id="eyJ-bt-vJL"/>
+                            <constraint firstItem="fNa-LP-TnA" firstAttribute="centerY" secondItem="Mm4-vR-NkX" secondAttribute="centerY" id="g6W-dh-WrY"/>
+                            <constraint firstItem="TFk-a2-FOv" firstAttribute="leading" secondItem="Ge9-f2-FUc" secondAttribute="leading" id="oI4-SV-xk7"/>
+                            <constraint firstItem="lgF-nO-Mvy" firstAttribute="top" secondItem="Ge9-f2-FUc" secondAttribute="top" constant="36" id="wNX-vm-egx"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ge9-f2-FUc"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="File Center" id="CIe-Lg-3z1">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="5iN-y5-5br">
+                            <connections>
+                                <action selector="returnBackAction:" destination="LJi-aC-dYB" id="Dbl-r7-7PM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="caledarButton" destination="fNa-LP-TnA" id="eZv-Jo-8En"/>
+                        <outlet property="collectionView" destination="TFk-a2-FOv" id="azR-ww-WqA"/>
+                        <outlet property="flowLayout" destination="CPg-cY-ajf" id="V4b-pb-Lul"/>
+                        <outlet property="scrollView" destination="lgF-nO-Mvy" id="MGN-wv-hyH"/>
+                        <outlet property="titleLabel" destination="Mm4-vR-NkX" id="7mq-k1-dt0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lqQ-zE-jgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="931.875" y="411.97183098591552"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_calendar_red_36dp" width="36" height="36"/>
+    </resources>
+</document>

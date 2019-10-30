@@ -264,7 +264,7 @@
     }
     
     if (number < 1 || number > 100) {
-        number = 20;
+        number = 100;
     }
     request.maxKeys = @(number * 2);
     
@@ -282,6 +282,27 @@
 //                completion(YES, response);
 //            }
 //        }
+    }];
+}
+
+- (void)deleteFileWithAWSS3Client:(AWSS3 *)s3client bucketName:(NSString *)bucketName filePath:(NSString *)filePath completion:(SHEDeleteFileCompletionBlock)completion {
+    if (s3client == nil || bucketName.length == 0 || filePath.length == 0) {
+        SHLogError(SHLogTagAPP, @"Parameter `s3client` or `bucketName` or `filePath` can't be nil.");
+        if (completion) {
+            completion(NO);
+        }
+        
+        return;
+    }
+    
+    AWSS3DeleteObjectRequest *request = [[AWSS3DeleteObjectRequest alloc] init];
+    request.bucket = bucketName;
+    request.key = filePath;
+    
+    [s3client deleteObject:request completionHandler:^(AWSS3DeleteObjectOutput * _Nullable response, NSError * _Nullable error) {
+        if (completion) {
+            completion(error ? NO : YES);
+        }
     }];
 }
 

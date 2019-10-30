@@ -70,6 +70,19 @@
     return nil;
 }
 
+- (SHCameraObject *)getCameraObjectWithDeviceID:(NSString *)deviceID {
+    __block SHCameraObject *cameraObj = nil;
+    
+    [self.smarthomeCams enumerateObjectsUsingBlock:^(SHCameraObject *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.camera.id isEqualToString:deviceID]) {
+            cameraObj = obj;
+            *stop = YES;
+        }
+    }];
+    
+    return cameraObj;
+}
+
 - (void)removeAllCameraObjects {
     [self.smarthomeCams removeAllObjects];
 }

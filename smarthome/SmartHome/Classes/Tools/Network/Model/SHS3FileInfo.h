@@ -29,7 +29,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SHS3FileInfo : NSObject
+typedef NS_ENUM(NSUInteger, SHDownloadState) {
+    SHDownloadStateWaiting = 0,
+    SHDownloadStateDownloading,
+    SHDownloadStateDownloadSuccess,
+    SHDownloadStateDownloadFailed,
+    SHDownloadStateCancelDownload,
+};
+
+@interface SHS3FileInfo : NSObject<NSCopying>
 
 @property (nonatomic, copy, readonly) NSString *datetime;
 @property (nonatomic, copy, readonly) NSString *duration;
@@ -40,6 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *filePath;
 @property (nonatomic, strong) UIImage *thumbnail;
+@property (nonatomic, copy) NSString *deviceID;
+@property (nonatomic, assign) BOOL selected;
+@property (nonatomic, assign) SHDownloadState downloadState;
 
 + (instancetype)s3FileInfoWithFileInfoDict:(NSDictionary *)dict;
 

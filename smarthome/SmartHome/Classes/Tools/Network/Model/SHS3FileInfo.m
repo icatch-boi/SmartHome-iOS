@@ -57,4 +57,23 @@
     return [NSString stringWithFormat:@"<%@: %p, %@>", self.class, self, [self dictionaryWithValuesForKeys:array].description];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    SHS3FileInfo *fileInfo = [[SHS3FileInfo allocWithZone:zone] init];
+    
+    fileInfo.datetime = self.datetime;
+    fileInfo.duration = self.duration;
+    fileInfo.monitor = self.monitor;
+    fileInfo.videosize = self.videosize;
+    fileInfo.key = self.key;
+    fileInfo.fileName = self.fileName;
+    fileInfo.filePath = self.filePath;
+    fileInfo.thumbnail = self.thumbnail;
+    fileInfo.deviceID = self.deviceID;
+    
+    fileInfo.selected = self.selected;
+    fileInfo.downloadState = self.downloadState;
+    
+    return fileInfo;
+}
+
 @end
