@@ -487,7 +487,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 - (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position {
     WEAK_SELF(self);
-    NSArray<NSDictionary *> *items = @[@{@"title": NSLocalizedString(@"kFileCenter", nil), @"imageName": @"", @"methodName": @"enterFileCenterViewWithCell:"},
+    NSArray<NSDictionary *> *items = @[@{@"title": NSLocalizedString(@"kFileCenter", nil), @"imageName": @"home_btn_file_center", @"methodName": @"enterFileCenterViewWithCell:"},
                                        @{@"title": NSLocalizedString(@"kModifyWiFi", nil), @"imageName": @"home_btn_modify_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
                                        @{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
                                        ];
