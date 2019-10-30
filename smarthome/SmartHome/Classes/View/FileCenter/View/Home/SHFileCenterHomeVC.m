@@ -19,7 +19,7 @@
 
 static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 
-@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate, HWCalendarDelegate>
+@interface SHFileCenterHomeVC () <UICollectionViewDataSource, UICollectionViewDelegate, SHDateViewDelete, SHFileCenterHomeCellDelegate, HWCalendarDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *caledarButton;
@@ -58,15 +58,16 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     // Do any additional setup after loading the view.
     
     [self setupGUI];
-    NSDate *date = [@"2019/10/01" convertToDateWithFormat:@"yyyy/MM/dd"];
     self.currentDate = [NSDate date];
     [self addObserver];
+    [self addGestureRecognizer];
 }
 
 - (void)dealloc {
     [self removeObserver];
 }
 
+#pragma mark - Observer
 - (void)addObserver {
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(editState)) options:NSKeyValueObservingOptionNew context:SHFileCenterHomeVCContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDateFileInfoHandle:) name:kReloadDateFileInfoNotification object:nil];
@@ -81,6 +82,38 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
     [self cancelEditAction:nil];
     
     [self loadDateFileInfo];
+}
+
+#pragma mark - GestureRecognizer
+- (void)addGestureRecognizer {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHandle:)];
+    tap.delegate = self;
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)tapGestureHandle:(UIGestureRecognizer *)sender {
+    if (_calendar == nil) {
+        return;
+    }
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+
+        CGPoint point = [sender locationInView:self.view];
+        
+        if (!CGRectContainsPoint(_calendar.frame, point) &&
+            _calendar.frame.origin.y != [UIScreen screenHeight]) {
+            [_calendar dismiss];
+        }
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void)setCurrentDate:(NSDate *)currentDate {
@@ -258,7 +291,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
 }
 
 - (IBAction)calendarClickAction:(id)sender {
-    if (_calendar.frame.origin.y != [UIScreen screenHeight] && _calendar) {
+    if (_calendar && _calendar.frame.origin.y != [UIScreen screenHeight]) {
         [_calendar dismiss];
     } else {
         [_calendar show];

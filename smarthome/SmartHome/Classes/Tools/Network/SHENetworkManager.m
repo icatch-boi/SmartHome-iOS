@@ -264,7 +264,7 @@
     }
     
     if (number < 1 || number > 100) {
-        number = 20;
+        number = 100;
     }
     request.maxKeys = @(number * 2);
     
