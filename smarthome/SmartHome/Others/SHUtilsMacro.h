@@ -170,7 +170,7 @@ static const NSTimeInterval kPromptinfoDisplayDuration = 2.0;
 static NSString * const kUserAccountPassword = @"UserAccountPassword";
 
 #define KUSE_S3_SERVICE
-#define KTEMP_MODIFY
+//#define KTEMP_MODIFY
 
 #pragma mark - Config Account Server
 static NSString * const kServerBaseURL = @"https://account.smarthome.icatchtek.com:3026/";
