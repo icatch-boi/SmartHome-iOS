@@ -655,6 +655,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:nav animated:YES completion:nil];
     });
 }

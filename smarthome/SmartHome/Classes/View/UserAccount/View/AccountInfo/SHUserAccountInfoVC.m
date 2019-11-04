@@ -206,8 +206,10 @@ static const CGFloat kTableViewRowHeight = 60;
 - (void)enterAbout:(SHUserAccountItem *)item {
     SHAppInfoVC *vc = [SHAppInfoVC appInfoVC];
     vc.title = item.title;
-    
-    [self presentViewController:[[UserAccountPortraitNavVC alloc] initWithRootViewController:vc] animated:YES completion:nil];
+    UserAccountPortraitNavVC *nav = [[UserAccountPortraitNavVC alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark -

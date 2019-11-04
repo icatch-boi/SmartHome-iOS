@@ -406,6 +406,7 @@ static void * SHFileCenterHomeVCContext = &SHFileCenterHomeVCContext;
         dispatch_async(dispatch_get_main_queue(), ^{
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
             nav.navigationBarHidden = YES;
+            nav.modalPresentationStyle = UIModalPresentationFullScreen;
             
             [self.navigationController presentViewController:nav animated:YES completion:nil];
         });

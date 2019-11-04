@@ -861,6 +861,7 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     }
     
     UIViewController *vc = [self prepareSettingViewController];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
     
     if (_shCameraObj.streamOper.PVRun) {
 #if 0
@@ -1043,7 +1044,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
         dispatch_async(dispatch_get_main_queue(), ^{
             AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
             app.isFullScreenPV = YES;
-            
+            vc.modalPresentationStyle = UIModalPresentationFullScreen;
+
             [self presentViewController:vc animated:YES completion:nil];
         });
     });

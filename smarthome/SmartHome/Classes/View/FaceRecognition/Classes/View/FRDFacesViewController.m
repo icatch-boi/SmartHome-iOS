@@ -57,6 +57,7 @@ static NSString * const ReuseIdentifier = @"faceCellID";
     [lvc livenesswithList:model.liveActionArray order:model.isByOrder numberOfLiveness:model.numOfLiveness];
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:lvc];
     navi.navigationBarHidden = true;
+    navi.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:navi animated:YES completion:nil];
 }
 

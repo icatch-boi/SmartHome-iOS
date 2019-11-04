@@ -137,6 +137,7 @@
     
     _ssidTextField.text = array.firstObject;
     _pwdTextField.text = [[SHWiFiInfoHelper sharedWiFiInfoHelper] passwordForSSID:array.firstObject];
+    [self updateButtonEnableState];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

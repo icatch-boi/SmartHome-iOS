@@ -532,6 +532,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
         vc.cameraUid = _shCamObj.camera.cameraUid;
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            nav.modalPresentationStyle = UIModalPresentationFullScreen;
+            
             [self.progressHUD hideProgressHUD:YES];
             [self presentViewController:nav animated:YES completion:nil];
         });
@@ -562,7 +564,8 @@ static NSString * const kDeleteCameraCellID = @"DeleteCameraCellID";
     dispatch_async(dispatch_get_main_queue(), ^{
         AppDelegate *app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         app.isFullScreenPV = YES;
-        
+        nav.modalPresentationStyle = UIModalPresentationFullScreen;
+
         [self presentViewController:nav animated:YES completion:nil];
     });
 }

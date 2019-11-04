@@ -152,6 +152,7 @@
 - (void)enterFaceRecognition {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:kFaceRecognitionStoryboardName bundle:nil];
     UINavigationController *nav = [sb instantiateInitialViewController];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
 }
 

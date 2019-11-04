@@ -321,6 +321,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 #else
     SHSetupHomeViewController *vc = [SHSetupHomeViewController setupHomeViewController];
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 #endif
@@ -543,6 +544,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     
 //    [self.navigationController pushViewController:vc animated:YES];
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
@@ -550,6 +552,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 - (void)enterFileCenterViewWithCell:(SHCameraViewCell *)cell {
     SHCameraObject *camObj = cell.viewModel.cameraObj;
     UINavigationController *vc = [SHFileCenterHomeVC fileCenterHomeVCWithDeviceID:camObj.camera.id];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
     
     [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
