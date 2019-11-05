@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>18680</string>
+	<string>18756</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -64,6 +64,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>pick up video/image</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>iOS13 and above required Location permission to read the phone Wi-Fi SSID name</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>send audio for remote user</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

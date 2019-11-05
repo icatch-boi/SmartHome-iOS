@@ -33,8 +33,9 @@
 #import "Reachability.h"
 #import "SHQRCodeSetupDeviceVC.h"
 #import "SHWiFiInfoHelper.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
+@interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UnderLineTextField *ssidTextField;
 @property (weak, nonatomic) IBOutlet UnderLineTextField *pwdTextField;
@@ -48,6 +49,8 @@
 
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, weak) UIView *coverView;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -94,7 +97,11 @@
     _ssidTextField.lineColor = color;
     _pwdTextField.lineColor = color;
     
-    [self setupSSID];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self setupSSID];
+    }
     
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     [self addLineForChangePasswordBtn];
@@ -130,6 +137,7 @@
     
     _ssidTextField.text = array.firstObject;
     _pwdTextField.text = [[SHWiFiInfoHelper sharedWiFiInfoHelper] passwordForSSID:array.firstObject];
+    [self updateButtonEnableState];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -145,7 +153,11 @@
 }
 
 - (void)updateSSIDStatus {
-    [self setupSSID];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self setupSSID];
+    }
     [self updateButtonEnableState];
 }
 
@@ -363,6 +375,57 @@
 - (void)updateButtonEnableState {
     _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && !self.isAutoWay;
     _qrcodeButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+}
+
+#pragma mark - CLLocationManager
+- (void)requestLocationPermission {
+    if ([CLLocationManager locationServicesEnabled]){
+
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
+        }
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    SHLogInfo(SHLogTagAPP, @"status: %d", status);
+    
+    switch (status) {
+        case  kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+            [self showLocationAuthorizationAlertView];
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self setupSSID];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)showLocationAuthorizationAlertView {
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"") message:NSLocalizedString(@"kLocationAuthorizationDeniedNotice", nil) preferredStyle:UIAlertControllerStyleAlert];
+    WEAK_SELF(self);
+    
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakself setupDeviceWiFi];
+    }]];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    SHLogError(SHLogTagAPP, @"Location happened error: %@", error.description);
 }
 
 @end

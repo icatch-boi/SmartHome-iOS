@@ -64,6 +64,14 @@
     if (self.currentAVPlayerViewController.isBeingDismissed) {
         self.currentAVPlayerViewController.player = nil;
     }
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (_currentAVPlayerViewController) {
+        appDelegate.isVideoPB = YES;
+    } else {
+        appDelegate.isVideoPB = NO;
+        [SHTool setupCurrentFullScreen:NO];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -161,7 +169,7 @@
             [_photo getVideoURL:^(NSURL *url) {
                 if (url) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-#if 1
+#if 0
                         [self _playVideo:url];
 #else
                         [self playVideoHandler:url];
@@ -177,6 +185,9 @@
 }
 
 - (void)playVideoHandler:(NSURL *)videoURL {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.isVideoPB = YES;
+    
     AVPlayer *avPlayer = [AVPlayer playerWithURL:videoURL];
     _currentAVPlayerViewController = [[AVPlayerViewController alloc] init];
     _currentAVPlayerViewController.player = avPlayer;
@@ -189,16 +200,21 @@
 //    [self.view addSubview:_currentAVPlayerViewController.view];
 //    [_currentAVPlayerViewController.player play];
     
+    WEAK_SELF(self);
     [self presentViewController:_currentAVPlayerViewController animated:YES completion:^{
         [_currentAVPlayerViewController.player play];
+        weakself.photoBrowser.currentViewer = nil;
     }];
     
     _currentAVPlayerViewController.allowsPictureInPicturePlayback = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onVideoCompleted:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.currentAVPlayerViewController.player.currentItem];
-    self.photoBrowser.currentViewer = nil;
+//    self.photoBrowser.currentViewer = nil;
 }
 
 - (void)onVideoCompleted:(NSNotification *)nc {
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    appDelegate.isVideoPB = NO;
+    
     self.currentAVPlayerViewController.player = nil;
     [self.currentAVPlayerViewController dismissViewControllerAnimated:YES completion:^{
         _currentAVPlayerViewController = nil;
@@ -301,7 +317,7 @@
     _scrollView.delegate = self;
     
     [self addVideoIndicator];
-    [self addGestureRecognizer];
+    _photo.isVideo ? void() : [self addGestureRecognizer];
     [self setupMessageLabel];
 }
 

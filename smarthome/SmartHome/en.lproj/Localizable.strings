@@ -557,3 +557,5 @@
 "kDownloadFailed" = "Failed";
 "kAlreadyCancel" = "Cancelled";
 "kCompleted" = "Completed";
+
+"kLocationAuthorizationDeniedNotice" = "You need to open the phone location permission to get the information that the phone is connected to Wi-Fi, otherwise you can not proceed to the next step.";

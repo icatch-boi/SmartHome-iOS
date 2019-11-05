@@ -200,6 +200,7 @@
 
 #pragma mark -
 - (void)localAlbumCell:(SHLocalAlbumCell *)cell showLocalMediaBrowser:(UINavigationController *)nav {
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
 }
 

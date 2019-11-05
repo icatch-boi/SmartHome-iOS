@@ -28,11 +28,12 @@
 #import "XJSetupDeviceSSIDVC.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import "XJSetupDeviceInfoVC.h"
+#import <CoreLocation/CoreLocation.h>
 
 static const CGFloat kTipsViewDefaultHeight = 140;
 static const CGFloat kChooseWiFiIconDefauleHeight = 160;
 
-@interface XJSetupDeviceSSIDVC ()
+@interface XJSetupDeviceSSIDVC ()<CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tipsViewHeightCons;
@@ -40,6 +41,8 @@ static const CGFloat kChooseWiFiIconDefauleHeight = 160;
 @property (weak, nonatomic) IBOutlet UILabel *chooseWifiDesLabel;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *exitButtonItem;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *chooseWiFiIconHeightCons;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -77,10 +80,14 @@ static const CGFloat kChooseWiFiIconDefauleHeight = 160;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self checkConnectState];
+        
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self checkConnectState];
+    }
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkConnectState) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConnectState) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -104,6 +111,14 @@ static const CGFloat kChooseWiFiIconDefauleHeight = 160;
         [self performSegueWithIdentifier:@"go2SetupDeviceInfoVCSegue" sender:nil];
     } else {
         [self setupDeviceWiFi];
+    }
+}
+
+- (void)updateConnectState {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self checkConnectState];
     }
 }
 
@@ -191,5 +206,56 @@ static const CGFloat kChooseWiFiIconDefauleHeight = 160;
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - CLLocationManager
+- (void)requestLocationPermission {
+    if ([CLLocationManager locationServicesEnabled]){
+        
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
+        }
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    SHLogInfo(SHLogTagAPP, @"status: %d", status);
+    
+    switch (status) {
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+            [self showLocationAuthorizationAlertView];
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self checkConnectState];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)showLocationAuthorizationAlertView {
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"") message:NSLocalizedString(@"kLocationAuthorizationDeniedNotice", nil) preferredStyle:UIAlertControllerStyleAlert];
+    WEAK_SELF(self);
+    
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakself setupDeviceWiFi];
+    }]];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    SHLogError(SHLogTagAPP, @"Location happened error: %@", error.description);
+}
 
 @end

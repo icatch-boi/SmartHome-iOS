@@ -57,6 +57,7 @@
 		382CAA921EE6A0F70042442C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA911EE6A0F70042442C /* CoreTelephony.framework */; };
 		382CAA941EE6A1270042442C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA931EE6A1270042442C /* UserNotifications.framework */; };
 		382CAA961EE6A1A60042442C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382CAA951EE6A1A60042442C /* Security.framework */; };
+		382EB927236C2A08007AFF82 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382EB926236C2A08007AFF82 /* CoreLocation.framework */; };
 		3832653D2359AEBD00913843 /* SHAVPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */; };
 		38339F0C236028ED007C433E /* SHOperationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38339F0B236028ED007C433E /* SHOperationView.m */; };
 		38339F0E236028F8007C433E /* SHOperationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 38339F0D236028F8007C433E /* SHOperationView.xib */; };
@@ -558,6 +559,7 @@
 		382CAA911EE6A0F70042442C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		382CAA931EE6A1270042442C /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		382CAA951EE6A1A60042442C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		382EB926236C2A08007AFF82 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3832653B2359AEBD00913843 /* SHAVPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAVPlayerViewController.h; sourceTree = "<group>"; };
 		3832653C2359AEBD00913843 /* SHAVPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAVPlayerViewController.m; sourceTree = "<group>"; };
 		38339F0A236028ED007C433E /* SHOperationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHOperationView.h; sourceTree = "<group>"; };
@@ -1255,6 +1257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				382EB927236C2A08007AFF82 /* CoreLocation.framework in Frameworks */,
 				3841312023419B96008B418C /* libavutil.a in Frameworks */,
 				38A0C56C20EF1A3A00AE7B7F /* AVKit.framework in Frameworks */,
 				0B68D9221F9EDA780045EBB0 /* CoreFoundation.framework in Frameworks */,
@@ -1750,6 +1753,7 @@
 		3884B10F1E9F27B500609B55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				382EB926236C2A08007AFF82 /* CoreLocation.framework */,
 				38A0C56B20EF1A3900AE7B7F /* AVKit.framework */,
 				3820466E1FC7EF06005EA723 /* AudioUnit.framework */,
 				0B68D9231F9EDAF10045EBB0 /* AdSupport.framework */,
@@ -4318,6 +4322,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 18709;
 				DEVELOPMENT_TEAM = MA4957F4LN;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4377,6 +4382,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 18709;
 				DEVELOPMENT_TEAM = MA4957F4LN;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
