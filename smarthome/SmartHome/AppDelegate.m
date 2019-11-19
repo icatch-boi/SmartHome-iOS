@@ -533,6 +533,7 @@ void uncaughtExceptionHandler(NSException *exception){
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+#if 0
 	NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
 	SHLogInfo(SHLogTagAPP, @"This is device token: %@", token);
@@ -540,6 +541,19 @@ void uncaughtExceptionHandler(NSException *exception){
     if (token != nil) {
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:kDeviceToken];
     }
+#else
+    if (![deviceToken isKindOfClass:[NSData class]]) return;
+    const unsigned *tokenBytes = (const unsigned *)[deviceToken bytes];
+    NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                          ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                          ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                          ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    NSLog(@"deviceToken: %@", hexToken);
+    
+    if (hexToken != nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:hexToken forKey:kDeviceToken];
+    }
+#endif
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

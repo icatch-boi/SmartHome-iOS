@@ -567,4 +567,4 @@
 "kAlreadyCancel" = "已取消";
 "kCompleted" = "已完成";
 
-"kLocationAuthorizationDeniedNotice" = "需要打开手机位置权限才能获取到手机连接Wi-Fi的信息，否则不能进行下一步操作";
+"kLocationAuthorizationDeniedNotice" = "需要打开手机位置权限才能获取到手机所连接的Wi-Fi的信息，否则不能进行下一步操作。";
