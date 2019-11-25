@@ -168,6 +168,7 @@ static const CGFloat kMarginTop = 140;
         return cropImage;
     }
     
+#if 0
     dispatch_sync(self.imageHandleQ, ^{
         [[FaceSDKManager sharedInstance] detectWithImage:originImg completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
             SHLogInfo(SHLogTagAPP, @"Face rect: %@, result: %d", NSStringFromCGRect(faceinfo.faceRect), resultCode);
@@ -178,6 +179,21 @@ static const CGFloat kMarginTop = 140;
             }
         }];
     });
+#else
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [[FaceSDKManager sharedInstance] detectWithImage:originImg completion:^(FaceInfo *faceinfo, ResultCode resultCode) {
+        SHLogInfo(SHLogTagAPP, @"Face rect: %@, result: %lu", NSStringFromCGRect(faceinfo.faceRect), (unsigned long)resultCode);
+        
+        if (resultCode == ResultCodeOK) {
+            cropImage = [self imageFromImage:originImg inRect:[self adjustFaceRect:faceinfo.faceRect imageWidth:originImg.size.width]];
+        }
+        
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+#endif
     
     return cropImage;
 }

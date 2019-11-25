@@ -32,7 +32,11 @@
     [super awakeFromNib];
     // Initialization code
     
+#if 0
     self.progressViewY = self.center.y - kProcessViewWidth * 0.5;
+#else
+    self.progressViewY = (CGRectGetHeight(self.bounds) - kProcessViewWidth) * 0.5;
+#endif
     SHDownloadProgressView *view= [[SHDownloadProgressView alloc] initWithFrame:CGRectMake(kLeftEdge, self.progressViewY, kScreenWidth - kLeftEdge - kRightEdge, kProcessViewWidth)];
 
     [view setCornerWithRadius:kProcessViewWidth * 0.5];
