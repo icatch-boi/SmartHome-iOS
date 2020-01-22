@@ -18,6 +18,7 @@
 @property (nonatomic, copy) NSNumber *timeInSecs;
 @property (nonatomic, copy) NSString *deviceId;
 @property (nonatomic, copy) NSNumber *errCode;
+@property (nonatomic, strong) NSArray *locationInfos;
 
 @property (nonatomic, copy, readonly) NSString *msgTypeString;
 

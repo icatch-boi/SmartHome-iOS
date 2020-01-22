@@ -46,6 +46,20 @@
     [self setupGUI];
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    [self clearHumanoidBoxView];
+}
+
+- (void)clearHumanoidBoxView {
+    for (UIView *v in self.iconImgView.subviews) {
+        if (v.tag == kHumanoidBoxViewTag) {
+            [v removeFromSuperview];
+        }
+    }
+}
+
 - (void)setupGUI {
     _timeLabel.numberOfLines = 0;
     _timeLabel.font = [UIFont systemFontOfSize:14.0];
@@ -68,7 +82,7 @@
 
     
     WEAK_SELF(self);
-    [messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+    [messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image, NSString * _Nullable fileIdentifier) {
 #ifndef KUSE_S3_SERVICE
 #if 0
         if (image != nil) {
@@ -88,9 +102,11 @@
 #endif
 
 #else
-        if (image != nil) {
+        if (image != nil && [weakself.messageInfo.fileIdentifier isEqualToString:fileIdentifier]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakself.iconImgView.image = [image ic_cornerImageWithSize:self.iconImgView.bounds.size radius:kImageCornerRadius];
+                
+                [messageInfo drawHumanoidBoxWithOriginImage:image toView:weakself.iconImgView];
             });
         }
 #endif

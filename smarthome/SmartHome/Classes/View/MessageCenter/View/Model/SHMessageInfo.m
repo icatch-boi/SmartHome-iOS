@@ -130,10 +130,11 @@
 #endif
         
 #else
+        WEAK_SELF(self);
         UIImage *image = [[ZJImageCache sharedImageCache] imageFromCacheForKey:[self makeCacheKey]];
         if (image != nil) {
             if (completion) {
-                completion(image);
+                completion(image, weakself.fileIdentifier);
             }
             
             dispatch_semaphore_signal(self.downloadSemaphore);
@@ -145,12 +146,12 @@
                 [[ZJImageCache sharedImageCache] storeImage:result forKey:[self makeCacheKey] completion:nil];
 
                 if (completion) {
-                    completion(result);
+                    completion(result, weakself.fileIdentifier);
                 }
             } else {
                 SHLogError(SHLogTagAPP, @"Get device message file failed, error: %@", result);
                 if (completion) {
-                    completion(nil);
+                    completion(nil, weakself.fileIdentifier);
                 }
             }
             
@@ -161,6 +162,7 @@
 }
 
 - (void)downloadMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion {
+    WEAK_SELF(self);
     [[SHNetworkManager sharedNetworkManager] downloadFileWithURLString:_messageFile.url finished:^(BOOL isSuccess, id  _Nullable result) {
         SHLogInfo(SHLogTagAPP, @"download Message file is success: %d", isSuccess);
         
@@ -175,7 +177,7 @@
         }
         
         if (completion) {
-            completion(image);
+            completion(image, weakself.messageFile.url);
         }
         
         dispatch_semaphore_signal(self.downloadSemaphore);
@@ -213,6 +215,94 @@
     }
     
     return _fileIdentifier;
+}
+
+#pragma mark - Draw HumanoidBox
+- (void)drawHumanoidBoxWithOriginImage:(UIImage *)image toView:(UIView *)view {
+    __block UIView *box = nil;
+    
+    [self.message.locationInfos enumerateObjectsUsingBlock:^(NSDictionary*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.count != 0) {
+            CGRect rect = [self convertRectWithLocationInfo:obj originImage:image toView:view];
+            SHLogInfo(SHLogTagAPP, @"Humanoid rect: %@", NSStringFromCGRect(rect));
+
+            CALayer *layer = [self createBoxLayer];
+            layer.frame = rect;
+            
+//            [self adjustHumanoidBoxWithLocationInfo:obj layer:layer toView:view];
+
+            box = box ? box : [self createBoxView];
+            
+            [box.layer addSublayer:layer];
+        }
+    }];
+    
+    box != nil ? [view addSubview:box] : void();
+}
+
+- (void)adjustHumanoidBoxWithLocationInfo:(NSDictionary *)obj layer:(CALayer *)layer toView:(UIView *)view {
+    int confidence = [obj[@"confidence"] intValue];
+    
+    if (confidence > 0 && confidence < 80) {
+        float widthratio = 1.1f;
+        float heightratio = 1.2f;
+        
+        layer.transform = CATransform3DIdentity;
+
+        if (confidence <= 75) {
+            heightratio = 1.3f;
+        }
+        
+        layer.transform = CATransform3DMakeScale(widthratio, heightratio, 1.0);
+        
+        CGRect newRect = layer.frame;
+        
+        SHLogInfo(SHLogTagAPP, @"Before rect: %@", NSStringFromCGRect(newRect));
+
+        CGFloat x = MAX(0, CGRectGetMinX(newRect));
+        CGFloat y = MAX(0, CGRectGetMinY(newRect));
+        CGFloat maxX = MIN(CGRectGetWidth(view.frame), CGRectGetMaxX(newRect));
+        CGFloat maxY = MIN(CGRectGetHeight(view.frame), CGRectGetMaxY(newRect));
+        
+        newRect = CGRectMake(x, y, maxX - x, maxY - y);
+        
+        SHLogInfo(SHLogTagAPP, @"After rect: %@", NSStringFromCGRect(newRect));
+        layer.frame = newRect;
+    }
+}
+
+- (CGRect)convertRectWithLocationInfo:(NSDictionary *)obj originImage:(UIImage *)image toView:(UIView *)view {
+    CGFloat x = [obj[@"left"] floatValue];
+    CGFloat y = [obj[@"top"] floatValue];
+    CGFloat width = [obj[@"width"] floatValue];
+    CGFloat height = [obj[@"height"] floatValue];
+    
+    CGFloat widthScale = image.size.width / CGRectGetWidth(view.bounds);
+    CGFloat heightScale = image.size.height / CGRectGetHeight(view.bounds);
+    
+    x = x / widthScale;
+    y = y / heightScale;
+    width = width / widthScale;
+    height = height / heightScale;
+    
+    return CGRectMake(x, y, width, height);
+}
+
+#pragma mark - HumanoidBox
+- (CALayer *)createBoxLayer {
+    CALayer *layer = [[CALayer alloc] init];
+    
+    layer.borderColor = [UIColor greenColor].CGColor;
+    layer.borderWidth = 1;
+    
+    return layer;
+}
+
+- (UIView *)createBoxView {
+    UIView *box = [[UIView alloc] init];
+    box.tag = kHumanoidBoxViewTag;
+    
+    return box;
 }
 
 @end

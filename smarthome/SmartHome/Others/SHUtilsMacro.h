@@ -173,7 +173,7 @@ static NSString * const kUserAccountPassword = @"UserAccountPassword";
 //#define KTEMP_MODIFY
 
 #pragma mark - Config Account Server
-static NSString * const kServerBaseURL = @"https://account.smarthome.icatchtek.com:3026/";
+static NSString * const kServerBaseURL = @"https://boi.tinyai.top:3026/";
 static NSString * const kServerClientID = @"icatch_smarthome";
 static NSString * const kServerClientSecret = @"123456";
 static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";

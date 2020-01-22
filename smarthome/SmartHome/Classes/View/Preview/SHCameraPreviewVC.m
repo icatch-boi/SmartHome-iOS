@@ -1421,8 +1421,8 @@ static const NSTimeInterval kConnectAndPreviewCommonSleepTime = 1.0;
     
     WEAK_SELF(self);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [info getMessageFileWithCompletion:^(UIImage * _Nullable image) {
-            if (image != nil) {
+        [info getMessageFileWithCompletion:^(UIImage * _Nullable image, NSString * _Nullable fileIdentifier) {
+            if (image != nil && [info.fileIdentifier isEqualToString:fileIdentifier]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     weakself.presentView.portraitImageView.image = [weakself reDrawOrangeImage:image rangeRect:weakself.presentView.portraitImageView.bounds];
                 });

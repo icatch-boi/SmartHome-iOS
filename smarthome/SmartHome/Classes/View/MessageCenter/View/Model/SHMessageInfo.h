@@ -31,7 +31,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
+typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image, NSString * _Nullable fileIdentifier);
+static const NSInteger kHumanoidBoxViewTag = 1314;
 
 @interface SHMessageInfo : NSObject
 
@@ -47,6 +48,7 @@ typedef void(^MessageInfoGetMessageFileCompletion)(UIImage * _Nullable image);
 + (instancetype)messageInfoWithDeviceID:(NSString *)deviceID messageDict:(NSDictionary *)messageDict;
 
 - (void)getMessageFileWithCompletion:(nullable MessageInfoGetMessageFileCompletion)completion;
+- (void)drawHumanoidBoxWithOriginImage:(UIImage *)image toView:(UIView *)view;
 
 @end
 

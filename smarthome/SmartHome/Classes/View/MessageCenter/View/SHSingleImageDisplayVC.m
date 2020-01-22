@@ -77,7 +77,7 @@
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     
     WEAK_SELF(self);
-    [_messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image) {
+    [_messageInfo getMessageFileWithCompletion:^(UIImage * _Nullable image, NSString * _Nullable fileIdentifier) {
         [SVProgressHUD dismiss];
 #ifndef KUSE_S3_SERVICE
 #if 0
@@ -102,11 +102,13 @@
         }];
 #endif
 #else
-        if (image) {
+        if (image != nil && [weakself.messageInfo.fileIdentifier isEqualToString:fileIdentifier]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakself.bigImageView.image = image;
                 
                 [weakself setupRightBarButtonItem];
+                
+                [weakself.messageInfo drawHumanoidBoxWithOriginImage:image toView:weakself.bigImageView];
             });
         }
 #endif

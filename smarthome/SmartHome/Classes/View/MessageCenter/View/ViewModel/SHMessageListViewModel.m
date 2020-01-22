@@ -51,6 +51,14 @@ static const NSInteger maxPullupTryTimes = 3;
         return;
     }
     
+    if (pullup && self.lastquerykey.intValue <= 0) {
+        if (completion) {
+            completion(YES, NO);
+        }
+        
+        return;
+    }
+    
     NSNumber *sinceid = pullup ? _lastquerykey : nil;
     NSString *enddate = pullup ? [self serverDateStringFromLocal:camera.createTime] : self.messageList.firstObject.time;
     
