@@ -289,7 +289,8 @@
     ICatchAudioFormat *audioFormat = new ICatchAudioFormat();
     NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
     int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
-    audioFormat->setCodec(ICATCH_CODEC_MPEG4_GENERIC);
+    ICatchAudioFormat format = [_sdk getAudioFormat];
+    audioFormat->setCodec(format.getCodec()/*ICATCH_CODEC_MPEG4_GENERIC*/);
     audioFormat->setFrequency(audioRate);
     audioFormat->setSampleBits(kBitsPerChannel);
     audioFormat->setNChannels(kChannelsPerFrame);

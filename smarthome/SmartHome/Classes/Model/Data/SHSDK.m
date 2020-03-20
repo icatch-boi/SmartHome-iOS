@@ -20,7 +20,8 @@
 @property (nonatomic) Playback *playback;
 @property (nonatomic) VideoPlayback *vplayback;
 @property (nonatomic) AudioServer *aserver;
-@property (nonatomic) Resampler *resampler;
+//@property (nonatomic) Resampler *resampler;
+@property (nonatomic) shared_ptr<Resampler> resampler;
 @property (nonatomic) EnvironmentCheck *checkInstance;
 
 @property (nonatomic) ICatchFrameBuffer *videoFrameBuffer;
@@ -75,16 +76,31 @@
     return _audioData;
 }
 
-- (smarthome::Resampler *)resampler {
-    if (_resampler == nil) {
-        _resampler = new Resampler();
-		NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
-		int audioRate = [defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+//- (smarthome::Resampler *)resampler {
+//    if (_resampler == nil) {
+//        _resampler = new Resampler();
+//		NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
+//		int audioRate = [defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+//        int ret = _resampler->init(1, 48000, audioRate);
+//        SHLogInfo(SHLogTagAPP, @"Resampler init, ret: %d", ret);
+//    }
+//
+//    return _resampler;
+//}
+
+- (void)initResampler {
+    self.resampler = make_shared<Resampler>();
+    
+    if (self.resampler != nullptr) {
+        NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
+        int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
         int ret = _resampler->init(1, 48000, audioRate);
         SHLogInfo(SHLogTagAPP, @"Resampler init, ret: %d", ret);
+        
+        if (ret != ICH_SUCCEED) {
+            _resampler = nullptr;
+        }
     }
-    
-    return _resampler;
 }
 
 - (int)resamplerWithInputBuffer:(char *)inputBuffer inputSize:(int)inputSize outputBuffer:(char *)outputBuffer outputSize:(int)outputSize {
@@ -202,7 +218,7 @@
         
         self.videoRange = NSMakeRange(0, VIDEO_BUFFER_SIZE);
         self.audioRange = NSMakeRange(0, AUDIO_BUFFER_SIZE);
-        
+        [self initResampler];
     } while (0);
     
     if (retVal == ICH_SUCCEED) {
@@ -238,6 +254,7 @@
     
     if (_resampler != nil) {
         _resampler->unInit();
+        _resampler = nullptr;
     }
     
     if (self.session) {
