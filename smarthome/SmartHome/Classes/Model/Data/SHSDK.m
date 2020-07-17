@@ -410,6 +410,9 @@
     }
     
     SHLogInfo(SHLogTagSDK, @"startMediaStream done, retVal : %d.", startRetVal);
+//    if (startRetVal == ICH_SUCCEED) {
+//        [self saveVideoFrameDataForTest];
+//    }
     
     self.isStopped = NO;
     return startRetVal;
@@ -576,7 +579,7 @@
         NSString *mediaDirectory = [documentsDirectory stringByAppendingPathComponent:@"TestVideo"];
         [[NSFileManager defaultManager] createDirectoryAtPath:mediaDirectory withIntermediateDirectories:NO attributes:nil error:nil];
         NSString *filePath = [mediaDirectory stringByAppendingPathComponent:@"test.mp4"];
-        _file = fopen([filePath cStringUsingEncoding:NSASCIIStringEncoding], "a+");
+        _file = fopen([filePath cStringUsingEncoding:NSASCIIStringEncoding], "wb+");
         SHLogInfo(SHLogTagSDK, @"filePath: %@", filePath);
         
         //        fwrite(self.videoFrameBuffer->getBuffer(), sizeof(char), self.videoFrameBuffer->getFrameSize(), _file);
@@ -604,6 +607,7 @@
         videoFrameData = [SHAVData cameraAVDataWithData:self.videoData andTime:self.videoFrameBuffer->getPresentationTime()];
         videoFrameData.isIFrame = self.videoFrameBuffer->getIsIFrame() ? YES : NO;
         
+//        SHLogInfo(SHLogTagSDK, @"video frame presentation time: %f", self.videoFrameBuffer->getPresentationTime());
 //        fwrite(self.videoFrameBuffer->getBuffer(), sizeof(char), self.videoFrameBuffer->getFrameSize(), _file);
         
     } else {

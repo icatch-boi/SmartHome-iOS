@@ -49,6 +49,10 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     return mainStory.instantiateInitialViewController;
 }
 
+- (void)dealloc {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kEnterAPMode];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -57,6 +61,23 @@ static const CGFloat kPhoneVerifycodeExpirydate = 60;
     [self initParameter];
     [self setupGUI];
     [self addGestureOperation];
+    [self noNeedExitAppHandle];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noNeedExitAppHandle) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)noNeedExitAppHandle {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kEnterAPMode];
 }
 
 - (void)initParameter {
