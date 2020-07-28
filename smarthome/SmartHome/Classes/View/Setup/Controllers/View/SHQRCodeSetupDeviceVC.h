@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *wifiSSID;
 @property (nonatomic, copy) NSString *wifiPWD;
+@property (nonatomic, assign, getter=isAutoWay) BOOL autoWay;
+@property (nonatomic, assign, getter=isConfigWiFi) BOOL configWiFi;
 
 @end
 

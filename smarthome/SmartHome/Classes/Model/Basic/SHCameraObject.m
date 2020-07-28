@@ -12,6 +12,7 @@
 #import "SHDownloadManager.h"
 #import "SHNetworkManager.h"
 #import "SHNetworkManager+SHCamera.h"
+#import "SHMessageCountManager.h"
 
 #define kChannelsPerFrame   1
 #define kBitsPerChannel     16
@@ -28,10 +29,16 @@
 @property (nonatomic, strong) SHObserver *packageDownloadSizeObserver;
 @property (nonatomic, strong) SHObserver *clientCountObserver;
 @property (nonatomic, strong) SHObserver *noTalkingObserver;
+@property (nonatomic, strong) SHObserver *recvVideoTimeoutObserver;
+@property (nonatomic, assign) NSUInteger newMessageCount;
 
 @end
 
 @implementation SHCameraObject
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 + (instancetype)cameraObjectWithCamera:(SHCamera *)camera {
 	SHCameraObject *obj = [[self alloc] init];
@@ -41,6 +48,8 @@
 	obj.cameraProperty = [[SHCameraProperty alloc] init];
 	obj.camera = camera;
     obj.streamQuality = VIDEO_QUALITY_SMOOTH;
+    obj.sdk = [[SHSDK alloc] init];
+    obj.newMessageCount = 0;
 
 	return obj;
 }
@@ -208,7 +217,7 @@
 
 - (int)connectCamera {
     SHLogTRACE();
-	SHSDK *sdk = [[SHSDK alloc] init];
+//    SHSDK *sdk = [[SHSDK alloc] init];
 	int retValue = ICH_SUCCEED;
 	//dispatch_async([sdk sdkQueue], ^{
 		SHLogInfo(SHLogTagAPP, @" to connect camera,camera name is : %@",self.camera.cameraName);
@@ -221,16 +230,16 @@
 
         return ICH_TUTK_IOTC_CONNECTION_UNKNOWN_ER;
     }
-        if ((retValue = [sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword]) == ICH_SUCCEED) {
+        if ((retValue = [self.sdk initializeSHSDK:self.camera.cameraUid devicePassword:self.camera.devicePassword]) == ICH_SUCCEED) {
             
             self.streamOper = [[SHStreamOperate alloc] initWithCameraObject:self];
             self.controler.actCtrl.shCamObj = self;
             self.controler.fileCtrl.shCamObj = self;
             self.gallery.shCamObj = self;
-            self.sdk = sdk;
+//            self.sdk = sdk;
             self.cameraProperty.previewMode = 0;
             
-            if ([sdk isSHSDKInitialized]) {
+            if ([self.sdk isSHSDKInitialized]) {
                 self.isConnect = YES;
                 [self addCameraPropertyObserver];
             } else {
@@ -263,7 +272,7 @@
     [self.cameraProperty cleanCurrentCameraAllProperty];
     
     _curResult = nil;
-    _sdk = nil;
+//    _sdk = nil;
     _streamOper = nil;
     
     [self.gallery cleanDateInfo];
@@ -280,7 +289,8 @@
     ICatchAudioFormat *audioFormat = new ICatchAudioFormat();
     NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
     int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
-    audioFormat->setCodec(ICATCH_CODEC_MPEG4_GENERIC);
+    ICatchAudioFormat format = [_sdk getAudioFormat];
+    audioFormat->setCodec(format.getCodec()/*ICATCH_CODEC_MPEG4_GENERIC*/);
     audioFormat->setFrequency(audioRate);
     audioFormat->setSampleBits(kBitsPerChannel);
     audioFormat->setNChannels(kChannelsPerFrame);
@@ -375,6 +385,10 @@
     SHSDKEventListener *noTalkingListener = new SHSDKEventListener(self, @selector(cameraPropertyValueChangeCallback:));
     self.noTalkingObserver = [SHObserver cameraObserverWithListener:noTalkingListener eventType:ICATCH_EVENT_NO_TALKING isCustomized:NO isGlobal:NO];
     [self.sdk addObserver:self.noTalkingObserver];
+    
+    SHSDKEventListener *recvDataTimeoutListener = new SHSDKEventListener(self, @selector(notifyRecvVideoTimeoutEvent));
+    self.recvVideoTimeoutObserver = [SHObserver cameraObserverWithListener:recvDataTimeoutListener eventType:ICATCH_EVENT_RECEIVE_VIDEO_TIMEOUT isCustomized:NO isGlobal:NO];
+    [self.sdk addObserver:self.recvVideoTimeoutObserver];
 }
 
 - (void)cameraPropertyValueChangeCallback:(SHICatchEvent *)evt {
@@ -434,6 +448,14 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:kCameraPowerOffNotification object:self userInfo:@{kPowerOffEventValue: @(intValue1)}];
+    });
+}
+
+- (void)notifyRecvVideoTimeoutEvent {
+    SHLogTRACE();
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRecvVideoTimeoutNotification object:self];
     });
 }
 
@@ -537,6 +559,17 @@
         self.noTalkingObserver = nil;
     }
     
+    if (self.recvVideoTimeoutObserver != nil) {
+        [self.sdk removeObserver:self.recvVideoTimeoutObserver];
+        
+        if (self.recvVideoTimeoutObserver.listener != nullptr) {
+            delete self.recvVideoTimeoutObserver.listener;
+            self.recvVideoTimeoutObserver.listener = nullptr;
+        }
+        
+        self.recvVideoTimeoutObserver = nil;
+    }
+    
     [self removeVideoBitRateObserver];
     self.cameraPropertyValueChangeBlock = nil;
 }
@@ -557,6 +590,29 @@
         }
         
         self.bitRateObserver = nil;
+    }
+}
+
+#pragma mark - NewMessageCount Ops
+- (void)incrementNewMessageCount {
+    [self incrementNewMessageCountBy:1];
+}
+
+- (void)incrementNewMessageCountBy:(NSUInteger)amount {
+    self.newMessageCount += amount;
+    
+    [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
+    if (self.updateNewMessageCount) {
+        self.updateNewMessageCount();
+    }
+}
+
+- (void)resetNewMessageCount {
+    self.newMessageCount = 0;
+    
+    [SHMessageCountManager updateMessageCountCacheWithCameraObj:self];
+    if (self.updateNewMessageCount) {
+        self.updateNewMessageCount();
     }
 }
 

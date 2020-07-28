@@ -465,3 +465,104 @@
 "kCurrentCannotUpgrade" = "其他用戶正在連接，當前暫不能進行固件升級，謝謝!";
 "kOthersTalking" = "其他用戶正在對講，請稍候再試，謝謝！";
 "kCannotAddFaceDataDescription" = "系統識別到有陌生人在按門鈴，非常抱歉您不是門鈴的擁有者，沒有權限將人臉數據添加到人臉數據看中。想要把玩'人臉識別'功能立馬購買一台屬於自己的門鈴吧，感謝您對SmartHome項目組的信任與支持！";
+"kBackgroundWakeup" = "背景喚醒";
+"kEnableBackgroundWakeupDescription" = "打開此功能將會增加耗電量，但可提升連接速度，確定要打開嗎？";
+"kSettingup" = "正在設置...";
+"kChangeBackgroundWakeupStatusFailed" = "更改背景喚醒狀態失敗！";
+
+"kAddDeviceTips" = "暫無設備，請添加";
+"kAddDevice" = "添加設備";
+"kRecvVideoTimeoutTips" = "當前網絡狀況差，已不能正常預覽，請稍候再試！";
+
+// Face Collect
+"kPleaseFaceThePhone" = "請正對手機";
+"kFaceHasOcclusion" = "臉部有遮擋";
+"kRaiseSlightly" = "建議略微抬頭";
+"kCheckCameraSetting" = "出現未知錯誤，請檢查相機設置";
+"kCameraPermissionsLimited" = "相機權限受限，請在設置中啟用";
+"kGood" = "非常好";
+"kBowSlightly" = "建議略微低頭";
+"kSlightlyToTheRight" = "建議略微向右轉頭";
+"kSlightlyToTheLeft" = "建議略微向左轉頭";
+"kLightAgain" = "光線再亮些";
+"kMoveIntoTheBox" = "把臉移入框內";
+"kPleaseStayStill" = "請保持不動";
+"kLeftEyeHasOcclusion" = "左眼有遮擋";
+"kRightEyeHasOcclusion" = "右眼有遮擋";
+"kNoisyNose" = "鼻子有遮擋";
+"kMouthBlocked" = "嘴巴有遮擋";
+"kLeftCheekHasOcclusion" = "左臉頰有遮擋";
+"kRightCheekHasOcclusion" = "右臉頰有遮擋";
+"kLowerJawHasOcclusion" = "下顎有遮擋";
+"kTakeLonger" = "手機拿遠一點";
+"kTakeCloser" = "手機拿近一點";
+"kBlink" = "眨眨眼";
+"kOpenMouth" = "張張嘴";
+"kHeadSlowlyRight" = "向右緩慢轉頭";
+"kHeadSlowlyLeft" = "向左緩慢轉頭";
+"kSlowlyLookingup" = "緩慢抬頭";
+"kSlowlybowing" = "緩慢低頭";
+"kShakingHisHead" = "搖搖頭";
+"kVerificationFailed" = "驗證失敗";
+"kCropFaceimage" = "正在裁剪人臉圖片，請稍候...";
+"kFaceimageisIncompleteDescription" = "採集的人臉圖片不完整（總共需要五個方向的數據，分別為正臉及左、右、上、下四個側面），請重新採集。";
+"kGetFaceID" = "正在獲取可用'faceid'，請稍候...";
+"kGetFaceIDFailed" = "獲取'faceid'失敗, error: %@";
+"kFaceIDEmpty" = "'faceid'為空";
+"kAddingFaceData" = "正在添加人臉數據，請稍候...";
+"kAddFaceDataFailed" = "添加人臉數據失敗";
+"kUploadFaceDataFailed" = "上傳人臉數據失敗";
+"kAddFaceDataToFWFailed" = "添加人臉數據到設備失敗";
+"kFaceDataSetNotExist" = "人臉集合數據不存在";
+"kFaceDataNotExist" = "人臉數據不存在";
+"kUploadFaceDataFailedDes" = "上傳人臉數據失敗, error: %@";
+"kUplaodFaceDataSetFailedDes" = "上傳人臉集合數據失敗，error: %@";
+"kStranger" = "陌生人";
+
+"kEnterMySharing" = "我的分享";
+"kNoDevicesToShare" = "沒有可分享的設備";
+"kDevice" = "設備";
+"kTotalShared" = "共分享給 %d 個用戶";
+
+"kNotificationContentBasicBody" = "剛剛收到一條新的門鈴通知，點擊查看詳情";
+"kMessageCenter" = "消息中心";
+"kPushMessageTypeLowPower" = "低電量";
+"kPushMessageTypeSDCardFull" = "SD卡滿";
+"kPushMessageTypeSDCardError" = "SD卡出錯";
+"kPushMessageTypeTamperAlarm" = "防拆報警";
+"kPushMessageTypeFaceRecognition" = "門鈴（帶AI）";
+"kPushMessageTypeUnknown" = "未知類型";
+
+"kFaceDataUpdateDescription" = "帳戶中人臉數據有更新，是否要同步到設備？";
+"kNotSync" = "不同步";
+"kSync" = "同步";
+
+"kDeviceAlreadyRegistered" = "該設備已被自己註冊過，設備名稱: %@";
+"kDeviceAlreadySubscribed" = "該設備已訂閱過，設備名稱: %@";
+"kSetDeviceNameFailedDescription" = "設置設備名稱失敗，需要重新嘗試嗎？";
+"kScanQRCodeAddDeviceDescription" = "1、V35設備；\n2、設備不支持自動獲取UUID方式；\n3、添加分享設備";
+"kAutoWayAddDeviceDescription" = "1、設備支持自動獲取UUID方式";
+"kModifyWiFi" = "修改Wi-Fi";
+"kDeleteDevice" = "刪除設備";
+"kUseScanQRCodeWayDescription" = "使用掃描二維碼方式添加設備的情況如下：";
+"kScanQRCodeWayButtonTitle" = "掃描二維碼方式";
+"kUseAutoWayDescription" = "使用自動獲取UUID方式添加設備的情況如下：";
+"kAutoWayButtonTitle" = "自動獲取UUID方式";
+
+"kFileCenter" = "文件中心";
+"kGetFileDataFailed" = "獲取文件數據失敗，請稍候重試";
+"kSelectAll" = "全選";
+"kChosen" = "已選擇";
+"kCancelSelectAll" = "取消全選";
+"kDeleteFileWarning" = "確定要刪除所選文件嗎？刪除後數據將不能恢復！";
+"kDeleteing" = "正在刪除...";
+"kDownload" = "下載";
+"kTryToLoadData" = "正在努力加載數據...";
+"kDownloading" = "正在下載";
+"kWaitDownload" = "等待下載...";
+"kDownloadSuccess" = "下載成功";
+"kDownloadFailed" = "下載失敗";
+"kAlreadyCancel" = "已取消";
+"kCompleted" = "已完成";
+
+"kLocationAuthorizationDeniedNotice" = "需要打開手機位置權限才能獲取到手機所連接的Wi-Fi的信息，否則不能進行下一步操作。";

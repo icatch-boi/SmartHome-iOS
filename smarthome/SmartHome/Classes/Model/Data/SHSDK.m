@@ -10,6 +10,7 @@
 #include "SHH264StreamParameter.hpp"
 #import <Photos/Photos.h>
 #import "XJLocalAssetHelper.h"
+#import "SHNetworkManagerHeader.h"
 
 @interface SHSDK ()
 
@@ -19,7 +20,8 @@
 @property (nonatomic) Playback *playback;
 @property (nonatomic) VideoPlayback *vplayback;
 @property (nonatomic) AudioServer *aserver;
-@property (nonatomic) Resampler *resampler;
+//@property (nonatomic) Resampler *resampler;
+@property (nonatomic) shared_ptr<Resampler> resampler;
 @property (nonatomic) EnvironmentCheck *checkInstance;
 
 @property (nonatomic) ICatchFrameBuffer *videoFrameBuffer;
@@ -74,16 +76,31 @@
     return _audioData;
 }
 
-- (smarthome::Resampler *)resampler {
-    if (_resampler == nil) {
-        _resampler = new Resampler();
-		NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
-		int audioRate = [defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+//- (smarthome::Resampler *)resampler {
+//    if (_resampler == nil) {
+//        _resampler = new Resampler();
+//		NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
+//		int audioRate = [defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
+//        int ret = _resampler->init(1, 48000, audioRate);
+//        SHLogInfo(SHLogTagAPP, @"Resampler init, ret: %d", ret);
+//    }
+//
+//    return _resampler;
+//}
+
+- (void)initResampler {
+    self.resampler = make_shared<Resampler>();
+    
+    if (self.resampler != nullptr) {
+        NSUserDefaults *defaultSettings = [NSUserDefaults standardUserDefaults];
+        int audioRate = (int)[defaultSettings integerForKey:@"PreferenceSpecifier:audioRate"];
         int ret = _resampler->init(1, 48000, audioRate);
         SHLogInfo(SHLogTagAPP, @"Resampler init, ret: %d", ret);
+        
+        if (ret != ICH_SUCCEED) {
+            _resampler = nullptr;
+        }
     }
-    
-    return _resampler;
 }
 
 - (int)resamplerWithInputBuffer:(char *)inputBuffer inputSize:(int)inputSize outputBuffer:(char *)outputBuffer outputSize:(int)outputSize {
@@ -129,7 +146,22 @@
 }
 
 + (void)checkDeviceStatusWithUID:(NSString *)uid {
-    Session::checkDeviceStatus(uid.UTF8String, true);
+    bool enableBackgroundWakeup = false;
+    
+    do {
+        NSDictionary *info = [SHNetworkManager sharedNetworkManager].userAccount.userExtensionsInfo;
+        if (info == nil) {
+            return;
+        }
+        
+        if (![info.allKeys containsObject:@"bgWakeup"]) {
+            return;
+        }
+        
+        enableBackgroundWakeup = [info[@"bgWakeup"] intValue];
+    } while (0);
+
+    Session::checkDeviceStatus(uid.UTF8String, enableBackgroundWakeup);
 }
 
 - (int)initializeSHSDK:(NSString *)cameraUid devicePassword:(NSString *)devicePassword {
@@ -186,7 +218,7 @@
         
         self.videoRange = NSMakeRange(0, VIDEO_BUFFER_SIZE);
         self.audioRange = NSMakeRange(0, AUDIO_BUFFER_SIZE);
-        
+        [self initResampler];
     } while (0);
     
     if (retVal == ICH_SUCCEED) {
@@ -222,6 +254,7 @@
     
     if (_resampler != nil) {
         _resampler->unInit();
+        _resampler = nullptr;
     }
     
     if (self.session) {
@@ -377,6 +410,9 @@
     }
     
     SHLogInfo(SHLogTagSDK, @"startMediaStream done, retVal : %d.", startRetVal);
+//    if (startRetVal == ICH_SUCCEED) {
+//        [self saveVideoFrameDataForTest];
+//    }
     
     self.isStopped = NO;
     return startRetVal;
@@ -543,7 +579,7 @@
         NSString *mediaDirectory = [documentsDirectory stringByAppendingPathComponent:@"TestVideo"];
         [[NSFileManager defaultManager] createDirectoryAtPath:mediaDirectory withIntermediateDirectories:NO attributes:nil error:nil];
         NSString *filePath = [mediaDirectory stringByAppendingPathComponent:@"test.mp4"];
-        _file = fopen([filePath cStringUsingEncoding:NSASCIIStringEncoding], "a+");
+        _file = fopen([filePath cStringUsingEncoding:NSASCIIStringEncoding], "wb+");
         SHLogInfo(SHLogTagSDK, @"filePath: %@", filePath);
         
         //        fwrite(self.videoFrameBuffer->getBuffer(), sizeof(char), self.videoFrameBuffer->getFrameSize(), _file);
@@ -571,6 +607,7 @@
         videoFrameData = [SHAVData cameraAVDataWithData:self.videoData andTime:self.videoFrameBuffer->getPresentationTime()];
         videoFrameData.isIFrame = self.videoFrameBuffer->getIsIFrame() ? YES : NO;
         
+//        SHLogInfo(SHLogTagSDK, @"video frame presentation time: %f", self.videoFrameBuffer->getPresentationTime());
 //        fwrite(self.videoFrameBuffer->getBuffer(), sizeof(char), self.videoFrameBuffer->getFrameSize(), _file);
         
     } else {

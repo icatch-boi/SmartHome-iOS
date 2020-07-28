@@ -10,4 +10,5 @@
 
 @interface SGQRCodeScanningVC : UIViewController
 
+- (void)setGestureHandle:(void (^)(UIView *sender))gestureHandle;
 @end

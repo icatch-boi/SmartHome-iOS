@@ -79,7 +79,7 @@ NSLog((@"sdk %@: " fmt @" => [ %@ ]"), _level, ##__VA_ARGS__, info); \
 #define kAppCleanSpaceAlertTag (kAppAlertTag + 2)
 #define kAppFactoryResetAlertTag (kAppAlertTag + 3)
 
-const int UNDEFINED_NUM = 0xffff;
+//const int UNDEFINED_NUM = 0xffff;
 
 #define HW_DECODE_H264
 #define USE_SYSTEM_IOS7_IMPLEMENTATION 0
@@ -109,6 +109,8 @@ static NSString * const kDeviceToken = @"deviceToken";
 static NSString * const kCurrentAddCameraUID = @"CurrentAddCameraUID";
 static NSString * const kLocalAlbumName = @"SmartHome";
 static NSString * const kSubscribeCameraName = @"SubscribeCameraName";
+static NSString * const kReconfigureDevice = @"ReconfigureDevice";
+static NSString * const kUserAccountInfo = @"UserAccountInfo";
 
 #pragma mark - Local Notification
 static NSString * const kAddCameraExitNotification = @"kAddCameraExitNotification";
@@ -121,6 +123,8 @@ static NSString * const kUpdateDeviceInfoNotification = @"UpdateDeviceInfoNotifi
 static NSString * const kDeviceUpgradeFailedNotification = @"DeviceUpgradeFailedNotification";
 static NSString * const kDeviceUpgradeSuccessNotification = @"DeviceUpgradeSuccessNotification";
 static NSString * const kDownloadUpgradePackageSuccessNotification = @"DownloadUpgradePackageSuccessNotification";
+static NSString * const kRecvVideoTimeoutNotification = @"RecvVideoTimeoutNotification";
+static NSString * const kSetupDeviceNotification = @"SetupDeviceNotification";
 
 #pragma mark - Color
 static NSUInteger const kThemeColor = 0xFA3336; //0xDE2F43; //0xF2F2F2; //0x00BFD2;
@@ -138,12 +142,13 @@ static NSString * const kAlbumStoryboardName = @"Album";
 static NSString * const kMainStoryboardName = @"XJMain";
 static NSString * const kMessageCenterStoryboardName = @"MessageCenter";
 static NSString * const kFaceRecognitionStoryboardName = @"FaceRecognition";
+static NSString * const kFaceCollect = @"FaceCollect";
 
 #pragma mark - RegularExpression
 static NSString * const kPhoneRegularExpression = @"^1(3[0-9]|4[579]|5[0-35-9]|7[01356]|8[0-9]|9[9])\\d{8}$";
 static NSString * const kEmailRegularExpression = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 static NSString * const kPasswordRegularExpression = @"[A-Za-z0-9_()?![，。？：；’‘！”“、`~!@#$%^&*()-_=+<>./]]{%zd,%zd}";
-static const NSInteger kPasswordMinLength = 6;
+static const NSInteger kPasswordMinLength = 8;
 static const NSInteger kPasswordMaxLength = 16;
 static NSString * const kDeviceNameRegularExpression = @"[\u4e00-\u9fa5a-zA-Z0-9_-]{%lu,%lu}";
 static const NSUInteger kDeviceNameMinLength = 3;
@@ -160,9 +165,15 @@ static const float kMaxZoomScale = 5.0;
 static const NSInteger kQRCodeValidDuration = 24; //hours
 static const NSInteger kDeviceValidUsedDuration = 7; //days
 static const BOOL kUseTUTKPushServer = NO;
+static const NSTimeInterval kTimeoutInterval = 15.0; // Network request
+static const NSTimeInterval kPromptinfoDisplayDuration = 2.0;
+static NSString * const kUserAccountPassword = @"UserAccountPassword";
+
+#define KUSE_S3_SERVICE
+//#define KTEMP_MODIFY
 
 #pragma mark - Config Account Server
-static NSString * const kServerBaseURL = @"http://account.smarthome.icatchtek.com:3006/";
+static NSString * const kServerBaseURL = @"https://boi.tinyai.top:3026/";
 static NSString * const kServerClientID = @"icatch_smarthome";
 static NSString * const kServerClientSecret = @"123456";
 static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
@@ -172,5 +183,28 @@ static NSString * const kServerCustomerID = @"5aa0d55246c14813a2313c17";
 
 #define WEAK_SELF(obj) __weak typeof(obj) weak##obj = obj;
 #define STRONG_SELF(obj) __strong typeof(obj) obj = weak##obj;
+
+typedef enum : NSUInteger {
+    PushMessageTypePir = 100,
+    PushMessageTypeLowPower = 102,
+    PushMessageTypeSDCardFull = 103,
+    PushMessageTypeSDCardError = 104,
+    PushMessageTypeTamperAlarm = 105,
+    PushMessageTypeRing = 201,
+    PushMessageTypeFDHit = 202,
+    PushMessageTypeFDMiss = 203,
+    PushMessageTypePushTest = 204,
+    PushMessageTypeFaceRecognition = 301,
+    PushMessageTypeScanQRcodeSuccess = 302,
+    PushMessageTypeModifyWiFiSuccess = 303,
+} PushMessageType;
+
+typedef NS_ENUM(NSUInteger, SHSystemMessageType) {
+    SHSystemMessageTypeAddDevice = 1201,
+    SHSystemMessageTypeAddDeviceFailed = 1202,
+    SHSystemMessageTypeDeleteDevice = 1203,
+    SHSystemMessageTypeDeleteDeviceFailed = 1204,
+    SHSystemMessageTypeScanSuccess = 1205,
+};
 
 #endif /* SHUtilsMacro_h */

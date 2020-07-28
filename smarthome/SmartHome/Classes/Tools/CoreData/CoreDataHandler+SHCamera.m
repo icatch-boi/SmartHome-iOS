@@ -29,6 +29,7 @@
 #import "SHCameraHelper.h"
 #import <SHAccountManagementKit/SHAccountManagementKit.h>
 #import "XJLocalAssetHelper.h"
+#import "SHMessageCountManager.h"
 
 @implementation CoreDataHandler (SHCamera)
 
@@ -172,6 +173,8 @@
     [[XJLocalAssetHelper sharedLocalAssetHelper] deleteLocalAllAssetsWithKey:cameraUid completionHandler:^(BOOL success) {
         SHLogInfo(SHLogTagAPP, @"Delete local all asset is success: %d", success);
     }];
+    
+    [SHMessageCountManager removeMessageCountCacheWithCameraUID:cameraUid];
 }
 
 - (void)removeCacheThumbnailWithUid:(NSString *)cameraUid {
@@ -223,6 +226,8 @@
         camera.id = cameraInfo.id ? cameraInfo.id : camera.id;
         camera.thumbnail = cameraInfo.thumnail ? cameraInfo.thumnail : camera.thumbnail;
         camera.operable = cameraInfo.operable;
+        camera.hwversionid = cameraInfo.deviceInfo.hwversionid;
+        camera.versionid = cameraInfo.deviceInfo.versionid;
 
         camera.createTime = cameraInfo.addTime;
         // Save data to sqlite
@@ -251,6 +256,8 @@
         savedCamera.id = cameraInfo.id;
         savedCamera.thumbnail = cameraInfo.thumnail;
         savedCamera.operable = cameraInfo.operable;
+        savedCamera.hwversionid = cameraInfo.deviceInfo.hwversionid;
+        savedCamera.versionid = cameraInfo.deviceInfo.versionid;
 #if 0
         NSDate *date = [NSDate date];
         NSTimeInterval sec = [date timeIntervalSinceNow];

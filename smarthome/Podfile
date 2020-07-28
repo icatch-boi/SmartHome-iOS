@@ -17,6 +17,10 @@ target 'SmartHome' do
 
 pod 'Masonry'
 
+# AWS
+$awsVersion = '~> 2.10.0'
+pod 'AWSS3', $awsVersion
+
   target 'SmartHomeTests' do
     inherit! :search_paths
     # Pods for testing

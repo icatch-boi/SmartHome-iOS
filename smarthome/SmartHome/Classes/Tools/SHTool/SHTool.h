@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "DiskSpaceTool.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, SHFileFilter) {
     SHFileFilterMonitorType,
     SHFileFilterFileType,
@@ -42,5 +44,10 @@ typedef NS_ENUM(NSUInteger, SHFileFilter) {
 + (UIViewController *)appVisibleViewController;
 
 + (void)appToSystemSettings;
++ (BOOL)checkUserWhetherHaveOwnDevice;
+
++ (NSArray *)propertiesWithClass:(Class)cls;
 
 @end
+
+NS_ASSUME_NONNULL_END

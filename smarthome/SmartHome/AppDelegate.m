@@ -30,6 +30,11 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SHDeviceUpgradeVC.h"
+#import "filecache/FileCacheConfig.h"
+
+#import "IDLFaceSDK/IDLFaceSDK.h"
+#import "FaceParameterConfig.h"
+#import "SHMessageCenterTVC.h"
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate,AllDownloadCompleteDelegate>
 
@@ -41,6 +46,7 @@
 @property (nonatomic, weak) MBProgressHUD *progressHUD;
 @property (nonatomic, weak) UIAlertController *networkAlertVC;
 @property (nonatomic, weak) UIAlertController *lowBatteryAlertVC;
+@property (nonatomic, weak) UIAlertController *recvVideoTimeoutAlertVC;
 
 @end
 
@@ -53,7 +59,10 @@
     config.debugMode = YES;
     [Bugly startWithAppId:nil config:config];
 	[self registerDefaultsFromSettingsBundle];
-	
+    [self configFaceSDK];
+    
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    FileCache::FileCacheConfig::defaultCacheConfig()->setCacheDirectory(path.UTF8String);
 	[self setupAppLog];
 	
 	self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
@@ -74,6 +83,14 @@
     [self addNetworkStatusObserver];
 
 	return YES;
+}
+
+- (void)configFaceSDK {
+    NSString* licensePath = [[NSBundle mainBundle] pathForResource:FACE_LICENSE_NAME ofType:FACE_LICENSE_SUFFIX];
+    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:licensePath], @"license文件路径不对，请仔细查看文档");
+    [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath];
+    NSLog(@"canWork = %d",[[FaceSDKManager sharedInstance] canWork]);
+    NSLog(@"version = %@",[[FaceVerifier sharedInstance] getVersion]);
 }
 
 - (void)showAppVersionInfoAndRunDate {
@@ -119,6 +136,7 @@
     homeVC.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext;
     
     if (launchOptions != nil) {
+#if 0
         NSDictionary *pushNotificationKey = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
@@ -127,6 +145,9 @@
         if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             homeVC.notRequiredLogin = YES;
         }
+#else
+        homeVC.notRequiredLogin = YES;
+#endif
     }
 }
 
@@ -188,6 +209,7 @@
         
         NSDictionary *aps = [self parseNotification:pushNotificationKey];
         
+#if 0
         NSString *msgType = [NSString stringWithFormat:@"%@", aps[@"msgType"]];
         if ((/*[msgType isEqualToString:@"201"] &&*/ ![self checkNotificationWhetherOverdue:aps]) || [msgType isEqualToString:@"202"]) {
             SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
@@ -205,6 +227,49 @@
         
             [mainVC pushViewController:vc animated:NO];
         }
+#else
+        if (aps == nil) {
+            SHLogError(SHLogTagAPP, @"Notification is nil.");
+            return;
+        }
+        
+        NSString *cameraUID = aps[@"devID"];
+        if (cameraUID == nil) {
+            SHLogError(SHLogTagAPP, @"Notification not contain `devID'.");
+            return;
+        }
+        
+        [[[CoreDataHandler sharedCoreDataHander] fetchedCamera] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [[SHCameraManager sharedCameraManger] addSHCameraObject:obj];
+        }];
+        
+        UIViewController *dstVC = nil;
+        
+        NSUInteger msgType = [aps[@"msgType"] unsignedIntegerValue];
+        if ((msgType == PushMessageTypeRing
+             || msgType == PushMessageTypeFDHit
+             || msgType == PushMessageTypeFaceRecognition) && ![self checkNotificationWhetherOverdue:aps]) {
+            SHCameraPreviewVC *vc = [SHCameraPreviewVC cameraPreviewVC];
+            
+            vc.cameraUid = cameraUID;
+            vc.managedObjectContext = [CoreDataHandler sharedCoreDataHander].managedObjectContext;
+            vc.notification = aps;
+            
+            dstVC = vc;
+        } else {
+            SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:cameraUID];
+            if (camObj != nil) {
+                dstVC = [SHMessageCenterTVC messageCenterTVCWithCameraObj:camObj];
+            }
+        }
+        
+        if (dstVC != nil) {
+            ZJSlidingDrawerViewController *slidingVC = (ZJSlidingDrawerViewController *)self.window.rootViewController;
+            UINavigationController *mainVC = (UINavigationController *)slidingVC.mainVC;
+            
+            [mainVC pushViewController:dstVC animated:NO];
+        }
+#endif
     } else {
     }
 }
@@ -344,8 +409,9 @@
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSArray *documentsDirectoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:nil];
 	NSString *logFilePath = nil;
+    string cacheNS = FileCache::FileCacheConfig::defaultCacheConfig()->getCacheNamespace();
 	for (NSString *fileName in  documentsDirectoryContents) {
-		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"]) {
+		if (![fileName isEqualToString:@"SHCamera.sqlite"] && ![fileName isEqualToString:@"SHCamera.sqlite-shm"] && ![fileName isEqualToString:@"SHCamera.sqlite-wal"] && ![fileName isEqualToString:@"SmartHome-Medias"] && ![fileName hasSuffix:@".db"] && ![fileName hasSuffix:@".plist"] &&![fileName isEqualToString:[NSString stringWithFormat:@"%s", cacheNS.c_str()]]) {
 			
 			logFilePath = [documentsDirectory stringByAppendingPathComponent:fileName];
 			[[NSFileManager defaultManager] removeItemAtPath:logFilePath error:nil];
@@ -467,6 +533,7 @@ void uncaughtExceptionHandler(NSException *exception){
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+#if 0
 	NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
 	SHLogInfo(SHLogTagAPP, @"This is device token: %@", token);
@@ -474,6 +541,19 @@ void uncaughtExceptionHandler(NSException *exception){
     if (token != nil) {
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:kDeviceToken];
     }
+#else
+    if (![deviceToken isKindOfClass:[NSData class]]) return;
+    const unsigned *tokenBytes = (const unsigned *)[deviceToken bytes];
+    NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                          ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                          ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                          ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    NSLog(@"deviceToken: %@", hexToken);
+    
+    if (hexToken != nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:hexToken forKey:kDeviceToken];
+    }
+#endif
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -497,6 +577,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
 	completionHandler(UIBackgroundFetchResultNewData);
     [self notificationHandleWithInfo:userInfo withCompletionHandler:nil];
+    SHLogInfo(SHLogTagAPP, @"Received notification: %@", userInfo);
 }
 
 // iOS 10收到通知
@@ -555,17 +636,40 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [self lowBatteryHandleWithUID:aps[@"devID"] disconnect:YES];
             break;
             
+        case PushMessageTypeRing:
+        case PushMessageTypeFDHit:
+        case PushMessageTypeFaceRecognition:
+            [self ringNotificationHandleWithInfo:userInfo];
+            break;
+            
+        case PushMessageTypeScanQRcodeSuccess:
+        case PushMessageTypeModifyWiFiSuccess:
+        case SHSystemMessageTypeAddDevice:
+        case SHSystemMessageTypeAddDeviceFailed:
+        case SHSystemMessageTypeScanSuccess: {
+            SHMessage *message = [SHMessage messageWithDict:aps];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kSetupDeviceNotification object:message];
+        }
+            break;
+            
         default:
             break;
     }
     
-    if (msgType != 106) {
+    [self updateMessageCountWithCameraUID:aps[@"devID"]];
+
+    if (msgType != 106 && msgType != SHSystemMessageTypeAddDevice && msgType != SHSystemMessageTypeAddDeviceFailed && msgType != SHSystemMessageTypeScanSuccess && msgType != PushMessageTypeScanQRcodeSuccess && msgType != PushMessageTypeModifyWiFiSuccess) {
         if (completionHandler == nil) {
             return;
         }
         
         completionHandler(UNNotificationPresentationOptionAlert/*|UNNotificationPresentationOptionBadge*/); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以设置
     }
+}
+
+- (void)updateMessageCountWithCameraUID:(NSString *)uid {
+    SHCameraObject *camObj = [[SHCameraManager sharedCameraManger] getSHCameraObjectWithCameraUid:uid];
+    [camObj incrementNewMessageCount];
 }
 
 - (BOOL)upgradingWithCameraUID:(NSString *)uid {
@@ -630,6 +734,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
     } else {
         _loaded = NO;
+    }
+}
+
+- (void)ringNotificationHandleWithInfo:(NSDictionary *)userInfo {
+    if (![self checkNotificationWhetherOverdue:[self parseNotification:userInfo]]) {
+        [self presentSinglePreview:userInfo];
     }
 }
 
@@ -862,6 +972,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 #pragma mark - DownloadCompleteHandle
 - (void)addGlobalObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(singleDownloadCompleteHandle:) name:kSingleDownloadCompleteNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvVideoTimeoutHandle:) name:kRecvVideoTimeoutNotification object:nil];
 }
 
 - (void)removeGlobalObserver {
@@ -1028,6 +1139,66 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (self.lowBatteryAlertVC != nil) {
         [self.lowBatteryAlertVC dismissViewControllerAnimated:YES completion:^{
             self.lowBatteryAlertVC = nil;
+        }];
+    }
+}
+
+- (void)recvVideoTimeoutHandle:(NSNotification *)nc {
+    if (self.recvVideoTimeoutAlertVC != nil) {
+        SHLogInfo(SHLogTagAPP, @"RecvVideoTimeout Alert View Already exist.");
+        
+        UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+        UIViewController *vc = nav.visibleViewController;
+        if ([vc isMemberOfClass:[SHHomeTableViewController class]]) {
+            SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+            [self dismissRecvVideoTimeoutAlertVC];
+        }
+        
+        return;
+    }
+    
+    SHLogTRACE();
+    SHCameraObject *shCamObj = nc.object;
+
+    [shCamObj.sdk disableTutk];
+    [shCamObj.streamOper stopTalkBack];
+    
+    [shCamObj.streamOper stopMediaStreamWithComplete:nil];
+    
+    [shCamObj.controler.pbCtrl stopWithCamera:shCamObj];
+
+    [shCamObj disConnectWithSuccessBlock:nil failedBlock:nil];
+    
+    [self showRecvVideoTimeoutAlertView];
+}
+
+- (void)showRecvVideoTimeoutAlertView {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kRecvVideoTimeoutTips", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SHTool backToRootViewControllerWithCompletion:nil];
+            [weakself dismissRecvVideoTimeoutAlertVC];
+        });
+    }]];
+    
+    UINavigationController *nav = (UINavigationController *)[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC;
+    UIViewController *vc = nav.visibleViewController;
+    if ([vc isMemberOfClass:[SHHomeTableViewController class]]) {
+        SHLogInfo(SHLogTagAPP, @"Current home page, not tips.");
+        return;
+    }
+    
+    [vc presentViewController:alertVC animated:YES completion:nil];
+    
+    self.recvVideoTimeoutAlertVC = alertVC;
+}
+
+- (void)dismissRecvVideoTimeoutAlertVC {
+    if (self.recvVideoTimeoutAlertVC != nil) {
+        [self.recvVideoTimeoutAlertVC dismissViewControllerAnimated:YES completion:^{
+            self.recvVideoTimeoutAlertVC = nil;
         }];
     }
 }

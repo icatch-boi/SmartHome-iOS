@@ -24,6 +24,7 @@
 @property (nonatomic, weak) id<HWCalendarDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj;
+- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj fileCenter:(BOOL)fileCenter;
 - (void)show;
 - (void)dismiss;
 

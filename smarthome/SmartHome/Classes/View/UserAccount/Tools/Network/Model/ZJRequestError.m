@@ -10,7 +10,7 @@
 
 @interface ZJRequestError ()
 
-@property (nonatomic, copy) NSString *error_code;
+@property (nonatomic, copy) NSNumber *error_code;
 @property (nonatomic, copy) NSString *error;
 @property (nonatomic, copy) NSString *error_description;
 @property (nonatomic, copy) NSString *name;
@@ -39,6 +39,15 @@
 
 + (instancetype)requestErrorWithDict:(NSDictionary *)dict {
     return [[self alloc] initWithDict:dict];
+}
+
++ (instancetype)requestErrorWithDescription:(NSString *)description {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    dict[@"error_code"] = @(ZJRequestErrorCodeInvalidParameters).stringValue;
+    dict[@"error_description"] = (description.length > 0) ? description : @"Unknown Error";
+    
+    return [ZJRequestError requestErrorWithDict:dict];
 }
 
 - (instancetype)initWithDict:(NSDictionary *)dict

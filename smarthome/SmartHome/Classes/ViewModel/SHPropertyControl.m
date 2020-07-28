@@ -21,6 +21,11 @@
 - (SHPropertyQueryResult *)retrieveSettingCurPropertyWithCamera:(SHCameraObject *)shCameraObj {
     __block SHPropertyQueryResult *result = nil;
     
+    if (shCameraObj.sdk == nil) {
+        SHLogError(SHLogTagAPP, @"CameraObj 'sdk' attribute is nil.");
+        return result;
+    }
+    
     dispatch_sync(shCameraObj.sdk.sdkQueue, ^{
         SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
         
@@ -50,6 +55,7 @@
     SHGettingProperty *currentPro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
     
     [currentPro addProperty:TRANS_PROP_CAMERA_BATTERY_LEVEL];
+    [currentPro addProperty:TRANS_PROP_CAMERA_CHARGE_STATUS];
 //    [currentPro addProperty:TRANS_PROP_DET_PIR_STATUS];
 
 //    [currentPro addProperty:TRANS_PROP_CAMERA_WIFI_SIGNAL];
@@ -98,9 +104,9 @@
     return [shCameraObj.sdk requestThumbnail:file andPropertyID:propertyID];
 }
 
-- (uint)prepareDataForBatteryLevelWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult
+- (int)prepareDataForBatteryLevelWithCamera:(SHCameraObject *)shCameraObj andCurResult:(SHPropertyQueryResult *)curResult
 {
-    __block uint level = -1;
+    __block int level = -1;
     dispatch_sync([shCameraObj.sdk sdkQueue], ^{
         if (!curResult) {
             SHGettingProperty *pro = [SHGettingProperty gettingPropertyWithControl:shCameraObj.sdk.control];
@@ -117,11 +123,11 @@
     return level;
 }
 
-- (NSString *)transBatteryLevel2NStr:(unsigned int)value
+- (NSString *)transBatteryLevel2NStr:(int)value
 {
     NSString *retVal = nil;
     
-    if (value < 10) {
+    if (value < 10 && value >= 0) {
         retVal = @"vedieo-buttery";
     } else if (value < 20) {
         retVal = @"vedieo-buttery_1";

@@ -171,6 +171,129 @@
             </objects>
             <point key="canvasLocation" x="3853.5999999999999" y="-611.24437781109452"/>
         </scene>
+        <!--Account SettingTVC-->
+        <scene sceneID="Egz-yD-SHr">
+            <objects>
+                <tableViewController storyboardIdentifier="SHAccountSettingTVC" id="RG8-AP-bYk" customClass="SHAccountSettingTVC" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Fmw-q3-ZhT">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dzN-Rd-Tcs">
+                            <rect key="frame" x="0.0" y="241.5" width="320" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <state key="normal" title="Log out">
+                                <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="logoutClick:" destination="RG8-AP-bYk" eventType="touchUpInside" id="zEs-Ts-SIe"/>
+                            </connections>
+                        </button>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SHAccountSettingAvatarCell" rowHeight="80" id="Luk-Wn-jgS" customClass="SHAccountSettingAvatarCell">
+                                <rect key="frame" x="0.0" y="55.5" width="320" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Luk-Wn-jgS" id="UY2-fc-qDL">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="头像" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l0R-bM-u2d">
+                                            <rect key="frame" x="28" y="29" width="37" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="portrait" translatesAutoresizingMaskIntoConstraints="NO" id="XfH-bz-Fqi">
+                                            <rect key="frame" x="236" y="4" width="72" height="72"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="72" id="GDX-td-tek"/>
+                                                <constraint firstAttribute="height" constant="72" id="vOT-2E-2Gb"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="XfH-bz-Fqi" firstAttribute="centerY" secondItem="UY2-fc-qDL" secondAttribute="centerY" id="72q-Ju-YxF"/>
+                                        <constraint firstItem="l0R-bM-u2d" firstAttribute="leading" secondItem="UY2-fc-qDL" secondAttribute="leadingMargin" constant="12" id="7bS-88-RyQ"/>
+                                        <constraint firstItem="l0R-bM-u2d" firstAttribute="centerY" secondItem="UY2-fc-qDL" secondAttribute="centerY" id="j5d-ZE-MDH"/>
+                                        <constraint firstAttribute="trailing" secondItem="XfH-bz-Fqi" secondAttribute="trailing" constant="12" id="p0m-FS-EcW"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="avatarImgView" destination="XfH-bz-Fqi" id="2Lg-yY-Zh8"/>
+                                    <outlet property="nicknameLabel" destination="l0R-bM-u2d" id="dbC-rE-VrI"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SHAccountSettingCommonCell" id="7wS-4d-EMM" customClass="SHAccountSettingCommonCell">
+                                <rect key="frame" x="0.0" y="135.5" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7wS-4d-EMM" id="pmL-HT-ifF">
+                                    <rect key="frame" x="0.0" y="0.0" width="286" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Modify the password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zex-sO-veo">
+                                            <rect key="frame" x="28" y="11" width="169" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="zex-sO-veo" firstAttribute="centerY" secondItem="pmL-HT-ifF" secondAttribute="centerY" id="JSG-28-JSh"/>
+                                        <constraint firstItem="zex-sO-veo" firstAttribute="leading" secondItem="pmL-HT-ifF" secondAttribute="leadingMargin" constant="12" id="x40-Hg-4U0"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="titleLabel" destination="zex-sO-veo" id="5F4-V4-AUx"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SHAccountSettingSwitchCell" id="OfI-xs-ut2" customClass="SHAccountSettingSwitchCell">
+                                <rect key="frame" x="0.0" y="179.5" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OfI-xs-ut2" id="3is-cD-K0b">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Modify the password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jrj-lM-4Z3">
+                                            <rect key="frame" x="28" y="11" width="169" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.2784313725" green="0.32156862749999998" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="adp-JH-1EM">
+                                            <rect key="frame" x="251" y="6.5" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="switchClick:" destination="OfI-xs-ut2" eventType="valueChanged" id="2gC-Qd-ufP"/>
+                                            </connections>
+                                        </switch>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="jrj-lM-4Z3" firstAttribute="leading" secondItem="3is-cD-K0b" secondAttribute="leadingMargin" constant="12" id="G2P-lP-geW"/>
+                                        <constraint firstAttribute="trailing" secondItem="adp-JH-1EM" secondAttribute="trailing" constant="20" id="NHU-uO-HhB"/>
+                                        <constraint firstItem="adp-JH-1EM" firstAttribute="centerY" secondItem="3is-cD-K0b" secondAttribute="centerY" id="Y9I-Sw-XsC"/>
+                                        <constraint firstItem="jrj-lM-4Z3" firstAttribute="centerY" secondItem="3is-cD-K0b" secondAttribute="centerY" id="cii-sT-ubk"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="switchButton" destination="adp-JH-1EM" id="8oc-af-TLM"/>
+                                    <outlet property="titleLabel" destination="jrj-lM-4Z3" id="wJb-iC-wK7"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="RG8-AP-bYk" id="IWU-Hc-tBX"/>
+                            <outlet property="delegate" destination="RG8-AP-bYk" id="U1v-Pg-6Y1"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="logoutButton" destination="dzN-Rd-Tcs" id="7jK-sd-pIB"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0bi-0Z-E5f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4628" y="-611"/>
+        </scene>
         <!--SmartHome-->
         <scene sceneID="Srx-oG-cH8">
             <objects>
@@ -540,7 +663,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MIy-k8-aqX" customClass="UserAccountPortraitNavVC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="aVj-dx-MEN">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>

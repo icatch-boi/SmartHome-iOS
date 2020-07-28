@@ -9,11 +9,12 @@
 #import "SHNetworkManager.h"
 #import "SHUserAccount.h"
 #import "SHNetworkManager+SHPush.h"
-#import "ZJRequestError.h"
 #import <AFNetworking/AFNetworking.h>
 
 @interface SHNetworkManager ()
 
+@property (nonatomic, strong) CameraOperate *cameraOperate;
+@property (nonatomic, strong) SHUserAccount *userAccount;
 @property (nonatomic, strong) TokenOperate *tokenOperate;
 @property (nonatomic, strong) AccountOperate *accountOperate;
 
@@ -133,6 +134,7 @@
             
             SHLogInfo(SHLogTagAPP, @"userAccount: %@", self.userAccount);
             [[NSUserDefaults standardUserDefaults] setObject:email forKey:kUserAccounts];
+            [[NSUserDefaults standardUserDefaults] setObject:password forKey:kUserAccountPassword];
             if (completion) {
                 completion(YES, account);
             }
@@ -148,6 +150,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"loadAccessTokenByEmail failed, error: %@", error.error_description);
 
@@ -226,7 +230,7 @@
 }
 
 - (void)refreshToken:(RequestCompletionBlock)completion {
-    if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
+    if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil || self.userAccount.id == nil) {
         if (completion) {
             Error *error = [[Error alloc] initWithErrorCode:-1024 andName:@"refreshToken error" andError:@"refreshToken parameter invalid" andErrorDescription:@"access_token or refresh_token is nil."];
             completion(NO, error);
@@ -251,6 +255,16 @@
             completion(YES, newToken);
         }
 
+        if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil || self.userAccount.id == nil) {
+            if (completion) {
+                Error *error = [[Error alloc] initWithErrorCode:-1024 andName:@"refreshToken error" andError:@"refreshToken parameter invalid" andErrorDescription:@"access_token or refresh_token is nil."];
+                completion(NO, error);
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            
+            return;
+        }
 //        Token *token = [[Token alloc] initWithData:@{@"access_token" : self.userAccount.access_token,
 //                                                     @"refresh_token" : self.userAccount.refresh_token,
 //                                                     }];
@@ -273,6 +287,8 @@
         [self registerClient:deviceToken finished:^(BOOL isSuccess, id  _Nullable result) {
             SHLogInfo(SHLogTagAPP, @"register client success: %d", isSuccess);
         }];
+        
+        [self cacheUserExtensionsInfo];
     } failure:^(Error * _Nonnull error) {
         SHLogError(SHLogTagSDK, @"refreshToken failed, error: %@", error.error_description);
 
@@ -323,6 +339,7 @@
 
 - (void)setUserAvatorWithData:(NSData *)avatorData completion:(RequestCompletionBlock)completion {
     if (self.userAccount.access_tokenHasEffective) {
+#if 0
         [self.accountOperate setAvatorWithToken:[self createToken] andAvatorData:avatorData success:^(NSString * _Nonnull url) {
             if (completion) {
                 completion(YES, url);
@@ -334,9 +351,13 @@
                 completion(NO, error);
             }
         }];
+#else
+        [self uploadUserPortraitWithData:avatorData completion:completion];
+#endif
     } else {
         [self refreshToken:^(BOOL isSuccess, id result) {
             if (isSuccess) {
+#if 0
                 [self.accountOperate setAvatorWithToken:[self createToken] andAvatorData:avatorData success:^(NSString * _Nonnull url) {
                     if (completion) {
                         completion(YES, url);
@@ -348,6 +369,9 @@
                         completion(NO, error);
                     }
                 }];
+#else
+                [self uploadUserPortraitWithData:avatorData completion:completion];
+#endif
             }
         }];
     }
@@ -493,7 +517,176 @@
     [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:urlString parameters:dict finished:completion];
 }
 
-#pragma mark -
+- (void)setUserExtensionsInfo:(NSDictionary *)info completion:(RequestCompletionBlock)completion {
+    if (info == nil || info.count <= 0) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"Paramete 'info' can't is nil or empty. => info: %@", info]);
+        }
+        
+        return;
+    }
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:info options:0 error:nil];
+    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    if (str == nil) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"JSON serialization failed. \n=> info: %@", info]);
+        }
+        
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"JSON serialization string is: %@, length: %zd", str, str.length);
+    if (str.length >= 500) {
+        if (completion) {
+            completion(NO, [NSString stringWithFormat:@"The length of the JSON serialization string more than 500 Bytes. \n=> str: %@", str]);
+        }
+        
+        return;
+    }
+    
+    NSDictionary *paramete = @{
+                               @"info": str,
+                               };
+    [self requestWithMethod:SHRequestMethodPOST manager:nil urlString:EXTENSIONS_INFO_PATH parameters:paramete finished:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            self.userAccount.userExtensionsInfo = info;
+            [self.userAccount saveUserAccount];
+        }
+        
+        if (completion) {
+            completion(isSuccess, result);
+        }
+    }];
+}
+
+- (void)getUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
+    [self requestWithMethod:SHRequestMethodGET manager:nil urlString:EXTENSIONS_INFO_PATH parameters:nil finished:^(BOOL isSuccess, id  _Nullable result) {
+        
+        if (isSuccess == NO) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+        
+        NSDictionary *dict = (NSDictionary *)result;
+        if (![dict.allKeys containsObject:@"info"]) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+
+        if (![result[@"info"] isKindOfClass:[NSString class]]) {
+            if (completion) {
+                completion(isSuccess, result);
+            }
+            
+            return;
+        }
+        
+        NSString *str = (NSString *)result[@"info"];
+        id obj = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        if (completion) {
+            completion(isSuccess, obj);
+        }
+    }];
+}
+
+- (void)deleteUserExtensionsInfoWithCompletion:(RequestCompletionBlock)completion {
+    [self requestWithMethod:SHRequestMethodDELETE manager:nil urlString:EXTENSIONS_INFO_PATH parameters:nil finished:completion];
+}
+
+- (void)cacheUserExtensionsInfo {
+    [self getUserExtensionsInfoWithCompletion:^(BOOL isSuccess, id  _Nullable result) {
+        if (isSuccess) {
+            if (result == nil) {
+                [self bgWakeupDefaultSet];
+                return;
+            }
+            
+            self.userAccount.userExtensionsInfo = result;
+            [self.userAccount saveUserAccount];
+        } else {
+            ZJRequestError *error = result;
+            if (error.error_code.intValue == 40009) {
+                [self bgWakeupDefaultSet];
+            }
+        }
+    }];
+}
+
+- (void)bgWakeupDefaultSet {
+    NSDictionary *info = @{
+                           @"bgWakeup": @(1),
+                           };
+    
+    [[SHNetworkManager sharedNetworkManager] setUserExtensionsInfo:info completion:^(BOOL isSuccess, id  _Nullable result) {
+        
+        if (isSuccess == NO) {
+            SHLogError(SHLogTagAPP, @"setUserExtensionsInfo failed, error: %@", result);
+        }
+    }];
+}
+
+- (void)downloadFileWithURLString:(NSString *)urlString finished:(RequestCompletionBlock)finished {
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:TIME_OUT_INTERVAL];
+    
+    if (urlString == nil || url == nil || request == nil) {
+        SHLogError(SHLogTagAPP, @"Download failed, urlString or url or request is nil.\n\t urlString: %@, url: %@, request: %@.", urlString, url, request);
+        if (finished) {
+            NSDictionary *dict = @{
+                                   NSLocalizedDescriptionKey: @"invalid parameter.",
+                                   };
+            finished(NO, [ZJRequestError requestErrorWithDict:dict]);
+        }
+        
+        return;
+    }
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            SHLogError(SHLogTagAPP, @"连接错误: %@", error);
+            if (finished) {
+                finished(NO, [ZJRequestError requestErrorWithNSError:error]);
+            }
+            return;
+        }
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode == 200 || httpResponse.statusCode == 304 || httpResponse.statusCode == 204) {
+            // 解析数据
+//            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+//
+//            SHLogInfo(SHLogTagAPP, @"json: %@", json);
+            if (finished) {
+                finished(YES, data);
+            }
+        } else {
+            if (httpResponse.statusCode == 401) {
+                SHLogError(SHLogTagAPP, @"Token invalid.");
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
+            }
+            
+            SHLogError(SHLogTagAPP, @"服务器内部错误");
+            NSDictionary *dict = @{
+                                   @"error_description": @"Unknown Error",
+                                   };
+            if (finished) {
+                finished(NO, [ZJRequestError requestErrorWithDict:dict]);
+            }
+        }
+        
+    }] resume];
+}
+
+#pragma mark - Init
 - (Token *)createToken {
     if (self.userAccount.access_token == nil || self.userAccount.refresh_token == nil) {
         [[NSNotificationCenter defaultCenter] postNotificationName:reloginNotifyName object:nil];
@@ -545,17 +738,18 @@
 - (void)dataTaskWithRequest:(NSURLRequest *)request completion:(RequestCompletionBlock)completion {
     if (request == nil) {
         if (completion) {
-            NSDictionary *dict = @{
-                                   @"error_description": @"This parameter must not be `nil`.",
-                                   };
-            completion(NO, [self createErrorWithCode:ZJRequestErrorCodeInvalidParameters userInfo:dict]);
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"This parameter must not be `nil`."]);
         }
         
         return;
     }
     
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/javascript",@"text/html",@"text/plain", @"application/xml", nil];
+
     [[manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (error != nil) {
             ZJRequestError *err = [ZJRequestError requestErrorWithNSError:error];
@@ -622,7 +816,8 @@
     
     if ([urlString hasPrefix:@"https:"] || [manager.baseURL.absoluteString hasPrefix:@"https:"]) {
         //设置 https 请求证书
-        [self setCertificatesWithManager:manager];
+        // The latest version of Server does not need to set a certificate.
+//        [self setCertificatesWithManager:manager];
     }
     
     if (manager == nil) {
@@ -665,11 +860,6 @@
     return manager;
 }
 
-#pragma mark - Error Handle
-- (ZJRequestError *)createErrorWithCode:(NSInteger)code userInfo:(nullable NSDictionary<NSErrorUserInfoKey, id> *)dict {
-    return [ZJRequestError requestErrorWithDict:dict];
-}
-
 #pragma mark - Certificate Handle
 - (BOOL)setCertificatesWithManager:(AFURLSessionManager *)manager {
     if ([ServerUrl sharedServerUrl].useSSL) { //使用自制证书
@@ -697,6 +887,78 @@
     }
     
     return YES;
+}
+
+- (void)uploadUserPortraitWithData:(NSData *)data completion:(RequestCompletionBlock)completion {
+    if (data.length == 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
+        }
+        
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"Upload portrait data length : %.2f K", data.length / 1024.0);
+    if (data.length > PORTRAIT_MAX_SZIE) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"Image is too big (The largest size is 60K)."]);
+        }
+        
+        return;
+    }
+    
+    NSString *urlString = [self requestURLString:USERS_PORTRAIT_PATH];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"post" URLString:urlString parameters:nil error:nil];
+    request.timeoutInterval = TIME_OUT_INTERVAL;
+    
+    [request setValue:@"image/jpeg" forHTTPHeaderField:@"Content-Type"];
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    NSString *len = [NSString stringWithFormat:@"%d", (int)data.length];
+    [request setValue:len forHTTPHeaderField:@"Content-Length"];
+    
+    // 设置body
+    [request setHTTPBody:data];
+    
+    [self dataTaskWithRequest:request completion:completion];
+}
+
+- (void)getAuthorizeCodeWithUsername:(NSString *)username password:(NSString *)password scopes:(NSArray<NSString *> * _Nullable)scopes completion:(RequestCompletionBlock)completion {
+    if (username.length == 0 || password.length == 0) {
+        if (completion) {
+            completion(NO, [ZJRequestError requestErrorWithDescription:@"These parameter must not be `nil`."]);
+        }
+        
+        return;
+    }
+    
+    NSString *scopesString = @"get_user_info";
+    if (scopes.count > 0) {
+        NSMutableString *temp = [NSMutableString string];
+        [scopes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [temp appendFormat:@"%@ ", obj];
+        }];
+        
+        scopesString = temp.copy;
+    }
+    
+    NSString *urlString = [self requestURLString:AUTHORIZE_CODE_PATH];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"post" URLString:urlString parameters:nil error:nil];
+    request.timeoutInterval = TIME_OUT_INTERVAL;
+    
+    NSString *token = [@"Bearer " stringByAppendingString:self.userAccount.access_token ? self.userAccount.access_token : @""];
+    [request setValue:token forHTTPHeaderField:@"Authorization"];
+    
+    NSString *bodyString = [NSString stringWithFormat:@"client_id=%@&username=%@&password=%@&response_type=code&scope=%@", kServerClientID, username, password, scopesString];
+    NSData *data = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    // 设置body
+    [request setHTTPBody:data];
+    
+    [self dataTaskWithRequest:request completion:completion];
 }
 
 @end

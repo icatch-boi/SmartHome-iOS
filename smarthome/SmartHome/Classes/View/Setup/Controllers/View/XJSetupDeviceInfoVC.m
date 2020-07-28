@@ -34,6 +34,10 @@
 #import "SHQRCodeScanningVC.h"
 #import "SHSetupNavVC.h"
 #import "SHLocalWithRemoteHelper.h"
+#import "SHWiFiInfoHelper.h"
+#import "SHMessage.h"
+#import "SHSetupHomeViewController.h"
+#import "XJSetupWiFiVC.h"
 
 static int const totalFindTime = 90;
 static int const apmodeTimeout = 30;
@@ -83,6 +87,10 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [self selectSetupWay];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)setupLocalizedString {
     _loadingLabel.text = NSLocalizedString(@"kConfiguring1", nil);
     _tipsLabel.text = NSLocalizedString(@"Tips", nil);
@@ -109,9 +117,21 @@ static NSString * const kDeviceDefaultPassword = @"1234";
 }
 
 - (void)selectSetupWay {
+    if (self.isAutoWay) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupNotificationHandle:) name:kSetupDeviceNotification object:nil];
+        
+        [self setupDevice];
+        
+        return;
+    }
+    
     if (_cameraUid != nil && _cameraUid.length > 0) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[self.cameraUid dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
         dict ? [self shareHandle:dict] : [self setupDevice];
+    } else {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice]) {
+            [self setupDevice];
+        }
     }
 }
 
@@ -128,7 +148,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     [self findTimer];
     _findInterval = 100.0 / totalFindTime;
-    self.useQRCodeSetup == NO ? [self setupLink] : [self qrcodeSetupHandler];
+    if (self.isAutoWay == NO) {
+        self.useQRCodeSetup == NO ? [self setupLink] : [self qrcodeSetupHandler];
+    }
 }
 
 - (void)qrcodeSetupHandler {
@@ -145,7 +167,11 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [super viewWillDisappear:animated];
     
     if (_wifiPWD || _wifiSSID) {
-        _link->cancel();
+        if (_link) {
+            _link->cancel();
+            delete _link;
+            _link = nullptr;
+        }
     }
     
     [self releaseTimer];
@@ -280,6 +306,7 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     }
     
     NSString *cameraUID = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID];
+    cameraUID = (cameraUID == nil) ? @"" : cameraUID;
     SHLogInfo(SHLogTagAPP, @"camera uid is : %@", cameraUID);
     retValue = _link->setContent(ssid.UTF8String, pwd.UTF8String, kDeviceDefaultPassword.UTF8String, "0.0.0.0", "0.0.0.0", "00:00:00:00:00:00", cameraUID.UTF8String);
     if (retValue != icatchtek::simplelink::SIMPLELINK_ERR_OK) {
@@ -301,14 +328,29 @@ static NSString * const kDeviceDefaultPassword = @"1234";
             [self.progressHUD hideProgressHUD:YES];
             
             if (!retVal) {
+                if (content != "" && _cameraUid == nil) {
+                    [self parseRecvContent:content];
+                }
                 [self netStatusTimer];
                 self.linkSuccess = YES;
             } else {
                 [self showConfigureDeviceFailedAlertView];
                 self.linkSuccess = NO;
+                [self releaseTimer];
             }
         });
     });
+}
+
+- (void)parseRecvContent:(string)content {
+    int parseResult = 0;
+    NSString *token = [[SHQRManager sharedQRManager] getTokenFromQRString:[NSString stringWithFormat:@"%s", content.c_str()] parseResult:&parseResult];
+    NSString *uid = [[SHQRManager sharedQRManager] getUID:token];
+    
+    if (uid != nil) {
+        SHLogInfo(SHLogTagAPP, @"Recv uid: %@", uid);
+        self.cameraUid = uid;
+    }
 }
 
 - (void)updateError:(NSString *)header error:(int)err {
@@ -413,7 +455,9 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     
     _trying = NO;
     if (_tryConnectTimes <= 0) {
-        [self showConnectFailedTips];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showConnectFailedTips];
+        });
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -433,12 +477,13 @@ static NSString * const kDeviceDefaultPassword = @"1234";
         connectSuccess = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showAddDeviceTips];
+            [[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice] ? [self reconfigureDeviceHandle] : [self showAddDeviceTips];
         });
 
         [sdk destroyTryConnectResource];
 
         [self releaseTimer];
+        [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:_wifiSSID password:_wifiPWD];
     } else {
         SHLogError(SHLogTagAPP, @"checkDeviceConnectState is failed, retVal: %d, tryConnectTimes: %ld", retVal, (long)self.tryConnectTimes);
     }
@@ -526,9 +571,12 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakself releaseTimer];
-            
+#if 0
             [weakself scanQRCode];
-            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
+#else
+            [weakself presentSetupViewController];
+#endif
+            [weakself.navigationController dismissViewControllerAnimated:NO completion:nil];
         });
     }]];
     
@@ -585,6 +633,29 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:nav animated:YES completion:nil];
+    });
+}
+
+- (void)presentSetupViewController {
+#if 0
+    SHSetupHomeViewController *vc = [SHSetupHomeViewController setupHomeViewController];
+#else
+    UIViewController *vc = nil;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kReconfigureDevice]) {
+        XJSetupWiFiVC *setupWiFiVC = [XJSetupWiFiVC setupWiFiVC];
+        setupWiFiVC.autoWay = self.autoWay;
+        setupWiFiVC.configWiFi = YES;
+        
+        vc = setupWiFiVC;
+    } else {
+        vc = [SHSetupHomeViewController setupHomeViewController];
+    }
+#endif
+    SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        nav.modalPresentationStyle = UIModalPresentationFullScreen;
         [[ZJSlidingDrawerViewController sharedSlidingDrawerVC].mainVC presentViewController:nav animated:YES completion:nil];
     });
 }
@@ -1038,14 +1109,153 @@ static NSString * const kDeviceDefaultPassword = @"1234";
     [SHTool appToSystemSettings];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)reconfigureDeviceHandle {
+    _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil);
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kConfigureSuccess", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
 }
-*/
+
+- (void)setupNotificationHandle:(NSNotification *)nc {
+    [self releaseTimer];
+    [[SHWiFiInfoHelper sharedWiFiInfoHelper] addWiFiInfo:self.wifiSSID password:self.wifiPWD];
+
+    SHMessage *message = nc.object;
+    int msgType = message.msgType.intValue;
+    switch (msgType) {
+        case SHSystemMessageTypeAddDevice:
+            [self showAddDeviceViewWithDeviceID:message.deviceId];
+            break;
+            
+        case SHSystemMessageTypeAddDeviceFailed: {
+            NSString *msg = message.msgParam;
+            
+            if (message.errCode.intValue == 50034) {
+                if (message.deviceId != nil) {
+                    msg = [self createAddFailedErrorInfoWithDeviceID:message.deviceId];
+                } else {
+                    msg = NSLocalizedString(@"kDeviceBindByOtherAccounts", nil);
+                }
+            }
+            
+            [self showFailedAlertViewWithTitle:NSLocalizedString(@"kConfigureDeviceFailed", nil) message:msg];
+        }
+            break;
+            
+        case PushMessageTypeModifyWiFiSuccess:
+            [self reconfigureDeviceHandle];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (NSString *)createAddFailedErrorInfoWithDeviceID:(NSString *)deviceID {
+    __block SHCameraObject *cameraObj = nil;
+    [[[SHCameraManager sharedCameraManger] smarthomeCams] enumerateObjectsUsingBlock:^(SHCameraObject *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.camera.id isEqualToString:deviceID]) {
+            cameraObj = obj;
+            *stop = YES;
+        }
+    }];
+    
+    NSString *msg = nil;
+    if (cameraObj.camera.operable == 1) {
+        msg = [NSString stringWithFormat:NSLocalizedString(@"kDeviceAlreadyRegistered", nil), cameraObj.camera.cameraName];
+    } else {
+        msg = [NSString stringWithFormat:NSLocalizedString(@"kDeviceAlreadySubscribed", nil), cameraObj.camera.cameraName];
+    }
+    
+    return msg;
+}
+
+- (void)showAddDeviceViewWithDeviceID:(NSString *)deviceID {
+    if (deviceID.length == 0) {
+        SHLogError(SHLogTagAPP, @"`deviceID` is nil.");
+
+        [self showConfigureDeviceFailedAlertView];
+        return;
+    }
+    
+    _loadingLabel.text = NSLocalizedString(@"kConfigureSuccess", nil);
+    __block NSString *cameraName = nil;
+    
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConfigureSuccess", nil) message:NSLocalizedString(@"kSetDeviceName", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    __block UITextField *deviceNameField = nil;
+    [alertVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        textField.returnKeyType = UIReturnKeyDone;
+        textField.text = cameraName;
+        
+        deviceNameField = textField;
+    }];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if ([SHTool isValidDeviceName:deviceNameField.text] == NO) {
+            [weakself showDeviceNameInvalidAlertView:^{
+                [weakself showAddDeviceViewWithDeviceID:deviceID];
+            }];
+            return;
+        }
+        
+        if (![deviceNameField.text isEqualToString:@""]) {
+            cameraName = deviceNameField.text;
+        }
+        
+        [weakself setupDeviceNameWithDeviceID:deviceID deviceName:cameraName];
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)setupDeviceNameWithDeviceID:(NSString *)deviceID deviceName:(NSString *)deviceName {
+    self.progressHUD.detailsLabelText = nil;
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConfigureDeviceInfo", nil)];
+    
+    WEAK_SELF(self);
+    [[SHNetworkManager sharedNetworkManager] renameCameraByCameraID:deviceID andNewName:deviceName completion:^(BOOL isSuccess, id  _Nonnull result) {
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.progressHUD hideProgressHUD:YES];
+
+            if(isSuccess) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needSyncDataFromServer"];
+
+                [weakself.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [weakself showSetupDeviceNameFailedAlertWithDeviceID:deviceID deviceName:deviceName];
+            }
+        });
+    }];
+}
+
+- (void)showSetupDeviceNameFailedAlertWithDeviceID:(NSString *)deviceID deviceName:(NSString *)deviceName {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"kSetDeviceNameFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself.navigationController dismissViewControllerAnimated:YES completion:nil];
+        });
+    }]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself setupDeviceNameWithDeviceID:deviceID deviceName:deviceName];
+        });
+    }]];
+    
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
 
 @end

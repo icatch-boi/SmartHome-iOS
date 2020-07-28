@@ -32,9 +32,15 @@
 #import "UnderLineTextField.h"
 #import "Reachability.h"
 #import "SHQRCodeSetupDeviceVC.h"
+#import "SHWiFiInfoHelper.h"
+#import <CoreLocation/CoreLocation.h>
+#import "SHNetworkManagerHeader.h"
 
-@interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate>
+static NSString * const kDeviceDefaultPassword = @"1234";
 
+@interface XJSetupWiFiVC () <XJSetupTipsViewDelegate, UITextFieldDelegate, CLLocationManagerDelegate>
+
+@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (weak, nonatomic) IBOutlet UnderLineTextField *ssidTextField;
 @property (weak, nonatomic) IBOutlet UnderLineTextField *pwdTextField;
 
@@ -47,6 +53,10 @@
 
 @property (nonatomic, strong) XJSetupTipsView *tipsView;
 @property (nonatomic, weak) UIView *coverView;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic) MBProgressHUD *progressHUD;
+@property (nonatomic, copy) NSString *cameraUid;
 
 @end
 
@@ -63,6 +73,7 @@
     
     [self setupLocalizedString];
     [self setupGUI];
+    _cameraUid = [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentAddCameraUID];
 }
 
 - (void)setupLocalizedString {
@@ -93,7 +104,11 @@
     _ssidTextField.lineColor = color;
     _pwdTextField.lineColor = color;
     
-    [self setupSSID];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self setupSSID];
+    }
     
     self.navigationItem.titleView = [UIImageView imageViewWithImage:[[UIImage imageNamed:@"nav-logo"] imageWithTintColor:[UIColor whiteColor]] gradient:NO];
     [self addLineForChangePasswordBtn];
@@ -103,6 +118,18 @@
     
     [_pwdTextField addTarget:self action:@selector(updateButtonEnableState) forControlEvents:UIControlEventEditingChanged];
     [self updateButtonEnableState];
+    _pwdTextField.secureTextEntry = NO;
+    
+    if (self.isConfigWiFi) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:nil fontSize:16.0 image:[UIImage imageNamed:@"nav-btn-cancel"] target:self action:@selector(closeAction) isBack:NO];
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+    
+    [self addLongPressGesture];
+}
+
+- (void)closeAction {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)addLineForChangePasswordBtn {
@@ -118,6 +145,8 @@
     NSArray *array = [self getWifiSSID];
     
     _ssidTextField.text = array.firstObject;
+    _pwdTextField.text = [[SHWiFiInfoHelper sharedWiFiInfoHelper] passwordForSSID:array.firstObject];
+    [self updateButtonEnableState];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -133,7 +162,12 @@
 }
 
 - (void)updateSSIDStatus {
-    [self setupSSID];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
+        [self requestLocationPermission];
+    } else {
+        [self setupSSID];
+    }
+    [self updateButtonEnableState];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -214,6 +248,8 @@
         
         vc.wifiSSID = _ssidTextField.text;
         vc.wifiPWD = _pwdTextField.text;
+        vc.autoWay = self.isAutoWay;
+        vc.configWiFi = self.isConfigWiFi;
     }
 }
 
@@ -346,8 +382,222 @@
 */
 
 - (void)updateButtonEnableState {
-    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+    _nextButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""] && !self.isAutoWay;
     _qrcodeButton.enabled = ![_ssidTextField.text isEqualToString:@""] && ![_pwdTextField.text isEqualToString:@""];
+}
+
+#pragma mark - CLLocationManager
+- (void)requestLocationPermission {
+    if ([CLLocationManager locationServicesEnabled]){
+
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
+        }
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    SHLogInfo(SHLogTagAPP, @"status: %d", status);
+    
+    switch (status) {
+        case  kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+            [self showLocationAuthorizationAlertView];
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self setupSSID];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)showLocationAuthorizationAlertView {
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"") message:NSLocalizedString(@"kLocationAuthorizationDeniedNotice", nil) preferredStyle:UIAlertControllerStyleAlert];
+    WEAK_SELF(self);
+    
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [alertC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kToSetup", @"") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakself setupDeviceWiFi];
+    }]];
+    
+    [self presentViewController:alertC animated:YES completion:nil];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    SHLogError(SHLogTagAPP, @"Location happened error: %@", error.description);
+}
+
+#pragma mark - LongPress Gesture
+- (void)addLongPressGesture {
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    longPress.minimumPressDuration = 2.0;
+    [_iconImageView addGestureRecognizer:longPress];
+}
+
+- (void)longPressGesture:(UILongPressGestureRecognizer *)recognizer {
+    if (recognizer.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    
+    SHLogInfo(SHLogTagAPP, @"longPressGesture");
+    [self bindDeviceToServerWithUid:self.cameraUid name:[self.cameraUid substringToIndex:5]];
+}
+
+#pragma mark - Bind Device
+- (void)bindDeviceToServerWithUid:(NSString *)cameraUid name:(NSString *)cameraName {
+    self.progressHUD.detailsLabelText = nil;
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kConfigureDeviceInfo", nil)];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
+        [fetchRequest setEntity:entity];
+        
+        WEAK_SELF(self);
+        [[SHNetworkManager sharedNetworkManager] bindCameraWithCameraUid:cameraUid name:cameraName password:kDeviceDefaultPassword completion:^(BOOL isSuccess, id result) {
+            SHLogInfo(SHLogTagAPP, @"bindCmaera is success: %d", isSuccess);
+            
+            if (isSuccess) {
+                Camera *camera_server = result;
+                int operable = [weakself isOperableWithOwnerID:camera_server.ownerId];
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"cameraUid = %@", cameraUid];
+                [fetchRequest setPredicate:predicate];
+                
+                BOOL isExist = NO;
+                NSError *error = nil;
+                NSArray *fetchedObjects = [[CoreDataHandler sharedCoreDataHander].managedObjectContext executeFetchRequest:fetchRequest error:&error];
+                if (!error && fetchedObjects && fetchedObjects.count > 0) {
+                    SHLogWarn(SHLogTagAPP, @"Already have one camera: %@", cameraUid);
+                    isExist = YES;
+                    
+                    SHCamera *camera = fetchedObjects.firstObject;
+                    camera.cameraName = cameraName;
+                    camera.cameraUid = camera_server.uid;
+                    camera.devicePassword = kDeviceDefaultPassword;
+                    camera.id = camera_server.id;
+                    camera.operable = operable;
+                    
+                    camera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+
+                    // Save data to sqlite
+                    NSError *error = nil;
+                    if (![camera.managedObjectContext save:&error]) {
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
+#ifdef DEBUG
+                        abort();
+#endif
+                    } else {
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
+                        [SHTutkHttp registerDevice:camera];
+                    }
+                } else {
+                    SHLogInfo(SHLogTagAPP, @"Create a camera");
+                    SHCamera *savedCamera = [NSEntityDescription insertNewObjectForEntityForName:@"SHCamera" inManagedObjectContext:[CoreDataHandler sharedCoreDataHander].managedObjectContext];
+                    savedCamera.cameraUid = cameraUid;
+                    savedCamera.cameraName = cameraName;
+                    savedCamera.devicePassword = kDeviceDefaultPassword;
+                    savedCamera.id = camera_server.id;
+                    savedCamera.operable = operable;
+                    
+                    savedCamera.createTime = [SHTool localDBTimeStringFromServer:camera_server.time];
+                    
+                    // Save data to sqlite
+                    NSError *error = nil;
+                    if (![savedCamera.managedObjectContext save:&error]) {
+                        /*
+                         Replace this implementation with code to handle the error appropriately.
+                         
+                         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+                         */
+                        SHLogError(SHLogTagAPP, @"Unresolved error %@, %@", error, [error userInfo]);
+#ifdef DEBUG
+                        abort();
+#endif
+                    } else {
+                        SHLogInfo(SHLogTagAPP, @"Saved to sqlite.");
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NeedReloadDataBase"];
+                        [SHTutkHttp registerDevice:savedCamera];
+                    }
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.progressHUD hideProgressHUD:YES];
+                    [weakself.navigationController.topViewController dismissViewControllerAnimated:YES completion:^{
+                        if (isExist) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kCameraAlreadyExistNotification object:cameraName];
+                        }
+                    }];
+                });
+            } else {
+                Error *error = result;
+                SHLogError(SHLogTagAPP, @"bindCmaera is failed, error: %@", error.error_description);
+                
+                [weakself showBindDeviceFailedAlertViewWithName:cameraName];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.progressHUD hideProgressHUD:YES];
+                });
+            }
+        }];
+    });
+}
+
+- (int)isOperableWithOwnerID:(NSString *)ownerId {
+    int operable = 1;
+    
+    NSString *owner = [SHNetworkManager sharedNetworkManager].userAccount.id;
+    
+    if (![ownerId isEqualToString:owner]) {
+        operable = 0;
+    }
+    
+    return operable;
+}
+
+- (void)showBindDeviceFailedAlertViewWithName:(NSString *)cameraName {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"kConnectionAccountServerFailed", nil) message:NSLocalizedString(@"kConnectionAccountServerFailedDescription", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    WEAK_SELF(self);
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [weakself dismissSetupView];
+    }]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"kTryagain", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself bindDeviceToServerWithUid:weakself.cameraUid name:cameraName];
+        });
+    }]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self presentViewController:alertVC animated:YES completion:nil];
+    });
+}
+
+- (void)dismissSetupView {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController.topViewController dismissViewControllerAnimated:YES completion:nil];
+    });
+}
+
+#pragma mark - Action Progress
+- (MBProgressHUD *)progressHUD {
+    if (!_progressHUD) {
+        _progressHUD = [MBProgressHUD progressHUDWithView:self.navigationController.view];
+    }
+    
+    return _progressHUD;
 }
 
 @end

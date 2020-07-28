@@ -8,6 +8,7 @@
 
 #import "HWCalendar.h"
 #import "HWOptionButton.h"
+#import "SHENetworkManagerCommon.h"
 
 #define KCol 7
 #define KBtnW 44
@@ -19,6 +20,7 @@
 #define KShowYearsCount 100
 #define KMainColor [UIColor ic_colorWithRed:0 green:139 blue:125] // [UIColor colorWithRed:0.0f green:139/255.0f blue:125/255.0f alpha:1.0f]
 #define KbackColor [UIColor ic_colorWithRed:173 green:212 blue:208] // [UIColor colorWithRed:173/255.0f green:212/255.0f blue:208/255.0f alpha:1.0f]
+static const CGFloat kDefaultFontSize = 16.0f;
 
 @interface HWCalendar ()<UIPickerViewDelegate, UIPickerViewDataSource, HWOptionButtonDelegate>
 
@@ -47,16 +49,22 @@
 @property (nonatomic) MBProgressHUD *progressHUD;
 @property (nonatomic, strong) NSDate *curDateTime;
 @property (nonatomic, strong) SHCameraObject *shCamObj;
+@property (nonatomic, assign, getter=isFileCenter) BOOL fileCenter;
 
 @end
 
 @implementation HWCalendar
 
-- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj
+- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj {
+    return [self initWithFrame:frame andCurDateTime:date cameraObj:shCamObj fileCenter:NO];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame andCurDateTime:(NSDate *)date cameraObj:(SHCameraObject *)shCamObj fileCenter:(BOOL)fileCenter
 {
     if (self = [super initWithFrame:frame]) {
         self.curDateTime = date;
         self.shCamObj = shCamObj;
+        self.fileCenter = fileCenter;
         
         //获取当前时间
         [self getCurrentDate];
@@ -103,11 +111,11 @@
 
 - (void)creatControl
 {
-    CGSize titleSize = [NSLocalizedString(@"kReturnToday", nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]} context:nil].size;
+    CGSize titleSize = [NSLocalizedString(@"kReturnToday", nil) boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kDefaultFontSize]} context:nil].size;
     CGFloat yearBtnW = 70.0f;
-    CGFloat monthbtnW = 60.0f;
+    CGFloat monthbtnW = 65.0f;
     CGFloat todayBtnW = titleSize.width; //70.0f;
-    CGFloat padding = (self.bounds.size.width - KTipsW - yearBtnW - monthbtnW - todayBtnW - KBtnW * 2) * 0.25;
+    CGFloat padding = (self.bounds.size.width /*- KTipsW*/ - yearBtnW - monthbtnW - todayBtnW - KBtnW * 2) /** 0.25*// 6;
     
     //年份按钮
     HWOptionButton *yearBtn = [[HWOptionButton alloc] initWithFrame:CGRectMake(0 + padding, 0, yearBtnW, KBtnH)];
@@ -124,7 +132,7 @@
     [self addSubview:preBtn];
     
     //月份按钮
-    HWOptionButton *monthBtn = [[HWOptionButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(preBtn.frame), 0, monthbtnW, KBtnH)];
+    HWOptionButton *monthBtn = [[HWOptionButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(preBtn.frame) + padding, 0, monthbtnW, KBtnH)];
     monthBtn.array = _monthArray;
     monthBtn.row = _month - 1;
     monthBtn.delegate = self;
@@ -132,41 +140,44 @@
     self.monthBtn = monthBtn;
     
     //下一月
-    UIButton *nextBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(monthBtn.frame), 0, KBtnW, KBtnH)];
+    UIButton *nextBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(monthBtn.frame) + padding, 0, KBtnW, KBtnH)];
     [nextBtn setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
     [nextBtn addTarget:self action:@selector(nextBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:nextBtn];
     
     //返回今天按钮
     UIButton *backTodayBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(nextBtn.frame) + padding, 0, todayBtnW, KBtnH)];
-    backTodayBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+    backTodayBtn.titleLabel.font = [UIFont systemFontOfSize:kDefaultFontSize];
     [backTodayBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backTodayBtn setTitle:/*@"返回今天"*/NSLocalizedString(@"kReturnToday", nil) forState:UIControlStateNormal];
     [backTodayBtn addTarget:self action:@selector(backTodayBtnOnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backTodayBtn];
     
     //星期标签
+    CGFloat margin = (CGRectGetWidth(self.bounds) - _weekArray.count * KBtnH) / (_weekArray.count + 1);
     for (int i = 0; i < _weekArray.count; i++) {
-        UILabel *week = [[UILabel alloc] initWithFrame:CGRectMake(0 + KBtnH * i, KBtnH, KBtnH, KBtnH)];
+        UILabel *week = [[UILabel alloc] initWithFrame:CGRectMake(/*0*/margin * (i + 1) + KBtnH * i, KBtnH, KBtnH, KBtnH)];
         week.textAlignment = NSTextAlignmentCenter;
         week.text = _weekArray[i];
+        week.font = [UIFont systemFontOfSize:kDefaultFontSize];
         [self addSubview:week];
     }
     
     //日历核心视图
-    UIView *calendarView = [[UIView alloc] initWithFrame:CGRectMake(0, KBtnH * 2, KBtnW * 7, KBtnH * 6)];
+    UIView *calendarView = [[UIView alloc] initWithFrame:CGRectMake(0, KBtnH * 2, /*KBtnW * 7*/CGRectGetWidth(self.bounds), KBtnH * 6)];
     [self addSubview:calendarView];
     self.calendarView = calendarView;
     
     //每一个日期用一个按钮去创建，当一个月的第一天是星期六并且有31天时为最多个数，5行零2个，共37个
     for (int i = 0; i < KMaxCount; i++) {
-        CGFloat btnX = i % KCol * KBtnW;
+        CGFloat btnX = i % KCol * KBtnW + margin * (i % KCol + 1);
         CGFloat btnY = i / KCol * KBtnH;
         
         UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(btnX, btnY, KBtnW, KBtnH)];
         btn.tag = i + KBtnTag;
 //        btn.layer.cornerRadius = KBtnW * 0.5;
 //        btn.layer.masksToBounds = YES;
+        [btn.titleLabel setFont:[UIFont systemFontOfSize:kDefaultFontSize]];
         [btn setCornerWithRadius:KBtnW * 0.5 masksToBounds:YES];
         [btn setTitle:[NSString stringWithFormat:@"%d", i + 1] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -189,7 +200,8 @@
     }
     
     //确认按钮
-    UIButton *sureBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(backTodayBtn.frame), CGRectGetMaxY(calendarView.frame) - 24, yearBtnW, KBtnH)];
+    CGFloat bottomMargin = 10;
+    UIButton *sureBtn = [[UIButton alloc] initWithFrame:CGRectMake(/*CGRectGetMinX(backTodayBtn.frame)*/CGRectGetWidth(self.bounds) - yearBtnW - bottomMargin, CGRectGetMaxY(calendarView.frame) - 24, yearBtnW, KBtnH)];
     sureBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
     [sureBtn setTitle:/*@"确定"*/NSLocalizedString(@"Sure", nil) forState:UIControlStateNormal];
     [sureBtn setTitleColor:KMainColor forState:UIControlStateNormal];
@@ -197,7 +209,7 @@
     [self addSubview:sureBtn];
     
     //取消按钮
-    UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(sureBtn.frame) - yearBtnW, CGRectGetMinY(sureBtn.frame), yearBtnW, KBtnH)];
+    UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(sureBtn.frame) - yearBtnW - bottomMargin, CGRectGetMinY(sureBtn.frame), yearBtnW, KBtnH)];
     cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
     [cancelBtn setTitle:/*@"取消"*/NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
     [cancelBtn setTitleColor:KMainColor forState:UIControlStateNormal];
@@ -274,6 +286,11 @@
 }
 
 - (void)resetStorageData {
+    if (self.isFileCenter) {
+        [self loadFileCenterData];
+        return;
+    }
+    
     NSString *startDate = [NSString stringWithFormat:@"%zd/%02zd/01", _year, _month];
     NSString *endDate = [NSString stringWithFormat:@"%zd/%02zd/%zd", _year, _month, [self numberOfDaysInMonth]];
     
@@ -311,6 +328,36 @@
     }];
 }
 
+- (void)loadFileCenterData {
+    [self.progressHUD showProgressHUDWithMessage:NSLocalizedString(@"kLoading", nil)];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSInteger days = [self numberOfDaysInMonth];
+        NSString *date = [NSString stringWithFormat:@"%zd/%02zd/%zd", _year, _month, days];
+        NSDictionary *dict = [[SHENetworkManager sharedManager] getFilesStorageInfoWithDeviceID:_shCamObj.camera.id queryDate:[date convertToDateWithFormat:@"yyyy/MM/dd"] days:days];
+        
+        if (dict == nil) {
+            if ([self.delegate respondsToSelector:@selector(calendarWithGetDataFailedHandler:)]) {
+                [self.delegate calendarWithGetDataFailedHandler:self];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hideProgressHUD:YES];
+            });
+        } else {
+            self.storageInfoDit = [[NSMutableDictionary alloc] initWithDictionary:dict];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.progressHUD hide:YES];
+                
+                //刷新数据
+                [self reloadData];
+            });
+        }
+    });
+}
+
 //刷新数据
 - (void)reloadData
 {
@@ -335,6 +382,9 @@
         }else {
             NSString *curDate = [NSString stringWithFormat:@"%zd/%02zd/%02zd", _year, _month, i - (firstDay - 1) + 1];
             BOOL isHidden = [self.storageInfoDit objectForKey:curDate] ? NO : YES;
+            if (self.isFileCenter) {
+                isHidden = ![[self.storageInfoDit objectForKey:curDate] boolValue];
+            }
             SHLogDebug(SHLogTagAPP, @"curDay: %zd, cueDate: %@, isHidden: %d", _day, curDate, isHidden);
             imgView.hidden = isHidden;
             btn.enabled = !isHidden;
@@ -540,7 +590,7 @@
             if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
                 self.frame = CGRectMake(self.superview.center.x - self.bounds.size.width * 0.5, self.superview.center.y - self.bounds.size.height * 0.5, self.bounds.size.width, self.bounds.size.height);
             } else {
-                self.frame = CGRectMake(7, UIScreen.screenHeight - self.bounds.size.height - 50, self.bounds.size.width, self.bounds.size.height);
+                self.frame = CGRectMake(0, UIScreen.screenHeight - self.bounds.size.height, self.bounds.size.width, self.bounds.size.height);
             }
             self.hidden = NO;
         }];
@@ -551,7 +601,7 @@
 - (void)dismiss
 {
     [UIView animateWithDuration:0.3f animations:^{
-        self.frame = CGRectMake(7, [UIScreen screenHeight], self.bounds.size.width, self.bounds.size.height);
+        self.frame = CGRectMake(0, [UIScreen screenHeight], self.bounds.size.width, self.bounds.size.height);
         self.hidden = YES;
     }];
 }

@@ -29,6 +29,8 @@
 #import "SHLocalWithRemoteHelper.h"
 #import "SHNetworkManagerHeader.h"
 
+static NSString * const kInvalidDeviceName = @"NA";
+
 @implementation SHLocalWithRemoteHelper
 
 + (void)checkDevicesStatus:(NSArray *)devices {
@@ -182,6 +184,7 @@
             completion(YES);
         }
     } else {
+#if 0
         __block BOOL success = YES;
         [cameraList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             Camera *info = obj;
@@ -200,7 +203,74 @@
                 }
             }];
         }];
+#else
+        dispatch_group_t group = dispatch_group_create();
+        dispatch_queue_t queue = dispatch_queue_create("com.icatchtek.GetDeviceDetailInfo", DISPATCH_QUEUE_CONCURRENT);
+        
+        __block BOOL success = NO;
+        WEAK_SELF(self);
+        [cameraList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Camera *info = obj;
+            
+            if ([weakself checkDeviceIsValidWithCamera:info]) {
+            
+                dispatch_group_enter(group);
+                dispatch_async(queue, ^{
+                    [[SHNetworkManager sharedNetworkManager] getCameraByCameraID:info.id completion:^(BOOL isSuccess, id  _Nullable result) {
+                        if (isSuccess) {
+                            [weakself addDevice2LocalWithBaseInfo:info deviceInfo:result];
+                            
+                            success = isSuccess;
+                        }
+                        
+                        dispatch_group_leave(group);
+                    }];
+                });
+            } else {
+                [weakself invalidDeviceHandleWithCamera:info];
+            }
+        }];
+        
+        dispatch_group_notify(group, queue, ^{
+            if (completion) {
+                completion(success);
+            }
+        });
+#endif
     }
+}
+
++ (void)invalidDeviceHandleWithCamera:(Camera *)camera {
+    if (camera == nil) {
+        SHLogWarn(SHLogTagAPP, @"Parameter `camera` is nil.");
+        return;
+    }
+    
+    int operable = 1;
+    
+    NSString *owner = [SHNetworkManager sharedNetworkManager].userAccount.id;
+    if (![camera.ownerId isEqualToString:owner]) {
+        operable = 0;
+    }
+    
+    if (operable == 1) {
+        [[SHNetworkManager sharedNetworkManager] unbindCameraWithCameraID:camera.id completion:^(BOOL isSuccess, id  _Nullable result) {
+            SHLogInfo(SHLogTagAPP, @"unbind invalid device [%@] is success: %d.", camera.name, isSuccess);
+        }];
+    } else {
+        [[SHNetworkManager sharedNetworkManager] unsubscribeCameraWithCameraID:camera.id completion:^(BOOL isSuccess, id  _Nullable result) {
+            SHLogInfo(SHLogTagAPP, @"unsubscribe invalid device [%@] is success: %d.", camera.name, isSuccess);
+        }];
+    }
+}
+
++ (BOOL)checkDeviceIsValidWithCamera:(Camera *)camera {
+    BOOL valid = YES;
+    if ([camera.name isEqualToString:kInvalidDeviceName]) {
+        valid = NO;
+    }
+    
+    return valid;
 }
 
 + (void)addDevice2LocalWithBaseInfo:(Camera *)baseInfo deviceInfo:(Camera *)deviceInfo {
@@ -227,6 +297,7 @@
 
     SHCameraHelper *camera = [SHCameraHelper cameraWithName:name cameraUid:deviceInfo.uid devicePassword:deviceInfo.devicepassword id:deviceInfo.id thumbnail:nil operable:operable];
     camera.addTime = [SHTool localDBTimeStringFromServer:baseInfo.time];
+    camera.deviceInfo = deviceInfo;
     SHLogInfo(SHLogTagAPP, @"===> camera: %@", camera);
     
     [[CoreDataHandler sharedCoreDataHander] addCamera:camera];
@@ -234,6 +305,7 @@
 }
 
 + (void)getThumbnailWithdeviceInfo:(Camera *)deviceInfo {
+#ifndef KUSE_S3_SERVICE
     [[SHNetworkManager sharedNetworkManager] getCameraCoverByCameraID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
         if (isSuccess) {
             [self downloadThumbnailWithURLString:result[@"url"] finised:^(UIImage *thumbnail) {
@@ -251,6 +323,19 @@
             SHLogError(SHLogTagAPP, @"Request failed, error: %@", result);
         }
     }];
+#else
+    [[SHENetworkManager sharedManager] getDeviceCoverWithDeviceID:deviceInfo.id completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getDeviceCoverWithCompletion result: %@", result);
+
+        if (isSuccess && result != nil) {
+            SHCameraHelper *camera = [[SHCameraHelper alloc] init];
+            camera.cameraUid = deviceInfo.uid;
+            camera.thumnail = result;
+            
+            [[CoreDataHandler sharedCoreDataHander] updateCameraThumbnail:camera];
+        }
+    }];
+#endif
 }
 
 + (void)downloadThumbnailWithURLString:(NSString *)urlString finised:(void (^)(UIImage *thumbnail))finised {

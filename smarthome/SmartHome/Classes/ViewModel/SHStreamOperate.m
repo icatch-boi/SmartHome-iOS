@@ -248,6 +248,8 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
     
 }
 
+#define TEST_SAVING_YUV_AT_PREVIEW 0
+
 - (void)playbackVideoH264:(ICatchVideoFormat)format {
     NSRange headerRange = NSMakeRange(0, 4);
     NSMutableData *headFrame = nil;
@@ -271,6 +273,29 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
         BOOL first = YES;
         NSUInteger locLength = 0;
 #endif
+   
+#if TEST_SAVING_YUV_AT_PREVIEW
+        // TODO: test saving yuv buffer
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docDir = [paths objectAtIndex:0];
+        NSString *yuvDir = [docDir stringByAppendingPathComponent:@"YUV"];
+        [[NSFileManager defaultManager] createDirectoryAtPath:yuvDir
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil error:nil];
+        
+        // Name the log folder & file
+        NSDate *date = [NSDate date];
+        NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+        [dateformatter setDateFormat:@"yyyyMMdd-HHmmss"];
+        NSString *name = [dateformatter stringFromDate:date];
+        NSString *yuvfile = [NSString stringWithFormat:@"YUV-%@.yuv", name];
+        NSString *filename = [yuvDir stringByAppendingPathComponent:yuvfile];
+        self.h264Decoder.testfd = fopen([filename cStringUsingEncoding:NSASCIIStringEncoding], "a+");
+        // ======
+        
+        extern char _write; _write = 1;
+#endif
+        
         while (_PVRun) {
             @autoreleasepool {
 
@@ -286,8 +311,9 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                             first = NO;
                         }
                         NSUInteger loc = locLength;
-#endif
+#else
                         NSUInteger loc = format.getCsd_0_size() + format.getCsd_1_size();
+#endif
                         nalSize = (uint32_t)(shData.data.length - loc - 4);
                         NSRange iRange = NSMakeRange(loc, shData.data.length - loc);
                         const uint8_t lengthBytes[] = {(uint8_t)(nalSize>>24),
@@ -320,7 +346,9 @@ static const NSTimeInterval kBufferingMaxTime = 10.0;
                 }
             }
         }
-        
+#if TEST_SAVING_YUV_AT_PREVIEW
+        fclose(self.h264Decoder.testfd);
+#endif
         [self getLastFrameImage];
         [self.h264Decoder clearH264Env];
     }

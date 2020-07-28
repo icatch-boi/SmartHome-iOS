@@ -42,6 +42,14 @@
 #import "Reachability.h"
 #import "SDWebImageManager.h"
 #import "FRDAddFaceCollectionVC.h"
+#import "SHAddDeviceView.h"
+#import "SHFaceDataManager.h"
+#import "SHStrangerViewController.h"
+#import "SHMessageCenterTVC.h"
+#import "SHSetupHomeViewController.h"
+#import "XJSetupWiFiVC.h"
+#import "PopMenuView.h"
+#import "SHFileCenterHomeVC.h"
 
 #define useAccountManager 1
 static NSString * const kCameraViewCellID = @"CameraViewCellID";
@@ -57,6 +65,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 @property (nonatomic, weak) SHUserAccountInfoVC *userAccountInfoVC;
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) NSTimer *netStatusTimer;
+@property (nonatomic, weak) SHAddDeviceView *addDeviceView;
 
 @end
 
@@ -110,6 +119,10 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
     self.tableView.rowHeight = [SHCameraViewModel rowHeight];
     
     [self setupRefreshView];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"11.0")) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
 }
 
 - (void)setupRefreshView {
@@ -172,6 +185,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             [weakself.tableView.mj_header endRefreshing];
         });
     }];
+    
+//    [[SHFaceDataManager sharedFaceDataManager] loadFacesInfoWithCompletion:nil];
 }
 
 - (void)showLoadCameraListFailedTips {
@@ -197,6 +212,12 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             
             if (self) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.listViewModel.cameraList.count > 0) {
+                        [self removeAddDeviceView];
+                    } else {
+                        [self setupAddDeviceView];
+                    }
+                    
                     [self.tableView reloadData];
                 });
             }
@@ -295,7 +316,15 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (IBAction)addCameraAction:(id)sender {
+#if 0
     [self scanQRCode];
+#else
+    SHSetupHomeViewController *vc = [SHSetupHomeViewController setupHomeViewController];
+    SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+#endif
 }
 
 - (void)scanQRCode {
@@ -427,7 +456,8 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterMessageCenterWithCell:(SHCameraViewCell *)cell {
-
+    SHMessageCenterTVC *vc = [SHMessageCenterTVC messageCenterTVCWithCameraObj:cell.viewModel.cameraObj];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)enterLocalAlbumWithCell:(SHCameraViewCell *)cell {
@@ -454,6 +484,77 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
         [alertVC addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Sure", @"") style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alertVC animated:YES completion:nil];
     }
+}
+
+- (void)moreOperationWithCell:(SHCameraViewCell *)cell viewPosition:(CGRect)position {
+    WEAK_SELF(self);
+    NSArray<NSDictionary *> *items = @[/*@{@"title": NSLocalizedString(@"kFileCenter", nil), @"imageName": @"home_btn_file_center", @"methodName": @"enterFileCenterViewWithCell:"},*/
+                                       @{@"title": NSLocalizedString(@"kModifyWiFi", nil), @"imageName": @"home_btn_modify_wifi", @"methodName": @"enterModifyWiFiViewWithCell:" },
+                                       @{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
+                                       ];
+    
+    SHCameraObject *camObj = cell.viewModel.cameraObj;
+    if (camObj.camera.operable != 1) {
+        items = @[@{@"title": NSLocalizedString(@"kDeleteDevice", nil), @"imageName": @"home_btn_delete", @"methodName": @"longPressDeleteCamera:"},
+                   ];
+    }
+    
+    __block CGFloat width = [SHTool stringSizeWithString:items.firstObject[@"title"] font:[UIFont systemFontOfSize:16]].width;
+    [items enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGFloat temp = [SHTool stringSizeWithString:obj[@"title"] font:[UIFont systemFontOfSize:16]].width;
+        if (temp > width) {
+            width = temp;
+        }
+    }];
+    
+    width = 40 + width + 3 * 10;
+    [PopMenuView showWithItems:items
+                         width:width
+              triangleLocation:CGPointMake(CGRectGetMidX(position), CGRectGetMinY(position))
+            animationDirection:PopMenuAnimationDirectionUp
+                        action:^(NSInteger index) {
+                            NSLog(@"点击了第%ld行", (long)index);
+
+                            NSDictionary *dict = items[index];
+                            if ([dict.allKeys containsObject:@"methodName"]) {
+                                NSString *methodName = dict[@"methodName"];
+                                SEL action = NSSelectorFromString(methodName);
+                                if (action && [weakself respondsToSelector:action]) {
+                                    [weakself performSelector:action withObject:cell afterDelay:0];
+                                }
+                            }
+                        }];
+}
+
+- (void)enterModifyWiFiViewWithCell:(SHCameraViewCell *)cell {
+    SHCamera *camera = cell.viewModel.cameraObj.camera;
+    SHLogInfo(SHLogTagAPP, @"hwversionid: %@", camera.hwversionid);
+    
+    BOOL useAutoWay = NO;
+    if ([camera.hwversionid hasPrefix:@"V37"]) {
+        useAutoWay = YES;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kReconfigureDevice];
+    [[NSUserDefaults standardUserDefaults] setObject:camera.cameraUid forKey:kCurrentAddCameraUID];
+    
+    XJSetupWiFiVC *vc = [XJSetupWiFiVC setupWiFiVC];
+    vc.autoWay = useAutoWay;
+    vc.configWiFi = YES;
+    
+//    [self.navigationController pushViewController:vc animated:YES];
+    SHSetupNavVC *nav = [[SHSetupNavVC alloc] initWithRootViewController:vc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)enterFileCenterViewWithCell:(SHCameraViewCell *)cell {
+    SHCameraObject *camObj = cell.viewModel.cameraObj;
+    UINavigationController *vc = [SHFileCenterHomeVC fileCenterHomeVCWithDeviceID:camObj.camera.id];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - Action Progress
@@ -758,6 +859,7 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
     NSArray *temp = [self parseFacesRect:notification[@"faces"]];
     
+#if 0
     if (notification && [notification.allKeys containsObject:@"attachment"]) {
         NSString *urlStr = notification[@"attachment"];
         NSURL *url = [[NSURL alloc] initWithString:urlStr];
@@ -779,6 +881,66 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
             }];
         }
     }
+#else
+    if (notification == nil) {
+        SHLogError(SHLogTagAPP, @"Recv notification is empty.");
+        return;
+    }
+    
+    if ([notification.allKeys containsObject:@"image"]) {
+        NSData *data = notification[@"image"];
+        UIImage *image = [[UIImage alloc] initWithData:data];
+            
+        if (image != nil) {
+            SHLogInfo(SHLogTagAPP, @"Face image: %@", image);
+            [self enterAddFaceViewWithFaceImage:image facesRect:temp];
+        }
+    } else if ([notification.allKeys containsObject:@"attachment"]) {
+        NSString *urlStr = notification[@"attachment"];
+        if (![urlStr hasPrefix:@"http"] && ![urlStr hasPrefix:@"https"]) {
+            [self loadStrangerFaceDataWithDeviceID:urlStr];
+            return;
+        }
+        NSURL *url = [[NSURL alloc] initWithString:urlStr];
+        
+        if (url) {
+            WEAK_SELF(self);
+            [self.progressHUD showProgressHUDWithMessage:nil];
+            [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                
+                STRONG_SELF(self);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressHUD hideProgressHUD:YES];
+                    
+                    if (image) {
+                        SHLogInfo(SHLogTagAPP, @"Face image: %@", image);
+                        [self enterAddFaceViewWithFaceImage:image facesRect:temp];
+                    }
+                });
+            }];
+        }
+    }
+#endif
+}
+
+- (void)loadStrangerFaceDataWithDeviceID:(NSString *)deviceID {
+#ifdef KUSE_S3_SERVICE
+    WEAK_SELF(self);
+    [self.progressHUD showProgressHUDWithMessage:nil];
+    
+    [[SHENetworkManager sharedManager] getStrangerFaceImageWithDeviceID:deviceID completion:^(BOOL isSuccess, id  _Nullable result) {
+        SHLogInfo(SHLogTagAPP, @"getStrangerFaceImageWithDeviceID result: %@", result);
+
+        STRONG_SELF(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.progressHUD hideProgressHUD:YES];
+
+            if (isSuccess && result != nil) {
+                [self enterAddFaceViewWithFaceImage:result facesRect:nil];
+            }
+        });
+    }];
+#endif
 }
 
 - (NSArray *)parseFacesRect:(NSArray *)facesRectArray {
@@ -802,11 +964,16 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 }
 
 - (void)enterAddFaceViewWithFaceImage:(UIImage *)image facesRect:(NSArray *)facesRectArray {
+#if 0
     FRDAddFaceCollectionVC *vc = [FRDAddFaceCollectionVC addFaceCollectionVC];
     vc.originalImage = image;
     vc.facesRectArray = facesRectArray;
 
     [self.navigationController pushViewController:vc animated:YES];
+#else
+    SHStrangerViewController *vc = [SHStrangerViewController strangerViewControllerWithFaceImage:image];
+    [self.navigationController pushViewController:vc animated:YES];
+#endif
 }
 
 - (NSDictionary *)getFaceNotification {
@@ -815,6 +982,40 @@ static NSString * const kSetupStoryboardID = @"SetupNavVCSBID";
 
 - (void)cleanFaceNotification {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kRecvNotification];
+}
+
+- (void)setupAddDeviceView {
+    if (self.addDeviceView != nil) {
+        return;
+    }
+    
+    SHAddDeviceView *addView = [SHAddDeviceView addDeviceViewWithFrame:[self calcAddDeviceViewFrame]];
+    [self.view addSubview:addView];
+    
+    WEAK_SELF(self);
+    [addView setAddDeviceHandle:^{
+        [weakself addCameraAction:nil];
+    }];
+    
+    self.addDeviceView = addView;
+}
+
+- (CGRect)calcAddDeviceViewFrame {
+    CGRect rect = self.view.frame;
+    //获取状态栏的rect
+    CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
+    //获取导航栏的rect
+    CGRect navRect = self.navigationController.navigationBar.frame;
+    return CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetWidth(rect), CGRectGetHeight(rect) - CGRectGetHeight(statusRect) - CGRectGetHeight(navRect));
+}
+
+- (void)removeAddDeviceView {
+    if (self.addDeviceView == nil) {
+        return;
+    }
+    
+    [self.addDeviceView removeFromSuperview];
+    self.addDeviceView = nil;
 }
 
 @end

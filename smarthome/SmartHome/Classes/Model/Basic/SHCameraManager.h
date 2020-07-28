@@ -19,6 +19,7 @@
 - (void)addSHCameraObject:(SHCamera *)shCamera;
 - (void)removeSHCameraObject:(SHCameraObject *)shCameraobj;
 - (SHCameraObject *)getSHCameraObjectWithCameraUid:(NSString *)uid;
+- (SHCameraObject *)getCameraObjectWithDeviceID:(NSString *)deviceID;
 - (void)removeAllCameraObjects;
 - (void)unmappingAllCamera;
 

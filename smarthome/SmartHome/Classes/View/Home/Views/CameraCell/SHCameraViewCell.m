@@ -26,20 +26,23 @@
     
 
 #import "SHCameraViewCell.h"
+#import "SHMsgBadgeButton.h"
 
 static UIColor * const kDefaultBackgroundColor = [UIColor ic_colorWithHex:0xF2F2F2];
 static UIColor * const kSelectedBackgroundColor = [UIColor ic_colorWithHex:0x9b9b9b alpha:0.65];
 static UIColor * const kButtonDefaultBackgroundColor = [UIColor ic_colorWithHex:0xF2F2F2];
 static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex:kButtonThemeColor];
+static void * SHCameraViewCellContext = &SHCameraViewCellContext;
 
 @interface SHCameraViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *cameraNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *cameraThumbnail;
 @property (weak, nonatomic) IBOutlet UIView *footBarView;
-@property (weak, nonatomic) IBOutlet UIButton *messageBtn;
+@property (weak, nonatomic) IBOutlet SHMsgBadgeButton *messageBtn;
 @property (weak, nonatomic) IBOutlet UIButton *albumBtn;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
+@property (weak, nonatomic) IBOutlet UIButton *moreButton;
 @property (weak, nonatomic) IBOutlet UILabel *lastPreviewTime;
 @property (weak, nonatomic) IBOutlet UILabel *cameraInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
@@ -65,6 +68,9 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     [self addGestureEvent];
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
+#ifdef KTEMP_MODIFY
+    _messageBtn.enabled = NO;
+#endif
 }
 
 - (void)addGestureEvent {
@@ -119,6 +125,30 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     _shareBtn.enabled = (viewModel.cameraObj.camera.operable == 1) ? YES : NO;
     (viewModel.cameraObj.camera.operable == 1) ? [self removeShareDescriptionLabel] : [self addShareDescriptionLabel];
 }
+
+#ifndef KTEMP_MODIFY
+- (void)willMoveToWindow:(UIWindow *)newWindow {
+    [super willMoveToWindow:newWindow];
+    
+    SHLogInfo(SHLogTagAPP, @"newWindow: %@", newWindow);
+    SHLogInfo(SHLogTagAPP, @"newSuperview: %@", self.superview);
+
+    if (newWindow == nil) {
+        return;
+    }
+    
+    if (_viewModel == nil) {
+        return;
+    }
+    
+    _messageBtn.badgeValue = _viewModel.cameraObj.newMessageCount;
+
+    WEAK_SELF(self);
+    [_viewModel.cameraObj setUpdateNewMessageCount:^{
+        weakself.messageBtn.badgeValue = weakself.viewModel.cameraObj.newMessageCount;
+    }];
+}
+#endif
 
 - (UILabel *)sharedLabel {
     if (_sharedLabel == nil) {
@@ -205,6 +235,8 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 }
 
 - (IBAction)messageCenterAction:(id)sender {
+    [_viewModel.cameraObj resetNewMessageCount];
+
     if ([self.delegate respondsToSelector:@selector(enterMessageCenterWithCell:)]) {
         [self.delegate enterMessageCenterWithCell:self];
     }
@@ -223,9 +255,15 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
 }
 
 - (IBAction)deleteCameraAction:(id)sender {
+#if 0
     if ([self.delegate respondsToSelector:@selector(longPressDeleteCamera:)]) {
         [self.delegate longPressDeleteCamera:self];
     }
+#else
+    if ([self.delegate respondsToSelector:@selector(moreOperationWithCell:viewPosition:)]) {
+        [self.delegate moreOperationWithCell:self viewPosition:[self moreButtonPosition]];
+    }
+#endif
 }
 
 - (IBAction)changeButtonBackgroundColor:(UIButton *)sender {
@@ -259,6 +297,16 @@ static UIColor * const kButtonSelectedBackgroundColor = [UIColor ic_colorWithHex
     _cameraThumbnail.highlighted = NO;
     
     _cameraThumbnail.backgroundColor = kDefaultBackgroundColor;
+}
+
+- (CGRect)moreButtonPosition {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    
+    CGRect rect1 = [self.moreButton convertRect:self.moreButton.bounds toView:self.footBarView];
+    CGRect rect2 = [self.footBarView convertRect:rect1 fromView:self.contentView];
+    CGRect rect3 = [self.footBarView convertRect:rect2 toView:window];
+    
+    return CGRectMake(CGRectGetMinX(rect3), CGRectGetMinY(rect3) + CGRectGetHeight(self.frame) - CGRectGetHeight(self.footBarView.frame) - 10, CGRectGetWidth(rect3), CGRectGetHeight(rect3));
 }
 
 @end

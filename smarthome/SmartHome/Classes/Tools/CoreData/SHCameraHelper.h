@@ -26,6 +26,7 @@
     
 
 #import <Foundation/Foundation.h>
+#import <SHAccountManagementKit/Camera.h>
 
 @interface SHCameraHelper : NSObject
 
@@ -36,6 +37,7 @@
 @property (nonatomic, strong) UIImage *thumnail;
 @property (nonatomic) int operable;
 @property (nonatomic, copy) NSString *addTime;
+@property (nonatomic, strong) Camera *deviceInfo;
 
 + (instancetype)cameraWithName:(NSString *)cameraName
                      cameraUid:(NSString *)cameraUid

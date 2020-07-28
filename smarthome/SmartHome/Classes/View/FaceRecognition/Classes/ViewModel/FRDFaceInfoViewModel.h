@@ -15,7 +15,7 @@ typedef void(^FaceInfoViewModelCompletion)(void);
 
 @interface FRDFaceInfoViewModel : NSObject
 
-@property (nonatomic, strong, readonly) NSArray<FRDFaceInfo *> *facesInfoArray;
+@property (nonatomic, strong, readonly) NSMutableArray<FRDFaceInfo *> *facesInfoArray;
 
 - (void)loadFacesInfoWithCompletion:(FaceInfoViewModelCompletion _Nullable)completion;
 

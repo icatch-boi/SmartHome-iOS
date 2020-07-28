@@ -46,7 +46,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -200,6 +200,7 @@
 
 #pragma mark -
 - (void)localAlbumCell:(SHLocalAlbumCell *)cell showLocalMediaBrowser:(UINavigationController *)nav {
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
 }
 

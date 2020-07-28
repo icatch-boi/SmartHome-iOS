@@ -11,6 +11,7 @@
 #import "type/ICatchLogLevel.h"
 #import <sys/utsname.h>
 #import "AppDelegate.h"
+#import <objc/runtime.h>
 
 #define kFileFilterPlistPath [[NSBundle mainBundle] pathForResource:@"SHFileFilter" ofType:@"plist"]
 
@@ -707,6 +708,38 @@
             [[UIApplication sharedApplication] openURL:url];
         }
     }
+}
+
++ (BOOL)checkUserWhetherHaveOwnDevice {
+    __block BOOL have = NO;
+    NSArray *devices = [SHCameraManager sharedCameraManger].smarthomeCams.copy;
+    [devices enumerateObjectsUsingBlock:^(SHCameraObject *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.camera.operable == 1) {
+            have = YES;
+            *stop = YES;
+        }
+    }];
+    
+    return have;
+}
+
++ (NSArray *)propertiesWithClass:(Class)cls {
+    NSMutableArray *propertyMArray = [NSMutableArray array];
+    
+    unsigned int outCount = 0;
+    
+    objc_property_t *properties = class_copyPropertyList(cls, &outCount);
+    
+    for (int i = 0; i < outCount; i++) {
+        objc_property_t property = properties[i];
+        const char *name = property_getName(property);
+        
+        NSString *key = [[NSString alloc] initWithUTF8String:name];
+        
+        [propertyMArray addObject:key];
+    }
+    
+    return propertyMArray.copy;
 }
 
 @end

@@ -75,6 +75,7 @@
     
     shareCamera.cameraUid = camera.cameraUid;
     shareCamera.cameraName = camera.cameraName;
+    shareCamera.deviceID = camera.id;
     
     [self.camerasArray addObject:shareCamera];
 }
