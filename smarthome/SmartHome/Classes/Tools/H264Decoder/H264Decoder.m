@@ -311,6 +311,49 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     return drawImage;
 }
 
+- (NSData *)dataWithYUVPixelBuffer:(CVPixelBufferRef)pixelBuffer
+{
+    size_t width = CVPixelBufferGetWidth(pixelBuffer);
+    size_t height  = CVPixelBufferGetHeight(pixelBuffer);
+    unsigned char* buffer = (unsigned char*) malloc(width * height * 1.5);
+    // 取视频YUV数据
+    [self copyDataFromYUVPixelBuffer:pixelBuffer toBuffer:buffer];
+    // 保存到本地
+    NSData *retData = [NSData dataWithBytes:buffer length:sizeof(unsigned char)*(width*height*1.5)];
+    free(buffer);
+    buffer = nil;
+    return retData;
+}
+
+//the size of buffer has to be width * height * 1.5 (yuv)
+- (void) copyDataFromYUVPixelBuffer:(CVPixelBufferRef)pixelBuffer toBuffer:(unsigned char*)buffer {
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    if (CVPixelBufferIsPlanar(pixelBuffer)) {
+        size_t w = CVPixelBufferGetWidth(pixelBuffer);
+        size_t h = CVPixelBufferGetHeight(pixelBuffer);
+        
+        size_t d = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+        unsigned char* src = (unsigned char*) CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+        unsigned char* dst = buffer;
+        
+        for (unsigned int rIdx = 0; rIdx < h; ++rIdx, dst += w, src += d) {
+            memcpy(dst, src, w);
+        }
+        
+        d = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+        src = (unsigned char *) CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+        
+        h = h >> 1;
+        for (unsigned int rIdx = 0; rIdx < h; ++rIdx, dst += w, src += d) {
+            memcpy(dst, src, w);
+        }
+    }
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+ 
+}
+
+char _write = 0;
+
 - (void)recordPixelBufferWithSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     CVPixelBufferRef pixelBuffer = [self pixelBufferFromSampleBuffer:sampleBuffer];
     
@@ -319,6 +362,19 @@ static void didDecompress( void *decompressionOutputRefCon, void *sourceFrameRef
     }
     
     @synchronized (self) {
+        
+        // test
+        //======================================================================
+        
+        if(_write) {
+            NSData *yuvData = [self dataWithYUVPixelBuffer:pixelBuffer];
+            fwrite(yuvData.bytes , sizeof(char), yuvData.length, self.testfd);
+            fflush(self.testfd);
+        }
+        //======================================================================
+        
+        
+        
         if (_pixelBuffer != nullptr) {
             CVPixelBufferRelease(_pixelBuffer);
             _pixelBuffer = nullptr;

@@ -11,6 +11,8 @@
 
 @interface H264Decoder : NSObject
 
+@property (nonatomic) FILE *testfd;
+
 - (BOOL)initH264EnvWithSPSSize:(int)spsSize sps:(const unsigned char *)sps ppsSize:(int)ppsSize pps:(const unsigned char *)pps;
 - (void)clearH264Env;
 - (void)decodeAndDisplayH264Frame:(NSData *)frame andAVSLayer:(AVSampleBufferDisplayLayer *)avslayer;

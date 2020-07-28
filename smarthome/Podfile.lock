@@ -9,7 +9,7 @@ DEPENDENCIES:
   - Masonry
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - AWSCore
     - AWSS3
     - Masonry
@@ -21,4 +21,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5c37903413e8e2a49dce58885fe0e4b90b5de936
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1

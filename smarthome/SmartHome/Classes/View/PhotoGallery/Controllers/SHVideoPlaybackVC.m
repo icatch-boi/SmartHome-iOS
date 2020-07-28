@@ -900,11 +900,37 @@
     SHLogInfo(SHLogTagAPP, @"Break video");
 }
 
+#define TEST_SAVING_YUV_AT_PLAYBACK 0
+
+
 - (void)playbackVideoH264:(ICatchVideoFormat)format {
     NSRange headerRange = NSMakeRange(0, 4);
     NSMutableData *headFrame = nil;
     uint32_t nalSize = 0;
     
+#if TEST_SAVING_YUV_AT_PLAYBACK
+    // save H264
+    [_shCamObj.sdk openSaveVideo];
+    
+    // TODO: test saving yuv buffer
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDir = [paths objectAtIndex:0];
+    NSString *yuvDir = [docDir stringByAppendingPathComponent:@"YUV"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:yuvDir
+                              withIntermediateDirectories:NO
+                                               attributes:nil error:nil];
+    // Name the log folder & file
+    NSDate *date = [NSDate date];
+    NSDateFormatter *dateformatter = [[NSDateFormatter alloc] init];
+    [dateformatter setDateFormat:@"yyyyMMdd-HHmmss"];
+    NSString *name = [dateformatter stringFromDate:date];
+    NSString *yuvfile = [NSString stringWithFormat:@"YUV-%@.yuv", name];
+    NSString *filename = [yuvDir stringByAppendingPathComponent:yuvfile];
+    self.h264Decoder.testfd = fopen([filename cStringUsingEncoding:NSASCIIStringEncoding], "a+");
+    // ======
+    
+    extern char _write; _write = 1;
+#endif
     while (_PlaybackRun) {
         //flush avslayer when active from background
         if (self.avslayer.status == AVQueuedSampleBufferRenderingStatusFailed) {
@@ -969,6 +995,10 @@
         
         [self.h264Decoder clearH264Env];
     }
+#if TEST_SAVING_YUV_AT_PLAYBACK
+    [_shCamObj.sdk closeSaveVideo];
+    fclose(self.h264Decoder.testfd);
+#endif
     
     SHLogInfo(SHLogTagAPP, @"Break video");
 }
